@@ -3,6 +3,17 @@
  */
 
 /* Add some spacing between buttons */
+
+.login {
+    background-color: #F1F1F1 !important;
+}
+.widget-themis {
+    box-shadow: 4px 4px 0 0;
+    border-top: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+}
+
+
 .btn-group .btn {
     margin-right: 5px;
 }

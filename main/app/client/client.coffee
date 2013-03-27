@@ -94,7 +94,7 @@ require [
   'jqueryUniform'
   'datatables_bootstrap'
 ], (
-  conn
+  Conn
   User
   ControllerOrders
   ControllerAdmin
@@ -110,14 +110,44 @@ require [
   datatables_bootstrap
 ) ->
 
-  $('#status').text 'Establishing Secure Connection...'
+  $pbar = $ 'div.bar'
+  pbar = $pbar.get 0
+  timers = []
+
+  moveProgress = (timerIndex, value) ->
+    percent = parseInt pbar.style.width
+
 
   #Must make sure socketio has done it's thing before starting the rest of the app
   start = () ->
     ControllerCore.initialize()
-    conn.io.emit 'authenticate:status', {}, (response) ->
+    Conn.io.emit 'authenticate:status', {}, (response) ->
       User.set response
 
-  conn.initialize () ->
-    start()
+
+  timer = setInterval(()->
+
+    percent = parseInt pbar.style.width
+    if percent > 95
+      clearTimeout timer
+      Conn.initialize () ->
+        start()
+      return
+
+    if percent > 55
+      $('#status').text 'Establishing Secure Connection...'
+
+    percent = percent + 4
+    console.log percent
+    pbar.style.width = percent + '%'
+    return
+
+  , 100)
+
+
+  #return
+  #$('#status').text 'Establishing Secure Connection...'
+
+
+
 
