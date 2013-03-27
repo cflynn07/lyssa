@@ -1,0 +1,60 @@
+
+<h3>Progress</h3>
+<div class="progress">
+    <div style="width: {{progress}}%;" class="bar"></div>
+</div>
+
+<h3>Comments</h3>
+
+<table class="table table-striped table-bordered table-advance">
+    <thead>
+        <tr>
+            <th><i class="icon-briefcase"></i> Comment</th>
+            <th>Author</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {{#each comments}}
+            <tr>
+                <td class="highlight">
+
+                    {{#if this.hidden}}
+                        <div class="warning"></div>
+                    {{else}}
+                        <div class="success"></div>
+                    {{/if}}
+
+                    &nbsp;&nbsp;&nbsp;
+                    <span>{{this.text}}</span>
+                </td>
+                <td>{{this.client.name}}</td>
+                <td>{{this.created_at}}</td>
+                <td>{{this.updated_at}}</td>
+                <td>
+
+
+                    {{#if update_able}}
+                        {{#if this.hidden}}
+
+                            <a data-comment_id="{{this.id}}" data-action="update-comment" href="javascript:;" class="btn mini green pull-right"><i class="icon-edit"></i> Make Public</a>
+
+                        {{else}}
+
+                            <a data-comment_id="{{this.id}}" data-action="update-comment" href="javascript:;" class="btn mini red pull-right"><i class="icon-edit"></i> Make Private</a>
+
+                        {{/if}}
+                    {{/if}}
+
+                </td>
+            </tr>
+        {{/each}}
+
+    </tbody>
+</table>
+
+<button data-action="add-public-comment" type="button" class="btn green">Add Public Comment</button>
+<button data-action="add-private-comment" type="button" class="btn red">Add Private Comment</button>

@@ -1,0 +1,10 @@
+www:
+  type: nodejs
+  approot: main
+  postinstall: ./postinstall.sh
+  config:
+    node_version: v0.8.x
+db:
+  type: mysql
+data:
+  type: redis

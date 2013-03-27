@@ -1,0 +1,12 @@
+/**
+ *     Attempt to organize all extensions to CSS
+ */
+
+/* Add some spacing between buttons */
+.btn-group .btn {
+    margin-right: 5px;
+}
+
+td.details {
+    background: lightgray !important;
+}

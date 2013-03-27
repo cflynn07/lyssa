@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+  <title>Vox Tracker | Vox Supply Chain</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css" />
+  <link href="/assets/<%= asset_hash %>.css" rel="stylesheet" type="text/css" />
+
+  <% if(false){ %>
+    <% if(environment == 'development'){ %>
+      <link href="/assets/main.css?<%= Date.now() %>" rel="stylesheet" type="text/css" />
+    <% }else{ %>
+      <link href="/assets/main-built.css" rel="stylesheet" type="text/css" />
+    <% } %>
+  <% } %>
+
+  <link rel="shortcut icon" href="/assets/img/favicon-vox.ico" />
+
+</head>

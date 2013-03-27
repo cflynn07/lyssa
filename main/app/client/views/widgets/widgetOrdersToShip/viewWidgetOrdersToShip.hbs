@@ -1,0 +1,77 @@
+<!-- BEGIN PAGE CONTENT-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <h4><i class="icon-edit"></i>Orders To Ship</h4>
+                <div class="tools">
+                    <a href="javascript:;" class="reload"></a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="clearfix">
+
+                    {{#if false}}
+                    <div class="btn-group">
+                        <button id="sample_editable_1_new" class="btn green">
+                        Add New <i class="icon-plus"></i>
+                        </button>
+                    </div>
+                    {{/if}}
+
+                    {{#if false}}
+
+                    <div class="btn-group pull-right">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="icon-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Print</a></li>
+                            <li><a href="#">Save as PDF</a></li>
+                            <li><a href="#">Export to Excel</a></li>
+                        </ul>
+                    </div>
+
+                    {{/if}}
+
+                </div>
+                <table class="table table-striped table-hover table-bordered" id="main_table">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>PO_NUM</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Delivery Confirmed</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each orders}}
+                        <tr class="">
+                            <td>{{this.recievingClient.name}}</td>
+                            <td>{{this.po_num}}</td>
+                            <td>{{this.description}}</td>
+
+                            <td>
+                                <select data-order_id="{{this.id}}">
+                                    {{{statusSelected ../statuses this.status}}}
+                                </select>
+                            </td>
+
+                            <td>{{this.created_at}}</td>
+                            <td>{{this.updated_at}}</td>
+                            <td>{{#if this.received}}Yes{{else}}No{{/if}}</td>
+                            <td><a data-order_id="{{this.id}}" data-action="view-order-detail" href="javascript:;" class="btn blue mini">Details</a></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+<!-- END PAGE CONTENT -->

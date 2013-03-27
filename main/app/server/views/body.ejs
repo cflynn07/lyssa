@@ -1,0 +1,25 @@
+<body class="login">
+
+  <div id="loading_indicator" style="margin-top:-125px; position:absolute; top:50%; text-align:center; width:100%;">
+    <img src="/assets/img/loading_2.gif" />
+
+    <% if(true){ %>
+    <h2 id="status" style="font-style:italic;">Loading...</h2>
+    <% } %>
+
+  </div>
+
+
+
+<% if(asset_hash == 'main'){ %>
+
+  <script async type="text/javascript" data-main="/client" src="vendor/require.js"></script>
+
+<% }else{ %>
+
+  <script async type="text/javascript" src="/assets/<%= asset_hash %>.js"></script>
+
+<% } %>
+
+
+</body>
