@@ -65,7 +65,7 @@ define [
       else
         this.renderLogin()
 
-      this.$el.hide().fadeIn 'fast'
+      #this.$el.hide().fadeIn ''
 
       #If the user just logged in, refire the route to show them the authenticated version of their URL
       try

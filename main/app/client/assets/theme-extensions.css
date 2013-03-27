@@ -12,6 +12,9 @@
     border-top: 1px solid lightgray;
     border-left: 1px solid lightgray;
 }
+.login .content input.m-wrap {
+    width:229px;
+}
 
 
 .btn-group .btn {
@@ -20,4 +23,14 @@
 
 td.details {
     background: lightgray !important;
+}
+
+div.header span.username {
+    font-size: 16px;
+}
+.header .nav > li.dropdown.user .dropdown-toggle {
+    padding: 11px 4px 10px 9px;
+}
+.page-sidebar > ul > li > a {
+    font-size: 16px;
 }

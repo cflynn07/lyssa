@@ -109,13 +109,9 @@ require [
   $uniform
   datatables_bootstrap
 ) ->
-
   $pbar = $ 'div.bar'
   pbar = $pbar.get 0
-  timers = []
 
-  moveProgress = (timerIndex, value) ->
-    percent = parseInt pbar.style.width
 
 
   #Must make sure socketio has done it's thing before starting the rest of the app
@@ -125,28 +121,48 @@ require [
       User.set response
 
 
-  timer = setInterval(()->
 
+  timer = setInterval(()->
     percent = parseInt pbar.style.width
     if percent > 95
       clearTimeout timer
-      Conn.initialize () ->
-        start()
       return
 
-    if percent > 55
-      $('#status').text 'Establishing Secure Connection...'
-
-    percent = percent + 4
-    console.log percent
+    percent = percent + 6
     pbar.style.width = percent + '%'
-    return
-
-  , 100)
+  , 150)
 
 
-  #return
-  #$('#status').text 'Establishing Secure Connection...'
+  $('#status').text 'Establishing Secure Connection...'
+  Conn.initialize () ->
+
+    #Clear other loader...
+    clearTimeout timer
+
+    finish_timer = setInterval(() ->
+
+      percent = parseInt pbar.style.width
+
+      if percent >= 100
+        clearTimeout finish_timer
+        start()
+
+      x = 2
+      if percent < 50
+        percent = percent + (20 * x)
+      else if percent < 60
+        percent = percent + (17 * x)
+      else if percent < 70
+        percent = percent + (15 * x)
+      else if percent < 80
+        percent = percent + (12 * x)
+      else if percent < 90
+        percent = percent + (8 * x)
+      else
+        percent = percent + (5 * x)
+
+      pbar.style.width = percent + '%'
+    , 150)
 
 
 
