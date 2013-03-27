@@ -21,3 +21,11 @@
 td.details {
     background: lightgray !important;
 }
+.page-sidebar > ul > li > a {
+    border-top: 1px solid #595959 !important;
+}
+@media (max-width: 480px) {
+    .login .content {
+        width: 291px;
+    }
+}
