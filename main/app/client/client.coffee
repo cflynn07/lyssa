@@ -112,8 +112,6 @@ require [
   $pbar = $ 'div.bar'
   pbar = $pbar.get 0
 
-
-
   #Must make sure socketio has done it's thing before starting the rest of the app
   start = () ->
     ControllerCore.initialize()
