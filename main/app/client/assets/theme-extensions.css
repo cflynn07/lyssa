@@ -32,5 +32,12 @@ div.header span.username {
     padding: 11px 4px 10px 9px;
 }
 .page-sidebar > ul > li > a {
-    font-size: 16px;
+    font-size: 14px;
+}
+
+.page-sidebar > ul > li.active > a {
+    background: #4b8df8 !important;
+}
+.page-sidebar > ul > li > ul.sub > li.active > a, .page-sidebar > ul > li > ul.sub > li > a:hover {
+    color: #000 !important;
 }
