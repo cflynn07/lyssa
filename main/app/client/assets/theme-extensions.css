@@ -7,20 +7,19 @@
 .login {
     background-color: #F1F1F1 !important;
 }
-.widget-themis {
-    box-shadow: 4px 4px 0 0;
-    border-top: 1px solid lightgray;
-    border-left: 1px solid lightgray;
+.login .content input.m-wrap {
+    width:229px;
 }
 
 
 .btn-group .btn {
     margin-right: 5px;
 }
-
 td.details {
     background: lightgray !important;
 }
+
+
 .page-sidebar > ul > li > a {
     border-top: 1px solid #595959 !important;
 }
@@ -28,4 +27,58 @@ td.details {
     .login .content {
         width: 291px;
     }
+
+div.header span.username {
+    font-size: 16px;
+}
+.header .nav > li.dropdown.user .dropdown-toggle {
+    padding: 11px 4px 10px 9px;
+}
+.page-sidebar > ul > li > a {
+    font-size: 14px;
+}
+
+
+
+
+.page-sidebar > ul > li.active > a {
+    background: #4b8df8 !important;
+}
+.page-sidebar > ul > li > ul.sub > li.active > a, .page-sidebar > ul > li > ul.sub > li > a:hover {
+    color: #000 !important;
+}
+.footer {
+    background: #434343 !important;
+}
+.page-sidebar > ul > li.active > a .selected{
+    background-image:url('/assets/img/sidebar-menu-arrow-blue.png');
+}
+
+
+
+
+
+
+
+.widget-themis {
+    position: relative;
+    top: 4px;
+    left: 4px;
+    opacity: 0.4;
+    border-top: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+}
+.widget-themis-nofade{
+    position: relative;
+    opacity: 1;
+    border-top: 1px solid lightgray;
+    border-left: 1px solid lightgray;
+    box-shadow: '4px 4px 0 0';
+}
+
+
+
+
+.page-content {
+    padding-bottom: 40px;
 }

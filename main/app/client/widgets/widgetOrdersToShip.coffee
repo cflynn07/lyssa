@@ -1,4 +1,5 @@
 define [
+  'cs!widgets/abstract/widgetAbstract'
   'cs!components/orderStatuses'
   'backbone'
   'jquery'
@@ -8,6 +9,7 @@ define [
   'hbs!views/widgets/widgetOrdersToShip/viewWidgetOrdersToShip'
   'cs!widgets/widgetOrderDetail'
 ], (
+  WidgetAbstract
   orderStatuses
   Backbone
   $
@@ -18,7 +20,8 @@ define [
   WidgetOrderDetail
 ) ->
 
-  Backbone.View.extend
+  WidgetAbstract.extend
+  #Backbone.View.extend
     dataTableOpenRows: []
     dataTable: null
     initialize: ->
@@ -32,6 +35,7 @@ define [
         console.log response
         if response.success
           _this.update response.OrdersToShip
+          _this.fadeWidgetIn()
 
     close: ->
       this.unbind()

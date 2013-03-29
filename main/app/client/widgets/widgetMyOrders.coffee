@@ -1,4 +1,7 @@
 define [
+  'cs!widgets/abstract/widgetAbstract'
+
+
   'jquery'
   'datatables'
 
@@ -10,6 +13,9 @@ define [
   'cs!widgets/widgetMyOrdersAddManual'
   'cs!widgets/widgetOrderDetail'
 ], (
+  WidgetAbstract
+
+
   $
   $datatables
 
@@ -22,16 +28,16 @@ define [
   WidgetOrderDetail
 ) ->
 
-  Backbone.View.extend
+  WidgetAbstract.extend
+  #Backbone.View.extend
     sub_views: []
     dataTableOpenRows: []
     dataTable: null
     flashed: false
     MyOrders: []
+
     initialize: ->
       _this = this
-
-
 
       init = () ->
         Conn.io.emit 'orders:retrieveMyOrders', {}, (response) ->
@@ -39,12 +45,10 @@ define [
           if response.success
             _this.MyOrders = response.MyOrders
             _this.update()
+            _this.fadeWidgetIn()
       init()
 
       User.on 'myOrders:change', init
-
-
-
 
     close: ->
 
@@ -68,9 +72,11 @@ define [
       this.dataTable = this.$el.find('table').dataTable()
 
 
-      if !this.flashed
-        this.flashed = true
-        this.$el.hide().fadeIn 'fast'
+      #if !this.flashed
+      #  this.flashed = true
+      #  this.$el.hide().fadeIn 'fast'
+      #this.bring_alive()
+
 
     render: ->
 

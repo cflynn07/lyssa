@@ -1,4 +1,5 @@
 define [
+  'cs!widgets/abstract/widgetAbstract'
   'cs!components/conn'
   'backbone'
   'jquery'
@@ -10,6 +11,7 @@ define [
   'cs!widgets/widgetSuperAdminAddClient'
   #'cs!views/helpers/standardDateTime'
 ], (
+  WidgetAbstract
   conn
   Backbone
   $
@@ -21,7 +23,8 @@ define [
   HelperStandardDateTime
 ) ->
 
-  Backbone.View.extend
+  WidgetAbstract.extend
+  #Backbone.View.extend
     sub_views: []
     dataTable: null
     dataTableOpenRows: []
@@ -32,6 +35,7 @@ define [
         console.log response
         if response.success
           _this.update response.clients
+          _this.fadeWidgetIn()
 
     update: (clients) ->
 

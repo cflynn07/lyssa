@@ -1,4 +1,5 @@
 define [
+  'cs!widgets/abstract/widgetAbstract'
   'cs!components/conn'
   'backbone'
   'jquery'
@@ -6,6 +7,7 @@ define [
   'hbs!views/widgets/widgetAdminUsers/viewWidgetAdminUsers'
   'cs!widgets/widgetAdminUsersAdd'
 ], (
+  WidgetAbstract
   conn
   Backbone
   $
@@ -14,7 +16,8 @@ define [
   WidgetAdminUsersAdd
 ) ->
 
-  Backbone.View.extend
+  WidgetAbstract.extend
+  #Backbone.View.extend
     sub_views: []
     initialize: ->
 
@@ -25,6 +28,7 @@ define [
           console.log response
           if response.success
             _this.update response.users
+            _this.fadeWidgetIn()
       init()
 
       User.on 'adminUsers:change', init

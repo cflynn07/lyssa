@@ -65,7 +65,7 @@ define [
       else
         this.renderLogin()
 
-      this.$el.hide().fadeIn 'fast'
+      #this.$el.hide().fadeIn ''
 
       #If the user just logged in, refire the route to show them the authenticated version of their URL
       try
@@ -168,6 +168,8 @@ define [
       view_instance = new v.view(v.data)
       $content.append view_instance.render().el
       registered_views.push view_instance
+      #try
+      #  view_instance.fadeWidgetIn()
 
     #construct holder template and insert into DOM
     #CoreControllerInstance.el.innerText = 'Test'
