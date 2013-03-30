@@ -1,7 +1,4 @@
-express         = require 'express.io'
-path            = require 'path'
-async           = require 'async'
-html_minifier   = require 'html-minifier'
+fs = require 'fs'
 
 #If we didn't get to server.js from bootstrap.js
 if !GLOBAL.asset_hash?
@@ -12,6 +9,16 @@ try
   GLOBAL.env = JSON.parse(fs.readFileSync('/home/dotcloud/environment.json', 'utf-8'))
 catch error
   GLOBAL.env = false
+
+
+
+
+express         = require 'express.io'
+path            = require 'path'
+async           = require 'async'
+html_minifier   = require 'html-minifier'
+
+
 
 
 #redis clients

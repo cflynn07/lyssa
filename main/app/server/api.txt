@@ -1,0 +1,111 @@
+Permissions Levels:
+SA  - Super Admin
+CSA - Client Super Admin
+CA  - Client Admin
+CD  - Client Delegate
+CAD - Client Auditor
+
+Resource: Client
+    -   hasMany:    Employee
+    -   hasMany:    Template
+    -   hasMany:    Event
+    -   hasMany:    Submission
+    GET /clients/
+        SA:     Return all clients in themis
+        CSA:    Return client with same clientID as user
+        CA:     ^
+        CD:     ^
+        CAD:    ^
+    POST /clients/
+        SA:     Create a client
+        CSA:    false
+        CA:     false
+        CD:     false
+        CAD:    false
+    PUT /clients/
+        SA:     Update a client
+        CSA:    false
+        CA:     false
+        CD:     false
+        CAD:    false
+
+
+
+Resource: Employee
+    -   belongsTo:  Client
+    -   hasOne:     User
+    -   hasMany:    Event
+    -   hasMany:    Submission
+Resource: User
+    -   belongsTo:  Employee
+    -   hasMany:    Template
+    -   hasMany:    Revision
+    -   hasMany:    Event
+    GET /users/
+        SA:     Return all users in themis
+        CSA:    Return all users in themis that share the authenticated user's clientID
+        CA:     ^
+        CD:     Return only this user
+        CAD:    ^
+    POST /users/
+        SA:     Create user. clientID required.
+        CSA:    Create user. clientID assumed identical to authenticated user's clientID
+        CA:     ^
+        CD:     false
+        CAD:    false
+    PUT /users/
+        SA:     Update any user
+        CSA:    Update any user with same clientID. Can make Super-Admins. Can not set self to
+                non-super-admin if only CSA
+        CA:     Update any user with same clientID. Can not make any user a CSA or set a CSA to not CSA
+        CD:     false
+        CAD:    false
+    DELETE /users/
+        SA:     Delete any user
+        CSA:    Delete any user with same clientID. Can not delete self if only CSA.
+        CA:     Delete any user other than SA, CSA, CA
+        CD:     false
+        CAD:    false
+
+Resource Template
+    -   belongsTo:  User
+    -   belongsTo:  Client
+    -   hasMany:    Revision
+
+
+
+Resource Revision
+    -   belongsTo:  Template
+    -   belongsTo:  User
+    -   hasMany:    Group
+    -   hasMany:    Event
+    -   hasMany:    Submission
+
+Resource Group
+    -   belongsTo:  Template
+    -   hasMany:    Question
+
+Resource Question
+    -   belongsTo:  Group
+    -   hasMany:    SubmissionField
+
+Resource Event
+    -   belongsTo:  Client
+    -   belongsTo:  User
+    -   belongsTo:  Employee
+    -   hasOne:     Revision
+    -   hasOne:     Submission
+
+Resource Submission
+    -   belongsTo:  Event
+    -   belongsTo:  Revision
+    -   hasMany:    SubmissionQuestion
+Resource SubmissionQuestion
+    -   belongsTo:  Submission
+    -   belongsTo:  Question
+
+Resource Dictionary
+    -   belongsTo:  Client
+    -   hasMany:    DictionaryItem
+Resource DictionaryItem
+    -   belongsTo:  Dictionary
