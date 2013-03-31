@@ -3,4 +3,4 @@ machine:
     version: 0.8.2
 test:
   override:
-    - node main/app/test/test-tests.js
+    - node main/app/tests/test-tests.js
