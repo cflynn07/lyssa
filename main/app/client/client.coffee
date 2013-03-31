@@ -83,31 +83,31 @@ requirejs.config
 require [
   'cs!components/conn'
   'cs!models/user'
-  'cs!controllers/controllerOrders'
-  'cs!controllers/controllerAdmin'
-  'cs!controllers/controllerSuperAdmin'
-  'cs!controllers/controllerProfile'
+  #'cs!controllers/controllerOrders'
+  #'cs!controllers/controllerAdmin'
+  #'cs!controllers/controllerSuperAdmin'
+  #'cs!controllers/controllerProfile'
   'cs!controllers/controllerCore'
-  'backbone'
+  #'backbone'
   'jquery'
-  'jqueryBrowser'
-  'jqueryUniform'
-  'datatables_bootstrap'
+  #'jqueryBrowser'
+  #'jqueryUniform'
+  #'datatables_bootstrap'
 ], (
   Conn
   User
-  ControllerOrders
-  ControllerAdmin
-  ControllerSuperAdmin
-  ControllerProfile
+  #ControllerOrders
+  #ControllerAdmin
+  #ControllerSuperAdmin
+  #ControllerProfile
   ControllerCore
-  Backbone
+  #Backbone
 
 
   $
-  $browser
-  $uniform
-  datatables_bootstrap
+  #$browser
+  #$uniform
+  #datatables_bootstrap
 ) ->
   $pbar = $ 'div.bar'
   pbar = $pbar.get 0
@@ -115,6 +115,7 @@ require [
   #Must make sure socketio has done it's thing before starting the rest of the app
   start = () ->
     ControllerCore.initialize()
+    User.set {authenticated: false}
     Conn.io.emit 'authenticate:status', {}, (response) ->
       User.set response
 

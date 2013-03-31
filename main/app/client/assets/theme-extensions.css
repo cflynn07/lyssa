@@ -1,84 +1,96 @@
 /**
  *     Attempt to organize all extensions to CSS
+ *     -----------------------------------------
  */
 
-/* Add some spacing between buttons */
+/*
+    Adding custom widget styles to theme for themis unique appearance & dynamic "fade-in and up" effect
+    ---------------------------------------------------------------------------------------------------
+*/
+.widget-themis {
+    position: relative;
+    top: 4px;
+    left: 4px;
+    opacity: 0.4;
 
+}
+.widget-themis-nofade{
+    position: relative;
+    opacity: 1;
+    border-top: 1px solid #4b8df8 !important;
+    border-left: 1px solid lightgray !important;
+    border-bottom: 1px solid lightgray !important;
+    border-right: 0px solid lightgray !important;
+    box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35);
+}
+
+/*
+    Customizing login page & fixing css related bug with new login widget on mobile viewport widths
+    -----------------------------------------------------------------------------------------------
+*/
 .login {
     background-color: #F1F1F1 !important;
 }
 .login .content input.m-wrap {
     width:229px;
 }
-
-
-.btn-group .btn {
-    margin-right: 5px;
-}
-td.details {
-    background: lightgray !important;
-}
-
-
-.page-sidebar > ul > li > a {
-    border-top: 1px solid #595959 !important;
-}
 @media (max-width: 480px) {
     .login .content {
         width: 291px;
     }
-
-div.header span.username {
-    font-size: 16px;
 }
-.header .nav > li.dropdown.user .dropdown-toggle {
-    padding: 11px 4px 10px 9px;
+
+/*
+    Universally differentiate detail panes in datatables plugin
+    -----------------------------------------------------------
+*/
+td.details {
+    background: lightgray !important;
+}
+
+/*
+    Customize look and feel of menu
+    -------------------------------
+*/
+.page-sidebar > ul > li > a {
+    border-top: 1px solid #595959 !important;
 }
 .page-sidebar > ul > li > a {
     font-size: 14px;
 }
-
-
-
-
 .page-sidebar > ul > li.active > a {
     background: #4b8df8 !important;
 }
 .page-sidebar > ul > li > ul.sub > li.active > a, .page-sidebar > ul > li > ul.sub > li > a:hover {
     color: #000 !important;
 }
-.footer {
-    background: #434343 !important;
-}
 .page-sidebar > ul > li.active > a .selected{
     background-image:url('/assets/img/sidebar-menu-arrow-blue.png');
 }
 
-
-
-
-
-
-
-.widget-themis {
-    position: relative;
-    top: 4px;
-    left: 4px;
-    opacity: 0.4;
-    border-top: 1px solid lightgray;
-    border-left: 1px solid lightgray;
+/*
+    Fix menu for proper display with no user-picture
+    ------------------------------------------------
+*/
+div.header span.username {
+    font-size: 16px;
 }
-.widget-themis-nofade{
-    position: relative;
-    opacity: 1;
-    border-top: 1px solid lightgray;
-    border-left: 1px solid lightgray;
-    box-shadow: '4px 4px 0 0';
+.header .nav > li.dropdown.user .dropdown-toggle {
+    padding: 11px 4px 10px 9px;
 }
 
+/*
+    Make footer match header
+    ------------------------
+*/
+.footer {
+    background: #434343 !important;
+}
 
-
-
+/*
+    Make sure page content has enough padding to clear the statically positioned footer
+    -----------------------------------------------------------------------------------
+*/
 .page-content {
     padding-bottom: 40px;
 }

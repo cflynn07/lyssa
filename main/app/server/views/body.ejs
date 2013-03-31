@@ -7,10 +7,15 @@
 
 
 <div class="logo"></div>
+
+
+
+
+
 <div class="content portlet box blue widget-themis-nofade">
 
     <div class="portlet-title">
-        <h4 style="color:#FFF;"><i class="icon-plus"></i>Cobar Systems Prototype v0.6</h4>
+        <h4 style="color:#FFF;"><i class="icon-plus"></i>Themis v0.1</h4>
     </div>
     <div class="portlet-body">
         <div class="progress progress-striped active">
@@ -21,6 +26,9 @@
     </div>
 
 </div>
+
+
+
 
 
 <% if(false){ %>
@@ -41,11 +49,9 @@
   </div>
 <% } %>
 
-
 <% if(asset_hash == 'main'){ %>
   <script async type="text/javascript" data-main="/client" src="vendor/require.js"></script>
 <% }else{ %>
   <script async type="text/javascript" src="/assets/<%= asset_hash %>.js"></script>
 <% } %>
-
 </body>
