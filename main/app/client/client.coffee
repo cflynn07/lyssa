@@ -3,7 +3,7 @@ if !window.console?
 if !window.console.log?
   window.console.log = ->
 
-window.WEB_SOCKET_SWF_LOCATION = '/socket.io/static/flashsocket/WebSocketMain.swf'
+#window.WEB_SOCKET_SWF_LOCATION = '/socket.io/static/flashsocket/WebSocketMain.swf'
 
 requirejs.config
   baseUrl: '/'
@@ -87,7 +87,7 @@ require [
   #'cs!controllers/controllerAdmin'
   #'cs!controllers/controllerSuperAdmin'
   #'cs!controllers/controllerProfile'
-  'cs!controllers/controllerCore'
+  #'cs!controllers/controllerCore'
   #'backbone'
   'jquery'
   #'jqueryBrowser'
@@ -100,7 +100,7 @@ require [
   #ControllerAdmin
   #ControllerSuperAdmin
   #ControllerProfile
-  ControllerCore
+  #ControllerCore
   #Backbone
 
 
@@ -111,10 +111,10 @@ require [
 ) ->
   $pbar = $ 'div.bar'
   pbar = $pbar.get 0
-
+  User.set {authenticated: false}
   #Must make sure socketio has done it's thing before starting the rest of the app
   start = () ->
-    ControllerCore.initialize()
+    #ControllerCore.initialize()
     User.set {authenticated: false}
     Conn.io.emit 'authenticate:status', {}, (response) ->
       User.set response
@@ -133,6 +133,7 @@ require [
 
 
   $('#status').text 'Establishing Secure Connection...'
+  return
   Conn.initialize () ->
 
     #Clear other loader...

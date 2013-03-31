@@ -18,7 +18,7 @@ if GLOBAL.env? && GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN?
   )
 else
   sequelize = new Sequelize(
-    'voxtracker',
+    'lyssa',
     'root',
     'root',
     host: 'localhost'
@@ -31,6 +31,27 @@ else
     syncOnAssociation: false
   )
 
+
+  module.exports = sequelize
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+return
 #Set up models
 User = sequelize.define 'user',
   id:         Sequelize.INTEGER
