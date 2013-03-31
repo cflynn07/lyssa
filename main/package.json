@@ -18,7 +18,7 @@
     "url": "https://github.com/cflynn07/lyssa/issues"
   },
   "scripts": {
-    "test": "node ./main/app/tests/test-tests.js",
+    "tests": "node ./app/tests/test-tests.js",
     "start": "./main/app/server/bootstrap.js"
   },
   "dependencies": {
