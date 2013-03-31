@@ -2,5 +2,7 @@ machine:
   node:
     version: 0.8.2
 test:
+  pre:
+    - coffee -c ./main/app
   override:
     - node main/app/tests/test-tests.js
