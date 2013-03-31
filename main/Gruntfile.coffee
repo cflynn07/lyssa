@@ -10,6 +10,15 @@ module.exports = (grunt) ->
         'app/server/**/*.coffee'
       ]
       options:
+        indentation:
+          value: 2
+          level: 'error'
+        no_empty_param_list:
+          level: 'error'
+        no_implicit_braces:
+          level: 'error'
+        no_implicit_parens:
+          level: 'error'
         max_line_length:
           level: 'ignore'
 
