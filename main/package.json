@@ -23,7 +23,8 @@
     "exec-sync": 	 "*",
     "node-mandrill": "*",
     "csv":           "*",
-    "formidable":    "*"
+    "formidable":    "*",
+    "nodetime":      "*"
   },
   "devDependencies": {
     "mocha": 					"1.8.2",

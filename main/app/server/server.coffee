@@ -1,3 +1,8 @@
+#require('nodetime').profile
+#  accountKey: '3e685ab0740eddb9a958f950a66bd728df2f1cca'
+#  appName:    'Lyssa'
+
+
 fs = require 'fs'
 
 #If we didn't get to server.js from bootstrap.js
@@ -83,6 +88,7 @@ app.configure () ->
 
 #Single page application, only serve '/'
 app.get '/', (req, res) ->
+  res.end('hi')
   async.map ['header', 'body', 'footer']
   ,(item, callback) ->
     res.render item,
