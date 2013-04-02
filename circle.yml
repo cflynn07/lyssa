@@ -5,4 +5,4 @@ test:
   pre:
     - coffee -c ./main/app
   override:
-    - node main/app/tests/test-tests.js
+    - node main/app/tests/routeParrot-test.js

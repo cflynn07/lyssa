@@ -13,17 +13,10 @@ define [
         @io.on 'connect', () ->
           conn_callback()
   io: false
+  request: (method, url, data, response) ->
+    @io.emit 'apiRequest', {
+        method: method
+        url: url
+        data: data
+      }, response
 
-
-
-#
-#
-#  return io
-#
-#
-#  connection = io.connect()
-#
-#  connection.on 'connect', () ->
-#    console.log 'socket.io connected'
-
-#  return connection

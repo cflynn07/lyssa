@@ -111,11 +111,22 @@ require [
 ) ->
   $pbar = $ 'div.bar'
   pbar = $pbar.get 0
+
+
   User.set {authenticated: false}
+
+
   #Must make sure socketio has done it's thing before starting the rest of the app
   start = () ->
     #ControllerCore.initialize()
     User.set {authenticated: false}
+
+    console.log 'start'
+    Conn.request 'get', '/users', {}, (response) ->
+      console.log 'api websocket response'
+      console.log response
+
+    return
     Conn.io.emit 'authenticate:status', {}, (response) ->
       User.set response
 
@@ -133,9 +144,10 @@ require [
 
 
   $('#status').text 'Establishing Secure Connection...'
-  return
-  Conn.initialize () ->
 
+  Conn.initialize () ->
+    start()
+    return
     #Clear other loader...
     clearTimeout timer
 

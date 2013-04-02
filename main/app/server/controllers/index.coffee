@@ -1,5 +1,6 @@
 async          = require 'async'
 html_minifier  = require 'html-minifier'
+
 module.exports = (req, res) ->
 
   async.map ['header', 'body', 'footer']

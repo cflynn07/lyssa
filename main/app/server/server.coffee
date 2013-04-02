@@ -1,6 +1,7 @@
-fs              = require 'fs'
-express         = require 'express.io'
-path            = require 'path'
+fs      = require 'fs'
+express = require 'express.io'
+path    = require 'path'
+config  = require './config/config'
 
 #If we didn't get to server.js from bootstrap.js
 if !GLOBAL.asset_hash?
@@ -11,6 +12,8 @@ try
   GLOBAL.env = JSON.parse(fs.readFileSync('/home/dotcloud/environment.json', 'utf-8'))
 catch error
   GLOBAL.env = false
+
+
 
 ###
 if GLOBAL.env
@@ -41,8 +44,8 @@ app.io.set 'store',
 #app.io.enable('browser client etag')
 app.io.set('log level', 3)
 app.io.set('transports', [
-#  'websocket'
-#  'flashsocket'
+# 'websocket'
+# 'flashsocket'
   'htmlfile'
   'xhr-polling'
   'jsonp-polling'
@@ -56,29 +59,22 @@ app.configure () ->
   app.set 'views', __dirname + '/views'
   app.set 'view engine', 'ejs'
 
-
-  app.use (req, res, next) ->
-    console.log req.headers.host
-    next()
-
-
   #TODO
-  app.use express.favicon()
-
+  #app.use express.favicon()
   app.use express.logger 'dev'
   app.use express.bodyParser()
   app.use express.methodOverride()
 
   app.use express.cookieParser()
   app.use express.session
-    secret: 'fc5422223ed4bcfdf92ab07ba3c7baf6'
+    secret: 'c9d7732c0de118325e6de4582b37a4e9'
     store:  redisStore
 
-  #Standard requests
+
+  #Standard Requests
   app.use (req, res, next) ->
-    res.jsonAPIRespond = (json) ->
-      res.json json
-    app.router(req, res, next)
+    require('./components/routeParrot').http(req, res, next, app.router)
+
 
   app.configure 'production', () ->
     maxAge = 31536000000
@@ -90,27 +86,9 @@ app.configure () ->
     app.use express.errorHandler()
 
 
-
-
-
 #API Requests
 app.io.route 'apiRequest', (req) ->
-
-  console.log req
-
-  httpEmulatedRequest =
-    method:   if req.data.method then req.data.method else 'get'
-    url:      if req.data.url    then req.data.url    else '/api/'
-    headers:  []
-
-  response =
-    jsonAPIRespond: (json) ->
-      req.io.respond json
-
-  app.router httpEmulatedRequest, response, () ->
-    console.log 'socket.io api request'
-
-
+  require('./components/routeParrot').socketio(req, {}, ->, app.router)
 
 
 
@@ -118,17 +96,10 @@ app.io.route 'apiRequest', (req) ->
 app.get '/', require('./controllers/index')
 
 #API Routes
-app.get '/apple', (req, res) ->
-  console.log 'apple route hit'
-  res.jsonAPIRespond
-    foo: 'bar'
+require('./controllers/api/users')(app)
 
-###
-  if res.io? and res.io.respond?
-    res.io.respond 'okay!'
-  else if res.end?
-    res.end 'okay!'
-###
+
+
 
 app.listen app.get 'port'
 console.log 'server listening on port: ' + app.get 'port'
