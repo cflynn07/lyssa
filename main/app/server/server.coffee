@@ -1,9 +1,6 @@
-#require('nodetime').profile
-#  accountKey: '3e685ab0740eddb9a958f950a66bd728df2f1cca'
-#  appName:    'Lyssa'
-
-
-fs = require 'fs'
+fs              = require 'fs'
+express         = require 'express.io'
+path            = require 'path'
 
 #If we didn't get to server.js from bootstrap.js
 if !GLOBAL.asset_hash?
@@ -15,16 +12,16 @@ try
 catch error
   GLOBAL.env = false
 
-
-
-
-express         = require 'express.io'
-path            = require 'path'
-async           = require 'async'
-html_minifier   = require 'html-minifier'
-
-
-
+###
+if GLOBAL.env
+  require('nodetime').profile
+    accountKey: '3e685ab0740eddb9a958f950a66bd728df2f1cca'
+    appName:    'Lyssa - Production'
+else
+  require('nodetime').profile
+    accountKey: '3e685ab0740eddb9a958f950a66bd728df2f1cca'
+    appName:    'Lyssa - Development'
+###
 
 #redis clients
 pub   = require('./config/redis').createClient()
@@ -32,7 +29,7 @@ sub   = require('./config/redis').createClient()
 store = require('./config/redis').createClient()
 redisStore = require('./config/redis').createStore()
 app = express().http().io()
-
+GLOBAL.app = app
 
 app.io.set 'store',
   new express.io.RedisStore
@@ -40,7 +37,6 @@ app.io.set 'store',
     redisPub: pub
     redisSub: sub
     redisClient: store
-
 
 #app.io.enable('browser client etag')
 app.io.set('log level', 3)
@@ -60,6 +56,12 @@ app.configure () ->
   app.set 'views', __dirname + '/views'
   app.set 'view engine', 'ejs'
 
+
+  app.use (req, res, next) ->
+    console.log req.headers.host
+    next()
+
+
   #TODO
   app.use express.favicon()
 
@@ -72,7 +74,11 @@ app.configure () ->
     secret: 'fc5422223ed4bcfdf92ab07ba3c7baf6'
     store:  redisStore
 
-  app.use app.router
+  #Standard requests
+  app.use (req, res, next) ->
+    res.jsonAPIRespond = (json) ->
+      res.json json
+    app.router(req, res, next)
 
   app.configure 'production', () ->
     maxAge = 31536000000
@@ -86,34 +92,43 @@ app.configure () ->
 
 
 
-#Single page application, only serve '/'
-app.get '/', (req, res) ->
-  res.end('hi')
-  async.map ['header', 'body', 'footer']
-  ,(item, callback) ->
-    res.render item,
-      environment: app.settings.env
-      asset_hash: GLOBAL.asset_hash,
-      (err, html) ->
-        callback err, html
-  ,(err, results) ->
-    html = results[1] + results[2]
-    html = html_minifier.minify html,
-      collapseWhitespace: true
-      removeComments:     true
-    #preseve comments in header
-    head = html_minifier.minify results[0],
-      collapseWhitespace: true
-    html = head + html
-    res.send html
+
+#API Requests
+app.io.route 'apiRequest', (req) ->
+
+  console.log req
+
+  httpEmulatedRequest =
+    method:   if req.data.method then req.data.method else 'get'
+    url:      if req.data.url    then req.data.url    else '/api/'
+    headers:  []
+
+  response =
+    jsonAPIRespond: (json) ->
+      req.io.respond json
+
+  app.router httpEmulatedRequest, response, () ->
+    console.log 'socket.io api request'
 
 
 
-#require('./routers/authenticate')(app)
-#require('./routers/admin')(app)
-#require('./routers/super_admin')(app)
-#require('./routers/orders')(app)
-#require('./routers/profile')(app)
+
+
+#Regular Routes
+app.get '/', require('./controllers/index')
+
+#API Routes
+app.get '/apple', (req, res) ->
+  console.log 'apple route hit'
+  res.jsonAPIRespond
+    foo: 'bar'
+
+###
+  if res.io? and res.io.respond?
+    res.io.respond 'okay!'
+  else if res.end?
+    res.end 'okay!'
+###
 
 app.listen app.get 'port'
 console.log 'server listening on port: ' + app.get 'port'

@@ -41,7 +41,9 @@
     "csv":           "*",
     "formidable":    "*",
     "nodetime":      "*",
-    "buster":        "*"
+    "buster":        "*",
+    "wrench": 	     "*",
+    "express-subdomains": "*"
   },
   "devDependencies": {
     "mocha": 					        "1.8.2",
