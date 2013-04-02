@@ -88,7 +88,7 @@ app.configure () ->
 
 #API Requests
 app.io.route 'apiRequest', (req) ->
-  require('./components/routeParrot').socketio(req, {}, ->, app.router)
+  require('./components/routeParrot').socketio(req, {}, (()->), app.router)
 
 
 

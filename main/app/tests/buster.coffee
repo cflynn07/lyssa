@@ -1,6 +1,6 @@
 config = module.exports
 config['My tests'] =
-  rootPath: "../"
+  rootPath: "."
   environment: "node"
 #These are not required for nodejs tests
 #  sources: [
@@ -8,5 +8,5 @@ config['My tests'] =
 #    'lib/**/*.js'
 #  ]
   tests: [
-    'tests/*-test.js'
+    '*-test.js'
   ]
