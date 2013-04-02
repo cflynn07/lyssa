@@ -1,4 +1,5 @@
 #authentication.coffee
+###
 module.exports = (req, callback) ->
 
   #Determine if this is HTTP or websockets
@@ -15,3 +16,4 @@ module.exports = (req, callback) ->
 
 
   callback(req)
+###
