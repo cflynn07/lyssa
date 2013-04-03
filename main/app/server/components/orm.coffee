@@ -55,7 +55,6 @@ setup = () ->
 
   fs.readdirSync(modelsPath).forEach (name) ->
 
-    console.log name
     if name.indexOf('coffee') > 0
       return
 
@@ -71,7 +70,7 @@ setup = () ->
       related = relation[relName]
       models[modelName][relName][models[related]]
 
-  sequelize.sync()
+  #sequelize.sync()
 
 
 module.exports =

@@ -1,6 +1,15 @@
-appDir = '../../../'
-app    = require appDir + 'server/app'
-users  = require appDir + 'server/controllers/api/users'
+appDir  = '../../../'
+express = require 'express.io' #appDir + 'server/app'
+users   = require appDir + 'server/controllers/api/users'
+orm     = require appDir + 'server/components/orm'
+
+
+orm.setup()
+console.log orm.model 'dictionary'
+
+
+app = express().http().io()
+
 
 buster = require 'buster'
 
@@ -11,11 +20,24 @@ buster.testCase 'API - /users collection',
     #this.timeout = 2000
 
     done()
-  tearDown: (done) ->
+  tearDown: () ->
+
+    #done()
+
+  '//GET /users - returns something': (done) ->
+
+    buster.assert(true)
     done()
 
-  'GET /users - returns something': (done) ->
+    return
 
+
+
+    done(() ->
+      buster.assert.equals(1, 1)
+    )
+
+    return
     request =
       session:
         user: true
@@ -31,7 +53,7 @@ buster.testCase 'API - /users collection',
 
 
 
-  'GET /users/5 - returns something': ->
+  '//GET /users/5 - returns something': ->
 
     request =
       session:

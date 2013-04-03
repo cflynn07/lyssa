@@ -9,6 +9,6 @@ config['My tests'] =
 #  ]
   tests: [
    # './**/*-test.js'
-    'integrationTests/**/*-test.js'
-    'unitTests/**/*-test.js'
+   # 'integrationTests/**/*-test.js'
+    '**/*-test.js'
   ]
