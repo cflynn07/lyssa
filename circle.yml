@@ -1,8 +1,8 @@
 machine:
   node:
     version: 0.8.2
-test:e
+test:
   pre:
     - coffee -c ./main/app
   override:
-    - node main/app/tests/routeParrot-test.js
+    - cd main/app/tests/ && buster test
