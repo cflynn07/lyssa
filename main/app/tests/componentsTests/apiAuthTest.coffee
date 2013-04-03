@@ -1,11 +1,15 @@
-appDir = '../../../'
+###
+  Test authentication module
+###
+
+appDir = '../../'
 buster  = require 'buster'
 _       = require 'underscore'
 apiAuth = require appDir + 'server/components/apiAuth'
 
 
 #Trying the BDD style of testing
-buster.testCase 'apiAuth module',
+buster.testCase 'Module components/apiAuth',
 
   setUp: (done) ->
     done()

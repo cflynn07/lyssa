@@ -1,5 +1,5 @@
 config = module.exports
-config['My tests'] =
+config['Tests'] =
   rootPath: "."
   environment: "node"
 #These are not required for nodejs tests
@@ -10,5 +10,5 @@ config['My tests'] =
   tests: [
    # './**/*-test.js'
    # 'integrationTests/**/*-test.js'
-    '**/*-test.js'
+    '**/*Test.js'
   ]

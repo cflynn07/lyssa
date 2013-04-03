@@ -93,14 +93,8 @@ app.io.route 'apiRequest', (req) ->
   require('./components/routeParrot').socketio(req, {}, (()->), app.router)
 
 
-
-#Regular Routes
-app.get '/', require('./controllers/index')
-
-
-#API Routes
-require('./controllers/api/users')(app)
-
+#Mount all controllers (API & Regular)
+require('./components/controllers')(app)
 
 
 app.listen app.get 'port'

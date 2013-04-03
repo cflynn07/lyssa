@@ -1,26 +1,32 @@
 async          = require 'async'
 html_minifier  = require 'html-minifier'
+config         = require '../config/config'
 
-module.exports = (req, res) ->
+module.exports = (app) ->
 
-  async.map ['header', 'body', 'footer']
-  , (item, callback) ->
+  app.get '/', (req, res, next) ->
 
-    res.render item,
-      environment: GLOBAL.app.settings.env
-      asset_hash:  GLOBAL.asset_hash,
-      (err, html) ->
-        callback err, html
+    async.map ['header', 'body', 'footer']
+    , (item, callback) ->
 
-  , (err, results) ->
+      res.render item,
+        environment: config.env
+        asset_hash:  config.assetHash,
+        (err, html) ->
 
-    html = results[1] + results[2]
-    html = html_minifier.minify html,
-      collapseWhitespace: true
-      removeComments:     true
-    #preseve comments in header
-    head = html_minifier.minify results[0],
-      collapseWhitespace: true
-    html = head + html
-    res.end html
+          console.log html
+
+          callback err, html
+
+    , (err, results) ->
+
+      html = results[1] + results[2]
+      html = html_minifier.minify html,
+        collapseWhitespace: true
+        removeComments:     true
+      #preseve comments in header
+      head = html_minifier.minify results[0],
+        collapseWhitespace: true
+      html = head + html
+      res.end html
 

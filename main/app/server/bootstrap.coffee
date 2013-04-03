@@ -15,10 +15,10 @@ catch e
   catch e
     output = Date.now() + ''
 
-GLOBAL.asset_hash = crypto.createHash('md5').update(output).digest("hex")
-console.log GLOBAL.asset_hash
+GLOBAL.assetHash = crypto.createHash('md5').update(output).digest("hex")
+console.log GLOBAL.assetHash
 
-localPath = __dirname + '/../client/assets/' + GLOBAL.asset_hash
+localPath = __dirname + '/../client/assets/' + GLOBAL.assetHash
 if fs.existsSync(localPath + '.css') and fs.existsSync(localPath + '.js')
   require './server'
 
@@ -29,7 +29,7 @@ else
       #OPTIMIZE CSS
       requirejs.optimize
         cssIn:        __dirname + '/../client/assets/main.css'
-        out:          __dirname + '/../client/assets/' + GLOBAL.asset_hash + '.css'
+        out:          __dirname + '/../client/assets/' + GLOBAL.assetHash + '.css'
         optimizeCss: 'standard' #standard
         preserveLicenseComments: false
         (buildResponse) ->
@@ -54,7 +54,7 @@ else
         include: './client'
      #   optimize: 'none' #'standard' #'none'
         preserveLicenseComments: false
-        out:     __dirname + '/../client/assets/' + GLOBAL.asset_hash + '.js'
+        out:     __dirname + '/../client/assets/' + GLOBAL.assetHash + '.js'
         paths:
           text:                 'vendor/text'
           'coffee-script':      'vendor/coffee-script'
