@@ -4,5 +4,6 @@ machine:
 test:
   pre:
     - coffee -c ./main/app
+    - npm install buster -g
   override:
     - cd main/app/tests/ && buster test
