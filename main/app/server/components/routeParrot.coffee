@@ -1,4 +1,4 @@
-config = require '../config/config'
+config  = require '../config/config'
 
 module.exports.http = (req, res, next, router) ->
   req.requestType = 'http'
@@ -7,7 +7,9 @@ module.exports.http = (req, res, next, router) ->
     #api auth
     #TODO
     res.jsonAPIRespond = (json) ->
-      res.json json
+      if !json.code?
+        json.code = 200
+      res.json json.code, json
 
     router(req, res, next)
   else
@@ -23,6 +25,8 @@ module.exports.socketio = (req, res, next, router) ->
     headers:  []
 
   res.jsonAPIRespond = (json) ->
+    if !json.code?
+      json.code = 200
     req.io.respond json
 
   #TODO api auth

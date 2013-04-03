@@ -8,5 +8,7 @@ config['My tests'] =
 #    'lib/**/*.js'
 #  ]
   tests: [
-    '*-test.js'
+   # './**/*-test.js'
+    'integrationTests/**/*-test.js'
+    'unitTests/**/*-test.js'
   ]

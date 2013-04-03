@@ -1,19 +1,28 @@
-#authentication.coffee
 ###
-module.exports = (req, callback) ->
+#  Verify access credentials
+###
 
-  #Determine if this is HTTP or websockets
+
+module.exports = (req, res, callback) ->
+
   if req.requestType is 'http'
-    #HTTP check session auth or token
 
-    if !req.user? or !req.user.clientID?
-      req.
+    ## Token or session based authentication?
+    if !req.session.user?
+      res.jsonAPIRespond
+        error: 'Unauthorized'
+        code: 401
     else
-      callback(req)
+      #applyAuthBadge(req)
+      callback()
 
-  else if req.requestType is 'socket.io'
-    #Socket.io only allows session auth
+  else if req.requestType is 'socketio'
 
-
-  callback(req)
-###
+    ## Session based authentication
+    if !req.session.user?
+      res.jsonAPIRespond
+        error: 'Unauthorized'
+        code: 401
+    else
+      #applyAuthBadge(req)
+      callback()
