@@ -26,6 +26,8 @@ else
     appName:    'Lyssa - Development'
 ###
 
+
+
 #redis clients
 pub   = require('./config/redis').createClient()
 sub   = require('./config/redis').createClient()
@@ -95,9 +97,9 @@ app.io.route 'apiRequest', (req) ->
 #Regular Routes
 app.get '/', require('./controllers/index')
 
+
 #API Routes
 require('./controllers/api/users')(app)
-
 
 
 

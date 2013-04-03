@@ -1,6 +1,8 @@
+appDir = '../../../'
+
 buster      = require 'buster'
 _           = require 'underscore'
-routeParrot = require '../server/components/routeParrot'
+routeParrot = require appDir + 'server/components/routeParrot'
 sinon       = require 'sinon'
 
 

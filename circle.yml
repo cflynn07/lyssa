@@ -4,5 +4,6 @@ machine:
 test:
   pre:
     - coffee -c ./main/app
+    - npm install buster -g
   override:
-    - node main/app/tests/routeParrot-test.js
+    - cd main/app/tests/ && buster test
