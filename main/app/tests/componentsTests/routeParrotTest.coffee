@@ -1,4 +1,9 @@
-appDir = '../../../'
+###
+  Testing proper parroting of API requests made via socket.io
+  & http to same route-handlers
+###
+
+appDir = '../../'
 
 buster      = require 'buster'
 _           = require 'underscore'
@@ -8,7 +13,7 @@ sinon       = require 'sinon'
 
 
 #Trying the BDD style of testing
-buster.testCase 'routeParrot module',
+buster.testCase 'Module components/routeParrot',
 
   setUp: (done) ->
     done()
