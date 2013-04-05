@@ -3,27 +3,32 @@ config  = require '../config/config'
 
 defaultCode = 200
 
-module.exports.http = (req, res, next, router) ->
+module.exports.http = (req, res, next) ->
   req.requestType = 'http'
 
+
+
   if req.url.indexOf config.apiSubDir is 0
-    #api auth
-    #TODO
+
     res.jsonAPIRespond = (json) ->
       if !json.code?
         json.code = defaultCode
       res.json json.code, json
 
+    #Pass through authentication module
     apiAuth req, res, next, () ->
       router req, res, next
 
-    #router(req, res, next)
+
+
   else
     router(req, res, next)
 
 
-module.exports.socketio = (req, res, next, router) ->
+module.exports.socketio = (req, res) ->
   req.requestType = 'socketio'
+
+
 
   httpEmulatedRequest =
     method:   if req.data.method then req.data.method else 'get'
@@ -35,6 +40,6 @@ module.exports.socketio = (req, res, next, router) ->
       json.code = defaultCode
     req.io.respond json
 
-  #TODO api auth
+  #Pass through authentication module
   apiAuth req, res, next, () ->
     router httpEmulatedRequest, res, next
