@@ -44,14 +44,14 @@ app.io.set 'store',
     redisClient: store
 
 #app.io.enable('browser client etag')
-app.io.set('log level', 3)
-app.io.set('transports', [
+app.io.set 'log level', 3
+app.io.set 'transports', [
 # 'websocket'
 # 'flashsocket'
   'htmlfile'
   'xhr-polling'
   'jsonp-polling'
-])
+]
 
 app.configure () ->
   #TODO store sessions in redis-store rather than memory
@@ -74,8 +74,12 @@ app.configure () ->
 
 
   #Standard Requests
-  app.use (req, res, next) ->
-    require('./components/routeParrot').http(req, res, next, app.router)
+  app.use require('./components/routeParrot').http
+
+#  app.use (req, res, next) ->
+#    require('./components/routeParrot').http(req, res)
+#    require('./components/apiAuth')(req, res)
+#    app.router()
 
 
   app.configure 'production', () ->

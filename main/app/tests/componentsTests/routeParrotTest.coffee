@@ -22,7 +22,7 @@ buster.testCase 'Module components/routeParrot',
 
   'modifies http request to API': () ->
 
-    routerSpy = this.spy()
+    nextSpy = this.spy()
     request =
       method: 'get'
       url: '/users'
@@ -30,9 +30,9 @@ buster.testCase 'Module components/routeParrot',
     response = {}
     next = ->
 
-    routeParrot.http request, response, next, routerSpy
+    routeParrot.http request, response, nextSpy
 
-    buster.assert.calledWith routerSpy,
+    buster.assert.calledWith nextSpy,
       _.extend(request, requestType: 'http'),
       response,
       next

@@ -23,9 +23,11 @@ buster.testCase 'Module components/apiAuth',
       session: {}
     response =
       jsonAPIRespond: this.spy()
-    callback = this.spy()
 
-    apiAuth(request, response, callback)
+    router = this.spy()
+    next   = this.spy()
+
+    apiAuth(request, response, next, router)
 
     buster.refute.called callback
     buster.assert.calledOnceWith response.jsonAPIRespond,

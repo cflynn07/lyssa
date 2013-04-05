@@ -1,4 +1,7 @@
 config  = require '../config/config'
+#apiAuth = require config.appRoot + 'server/components/apiAuth'
+
+defaultCode = 200
 
 module.exports.http = (req, res, next, router) ->
   req.requestType = 'http'
@@ -8,10 +11,13 @@ module.exports.http = (req, res, next, router) ->
     #TODO
     res.jsonAPIRespond = (json) ->
       if !json.code?
-        json.code = 200
+        json.code = defaultCode
       res.json json.code, json
 
-    router(req, res, next)
+    apiAuth req, res, next, () ->
+      router req, res, next
+
+    #router(req, res, next)
   else
     router(req, res, next)
 
@@ -26,8 +32,9 @@ module.exports.socketio = (req, res, next, router) ->
 
   res.jsonAPIRespond = (json) ->
     if !json.code?
-      json.code = 200
+      json.code = defaultCode
     req.io.respond json
 
   #TODO api auth
-  router httpEmulatedRequest, res, next
+  apiAuth req, res, next, () ->
+    router httpEmulatedRequest, res, next

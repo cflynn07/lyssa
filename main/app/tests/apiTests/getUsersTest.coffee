@@ -2,7 +2,7 @@
   Tests anticipated responses for GET requests to /users api
   resource
 ###
-
+return
 buster   = require 'buster'
 config   = require '../../server/config/config'
 express  = require 'express.io'

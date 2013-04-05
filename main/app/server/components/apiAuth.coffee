@@ -2,8 +2,7 @@
 #  Verify access credentials
 ###
 
-
-module.exports = (req, res, callback) ->
+module.exports = (req, res, next, router) ->
 
   if req.requestType is 'http'
 
