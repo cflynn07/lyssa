@@ -122,7 +122,7 @@ require [
     User.set {authenticated: false}
 
     console.log 'start'
-    Conn.request 'get', '/users', {}, (response) ->
+    Conn.request 'get', '/users/casey555', {}, (response) ->
       console.log 'api websocket response'
       console.log response
 
@@ -134,8 +134,8 @@ require [
 
   timer = setInterval(()->
     percent = parseInt pbar.style.width
-    if percent > 95
       clearTimeout timer
+    if percent > 95
       return
 
     percent = percent + 6

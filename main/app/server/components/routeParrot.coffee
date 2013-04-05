@@ -4,32 +4,25 @@ config  = require '../config/config'
 defaultCode = 200
 
 module.exports.http = (req, res, next) ->
-  req.requestType = 'http'
 
 
+  #Modify if this is an API HTTP request
+  if req.url.indexOf(config.apiSubDir) is 0
 
-  if req.url.indexOf config.apiSubDir is 0
-
+    req.requestType = 'http'
     res.jsonAPIRespond = (json) ->
       if !json.code?
         json.code = defaultCode
       res.json json.code, json
 
-    #Pass through authentication module
-    apiAuth req, res, next, () ->
-      router req, res, next
+  next()
 
 
-
-  else
-    router(req, res, next)
-
-
-module.exports.socketio = (req, res) ->
+module.exports.socketio = (req, res, callback) ->
   req.requestType = 'socketio'
 
-
-
+  #Tweak the REQ object so that the app.router will treat it as
+  #a regular HTTP request
   httpEmulatedRequest =
     method:   if req.data.method then req.data.method else 'get'
     url:      config.apiSubDir + (if req.data.url then req.data.url else '/')
@@ -40,6 +33,5 @@ module.exports.socketio = (req, res) ->
       json.code = defaultCode
     req.io.respond json
 
-  #Pass through authentication module
-  apiAuth req, res, next, () ->
-    router httpEmulatedRequest, res, next
+
+  callback(httpEmulatedRequest, res)

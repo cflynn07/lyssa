@@ -1,5 +1,5 @@
 ###
-#  Loads & mounts all modules in the controllers folder
+  Recursively search & attach route handlers in /server/controllers directory
 ###
 
 controllersPath = __dirname + '/../controllers'

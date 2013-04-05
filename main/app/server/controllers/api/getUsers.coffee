@@ -9,4 +9,6 @@ module.exports = (app) ->
     , 10
 
   app.get apiSubDir + '/users/:id', (req, res) ->
-    res.jsonAPIRespond({foo: 'bar2'})
+    res.jsonAPIRespond
+      foo: 'bar2'
+      stuff: req.params.id

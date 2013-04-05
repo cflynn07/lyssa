@@ -3,16 +3,12 @@
   & http to same route-handlers
 ###
 
-appDir = '../../'
-
+config      = require '../../server/config/config'
 buster      = require 'buster'
 _           = require 'underscore'
-routeParrot = require appDir + 'server/components/routeParrot'
+routeParrot = require config.appRoot + 'server/components/routeParrot'
 sinon       = require 'sinon'
 
-
-
-#Trying the BDD style of testing
 buster.testCase 'Module components/routeParrot',
 
   setUp: (done) ->
@@ -20,82 +16,82 @@ buster.testCase 'Module components/routeParrot',
   tearDown: (done) ->
     done()
 
-  'modifies http request to API': () ->
+  'Modifies HTTP request to API': () ->
 
     nextSpy = this.spy()
     request =
       method: 'get'
-      url: '/users'
+      url: config.apiSubDir + '/users'
       headers: []
     response = {}
-    next = ->
+    next     = this.spy()
 
     routeParrot.http request, response, nextSpy
 
-    buster.assert.calledWith nextSpy,
-      _.extend(request, requestType: 'http'),
-      response,
-      next
+    #routeParrot.http modified this request by adding required attributes
+    #to req & res objects
+    buster.assert.called nextSpy
     buster.assert.isFunction response.jsonAPIRespond
     buster.assert.same('http', request.requestType)
 
 
-  'does not modify http request that is not to API': () ->
+  'Does not modify HTTP request that is not to API': () ->
 
-    routerSpy = this.spy()
     request =
       method: 'get'
       url: '/users' #<-- not prefixed with '/api'
       headers: []
     response = {}
-    next = ->
+    nextSpy  = this.spy()
 
-    routeParrot.http request, response, next, routerSpy
+    routeParrot.http request, response, nextSpy
 
-    buster.assert.calledWith routerSpy,
-      request,
-      response,
-      next
-    buster.assert.same(request.jsonAPIRespond, undefined)
-    buster.assert.same('http', request.requestType)
+    #routeParrot.http did not modify req & res objects
+    buster.assert.called nextSpy
+    buster.refute response.jsonAPIRespond
+    buster.refute request.requestType
 
 
-  'modifies socketio request to API': () ->
+  'Modifies socket.io request to API': () ->
 
-    routerSpy = this.spy()
+    #The client method is responsible for formatting the data object with
+    #3 properties - method, url, headers
     request =
       data:
         method: 'get'
         url: '/users'
         headers: []
+    #response will be an empty object
     response = {}
-    next = ->
+    callbackSpy  = this.spy()
 
-    #Expect request.data to be passed to router as this
-    httpEmulatedRequest =
-      method: request.data.method
-      url: '/api' + request.data.url  #<-- make sure '/api' is prepended
+    routeParrot.socketio request, response, callbackSpy
+
+    buster.assert.calledWith callbackSpy, {
+      method:  'get'
+      url:     config.apiSubDir + '/users' #<-- expect config.apiSubDir to be prepended
       headers: []
-
-    routeParrot.socketio request, response, next, routerSpy
-
-    buster.assert.calledWith routerSpy,
-      httpEmulatedRequest,
-      response
-      next
-
+    }, response
     buster.assert.isFunction response.jsonAPIRespond
     buster.assert.same('socketio', request.requestType)
 
 
-  'forwards socketio & http api requests to same route': () ->
+  'Forwards socketio & http api requests to same route': () ->
 
-    httpSpy = this.spy()
-    socketIOSpy = this.spy()
+    ###
+    For the purposes of this test, we assume that if the 'url' property and the
+    'method' property of the req object that's passed to app.router is identical,
+    the router will pass the request to the same handler. This is a UNIT test not
+    an integration test.
+    ###
+
+    #SETUP!
+    httpNextSpy = this.spy()
+    sioNextSpy  = this.spy()
 
     httpAPIRequest =
       method: 'get'
-      url: '/api/users'
+      url: config.apiSubDir + '/users'
       headers: []
 
     socketioAPIRequest =
@@ -105,15 +101,16 @@ buster.testCase 'Module components/routeParrot',
         headers: []
 
     httpResponse = {}
-    socketioResponse = {}
-    httpNext = ->
-    socketioNext = ->
+    sioResponse  = {}
 
-    routeParrot.http(httpAPIRequest, httpResponse, httpNext, httpSpy)
-    routeParrot.socketio(socketioAPIRequest, socketioResponse, socketioNext, socketIOSpy)
+    #GO!
+    routeParrot.http httpAPIRequest, httpResponse, httpNextSpy
+    routeParrot.socketio socketioAPIRequest, sioResponse, sioNextSpy
 
-    buster.assert.same httpSpy.args[0][0].url, socketIOSpy.args[0][0].url, '/api/users'
-
+    #TEST!
+    buster.assert.called httpNextSpy
+    buster.assert.called sioNextSpy
+    buster.assert.same httpAPIRequest.url, sioNextSpy.args[0][0].url, config.apiSubDir + '/users'
 
 
 

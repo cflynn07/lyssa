@@ -9,7 +9,7 @@ if !GLOBAL.asset_hash?
 
 #Read dotCloud ENV file if exists
 try
-  GLOBAL.env = JSON.parse(fs.readFileSync('/home/dotcloud/environment.json', 'utf-8'))
+  GLOBAL.env = JSON.parse fs.readFileSync '/home/dotcloud/environment.json', 'utf-8'
 catch error
   GLOBAL.env = false
 
@@ -54,33 +54,26 @@ app.io.set 'transports', [
 ]
 
 app.configure () ->
-  #TODO store sessions in redis-store rather than memory
+
   app.use express.compress()
   app.disable 'x-powered-by'
   app.set 'port', process.env.PORT || 8080
   app.set 'views', __dirname + '/views'
   app.set 'view engine', 'ejs'
-
-  #TODO
-  #app.use express.favicon()
   app.use express.logger 'dev'
   app.use express.bodyParser()
   app.use express.methodOverride()
-
   app.use express.cookieParser()
   app.use express.session
     secret: 'c9d7732c0de118325e6de4582b37a4e9'
     store:  redisStore
 
 
-  #Standard Requests
+  #Route parrot middleware
+  #match api requests from socket.io & http to same handlers by modifying
+  #req & res objects
   app.use require('./components/routeParrot').http
-
-#  app.use (req, res, next) ->
-#    require('./components/routeParrot').http(req, res)
-#    require('./components/apiAuth')(req, res)
-#    app.router()
-
+  app.use app.router
 
   app.configure 'production', () ->
     maxAge = 31536000000
@@ -94,7 +87,11 @@ app.configure () ->
 
 #API Requests
 app.io.route 'apiRequest', (req) ->
-  require('./components/routeParrot').socketio(req, {}, (()->), app.router)
+  require('./components/routeParrot').socketio req, {}, (req, res) ->
+    app.router req, res, () ->
+      req.io.respond
+        code: 404
+        error: 'not found'
 
 
 #Mount all controllers (API & Regular)
