@@ -134,7 +134,7 @@ require [
 
   timer = setInterval(()->
     percent = parseInt pbar.style.width
-      clearTimeout timer
+    clearTimeout timer
     if percent > 95
       return
 
