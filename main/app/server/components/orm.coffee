@@ -7,9 +7,13 @@ modelsPath    = __dirname + '/../models'
 relationships = {}
 models        = []
 
+instance = null
 
 #setup
-setup = () ->
+setup = (mode = 'standard') ->
+
+  if instance
+    return instance
 
   globalOptions =
     pool:
@@ -20,38 +24,51 @@ setup = () ->
     syncOnAssociation: false
     paranoid: true
 
+  if mode is 'standard'
 
+    # 'lyssa' is my development DB
+    #& 'production' is production on dotcloud
+    if GLOBAL.env? && GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN?
 
-  # 'lyssa' is my development DB
-  #& 'production' is production on dotcloud
-  if GLOBAL.env? && GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN?
+      productionOptions =
+        host: GLOBAL.env.DOTCLOUD_DB_MYSQL_HOST
+        port: GLOBAL.env.DOTCLOUD_DB_MYSQL_PORT
+      _.extend globalOptions, productionOptions
 
-    productionOptions =
-      host: GLOBAL.env.DOTCLOUD_DB_MYSQL_HOST
-      port: GLOBAL.env.DOTCLOUD_DB_MYSQL_PORT
-    _.extend globalOptions, productionOptions
+      sequelize = new Sequelize(
+        'production',
+        GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN,
+        GLOBAL.env.DOTCLOUD_DB_MYSQL_PASSWORD,
+        globalOptions
+      )
 
-    sequelize = new Sequelize(
-      'production',
-      GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN,
-      GLOBAL.env.DOTCLOUD_DB_MYSQL_PASSWORD,
-      globalOptions
-    )
+    else
+
+      localOptions =
+        host: 'localhost'
+        port: '8889'
+      _.extend globalOptions, localOptions
+
+      sequelize = new Sequelize(
+        'lyssa',
+        'root',
+        'root',
+        globalOptions
+      )
 
   else
+    if mode is 'testing'
 
-    localOptions =
-      host: 'localhost'
-      port: '8889'
-    _.extend globalOptions, localOptions
+      testOptions =
+        host: 'localhost'
+      _.extend globalOptions, testOptions
 
-    sequelize = new Sequelize(
-      'lyssa',
-      'root',
-      'root',
-      globalOptions
-    )
-
+      sequelize = new Sequelize(
+        'circle_test',
+        'ubuntu',
+        '',
+        globalOptions
+      )
 
   fs.readdirSync(modelsPath).forEach (name) ->
 
@@ -71,6 +88,8 @@ setup = () ->
       models[modelName][relName][models[related]]
 
   #sequelize.sync()
+  instance = sequelize
+  return instance
 
 
 module.exports =

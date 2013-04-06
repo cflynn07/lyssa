@@ -3,13 +3,44 @@
   resource
 ###
 
+
+
+testScript = "SET NAMES utf8;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+--  Table structure for `clients`
+-- ----------------------------
+DROP TABLE IF EXISTS `clients`;
+CREATE TABLE `clients` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `identifier` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `clients`
+-- ----------------------------
+BEGIN;
+INSERT INTO `clients` VALUES ('1', 'Apple', 'apple'), ('2', 'Wellington Mgmt', 'wellington'), ('3', 'Princement', 'prince');
+COMMIT;
+
+SET FOREIGN_KEY_CHECKS = 1;"
+
+
+
 buster   = require 'buster'
 config   = require '../../server/config/config'
 express  = require 'express.io'
 getUsers = require config.appRoot + 'server/controllers/api/users/getUsers'
 
 ORM      = require config.appRoot + 'server/components/orm'
-ORM.setup()
+sequelize = ORM.setup()
+
+sequelize.query("SHOW DATABASES;").success (rows) ->
+  console.log rows
+
 
 app = express().http().io()
 
