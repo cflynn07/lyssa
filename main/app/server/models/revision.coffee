@@ -12,5 +12,5 @@ module.exports =
     relations:
         belongsTo: 'client'
         belongsTo: 'user'
-        hasMany: 'revision'
+        hasMany: 'group'
     options: {}
