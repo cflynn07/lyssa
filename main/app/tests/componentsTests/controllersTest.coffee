@@ -3,9 +3,8 @@
   sure proper routes are mounted
 ###
 
-appDir = '../../'
-buster = require 'buster'
-
+appDir  = '../../'
+buster  = require 'buster'
 express = require 'express.io'
 app     = express().http().io()
 

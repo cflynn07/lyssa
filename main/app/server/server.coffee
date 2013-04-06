@@ -13,7 +13,8 @@ try
 catch error
   GLOBAL.env = false
 
-
+#set up orm
+require('./components/orm').setup()
 
 ###
 if GLOBAL.env
@@ -67,7 +68,6 @@ app.configure () ->
   app.use express.session
     secret: 'c9d7732c0de118325e6de4582b37a4e9'
     store:  redisStore
-
 
   #Route parrot middleware
   #match api requests from socket.io & http to same handlers by modifying
