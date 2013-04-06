@@ -122,7 +122,7 @@ require [
     User.set {authenticated: false}
 
     console.log 'start'
-    Conn.request 'get', '/users/casey555', {}, (response) ->
+    Conn.request 'get', '/users/casey555?type=super_admin', {}, (response) ->
       console.log 'api websocket response'
       console.log response
 

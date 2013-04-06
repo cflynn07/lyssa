@@ -23,7 +23,6 @@ module.exports = (app) ->
 
   app.get config.apiSubDir + '/users/:id', (req, res) ->
     apiAuth req, res, () ->
-
       switch req.session.user.type
         when 'super_admin'
           res.jsonAPIRespond config.unauthorizedResponse

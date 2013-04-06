@@ -1,4 +1,5 @@
 config  = require '../config/config'
+_       = require 'underscore'
 #apiAuth = require config.appRoot + 'server/components/apiAuth'
 
 defaultCode = 200
@@ -19,14 +20,16 @@ module.exports.http = (req, res, next) ->
 
 
 module.exports.socketio = (req, res, callback) ->
-  req.requestType = 'socketio'
 
   #Tweak the REQ object so that the app.router will treat it as
   #a regular HTTP request
   httpEmulatedRequest =
+    requestType: 'socketio'
     method:   if req.data.method then req.data.method else 'get'
     url:      config.apiSubDir + (if req.data.url then req.data.url else '/')
     headers:  []
+
+  _.extend req, httpEmulatedRequest
 
   res.jsonAPIRespond = (json) ->
     if !json.code?
@@ -34,4 +37,4 @@ module.exports.socketio = (req, res, callback) ->
     req.io.respond json
 
 
-  callback(httpEmulatedRequest, res)
+  callback(req, res)

@@ -13,21 +13,17 @@ module.exports = (req, res, callback) ->
       req.session.user =
         type: req.param('type')
 
-
     ## Token or session based authentication?
     if !req.session.user?
       res.jsonAPIRespond config.unauthorizedResponse
-
     else if config.authCategories.indexOf(req.session.user.type) is -1
       res.jsonAPIRespond config.unauthorizedResponse
-
     else
       #applyAuthBadge(req)
       callback()
 
 
   else if req.requestType is 'socketio'
-
     ## Session based authentication
     if !req.session.user?
       res.jsonAPIRespond config.unauthorizedResponse

@@ -91,7 +91,6 @@ setup = (mode = 'standard') ->
   instance = sequelize
   return instance
 
-
 module.exports =
   SEQ: Sequelize
   setup: setup

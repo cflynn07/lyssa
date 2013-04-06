@@ -87,11 +87,13 @@ app.configure () ->
 
 #API Requests
 app.io.route 'apiRequest', (req) ->
-  require('./components/routeParrot').socketio req, {}, (req, res) ->
-    app.router req, res, () ->
-      req.io.respond
-        code: 404
-        error: 'not found'
+  require('./components/routeParrot').socketio req,
+    {},
+    (req, res) ->
+      app.router req, res, () ->
+        req.io.respond
+          code: 404
+          error: 'not found'
 
 
 #Mount all controllers (API & Regular)
