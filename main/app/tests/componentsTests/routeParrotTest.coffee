@@ -16,7 +16,7 @@ buster.testCase 'Module components/routeParrot',
   tearDown: (done) ->
     done()
 
-  'Modifies HTTP request to API': () ->
+  '--> Modifies HTTP request to API': () ->
 
     nextSpy = this.spy()
     request =
@@ -35,7 +35,7 @@ buster.testCase 'Module components/routeParrot',
     buster.assert.same('http', request.requestType)
 
 
-  'Does not modify HTTP request that is not to API': () ->
+  '--> Does not modify HTTP request that is not to API': () ->
 
     request =
       method: 'get'
@@ -52,7 +52,7 @@ buster.testCase 'Module components/routeParrot',
     buster.refute request.requestType
 
 
-  'Modifies socket.io request to API': () ->
+  '--> Modifies socket.io request to API': () ->
 
     #The client method is responsible for formatting the data object with
     #3 properties - method, url, headers
@@ -65,18 +65,24 @@ buster.testCase 'Module components/routeParrot',
     response = {}
     callbackSpy  = this.spy()
 
+    ###
+      This is what we expect routeParrot.socketio to mutate request as
+    ###
+    mergedRequest = _.extend({
+      method:  'get'
+      url:     config.apiSubDir + '/users'
+      headers: []
+      requestType: 'socketio'
+    }, request)
+
     routeParrot.socketio request, response, callbackSpy
 
-    buster.assert.calledWith callbackSpy, {
-      method:  'get'
-      url:     config.apiSubDir + '/users' #<-- expect config.apiSubDir to be prepended
-      headers: []
-    }, response
+    buster.assert.calledWith callbackSpy, mergedRequest, response
     buster.assert.isFunction response.jsonAPIRespond
     buster.assert.same('socketio', request.requestType)
 
 
-  'Forwards socketio & http api requests to same route': () ->
+  '--> Forwards socketio & http api requests to same route': () ->
 
     ###
     For the purposes of this test, we assume that if the 'url' property and the

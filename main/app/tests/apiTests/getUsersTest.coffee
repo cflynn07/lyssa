@@ -5,13 +5,14 @@
 
 
 buster   = require 'buster'
+execSync = require 'exec-sync'
 config   = require '../../server/config/config'
 express  = require 'express.io'
 getUsers = require config.appRoot + 'server/controllers/api/users/getUsers'
 
 ORM      = require config.appRoot + 'server/components/orm'
 sequelize = ORM.setup()
-
+#sequelize.sync()
 
 app = express().http().io()
 
@@ -21,6 +22,10 @@ getUsers(app)
 buster.testCase 'API GET /users',
 
   setUp: (done) ->
+
+    #Okay this works for loading up a database...
+    mysql = '/usr/local/mysql/bin/mysql'
+    this.output = execSync mysql + ' -u root lyssa < ' + config.appRoot + '/tests/apiTests/lyssa.sql'
 
     this.request =
       url:      '/api/users'
@@ -37,14 +42,14 @@ buster.testCase 'API GET /users',
     done()
 
 
-  'GET /users exists': () ->
+  '--> GET /users exists': () ->
 
     next = this.spy()
     app.router this.request, this.response, next
     buster.refute.called next
 
 
-  'GET /users/:id exists': () ->
+  '--> GET /users/:id exists': () ->
 
     this.request.url = '/api/users/10'
 
