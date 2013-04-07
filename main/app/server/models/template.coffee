@@ -8,8 +8,12 @@ module.exports =
     id:   SEQ.INTEGER
     name: SEQ.STRING
     type: SEQ.ENUM 'full', 'mini'
-  relations:
-    belongsTo: 'client'
-    belongsTo: 'employee'
+  relations: [
+    relation: 'belongsTo'
+    model:    'client'
+  ,
+    relation: 'belongsTo'
+    model:    'employee'
+  ]
   options:
     paranoid: true
