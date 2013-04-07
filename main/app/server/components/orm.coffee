@@ -90,9 +90,19 @@ module.exports =
       if object.relations
         relationships[modelName] = object.relations
 
-    for modelName, relation of @relationships
-      for relName, relModel of relation
-        @models[modelName][relName](@models[relModel])
+
+
+    for modelName, relations of @relationships
+      for relObject in relations
+        @models[modelName][relObject.relation](@models[relObject.model])
+
+      #  console.log relName
+      #  console.log relModel
+      #  console.log modelName + ' ' + relName + ' ' + relModel
+      #  @models[modelName][relName](@models[relModel])
+
+
+
 
     @instance = sequelize
     return @instance
