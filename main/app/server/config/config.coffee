@@ -10,6 +10,13 @@ module.exports =
     'client_delegate'
     'client_auditor'
   ]
+  fieldTypes: [
+    'openResponse'
+    'selectIndividual'
+    'selectMultiple'
+    'yesNo'
+    'slider'
+  ]
   unauthorizedResponse:
     code: 401
     error: 'Unauthorized'

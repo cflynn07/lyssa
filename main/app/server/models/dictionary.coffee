@@ -10,4 +10,5 @@ module.exports =
   relations:
     belongsTo: 'client'
     hasMany: 'dictionaryItem'
-  options: {}
+  options:
+    paranoid: true
