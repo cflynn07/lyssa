@@ -8,8 +8,12 @@ module.exports =
     id:       SEQ.INTEGER
     name:     SEQ.STRING
     dateTime: SEQ.DATE
-  relations:
-    belongsTo: 'client'
-    hasMany: 'submission'
+  relations: [
+    relation: 'belongsTo'
+    model: 'client'
+  ,
+    relation: 'hasMany'
+    model: 'submission'
+  ]
   options:
     paranoid: true

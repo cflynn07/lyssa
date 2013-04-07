@@ -8,10 +8,18 @@ module.exports =
     id:            SEQ.INTEGER
     changeSummary: SEQ.TEXT
     scope:         SEQ.TEXT
-  relations:
-    belongsTo: 'template'
-    belongsTo: 'client'
-    belongsTo: 'employee'
-    hasMany: 'group'
+  relations: [
+    relation: 'belongsTo'
+    model: 'template'
+  ,
+    relation: 'belongsTo'
+    model: 'client'
+  ,
+    relation: 'belongsTo'
+    model: 'employee'
+  ,
+    relation: 'hasMany'
+    model: 'group'
+  ]
   options:
     paranoid: true

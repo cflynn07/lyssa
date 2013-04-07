@@ -17,11 +17,21 @@ module.exports =
     username: SEQ.STRING
     password: SEQ.STRING
     type:     SEQ.ENUM config.authCategories
-  relations:
-    belongsTo: 'client'
-    hasMany:   'template'
-    hasMany:   'revision'
-    hasMany:   'event'
-    hasMany:   'submission'
+  relations: [
+    relation: 'belongsTo'
+    model: 'client'
+  ,
+    relation: 'hasMany'
+    model: 'template'
+  ,
+    relation: 'hasMany'
+    model: 'revision'
+  ,
+    relation: 'hasMany'
+    model: 'event'
+  ,
+    relation: 'hasMany'
+    model: 'submission'
+  ]
   options:
     paranoid: true

@@ -8,8 +8,12 @@ module.exports =
     id:      SEQ.INTEGER
     name:    SEQ.STRING
     ordinal: SEQ.INTEGER
-  relations:
-    belongsTo: 'revision'
-    hasMany: 'field'
+  relations: [
+    relation: 'belongsTo'
+    model: 'revision'
+  ,
+    relation: 'hasMany'
+    model: 'field'
+  ]
   options:
     paranoid: true

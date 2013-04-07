@@ -7,7 +7,9 @@ module.exports =
   model:
     id:   SEQ.INTEGER
     name: SEQ.STRING
-  relations:
-    belongsTo: 'dictionary'
+  relations: [
+    relation: 'belongsTo'
+    model: 'dictionary'
+  ]
   options:
     paranoid: true

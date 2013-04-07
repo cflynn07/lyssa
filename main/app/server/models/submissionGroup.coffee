@@ -7,8 +7,12 @@ module.exports =
   model:
     id:   SEQ.INTEGER
     name: SEQ.STRING
-  relations:
-    belongsTo: 'submission'
-    hasMany: 'submissionField'
+  relations: [
+    relation: 'belongsTo'
+    model: 'submission'
+  ,
+    relation: 'hasMany'
+    model: 'submissionField'
+  ]
   options:
     paranoid: true

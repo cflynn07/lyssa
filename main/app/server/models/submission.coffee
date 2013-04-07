@@ -6,8 +6,15 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id: SEQ.INTEGER
-  relations:
-    belongsTo: 'event'
-    #hasMany: ''
+  relations: [
+    relation: 'belongsTo'
+    model: 'event'
+  ,
+    relation: 'belongsTo'
+    model: 'employee'
+  ,
+    relation: 'hasMany'
+    model: 'submissionGroup'
+  ]
   options:
     paranoid: true

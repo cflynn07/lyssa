@@ -79,8 +79,11 @@ module.exports =
     relationships = @relationships
     models = @models
     fs.readdirSync(modelsPath).forEach (name) ->
+
       if name.indexOf('coffee') > 0
         return
+
+      console.log name
 
       object = require modelsPath + '/' + name
       options = object.options || {}

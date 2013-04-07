@@ -20,10 +20,18 @@ module.exports =
     country:       SEQ.STRING
     telephone:     SEQ.STRING
     fax:           SEQ.STRING
-  relations:
-    hasMany: 'employee'
-    hasMany: 'template'
-    hasMany: 'dictionary'
-    hasMany: 'event'
+  relations: [
+    relation: 'hasMany'
+    model: 'employee'
+  ,
+    relation: 'hasMany'
+    model: 'template'
+  ,
+    relation: 'hasMany'
+    model: 'dictionary'
+  ,
+    relation: 'hasMany'
+    model: 'event'
+  ]
   options:
     paranoid: true

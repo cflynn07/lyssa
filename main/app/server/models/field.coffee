@@ -9,7 +9,9 @@ module.exports =
     id:   SEQ.INTEGER
     name: SEQ.STRING
     type: SEQ.ENUM config.fieldTypes
-  relations:
-    belongsTo: 'group'
+  relations: [
+    relation: 'belongsTo'
+    model: 'group'
+  ]
   options:
     paranoid: true
