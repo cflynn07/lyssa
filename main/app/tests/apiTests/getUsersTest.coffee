@@ -10,7 +10,7 @@ getUsers = require config.appRoot + 'server/controllers/api/users/getUsers'
 ORM      = require config.appRoot + 'server/components/orm'
 
 sequelize = ORM.setup()
-#sequelize.sync force: true
+sequelize.sync force: true
 app = express().http().io()
 
 ###

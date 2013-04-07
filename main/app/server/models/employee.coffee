@@ -1,5 +1,6 @@
 # employee model
 
+config = require '../config/config'
 orm = require '../components/orm'
 SEQ = orm.SEQ
 
@@ -11,6 +12,16 @@ module.exports =
     lastName:   SEQ.STRING
     email:      SEQ.STRING
     phone:      SEQ.STRING
+
+    #Migrated from users model
+    username: SEQ.STRING
+    password: SEQ.STRING
+    type:     SEQ.ENUM config.authCategories
   relations:
     belongsTo: 'client'
-  options: {}
+    hasMany:   'template'
+    hasMany:   'revision'
+    hasMany:   'event'
+    hasMany:   'submission'
+  options:
+    paranoid: true

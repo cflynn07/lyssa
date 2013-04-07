@@ -1,4 +1,4 @@
-# revision model
+# submissionGroup model
 
 orm = require '../components/orm'
 SEQ = orm.SEQ
@@ -7,10 +7,7 @@ module.exports =
     model:
         id:             SEQ.INTEGER
         name:           SEQ.STRING
-        changeSummary:  SEQ.TEXT
-        type:           SEQ.STRING
     relations:
-        belongsTo: 'client'
-        belongsTo: 'employee'
-        hasMany: 'group'
+        belongsTo: 'submission'
+        hasMany: 'submissionField'
     options: {}

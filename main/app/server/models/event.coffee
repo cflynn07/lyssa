@@ -10,4 +10,5 @@ module.exports =
         dateTime:       SEQ.DATE
     relations:
         belongsTo: 'client'
+        hasMany: 'submission'
     options: {}
