@@ -13,9 +13,6 @@ module.exports =
     model: 'template'
   ,
     relation: 'belongsTo'
-    model: 'client'
-  ,
-    relation: 'belongsTo'
     model: 'employee'
   ,
     relation: 'hasMany'

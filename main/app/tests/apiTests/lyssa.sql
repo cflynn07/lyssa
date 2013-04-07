@@ -26,10 +26,20 @@ CREATE TABLE `clients` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `indentifier` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `address1` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `address2` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `address3` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `stateProvince` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `country` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `telephone` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `fax` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `deletedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `indentifier` (`indentifier`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +48,6 @@ CREATE TABLE `clients` (
 
 LOCK TABLES `clients` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-INSERT INTO `clients` VALUES (1,'Acme Co','acme','2013-04-06 19:42:13','2013-04-06 19:42:15'),(2,'Delta Co','delta','2013-04-06 19:42:28','2013-04-06 19:42:31'),(3,'Brazin Co','brazin','2013-04-06 19:42:42','2013-04-06 19:42:45'),(4,'Microsoft Co','microsoft','2013-04-06 19:50:56','2013-04-06 19:50:58'),(5,'Cobar Systems LLC','cobar','2013-04-06 19:51:11','2013-04-06 19:51:13');
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,8 +63,11 @@ CREATE TABLE `dictionaries` (
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
+  `deletedAt` datetime DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_dictionaries_clients1` (`clientId`),
+  CONSTRAINT `fk_dictionaries_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -80,8 +92,11 @@ CREATE TABLE `dictionaryItems` (
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
+  `deletedAt` datetime DEFAULT NULL,
   `dictionaryId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_dictionaryItems_dictionaries1` (`dictionaryId`),
+  CONSTRAINT `fk_dictionaryItems_dictionaries1` FOREIGN KEY (`dictionaryId`) REFERENCES `dictionaries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -108,10 +123,16 @@ CREATE TABLE `employees` (
   `lastName` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `email` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `phone` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `username` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `type` enum('super_admin','client_super_admin','client_admin','client_delegate','client_auditor') COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
+  `deletedAt` datetime DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `clientId` (`clientId`),
+  CONSTRAINT `clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -137,8 +158,14 @@ CREATE TABLE `events` (
   `dateTime` datetime DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
+  `deletedAt` datetime DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `employeeId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_events_employees1` (`employeeId`),
+  KEY `fk_events_clients1` (`clientId`),
+  CONSTRAINT `fk_events_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_events_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -161,11 +188,14 @@ DROP TABLE IF EXISTS `fields`;
 CREATE TABLE `fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `type` enum('openResponse','selectIndividual','selectMultiple','yesNo','slider') COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
+  `deletedAt` datetime DEFAULT NULL,
   `groupId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_fields_groups1` (`groupId`),
+  CONSTRAINT `fk_fields_groups1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -191,8 +221,11 @@ CREATE TABLE `groups` (
   `ordinal` int(11) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
+  `deletedAt` datetime DEFAULT NULL,
   `revisionId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `revisionId` (`revisionId`),
+  CONSTRAINT `revisionId` FOREIGN KEY (`revisionId`) REFERENCES `revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -214,13 +247,18 @@ DROP TABLE IF EXISTS `revisions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `revisions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `changeSummary` text COLLATE utf8_bin,
-  `type` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `scope` text COLLATE utf8_bin,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `userId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `deletedAt` datetime DEFAULT NULL,
+  `employeeId` int(11) DEFAULT NULL,
+  `templateId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `templateId` (`templateId`),
+  KEY `employeeId` (`employeeId`),
+  CONSTRAINT `templateId` FOREIGN KEY (`templateId`) REFERENCES `templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `employeeId` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -234,6 +272,95 @@ LOCK TABLES `revisions` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `submissionFields`
+--
+
+DROP TABLE IF EXISTS `submissionFields`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `submissionFields` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  `submissionGroupId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_submissionFields_submissionGroups1` (`submissionGroupId`),
+  CONSTRAINT `fk_submissionFields_submissionGroups1` FOREIGN KEY (`submissionGroupId`) REFERENCES `submissionGroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `submissionFields`
+--
+
+LOCK TABLES `submissionFields` WRITE;
+/*!40000 ALTER TABLE `submissionFields` DISABLE KEYS */;
+/*!40000 ALTER TABLE `submissionFields` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `submissionGroups`
+--
+
+DROP TABLE IF EXISTS `submissionGroups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `submissionGroups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  `submissionId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_submissionGroups_submissions1` (`submissionId`),
+  CONSTRAINT `fk_submissionGroups_submissions1` FOREIGN KEY (`submissionId`) REFERENCES `submissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `submissionGroups`
+--
+
+LOCK TABLES `submissionGroups` WRITE;
+/*!40000 ALTER TABLE `submissionGroups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `submissionGroups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `submissions`
+--
+
+DROP TABLE IF EXISTS `submissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `submissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  `employeeId` int(11) DEFAULT NULL,
+  `eventId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_submissions_events1` (`eventId`),
+  KEY `fk_submissions_employees1` (`employeeId`),
+  CONSTRAINT `fk_submissions_events1` FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissions_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `submissions`
+--
+
+LOCK TABLES `submissions` WRITE;
+/*!40000 ALTER TABLE `submissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `submissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `templates`
 --
 
@@ -243,15 +370,17 @@ DROP TABLE IF EXISTS `templates`;
 CREATE TABLE `templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `objective` text COLLATE utf8_bin,
-  `scopeRequirements` text COLLATE utf8_bin,
-  `recoveryPointObjective` int(11) DEFAULT NULL,
-  `recoveryTimeObjective` int(11) DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `type` enum('full','mini') COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `userId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `deletedAt` datetime DEFAULT NULL,
+  `clientId` int(11) DEFAULT NULL,
+  `employeeId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_templates_employees1` (`employeeId`),
+  KEY `fk_templates_clients1` (`clientId`),
+  CONSTRAINT `fk_templates_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_templates_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -263,34 +392,6 @@ LOCK TABLES `templates` WRITE;
 /*!40000 ALTER TABLE `templates` DISABLE KEYS */;
 /*!40000 ALTER TABLE `templates` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  `employeeId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -301,4 +402,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-06 20:04:38
+-- Dump completed on 2013-04-07 19:40:04
