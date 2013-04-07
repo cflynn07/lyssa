@@ -38,6 +38,8 @@ module.exports =
 
       else
 
+
+
         ###
           Local
         ###
@@ -52,6 +54,8 @@ module.exports =
           '',
           globalOptions
         )
+
+
 
     else
 
@@ -78,8 +82,6 @@ module.exports =
       if name.indexOf('coffee') > 0
         return
 
-      console.log name
-
       object = require modelsPath + '/' + name
       options = object.options || {}
       modelName = name.replace(/\.js$/i, '')
@@ -89,12 +91,6 @@ module.exports =
         relationships[modelName] = object.relations
 
     for modelName, relation of @relationships
-
-      console.log '---'
-      console.log modelName
-      console.log relation
-      console.log '==='
-
       for relName, relModel of relation
         @models[modelName][relName](@models[relModel])
 
@@ -107,4 +103,4 @@ module.exports =
   relationships: {}
 
   model: (name) ->
-    models[name]
+    @models[name]

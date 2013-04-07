@@ -12,8 +12,9 @@ getUsers = require config.appRoot + 'server/controllers/api/users/getUsers'
 
 ORM      = require config.appRoot + 'server/components/orm'
 sequelize = ORM.setup()
-sequelize.sync()
-return
+#sequelize.sync force: true
+
+
 app = express().http().io()
 
 #bind routes
@@ -22,10 +23,14 @@ getUsers(app)
 buster.testCase 'API GET /users',
 
   setUp: (done) ->
-
+    console.log '1'
     #Okay this works for loading up a database...
-  #  mysql = '/usr/local/mysql/bin/mysql'
-  #  this.output = execSync mysql + ' -u root lyssa < ' + config.appRoot + '/tests/apiTests/lyssa.sql'
+    mysql = '/usr/local/mysql/bin/mysql'
+
+    console.log mysql + ' -u root lyssa < ' + config.appRoot + 'tests/apiTests/lyssa.sql'
+
+    output = execSync mysql + ' -u root lyssa < ' + config.appRoot + 'tests/apiTests/lyssa.sql'
+    console.log '2'
 
     this.request =
       url:      '/api/users'

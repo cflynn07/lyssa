@@ -7,6 +7,7 @@ module.exports =
   model:
     id:             SEQ.INTEGER
     name:           SEQ.STRING
+    indentifier:    SEQ.STRING
   relations:
     hasMany: 'employee'
   options: {}

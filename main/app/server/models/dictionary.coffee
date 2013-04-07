@@ -9,5 +9,5 @@ module.exports =
         name:           SEQ.STRING
     relations:
         belongsTo: 'client'
-        hasMany: 'item'
+        hasMany: 'dictionaryItem'
     options: {}
