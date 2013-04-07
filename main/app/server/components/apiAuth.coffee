@@ -32,3 +32,6 @@ module.exports = (req, res, callback) ->
     else
       #applyAuthBadge(req)
       callback()
+
+  else
+    throw new Error()# 'requestType not set'

@@ -9,6 +9,7 @@ _           = require 'underscore'
 routeParrot = require config.appRoot + 'server/components/routeParrot'
 sinon       = require 'sinon'
 
+
 buster.testCase 'Module components/routeParrot',
 
   setUp: (done) ->
@@ -117,12 +118,6 @@ buster.testCase 'Module components/routeParrot',
     buster.assert.called httpNextSpy
     buster.assert.called sioNextSpy
     buster.assert.same httpAPIRequest.url, sioNextSpy.args[0][0].url, config.apiSubDir + '/users'
-
-
-
-
-
-
 
 
 
