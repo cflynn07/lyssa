@@ -6,6 +6,9 @@ CD  - Client Delegate
 CAD - Client Auditor
 
 
+
+
+
 Resource: Client
     -   hasMany:    Employee
     -   hasMany:    Template
@@ -13,7 +16,7 @@ Resource: Client
     -   hasMany:    Submission
     GET /clients/
         SA:     Return all clients
-        CSA:    Return all clients with same clientID as authenticated user
+        CSA:    Return client with same clientID as authenticated user
         CA:     ^
         CD:     ^
         CAD:    ^
@@ -37,9 +40,11 @@ Resource: Client
         CAD:    false
 
 
+
+
+
 Resource: Employee
     -   belongsTo:  Client
-    -   hasOne:     User
     -   hasMany:    Event
     -   hasMany:    Submission
     GET /employees/
@@ -70,36 +75,47 @@ Resource: Employee
         CAD:    false
 
 
-Resource: User
-    -   belongsTo:  Employee
-    -   hasMany:    Template
-    -   hasMany:    Revision
-    -   hasMany:    Event
-    GET /users/     EXAMPLES: [/users?id=44 || /users?offset=10&limit=10 || /users?name={contains=a}]
-        SA:     Return all users
-        CSA:    Return all users that share the authenticated user's clientID
-        CA:     ^
-        CD:     Return only this user
-        CAD:    ^
-    POST /users/
-        SA:     Create user. clientID required.
-        CSA:    Create user. clientID assumed identical to authenticated user's clientID
-        CA:     ^
-        CD:     false
-        CAD:    false
-    PUT /users/
-        SA:     Update any user
-        CSA:    Update any user with same clientID. Can make Super-Admins. Can not set self to
-                non-super-admin if only CSA
-        CA:     Update any user with same clientID. Can not make any user a CSA or set a CSA to not CSA
-        CD:     false
-        CAD:    false
-    DELETE /users/
-        SA:     Delete any user
-        CSA:    Delete any user with same clientID. Can not delete self if only CSA.
-        CA:     Delete any user other than SA, CSA, CA
-        CD:     false
-        CAD:    false
+
+
+
+
+/*-----------------------------
+    Resource: User
+        -   belongsTo:  Employee
+        -   hasMany:    Template
+        -   hasMany:    Revision
+        -   hasMany:    Event
+        GET /users/     EXAMPLES: [/users?id=44 || /users?offset=10&limit=10 || /users?name={contains=a}]
+            SA:     Return all users
+            CSA:    Return all users that share the authenticated user's clientID
+            CA:     ^
+            CD:     Return only this user
+            CAD:    ^
+        POST /users/
+            SA:     Create user. clientID required.
+            CSA:    Create user. clientID assumed identical to authenticated user's clientID
+            CA:     ^
+            CD:     false
+            CAD:    false
+        PUT /users/
+            SA:     Update any user
+            CSA:    Update any user with same clientID. Can make Super-Admins. Can not set self to
+                    non-super-admin if only CSA
+            CA:     Update any user with same clientID. Can not make any user a CSA or set a CSA to not CSA
+            CD:     false
+            CAD:    false
+        DELETE /users/
+            SA:     Delete any user
+            CSA:    Delete any user with same clientID. Can not delete self if only CSA.
+            CA:     Delete any user other than SA, CSA, CA
+            CD:     false
+            CAD:    false
+-----------------------------*/
+
+
+
+
+
 
 
 Resource Template

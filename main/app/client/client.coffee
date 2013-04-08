@@ -87,7 +87,7 @@ require [
   #'cs!controllers/controllerAdmin'
   #'cs!controllers/controllerSuperAdmin'
   #'cs!controllers/controllerProfile'
-  #'cs!controllers/controllerCore'
+  'cs!controllers/controllerCore'
   #'backbone'
   'jquery'
   #'jqueryBrowser'
@@ -100,7 +100,7 @@ require [
   #ControllerAdmin
   #ControllerSuperAdmin
   #ControllerProfile
-  #ControllerCore
+  ControllerCore
   #Backbone
 #minor change
 
@@ -113,13 +113,15 @@ require [
   pbar = $pbar.get 0
 
 
-  User.set {authenticated: false}
-
+  #User.set {authenticated: false}
+  ControllerCore.initialize()
+  User.set {authenticated: true}
+  return
 
   #Must make sure socketio has done it's thing before starting the rest of the app
   start = () ->
     #ControllerCore.initialize()
-    User.set {authenticated: false}
+    User.set {authenticated: true}
 
     console.log 'start'
     Conn.request 'get', '/users/casey555?type=super_admin', {}, (response) ->

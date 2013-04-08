@@ -10,33 +10,13 @@ getUsers = require config.appRoot + 'server/controllers/api/users/getUsers'
 ORM      = require config.appRoot + 'server/components/orm'
 
 sequelize = ORM.setup()
-sequelize.sync force: true
 app = express().http().io()
 
 ###
   bind routes
 ###
-return
-
-
 getUsers(app)
 
-
-
-
-client = ORM.model 'client'
-client.find(1).success (client) ->
-  if client
-    console.log client.getEmployees
-    console.log client
-    #client.getTemplates().success (templates) ->
-    #  console.log templates
-
-
-
-
-
-return
 
 buster.testCase 'API GET /users',
   setUp: (done) ->
