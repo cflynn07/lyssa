@@ -5,5 +5,6 @@ test:
   pre:
     - coffee -c ./main/app
     - npm install buster -g
+    - cd ~/lyssa/main/ && npm uninstall exec-sync && npm install exec-sync
   override:
-    - cd main/app/tests/ && buster test
+    - cd ~/lyssa/main/app/tests/ && buster test
