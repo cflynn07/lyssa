@@ -19,63 +19,57 @@ module.exports =
       paranoid: true
       logging: false
 
-    if mode is 'standard'
 
-      # 'lyssa' is my development DB
-      #& 'production' is production on dotcloud
-      if GLOBAL.env? && GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN?
-
-        productionOptions =
-          host: GLOBAL.env.DOTCLOUD_DB_MYSQL_HOST
-          port: GLOBAL.env.DOTCLOUD_DB_MYSQL_PORT
-        _.extend globalOptions, productionOptions
-
-        sequelize = new Sequelize(
-          'production',
-          GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN,
-          GLOBAL.env.DOTCLOUD_DB_MYSQL_PASSWORD,
-          globalOptions
-        )
-
-      else
-
-
-
-        ###
-          Local
-        ###
-        localOptions =
-          host: 'localhost'
-          port: 3306
-        _.extend globalOptions, localOptions
-
-        sequelize = new Sequelize(
-          'lyssa',
-          'root',
-          '',
-          globalOptions
-        )
-
-
-
-    else
+    if process.env.CIRCLECI
 
       ###
         CircleCI
       ###
-      if mode is 'testing'
 
-        testOptions =
-          host: 'localhost'
-        _.extend globalOptions, testOptions
+      testOptions =
+        host: 'localhost'
+      _.extend globalOptions, testOptions
 
-        sequelize = new Sequelize(
-          'circle_test',
-          'ubuntu',
-          '',
-          globalOptions
-        )
+      sequelize = new Sequelize(
+        'circle_test',
+        'ubuntu',
+        '',
+        globalOptions
+      )
 
+    else
+      if mode is 'standard'
+
+        # 'lyssa' is my development DB
+        #& 'production' is production on dotcloud
+        if GLOBAL.env? && GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN?
+
+          productionOptions =
+            host: GLOBAL.env.DOTCLOUD_DB_MYSQL_HOST
+            port: GLOBAL.env.DOTCLOUD_DB_MYSQL_PORT
+          _.extend globalOptions, productionOptions
+
+          sequelize = new Sequelize(
+            'production',
+            GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN,
+            GLOBAL.env.DOTCLOUD_DB_MYSQL_PASSWORD,
+            globalOptions
+          )
+        else
+          ###
+            Local
+          ###
+          localOptions =
+            host: 'localhost'
+            port: 3306
+          _.extend globalOptions, localOptions
+
+          sequelize = new Sequelize(
+            'lyssa',
+            'root',
+            '',
+            globalOptions
+          )
 
     relationships = @relationships
     models = @models
