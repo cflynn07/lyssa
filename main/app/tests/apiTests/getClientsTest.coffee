@@ -68,6 +68,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients',
     expectedNumClientsInDB = 3
 
     client.findAll().success (clients) ->
+
       _this.response.jsonAPIRespond = done (result) ->
         buster.assert.isObject result
         buster.assert.same result.code, 200
@@ -182,4 +183,6 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients',
         buster.refute.called next
 
       app.router _this.request, _this.response, next
+
+  '//--> ': (done) ->
 

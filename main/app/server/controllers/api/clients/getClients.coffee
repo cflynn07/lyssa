@@ -2,9 +2,9 @@ config  = require '../../../config/config'
 apiAuth = require config.appRoot + '/server/components/apiAuth'
 ORM     = require config.appRoot + '/server/components/orm'
 
-client = ORM.model 'client'
-
 module.exports = (app) ->
+
+  client = ORM.model 'client'
 
   app.get config.apiSubDir + '/clients', (req, res) ->
     apiAuth req, res, () ->
