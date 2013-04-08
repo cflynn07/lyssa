@@ -3,7 +3,7 @@ machine:
     version: 0.8.2
 test:
   pre:
-    - coffee -c ./main/app
+    - coffee -c ~/lyssa/main/app
     - npm install buster -g
     - cd ~/lyssa/main/ && npm uninstall exec-sync && npm install exec-sync
   override:
