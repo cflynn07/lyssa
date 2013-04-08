@@ -1,1 +1,0 @@
-componentConnectionTest.coffee
