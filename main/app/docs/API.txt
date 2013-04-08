@@ -6,7 +6,12 @@ CD  - Client Delegate
 CAD - Client Auditor
 
 
+/**
+Resource Expansion:
+ - Only allow "downstream" resource expansion. That is given any collection, only allow to eagerly load associated
+ collections that are related by "hasMany" or "hasOne" relationships. Not "belongsTo".
 
+**/
 
 
 Resource: Client

@@ -10,6 +10,9 @@ module.exports =
     scope:         SEQ.TEXT
   relations: [
     relation: 'belongsTo'
+    model: 'client'
+  ,
+    relation: 'belongsTo'
     model: 'template'
   ,
     relation: 'belongsTo'

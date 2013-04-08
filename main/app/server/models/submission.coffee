@@ -8,6 +8,9 @@ module.exports =
     id: SEQ.INTEGER
   relations: [
     relation: 'belongsTo'
+    model: 'client'
+  ,
+    relation: 'belongsTo'
     model: 'event'
   ,
     relation: 'belongsTo'

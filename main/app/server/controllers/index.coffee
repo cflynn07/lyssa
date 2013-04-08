@@ -13,9 +13,6 @@ module.exports = (app) ->
         environment: config.env
         asset_hash:  config.assetHash,
         (err, html) ->
-
-          console.log html
-
           callback err, html
 
     , (err, results) ->

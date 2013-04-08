@@ -17,6 +17,7 @@ module.exports =
         underscored: false
       syncOnAssociation: false
       paranoid: true
+      logging: false
 
     if mode is 'standard'
 

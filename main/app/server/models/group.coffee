@@ -10,6 +10,9 @@ module.exports =
     ordinal: SEQ.INTEGER
   relations: [
     relation: 'belongsTo'
+    model: 'client'
+  ,
+    relation: 'belongsTo'
     model: 'revision'
   ,
     relation: 'hasMany'

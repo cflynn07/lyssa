@@ -9,6 +9,9 @@ module.exports =
     name: SEQ.STRING
   relations: [
     relation: 'belongsTo'
+    model: 'client'
+  ,
+    relation: 'belongsTo'
     model: 'submissionGroup'
   ]
   options:

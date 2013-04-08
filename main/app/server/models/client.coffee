@@ -31,7 +31,28 @@ module.exports =
     model: 'dictionary'
   ,
     relation: 'hasMany'
+    model: 'dictionaryItem'
+  ,
+    relation: 'hasMany'
     model: 'event'
+  ,
+    relation: 'hasMany'
+    model: 'revision'
+  ,
+    relation: 'hasMany'
+    model: 'group'
+  ,
+    relation: 'hasMany'
+    model: 'field'
+  ,
+    relation: 'hasMany'
+    model: 'submission'
+  ,
+    relation: 'hasMany'
+    model: 'submissionGroup'
+  ,
+    relation: 'hasMany'
+    model: 'submissionField'
   ]
   options:
     paranoid: true

@@ -11,6 +11,9 @@ module.exports =
     type: SEQ.ENUM config.fieldTypes
   relations: [
     relation: 'belongsTo'
+    model: 'client'
+  ,
+    relation: 'belongsTo'
     model: 'group'
   ]
   options:
