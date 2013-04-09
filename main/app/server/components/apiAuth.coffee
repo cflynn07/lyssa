@@ -8,17 +8,10 @@ module.exports = (req, res, callback) ->
 
   if req.requestType is 'http'
 
-
-
-
-
     #TEMP FOR debugging
-    if (req.param and req.session)
+    if (req.query and req.session)
       req.session.user =
-        type: req.param('type')
-
-
-
+        req.query
 
 
     ## Token or session based authentication?

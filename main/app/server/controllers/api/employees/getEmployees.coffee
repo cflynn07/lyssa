@@ -4,12 +4,15 @@ ORM     = require config.appRoot + '/server/components/orm'
 
 module.exports = (app) ->
 
+  employee = ORM.model 'employee'
+
   app.get config.apiSubDir + '/employees', (req, res) ->
     apiAuth req, res, () ->
 
-      employee = ORM.model 'employee'
+      userType = req.session.user.type
+      clientId = req.session.user.clientId
 
-      switch req.session.user.type
+      switch userType
         when 'super_admin'
 
           employee.findAll().success (employees) ->
@@ -19,9 +22,10 @@ module.exports = (app) ->
 
         when 'client_super_admin', 'client_admin', 'client_delegate', 'client_auditor'
 
+          #Always prevent password hash from being sent
           employee.find(
-            where
-              clientId: this.session.user.clientId
+            where:
+              clientId: req.session.user.clientId
           ).success (employees) ->
             res.jsonAPIRespond
               code: 200
@@ -30,7 +34,11 @@ module.exports = (app) ->
 
   app.get config.apiSubDir + '/employees/:id', (req, res) ->
     apiAuth req, res, () ->
-      switch req.session.user.type
+
+      userType = req.session.user.type
+      clientId = req.session.user.clientId
+
+      switch userType
         when 'super_admin'
           res.jsonAPIRespond config.unauthorizedResponse
         when 'client_super_admin'

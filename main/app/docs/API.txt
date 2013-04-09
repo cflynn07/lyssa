@@ -19,9 +19,16 @@ Resource: Client
     -   hasMany:    Template
     -   hasMany:    Event
     -   hasMany:    Submission
-    GET /clients/
+    //TODO... add more
+*   GET /clients/
         SA:     Return all clients
         CSA:    Return client with same clientID as authenticated user
+        CA:     ^
+        CD:     ^
+        CAD:    ^
+*   GET /clients/:id
+        SA:     Return any client that exists
+        CSA:    Return client with same clientID as authenticated user, otherwise 401 Unauthorized
         CA:     ^
         CD:     ^
         CAD:    ^
@@ -31,21 +38,18 @@ Resource: Client
         CA:     false
         CD:     false
         CAD:    false
-    PUT /clients/
+    PUT /clients/:id
         SA:     Update a client [Required: clientID]
         CSA:    false
         CA:     false
         CD:     false
         CAD:    false
-    DELETE /clients/
+    DELETE /clients/:id
         SA:     Delete a client [Required: clientID]
         CSA:    false
         CA:     false
         CD:     false
         CAD:    false
-
-
-
 
 
 Resource: Employee
@@ -55,6 +59,12 @@ Resource: Employee
     GET /employees/
         SA:     Return all employees
         CSA:    Return all employees with same clientID as authenticated user
+        CA:     ^
+        CD:     ^
+        CAD:    ^
+    GET /employees/:id
+        SA:     Return any employee
+        CSA:    Return any employees with same clientID as authenticated user
         CA:     ^
         CD:     ^
         CAD:    ^
