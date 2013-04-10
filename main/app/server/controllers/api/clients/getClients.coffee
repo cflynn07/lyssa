@@ -15,18 +15,21 @@ module.exports = (app) ->
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
-        #Here we will do expansion testing
-        apiExpand req, res, callback
-      (callback) ->
         userType = req.session.user.type
         clientId = req.session.user.clientId
 
         switch userType
           when 'super_admin'
-            client.findAll().success (clients) ->
-              res.jsonAPIRespond
-                code: 200
-                response: clients
+
+
+            apiExpand(req, res, client, false)
+
+            #client.findAll().success (clients) ->
+            #  res.jsonAPIRespond
+            #    code: 200
+            #    response: clients
+
+
 
           when 'client_super_admin', 'client_admin', 'client_delegate', 'client_auditor'
             client.find(clientId).success (client) ->
@@ -39,8 +42,6 @@ module.exports = (app) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
-      (callback) ->
-        callback(false)
       (callback) ->
         userType = req.session.user.type
         clientId = req.session.user.clientId

@@ -10,6 +10,10 @@ module.exports.http = (req, res, next) ->
   #Modify if this is an API HTTP request
   if req.url.indexOf(config.apiSubDir) is 0
 
+    if req.query and req.query.expand
+      req.apiExpand = req.query.expand
+
+
     req.requestType = 'http'
     res.jsonAPIRespond = (json) ->
       if !json.code?

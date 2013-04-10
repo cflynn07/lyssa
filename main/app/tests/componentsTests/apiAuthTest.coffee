@@ -8,7 +8,6 @@ _       = require 'underscore'
 apiAuth = require config.appRoot + 'server/components/apiAuth'
 
 
-#Trying the BDD style of testing
 buster.testCase 'Module components/apiAuth',
 
   setUp: (done) ->

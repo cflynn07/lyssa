@@ -8,16 +8,15 @@ config     = require '../../server/config/config'
 express    = require 'express.io'
 getClients = require config.appRoot + 'server/controllers/api/clients/getClients'
 ORM        = require config.appRoot + 'server/components/orm'
+async      = require 'async'
 
-sequelize = ORM.setup()
-app = express().http().io()
+sequelize  = ORM.setup()
+app        = express().http().io()
 
-client = ORM.model 'client'
-
+client     = ORM.model 'client'
 
 #Bind the routes
 getClients(app)
-
 
 buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir + '/clients/:id',
   setUp: (done) ->
