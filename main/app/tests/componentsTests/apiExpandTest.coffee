@@ -36,7 +36,7 @@ buster.testCase 'Module components/apiExpand',
 
 
   # -------------------------------------------
-  '--> Single response expands to one association at one level': (done) ->
+  '//--> Single response expands to one association at one level': (done) ->
 
     client = ORM.model 'client'
 
