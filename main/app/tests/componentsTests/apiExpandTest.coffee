@@ -32,59 +32,71 @@ buster.testCase 'Module components/apiExpand',
     done()
 
   # -------------------------------------------
-  '//--> API request without expand parameter succeeds': (done) ->
+  '--> API request without expand parameter succeeds': (done) ->
+
+    _this    = this
+
+    testClientId = 2
+    #testClientExpectedNumEmployees = 2
+
+    client = ORM.model 'client'
+    resourceQueryParams =
+      method: 'findAll'
+      find:
+        where:
+          id: testClientId
+
+    #this.request.apiExpand = [{
+    #  resource: 'employees'
+    #}]
+
+    _this.response.jsonAPIRespond = done (apiResponse) ->
+
+      buster.assert.isObject apiResponse
+      buster.assert.same apiResponse.code, 200
+
+      buster.assert.isObject apiResponse.response
+      buster.refute.isArray apiResponse.response.employees
+
+
+    #Run test
+    apiExpand this.request, this.response, client, resourceQueryParams
 
 
   # -------------------------------------------
-  '//--> Single response expands to one association at one level': (done) ->
+  '--> Single response object expands to one associated resource': (done) ->
 
-    client = ORM.model 'client'
+    _this    = this
 
     testClientId = 2
+    testClientExpectedNumEmployees = 2
 
-    _this = this
-    resource = client
+
+    client = ORM.model 'client'
     resourceQueryParams =
-      id: testClientId
+      method: 'findAll'
+      find:
+        where:
+          id: testClientId
 
 
     this.request.apiExpand = [{
       resource: 'employees'
-     # expand: [{
-     #   resource: 'templates'
-     # }]
-    },{
-      resource: 'templates'
     }]
 
 
-    #Test setup
-    client.find(
-      where:resourceQueryParams
-    ).success (resClient) ->
-      resClient.getEmployees().success (resEmployees) ->
+    _this.response.jsonAPIRespond = done (apiResponse) ->
 
-        #testResult should equal the api response
-        #testing query without eager loading in this example
-        testResult = JSON.parse(JSON.stringify(resClient))
-        testResult.employees = JSON.parse(JSON.stringify(resEmployees))
+      buster.assert.isObject apiResponse
+      buster.assert.same apiResponse.code, 200
 
-        _this.response.jsonAPIRespond = done (apiResponse) ->
+      buster.assert.isObject apiResponse.response
+      buster.assert.isArray apiResponse.response.employees
+      buster.assert.same apiResponse.response.employees.length, testClientExpectedNumEmployees
 
-          console.log JSON.parse JSON.stringify apiResponse.response
-          buster.assert true
-          return
-          #Test complete, run assertions
-          buster.assert.isObject apiResponse
-          buster.assert.same apiResponse.code, 200
 
-          buster.assert.isObject apiResponse.response
-          buster.assert.isArray apiResponse.response.employees
-
-          buster.assert.same JSON.stringify(apiResponse.response), JSON.stringify(testResult)
-
-        #Run test
-        apiExpand _this.request, _this.response, resource, resourceQueryParams
+    #Run test
+    apiExpand this.request, this.response, client, resourceQueryParams
 
 
 
