@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.6.10, for osx10.7 (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.10, for osx10.6 (i386)
 --
 -- Host: localhost    Database: lyssa
 -- ------------------------------------------------------
@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS `clients`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `clients` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `indentifier` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -38,8 +39,9 @@ CREATE TABLE `clients` (
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid` (`uid`) USING BTREE,
   UNIQUE KEY `indentifier` (`indentifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +50,6 @@ CREATE TABLE `clients` (
 
 LOCK TABLES `clients` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-INSERT INTO `clients` VALUES (1,'MegaCo','mega','add1','add2','add3','Boston','MA','USA','9',NULL,'2013-04-08 15:17:06','2013-04-08 15:17:06',NULL),(2,'DeltaCo','delta','add2','adde34','adsf4','Mexico','MA','USA','9',NULL,'2013-04-08 15:17:06','2013-04-08 15:17:06',NULL),(3,'Iconico','icon','ad','add','adddd','Springfield','MA','Mexico','9',NULL,'2013-04-08 15:17:06','2013-04-08 15:17:06',NULL);
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,15 +61,20 @@ DROP TABLE IF EXISTS `dictionaries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dictionaries` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
   KEY `fk_dictionaries_clients1` (`clientId`),
-  CONSTRAINT `fk_dictionaries_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_dictionaries_clients2` (`clientUid`),
+  CONSTRAINT `fk_dictionaries_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_dictionaries_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -89,18 +95,26 @@ DROP TABLE IF EXISTS `dictionaryItems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dictionaryItems` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `dictionaryUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
-  `dictionaryId` int(11) DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
+  `dictionaryId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
   KEY `fk_dictionaryItems_dictionaries1` (`dictionaryId`),
   KEY `fk_dictionaryItems_clients1` (`clientId`),
+  KEY `fk_dictionaryItems_dictionaries2` (`dictionaryUid`),
+  KEY `fk_dictionaryItems_clients2` (`clientUid`),
   CONSTRAINT `fk_dictionaryItems_dictionaries1` FOREIGN KEY (`dictionaryId`) REFERENCES `dictionaries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_dictionaryItems_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_dictionaryItems_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_dictionaryItems_dictionaries2` FOREIGN KEY (`dictionaryUid`) REFERENCES `dictionaries` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_dictionaryItems_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -121,6 +135,7 @@ DROP TABLE IF EXISTS `employees`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `employees` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `identifier` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `firstName` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -129,15 +144,19 @@ CREATE TABLE `employees` (
   `phone` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `username` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `password` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `type` enum('super_admin','client_super_admin','client_admin','client_delegate','client_auditor') COLLATE utf8_bin DEFAULT NULL,
+  `type` enum('superAdmin','clientSuperAdmin','clientAdmin','clientDelegate','clientAuditor') COLLATE utf8_bin DEFAULT NULL,
+  `clientUid` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
-  `clientId` int(11) DEFAULT NULL,
+  `clientId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid` (`uid`),
   KEY `clientId` (`clientId`),
-  CONSTRAINT `clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  KEY `clientUid` (`clientUid`),
+  CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +165,6 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (1,'john','John','Clark','jc@gmail.com','555','johny','abc','client_super_admin','2013-04-08 15:20:31','2013-04-08 15:20:34',NULL,2),(2,'eric','Eric','Canter','ec@gmail.com','444','eric','abc','client_admin','2013-04-08 15:17:06','2013-04-08 15:17:06',NULL,2),(3,'Sean','Sean','Beans','sb@gmail.com','555','seanb','abc','client_delegate','2013-04-08 15:17:06','2013-04-08 15:17:06',NULL,2),(4,'SUPERADMIN','Casey','Flynn','casey_flynn@cobarsystems.com','555','casey','abc','super_admin','2013-04-08 15:17:06','2013-04-08 15:17:06',NULL,1);
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,19 +176,27 @@ DROP TABLE IF EXISTS `events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `events` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `dateTime` datetime DEFAULT NULL,
+  `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `employeeUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
   `employeeId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
   KEY `fk_events_employees1` (`employeeId`),
   KEY `fk_events_clients1` (`clientId`),
+  KEY `fk_events_employees2` (`employeeUid`),
+  KEY `fk_events_clients2` (`clientUid`),
   CONSTRAINT `fk_events_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_events_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_events_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_events_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_events_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -191,19 +217,27 @@ DROP TABLE IF EXISTS `fields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fields` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `type` enum('openResponse','selectIndividual','selectMultiple','yesNo','slider') COLLATE utf8_bin DEFAULT NULL,
+  `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `groupUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
-  `groupId` int(11) DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
+  `groupId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
   KEY `fk_fields_groups1` (`groupId`),
   KEY `fk_fields_clients1` (`clientId`),
+  KEY `fk_fields_groups2` (`groupUid`),
+  KEY `fk_fields_clients2` (`clientUid`),
+  CONSTRAINT `fk_fields_groups1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_fields_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_fields_groups1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_fields_groups2` FOREIGN KEY (`groupUid`) REFERENCES `groups` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_fields_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -224,19 +258,27 @@ DROP TABLE IF EXISTS `groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `groups` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `ordinal` int(11) DEFAULT NULL,
+  `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `revisionUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
-  `revisionId` int(11) DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
+  `revisionId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `revisionId` (`revisionId`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
+  KEY `fk_groups_revisions1` (`revisionId`),
   KEY `fk_groups_clients1` (`clientId`),
+  KEY `fk_groups_revisions2` (`revisionUid`),
+  KEY `fk_groups_clients2` (`clientUid`),
+  CONSTRAINT `fk_groups_revisions1` FOREIGN KEY (`revisionId`) REFERENCES `revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_groups_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `revisionId` FOREIGN KEY (`revisionId`) REFERENCES `revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_groups_revisions2` FOREIGN KEY (`revisionUid`) REFERENCES `revisions` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_groups_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -257,22 +299,33 @@ DROP TABLE IF EXISTS `revisions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `revisions` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `changeSummary` text COLLATE utf8_bin,
   `scope` text COLLATE utf8_bin,
+  `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `templateUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `employeeUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
+  `clientId` int(11) DEFAULT NULL,
   `employeeId` int(11) DEFAULT NULL,
   `templateId` int(11) DEFAULT NULL,
-  `clientId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `templateId` (`templateId`),
-  KEY `employeeId` (`employeeId`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
+  KEY `fk_revisions_templates1` (`templateId`),
+  KEY `fk_revisions_employees1` (`employeeId`),
+  KEY `fk_revisions_employees2` (`employeeUid`),
+  KEY `fk_revisions_templates2` (`templateUid`),
   KEY `fk_revisions_clients1` (`clientId`),
-  CONSTRAINT `employeeId` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `fk_revisions_clients2` (`clientUid`),
+  CONSTRAINT `fk_revisions_templates1` FOREIGN KEY (`templateId`) REFERENCES `templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_revisions_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_revisions_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_revisions_templates2` FOREIGN KEY (`templateUid`) REFERENCES `templates` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_revisions_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `templateId` FOREIGN KEY (`templateId`) REFERENCES `templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_revisions_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -293,18 +346,26 @@ DROP TABLE IF EXISTS `submissionFields`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `submissionFields` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `submissionGroupUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
-  `submissionGroupId` int(11) DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
+  `submissionGroupId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
   KEY `fk_submissionFields_submissionGroups1` (`submissionGroupId`),
   KEY `fk_submissionFields_clients1` (`clientId`),
+  KEY `fk_submissionFields_submissionGroups2` (`submissionGroupUid`),
+  KEY `fk_submissionFields_clients2` (`clientUid`),
+  CONSTRAINT `fk_submissionFields_submissionGroups1` FOREIGN KEY (`submissionGroupId`) REFERENCES `submissionGroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissionFields_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissionFields_submissionGroups1` FOREIGN KEY (`submissionGroupId`) REFERENCES `submissionGroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_submissionFields_submissionGroups2` FOREIGN KEY (`submissionGroupUid`) REFERENCES `submissionGroups` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissionFields_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -325,18 +386,26 @@ DROP TABLE IF EXISTS `submissionGroups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `submissionGroups` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `submissionUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
-  `submissionId` int(11) DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
+  `submissionId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
   KEY `fk_submissionGroups_submissions1` (`submissionId`),
-  KEY `fk_submissionGroups_clients1` (`clientId`),
+  KEY `fk_submissionGroups_submissions2` (`clientId`),
+  KEY `fk_submissionGroups_submissions3` (`submissionUid`),
+  KEY `fk_submissionGroups_clients1` (`clientUid`),
   CONSTRAINT `fk_submissionGroups_submissions1` FOREIGN KEY (`submissionId`) REFERENCES `submissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissionGroups_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_submissionGroups_submissions2` FOREIGN KEY (`clientId`) REFERENCES `submissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissionGroups_submissions3` FOREIGN KEY (`submissionUid`) REFERENCES `submissions` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissionGroups_clients1` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -357,20 +426,31 @@ DROP TABLE IF EXISTS `submissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `submissions` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `eventUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `employeeUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
+  `clientId` int(11) DEFAULT NULL,
   `employeeId` int(11) DEFAULT NULL,
   `eventId` int(11) DEFAULT NULL,
-  `clientId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
   KEY `fk_submissions_events1` (`eventId`),
   KEY `fk_submissions_employees1` (`employeeId`),
   KEY `fk_submissions_clients1` (`clientId`),
+  KEY `fk_submissions_employees2` (`employeeUid`),
+  KEY `fk_submissions_events2` (`eventUid`),
+  KEY `fk_submissions_clients2` (`clientUid`),
   CONSTRAINT `fk_submissions_events1` FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissions_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissions_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_submissions_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissions_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissions_events2` FOREIGN KEY (`eventUid`) REFERENCES `events` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissions_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -391,19 +471,27 @@ DROP TABLE IF EXISTS `templates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `templates` (
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `type` enum('full','mini') COLLATE utf8_bin DEFAULT NULL,
+  `clientUid` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `employeeUid` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
-  `clientId` int(11) DEFAULT NULL,
-  `employeeId` int(11) DEFAULT NULL,
+  `clientId` int(11) NOT NULL,
+  `employeeId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_templates_employees1` (`employeeId`),
-  KEY `fk_templates_clients1` (`clientId`),
-  CONSTRAINT `fk_templates_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_templates_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
+  KEY `employeeId` (`employeeId`),
+  KEY `clientId` (`clientId`),
+  KEY `employeeUid` (`employeeUid`),
+  KEY `clientUid` (`clientUid`),
+  CONSTRAINT `templates_ibfk_1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `templates_ibfk_2` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `templates_ibfk_3` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `templates_ibfk_4` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -425,4 +513,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-08 15:23:13
+-- Dump completed on 2013-04-10 21:31:58

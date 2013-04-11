@@ -27,7 +27,7 @@ console.log uuid.v4()
 #    console.log JSON.parse JSON.stringify clients
 
 
-#sequelize.sync force: true
+sequelize.sync force: true
 return
 app        = express().http().io()
 
