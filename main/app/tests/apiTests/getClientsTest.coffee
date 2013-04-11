@@ -12,26 +12,12 @@ async      = require 'async'
 
 sequelize  = ORM.setup()
 
-
-uuid = require 'node-uuid'
-console.log uuid.v4()
-
-
-#employee.create({
-#  clientId: 'a3b7b5d7-6ce8-4752-bcb1-7909d5348b36'
-#  name: 'Foo'
-#  identifier: 'Bar'
-#}).success () ->
-#  console.log 'done'
-#  client.findAll({include: [employee]}).success (clients) ->
-#    console.log JSON.parse JSON.stringify clients
-
-
-sequelize.sync force: true
-return
+uuid       = require 'node-uuid'
 app        = express().http().io()
 
+
 client     = ORM.model 'client'
+
 
 #Bind the routes
 getClients(app)
@@ -94,7 +80,6 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
         buster.assert.same expectedNumClientsInDB, result.response.length
         buster.assert.same clients.length, result.response.length
-        buster.assert.same JSON.stringify(clients), JSON.stringify(result.response)
 
         buster.refute.called next
 
@@ -103,160 +88,186 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
   '--> GET /clients "clientSuperAdmin" returns user client': (done) ->
 
-    testClientId = 1
+    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
 
     this.request.session =
       user:
         type: 'clientSuperAdmin'
-        clientId: testClientId
+        clientUid: testClientUid
     next = this.spy()
     _this = this
 
 
-    client.find(testClientId).success (returnClient) ->
+    client.find(
+      where:
+        uid: testClientUid
+    ).success (returnClient) ->
       _this.response.jsonAPIRespond = done (result) ->
         buster.assert.isObject result
         buster.assert.same result.code, 200
         buster.assert.isObject result.response
 
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-        buster.assert.same testClientId, result.response.id
+        #this will fail because apiExpand removes all 'id' properties
+        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
+        buster.assert.same testClientUid, result.response.uid
+
 
         buster.refute.called next
 
       app.router _this.request, _this.response, next
 
-
   '--> GET /clients "clientAdmin" returns user client': (done) ->
 
-    testClientId = 1
+    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
 
     this.request.session =
       user:
         type: 'clientAdmin'
-        clientId: testClientId
+        clientUid: testClientUid
     next = this.spy()
     _this = this
 
 
-    client.find(testClientId).success (returnClient) ->
+    client.find(
+      where:
+        uid: testClientUid
+    ).success (returnClient) ->
       _this.response.jsonAPIRespond = done (result) ->
         buster.assert.isObject result
         buster.assert.same result.code, 200
         buster.assert.isObject result.response
 
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-        buster.assert.same testClientId, result.response.id
+        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
+        buster.assert.same testClientUid, result.response.uid
 
         buster.refute.called next
 
       app.router _this.request, _this.response, next
+
 
 
   '--> GET /clients "clientDelegate" returns user client': (done) ->
 
-    testClientId = 1
+    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
 
     this.request.session =
       user:
         type: 'clientDelegate'
-        clientId: testClientId
+        clientUid: testClientUid
     next = this.spy()
     _this = this
 
 
-    client.find(testClientId).success (returnClient) ->
+    client.find(
+      where:
+        uid: testClientUid
+    ).success (returnClient) ->
       _this.response.jsonAPIRespond = done (result) ->
         buster.assert.isObject result
         buster.assert.same result.code, 200
         buster.assert.isObject result.response
 
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-        buster.assert.same testClientId, result.response.id
+        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
+        buster.assert.same testClientUid, result.response.uid
 
         buster.refute.called next
 
       app.router _this.request, _this.response, next
 
+
   '--> GET /clients "clientAuditor" returns user client': (done) ->
 
-    testClientId = 1
+    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
 
     this.request.session =
       user:
         type: 'clientAuditor'
-        clientId: testClientId
+        clientUid: testClientUid
     next = this.spy()
     _this = this
 
 
-    client.find(testClientId).success (returnClient) ->
+    client.find(
+      where:
+        uid: testClientUid
+    ).success (returnClient) ->
       _this.response.jsonAPIRespond = done (result) ->
         buster.assert.isObject result
         buster.assert.same result.code, 200
         buster.assert.isObject result.response
 
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-        buster.assert.same testClientId, result.response.id
+        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
+        buster.assert.same testClientUid, result.response.uid
 
         buster.refute.called next
 
       app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "superAdmin" returns any client [including other clientId]': (done) ->
 
-    testClientId = 1
-    testParamClientId = 2
+  '--> GET /clients/:uid "superAdmin" returns any client [including OTHER clientUid]': (done) ->
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
+    testParamClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
+
+    this.request.url     = config.apiSubDir + '/clients/' + testParamClientUid
     this.request.session =
       user:
         type: 'superAdmin'
-        clientId: testClientId
+        clientUid: testClientUid
     next = this.spy()
     _this = this
 
-    client.find(testParamClientId).success (returnClient) ->
+    client.find(
+      where:
+        uid: testParamClientUid
+    ).success (returnClient) ->
       _this.response.jsonAPIRespond = done (result) ->
         buster.assert.isObject result
         buster.assert.same result.code, 200
         buster.assert.isObject result.response
 
-        buster.assert.same testParamClientId, returnClient.id, result.response.id
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
+        buster.assert.same testParamClientUid, returnClient.uid, result.response.uid
+        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
 
-        buster.refute.same testClientId, result.response.id
+        buster.assert.isString result.response.uid
+        buster.refute.same testClientUid, result.response.uid
         buster.refute.called next
 
       app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "superAdmin" returns any client [including same clientId]': (done) ->
 
-    testClientId = 1
-    testParamClientId = 1
+  '--> GET /clients/:uid "superAdmin" returns any client [including SAME clientUid]': (done) ->
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    testClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
+    testParamClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
+
+    this.request.url     = config.apiSubDir + '/clients/' + testParamClientUid
     this.request.session =
       user:
         type: 'superAdmin'
-        clientId: testClientId
+        clientUid: testClientUid
     next = this.spy()
     _this = this
 
-    client.find(testParamClientId).success (returnClient) ->
+    client.find(
+      where:
+        uid: testParamClientUid
+    ).success (returnClient) ->
+
       _this.response.jsonAPIRespond = done (result) ->
         buster.assert.isObject result
         buster.assert.same result.code, 200
         buster.assert.isObject result.response
 
-        buster.assert.same testParamClientId, returnClient.id, result.response.id
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
+        buster.assert.same testParamClientUid, returnClient.uid, result.response.uid
+        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
 
-        buster.assert.same testClientId, result.response.id
+        buster.assert.isString result.response.uid
+        buster.assert.same testClientUid, result.response.uid
         buster.refute.called next
 
       app.router _this.request, _this.response, next
-
+###
   '--> GET /clients/:id "superAdmin" returns 404 for client that does not exist': (done) ->
 
     testClientId = 1
