@@ -10,48 +10,51 @@ module.exports = (app) ->
 
   client = ORM.model 'client'
 
-  app.get config.apiSubDir + '/clients', (req, res) ->
+  app.get config.apiSubDir + '/v1/clients', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
-        userType = req.session.user.type
-        clientId = req.session.user.clientId
+        userType  = req.session.user.type
+        clientUid = req.session.user.clientUid
 
         switch userType
           when 'superAdmin'
 
-
-            #params =
-            #  method: 'findAll'
-            #  find:
-            #    where:
-            #      id: [1,2,3]
-            #apiExpand(req, res, client, params)
-
-            client.findAll().success (clients) ->
-              res.jsonAPIRespond
-                code: 200
-                response: clients
-
-
+            params =
+              method: 'findAll'
+              find: {}
+              #  where:
+              #    id: '*'
+            apiExpand(req, res, client, params)
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
-            client.find(clientId).success (client) ->
-              res.jsonAPIRespond
-                code: 200
-                response: client
+
+            params =
+              method: 'findAll'
+              find:
+                where:
+                  uid: clientUid
+
+            apiExpand(req, res, client, params)
+
+            #apiExpand(req, res, client, params)
+            #client.find(clientId).success (client) ->
+            #  res.jsonAPIRespond
+            #    code: 200
+            #    response: client
+
     ]
 
-  app.get config.apiSubDir + '/clients/:id', (req, res) ->
+  app.get config.apiSubDir + '/v1/clients/:id', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
-        userType = req.session.user.type
-        clientId = req.session.user.clientId
 
-
+        userType  = req.session.user.type
+        clientUid = req.session.user.clientUid
+        uids      = req.params.id.split ','
 
         #console.log req.params.id
         #console.log req.params.id.split(',')
@@ -60,18 +63,30 @@ module.exports = (app) ->
         #console.log '----'
         #return
 
+
+        ###
         params =
           method: 'findAll'
           find:
             where:
-              uid: ["ea1fac23-82f5-4064-82f3-87702eb8d568", "ea1fac23-82f5-4064-82f3-87702eb8d569"]
+              uid: uids
         apiExpand(req, res, client, params)
         return
-
+        ###
 
         switch userType
           when 'superAdmin'
 
+            params =
+              method: 'findAll'
+              find:
+                where:
+                  uid: uids
+
+            apiExpand(req, res, client, params)
+
+
+            ###
             client.find(req.params.id).success (client) ->
               if !client
                 res.jsonAPIRespond
@@ -81,6 +96,8 @@ module.exports = (app) ->
                 res.jsonAPIRespond
                   code: 200
                   response: client
+            ###
+
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 

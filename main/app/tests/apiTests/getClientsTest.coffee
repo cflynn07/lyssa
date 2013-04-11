@@ -267,8 +267,8 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
         buster.refute.called next
 
       app.router _this.request, _this.response, next
-###
-  '--> GET /clients/:id "superAdmin" returns 404 for client that does not exist': (done) ->
+
+  '--> GET /clients/:uid "superAdmin" returns 404 for client that does not exist': (done) ->
 
     testClientId = 1
     testParamClientId = 999
@@ -293,6 +293,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
       app.router _this.request, _this.response, next
 
+###
   '--> GET /clients/:id "clientSuperAdmin" returns 401 for :id that does not match clientId': (done) ->
 
     testClientId = 1

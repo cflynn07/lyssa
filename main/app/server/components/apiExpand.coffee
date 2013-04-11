@@ -9,13 +9,15 @@ ORM       = require config.appRoot + '/server/components/orm'
 sequelize = ORM.setup()
 async     = require 'async'
 
-module.exports = (req, res, resource, resourceQueryParams) ->
 
-  console.log req.apiExpand
+
+
+module.exports = (req, res, resource, resourceQueryParams) ->
 
   #Verify extend parameter is valid if it exists
   #extend may be a string (HTTP) or an object (socketio)
   #returns boolean
+
   isValidExtend = (req) ->
     #verify extend
 
@@ -47,7 +49,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
 
 
-
   #recursively iterates over verified extend parameter and checks each association is valid
   #and that no circular associations or duplicate associations are attempted
   isValidExtendAssociation = (resource, req) ->
@@ -75,6 +76,27 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
 
 
+
+  #Now we must clear out "id" and "password" props
+  #NOTE: topResult should still be an array
+  recursiveCleanProps = (arr) ->
+    for subResult in arr
+      for subResultPropertyKey, subResultPropertyValue of subResult
+        if _.isArray(subResultPropertyValue)
+          recursiveCleanProps(subResultPropertyValue)
+
+        else
+
+          if (subResultPropertyKey is 'id') or (subResultPropertyKey is 'password')
+            delete subResult[subResultPropertyKey]
+
+          if (subResultPropertyKey.indexOf('Id') > -1)
+            delete subResult[subResultPropertyKey]
+
+
+
+
+
   #abort if invalid 'extend' parameter
   if !isValidExtend(req)
     res.jsonAPIRespond(_.extend({message: 'invalid expand format'}, config.errorResponse(400)))
@@ -82,15 +104,34 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
   #abort if invalid association-extend in 'extend' parameter
   if !isValidExtendAssociation(resource, req)
-    console.log 'FAIL!'
     res.jsonAPIRespond(_.extend({message: 'invalid/unknown expand resource specified'}, config.errorResponse(400)))
     return
 
 
 
 
+  sendFinalResult = (topResult) ->
+    topResultJSON = JSON.parse JSON.stringify topResult
+    recursiveCleanProps topResultJSON
+
+    #if single array, just return object
+    if _.isArray(topResultJSON) and topResultJSON.length is 1
+      topResultJSON = topResultJSON[0]
+
+    res.jsonAPIRespond
+      code: 200
+      response: topResultJSON
+
+
+
+
+
+
+
+
   include       = []
   secondInclude = []
+
 
   for v in req.apiExpand
     include.push ORM.model(v.resource.replace(/s+$/, ''))
@@ -99,18 +140,17 @@ module.exports = (req, res, resource, resourceQueryParams) ->
         secondInclude.push {parentName: v.resource, parentModel: ORM.model(v.resource.replace(/s+$/, '')), childModel: ORM.model(k.resource.replace(/s+$/, ''))}
 
 
-
-
-
   if include.length > 0
     resourceQueryParams.find.include = include
-
-
-
 
   resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
 
 
+    # Check if length of topResult matches length of specified IDs, if != send back 404
+    if _.isArray resourceQueryParams.find.where.uid
+      if resourceQueryParams.find.where.uid.length > topResult.length
+        res.jsonAPIRespond config.errorResponse(404)
+        return
 
 
 
@@ -123,11 +163,11 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       for subResult, subResultIndex in topResult
         #ONCE 1
 
-        console.log '------ EACH CLIENT -----'
+        #console.log '------ EACH CLIENT -----'
 
         for includeItem in secondInclude
           #ALSO ONCE
-          console.log '------ ONCE FOR EACH CLIENT -------'
+          #console.log '------ ONCE FOR EACH CLIENT -------'
 
           ids = []
           unextendedFetchedItems = subResult[includeItem.parentName]
@@ -157,106 +197,13 @@ module.exports = (req, res, resource, resourceQueryParams) ->
             )(includeItem, subResult, subResultIndex, topResult, ids)
 
 
-
-
-
-
       async.parallel asyncMethods, () ->
 
-        console.log 'das methods est completen'
-        console.log JSON.parse JSON.stringify topResult
+        sendFinalResult topResult
 
+    else
 
-        #Now we must clear out "id" and "password" props
-        #NOTE: topResult should still be an array
-        recursiveCleanProps = (arr, parentName, parentUid = false, lvl=0) ->
-
-          for subResult in arr
-
-            for subResultPropertyKey, subResultPropertyValue of subResult
-              if _.isArray(subResultPropertyValue)
-
-                #This should only happen on the first top-level iteration,
-                #after a recursive call it will be filled out
-                if lvl is 0
-                  parentUid = subResult.uid
-                else
-                  parentName = subResultPropertyKey.replace(/s+$/, '')
-
-
-                recursiveCleanProps(subResultPropertyValue, parentName, parentUid, (lvl + 1))
-
-
-              else
-
-
-                if (subResultPropertyKey is 'id') or (subResultPropertyKey is 'password')
-                  delete subResult[subResultPropertyKey]
-
-                if (subResultPropertyKey.indexOf('Id') > -1)
-                  delete subResult[subResultPropertyKey]
-
-                #if (parentName + 'Id' is subResultPropertyKey)
-                #  subResult[subResultPropertyKey] = parentUid
-
-
-
-
-
-        topResultJSON = JSON.parse JSON.stringify topResult
-        recursiveCleanProps topResultJSON, 'client'
-
-        console.log '-----------'
-        console.log topResultJSON
-        for item in topResultJSON
-          console.log item
-
-
-
-
-
-        res.jsonAPIRespond
-          code: 200
-          response: topResultJSON
-
-
-
-
-
-
-
-
-          #else
-          #  res.jsonAPIRespond
-          #    code: 200
-          #    response: topResult
-          #  return
-
-
-
-
-      #res.jsonAPIRespond
-      #  code: 200
-      #  response: topResult
-
-
-
-
-      #console.log includeItem.parentName
-      #console.log subResult[includeItem.parentName]
-      ##Find all the ids of that item that were fetched
-      #for unexpandedItem in subResult[includeItem.parentName]
-      #  ids.push unexpandedItem.id
-
-
-
-
-    #else
-    #  res.jsonAPIRespond
-    #    code: 200
-    #    response: topResult
-
-
+      sendFinalResult topResult
 
 
 
