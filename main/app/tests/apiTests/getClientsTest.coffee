@@ -11,6 +11,24 @@ ORM        = require config.appRoot + 'server/components/orm'
 async      = require 'async'
 
 sequelize  = ORM.setup()
+
+
+uuid = require 'node-uuid'
+console.log uuid.v4()
+
+
+#employee.create({
+#  clientId: 'a3b7b5d7-6ce8-4752-bcb1-7909d5348b36'
+#  name: 'Foo'
+#  identifier: 'Bar'
+#}).success () ->
+#  console.log 'done'
+#  client.findAll({include: [employee]}).success (clients) ->
+#    console.log JSON.parse JSON.stringify clients
+
+
+#sequelize.sync force: true
+return
 app        = express().http().io()
 
 client     = ORM.model 'client'
@@ -56,11 +74,11 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     next = this.spy()
     app.router this.request, this.response, next
 
-  '--> GET /clients "super_admin" returns all clients': (done) ->
+  '--> GET /clients "superAdmin" returns all clients': (done) ->
 
     this.request.session =
       user:
-        type: 'super_admin'
+        type: 'superAdmin'
     next = this.spy()
     _this = this
 
@@ -83,13 +101,13 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
       app.router _this.request, _this.response, next
 
 
-  '--> GET /clients "client_super_admin" returns user client': (done) ->
+  '--> GET /clients "clientSuperAdmin" returns user client': (done) ->
 
     testClientId = 1
 
     this.request.session =
       user:
-        type: 'client_super_admin'
+        type: 'clientSuperAdmin'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -109,13 +127,13 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
       app.router _this.request, _this.response, next
 
 
-  '--> GET /clients "client_admin" returns user client': (done) ->
+  '--> GET /clients "clientAdmin" returns user client': (done) ->
 
     testClientId = 1
 
     this.request.session =
       user:
-        type: 'client_admin'
+        type: 'clientAdmin'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -135,13 +153,13 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
       app.router _this.request, _this.response, next
 
 
-  '--> GET /clients "client_delegate" returns user client': (done) ->
+  '--> GET /clients "clientDelegate" returns user client': (done) ->
 
     testClientId = 1
 
     this.request.session =
       user:
-        type: 'client_delegate'
+        type: 'clientDelegate'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -160,13 +178,13 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
       app.router _this.request, _this.response, next
 
-  '--> GET /clients "client_auditor" returns user client': (done) ->
+  '--> GET /clients "clientAuditor" returns user client': (done) ->
 
     testClientId = 1
 
     this.request.session =
       user:
-        type: 'client_auditor'
+        type: 'clientAuditor'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -185,7 +203,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
       app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "super_admin" returns any client [including other clientId]': (done) ->
+  '--> GET /clients/:id "superAdmin" returns any client [including other clientId]': (done) ->
 
     testClientId = 1
     testParamClientId = 2
@@ -193,7 +211,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'super_admin'
+        type: 'superAdmin'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -212,7 +230,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
       app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "super_admin" returns any client [including same clientId]': (done) ->
+  '--> GET /clients/:id "superAdmin" returns any client [including same clientId]': (done) ->
 
     testClientId = 1
     testParamClientId = 1
@@ -220,7 +238,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'super_admin'
+        type: 'superAdmin'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -239,7 +257,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
       app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "super_admin" returns 404 for client that does not exist': (done) ->
+  '--> GET /clients/:id "superAdmin" returns 404 for client that does not exist': (done) ->
 
     testClientId = 1
     testParamClientId = 999
@@ -247,7 +265,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'super_admin'
+        type: 'superAdmin'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -264,7 +282,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
       app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "client_super_admin" returns 401 for :id that does not match clientId': (done) ->
+  '--> GET /clients/:id "clientSuperAdmin" returns 401 for :id that does not match clientId': (done) ->
 
     testClientId = 1
     testParamClientId = 5
@@ -272,7 +290,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'client_super_admin'
+        type: 'clientSuperAdmin'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -289,7 +307,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
 
 
-  '--> GET /clients/:id "client_super_admin" returns 200 & client for match': (done) ->
+  '--> GET /clients/:id "clientSuperAdmin" returns 200 & client for match': (done) ->
 
     testClientId = 1
     testParamClientId = 1
@@ -297,7 +315,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'client_super_admin'
+        type: 'clientSuperAdmin'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -316,7 +334,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
       app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "client_admin" returns 401 for :id that does not match clientId': (done) ->
+  '--> GET /clients/:id "clientAdmin" returns 401 for :id that does not match clientId': (done) ->
 
     testClientId = 1
     testParamClientId = 5
@@ -324,7 +342,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'client_admin'
+        type: 'clientAdmin'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -339,7 +357,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
     app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "client_admin" returns 200 & client for match': (done) ->
+  '--> GET /clients/:id "clientAdmin" returns 200 & client for match': (done) ->
 
     testClientId = 3
     testParamClientId = 3
@@ -347,7 +365,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'client_admin'
+        type: 'clientAdmin'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -366,7 +384,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
       app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "client_delegate" returns 401 for :id that does not match clientId': (done) ->
+  '--> GET /clients/:id "clientDelegate" returns 401 for :id that does not match clientId': (done) ->
 
     testClientId = 1
     testParamClientId = 5
@@ -374,7 +392,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'client_delegate'
+        type: 'clientDelegate'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -389,7 +407,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
     app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "client_delegate" returns 200 & client for match': (done) ->
+  '--> GET /clients/:id "clientDelegate" returns 200 & client for match': (done) ->
 
     testClientId = 2
     testParamClientId = 2
@@ -397,7 +415,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'client_delegate'
+        type: 'clientDelegate'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -417,7 +435,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
       app.router _this.request, _this.response, next
 
 
-  '--> GET /clients/:id "client_auditor" returns 401 for :id that does not match clientId': (done) ->
+  '--> GET /clients/:id "clientAuditor" returns 401 for :id that does not match clientId': (done) ->
 
     testClientId = 1
     testParamClientId = 5
@@ -425,7 +443,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'client_auditor'
+        type: 'clientAuditor'
         clientId: testClientId
     next = this.spy()
     _this = this
@@ -440,7 +458,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
 
     app.router _this.request, _this.response, next
 
-  '--> GET /clients/:id "client_auditor" returns 200 & client for match': (done) ->
+  '--> GET /clients/:id "clientAuditor" returns 200 & client for match': (done) ->
 
     testClientId = 1
     testParamClientId = 1
@@ -448,7 +466,7 @@ buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir
     this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
     this.request.session =
       user:
-        type: 'client_auditor'
+        type: 'clientAuditor'
         clientId: testClientId
     next = this.spy()
     _this = this

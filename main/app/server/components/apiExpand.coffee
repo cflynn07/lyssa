@@ -94,32 +94,167 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
   for v in req.apiExpand
     include.push ORM.model(v.resource.replace(/s+$/, ''))
-
-    #if _.isArray v.expand
-      #for k in v.expand
-        #if !
-        #secondInclude.push {parent: ORM.model(v.resource.replace(/s+$/, '')), child: ORM.model(k.resource.replace(/s+$/, ''))}
+    if _.isArray v.expand
+      for k in v.expand
+        secondInclude.push {parentName: v.resource, parentModel: ORM.model(v.resource.replace(/s+$/, '')), childModel: ORM.model(k.resource.replace(/s+$/, ''))}
 
 
 
-  findObj =
-    include: include
-  findMethod = 'findAll'
 
-  if resourceQueryParams
-    findObj.where = resourceQueryParams
-    findMethod = 'find'
 
-  resource[findMethod](findObj).success (result) ->
+  if include.length > 0
+    resourceQueryParams.find.include = include
+
+
+
+
+  resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
+
+
+
+
 
     if secondInclude.length > 0
-      res.jsonAPIRespond
-        code: 404
-        message: 'still working on 2nd level nested associations'
-    else
-      res.jsonAPIRespond
-        code: 200
-        response: result
+      if !_.isArray(topResult)
+        topResult = [topResult]
+
+      asyncMethods = []
+
+      for subResult, subResultIndex in topResult
+        #ONCE 1
+
+        console.log '------ EACH CLIENT -----'
+
+        for includeItem in secondInclude
+          #ALSO ONCE
+          console.log '------ ONCE FOR EACH CLIENT -------'
+
+          ids = []
+          unextendedFetchedItems = subResult[includeItem.parentName]
+
+          if unextendedFetchedItems.length > 0
+
+            #Get all the ids we need to grab for this item
+            for itemToExtend in unextendedFetchedItems
+              ids.push itemToExtend.id
+
+            #Now that we have all the ids... go fetch
+            ((includeItemCap, subResultCap, subResultIndexCap, topResultCap, idsCap) ->
+
+
+              asyncMethods.push (callback) ->
+
+                includeItemCap.parentModel.findAll(
+                  where:
+                    id: idsCap
+                  include: [includeItemCap.childModel]
+                ).success (result) ->
+
+                  topResultCap[subResultIndexCap][includeItemCap.parentName] = result
+                  callback()
+
+
+            )(includeItem, subResult, subResultIndex, topResult, ids)
+
+
+
+
+
+
+      async.parallel asyncMethods, () ->
+
+        console.log 'das methods est completen'
+        console.log JSON.parse JSON.stringify topResult
+
+
+        #Now we must clear out "id" and "password" props
+        #NOTE: topResult should still be an array
+        recursiveCleanProps = (arr, parentName, parentUid = false, lvl=0) ->
+
+          for subResult in arr
+
+            for subResultPropertyKey, subResultPropertyValue of subResult
+              if _.isArray(subResultPropertyValue)
+
+                #This should only happen on the first top-level iteration,
+                #after a recursive call it will be filled out
+                if lvl is 0
+                  parentUid = subResult.uid
+                else
+                  parentName = subResultPropertyKey.replace(/s+$/, '')
+
+
+                recursiveCleanProps(subResultPropertyValue, parentName, parentUid, (lvl + 1))
+
+
+              else
+
+
+                if (subResultPropertyKey is 'id') or (subResultPropertyKey is 'password')
+                  delete subResult[subResultPropertyKey]
+
+                if (subResultPropertyKey.indexOf('Id') > -1)
+                  delete subResult[subResultPropertyKey]
+
+                #if (parentName + 'Id' is subResultPropertyKey)
+                #  subResult[subResultPropertyKey] = parentUid
+
+
+
+
+
+        topResultJSON = JSON.parse JSON.stringify topResult
+        recursiveCleanProps topResultJSON, 'client'
+
+        console.log '-----------'
+        console.log topResultJSON
+        for item in topResultJSON
+          console.log item
+
+
+
+
+
+        res.jsonAPIRespond
+          code: 200
+          response: topResultJSON
+
+
+
+
+
+
+
+
+          #else
+          #  res.jsonAPIRespond
+          #    code: 200
+          #    response: topResult
+          #  return
+
+
+
+
+      #res.jsonAPIRespond
+      #  code: 200
+      #  response: topResult
+
+
+
+
+      #console.log includeItem.parentName
+      #console.log subResult[includeItem.parentName]
+      ##Find all the ids of that item that were fetched
+      #for unexpandedItem in subResult[includeItem.parentName]
+      #  ids.push unexpandedItem.id
+
+
+
+
+    #else
+    #  res.jsonAPIRespond
+    #    code: 200
+    #    response: topResult
 
 
 

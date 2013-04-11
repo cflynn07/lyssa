@@ -8,6 +8,18 @@ module.exports =
     id:      SEQ.INTEGER
     name:    SEQ.STRING
     ordinal: SEQ.INTEGER
+
+    clientUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: true
+    revisionUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: true
+
   relations: [
     relation: 'belongsTo'
     model: 'client'

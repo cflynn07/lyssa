@@ -40,7 +40,8 @@
     "node-mandrill": "*",
     "csv":           "*",
     "formidable":    "*",
-    "nodetime":      "*"
+    "nodetime":      "*",
+    "node-uuid":     "*"
   },
   "devDependencies": {
     "mocha": 					        "1.8.2",

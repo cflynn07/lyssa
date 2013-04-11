@@ -13,14 +13,14 @@ module.exports = (app) ->
       clientId = req.session.user.clientId
 
       switch userType
-        when 'super_admin'
+        when 'superAdmin'
 
           employee.findAll().success (employees) ->
             res.jsonAPIRespond
               code: 200
               response: employees
 
-        when 'client_super_admin', 'client_admin', 'client_delegate', 'client_auditor'
+        when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 
           #Always prevent password hash from being sent
           employee.find(
@@ -39,13 +39,13 @@ module.exports = (app) ->
       clientId = req.session.user.clientId
 
       switch userType
-        when 'super_admin'
+        when 'superAdmin'
           res.jsonAPIRespond config.unauthorizedResponse
-        when 'client_super_admin'
+        when 'clientSuperAdmin'
           res.jsonAPIRespond config.unauthorizedResponse
-        when 'client_admin'
+        when 'clientAdmin'
           res.jsonAPIRespond config.unauthorizedResponse
-        when 'client_delegate'
+        when 'clientDelegate'
           res.jsonAPIRespond config.unauthorizedResponse
-        when 'client_auditor'
+        when 'clientAuditor'
           res.jsonAPIRespond config.unauthorizedResponse

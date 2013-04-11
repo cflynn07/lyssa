@@ -81,6 +81,17 @@ module.exports =
       object = require modelsPath + '/' + name
       options = object.options || {}
       modelName = name.replace(/\.js$/i, '')
+
+      #add uid to each model
+      object.model = _.extend({uid:
+        type: Sequelize.STRING
+        validate:
+          isUUID: 4
+          notNull: true
+          unique: true
+      }, object.model)
+
+
       models[modelName] = sequelize.define modelName, object.model, options
 
       if object.relations
@@ -88,7 +99,11 @@ module.exports =
 
     for modelName, relations of @relationships
       for relObject in relations
-        @models[modelName][relObject.relation](@models[relObject.model])
+
+        if !_.isObject relObject.options
+          relObject.options = {}
+
+        @models[modelName][relObject.relation](@models[relObject.model], relObject.options)
 
     @instance = sequelize
     return @instance
