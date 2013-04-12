@@ -3,13 +3,12 @@ Module for managing api resource expansion relationships,
 permissions, and validation
 ###
 
+
 config    = require '../config/config'
 _         = require 'underscore'
 ORM       = require config.appRoot + '/server/components/orm'
 sequelize = ORM.setup()
 async     = require 'async'
-
-
 
 
 module.exports = (req, res, resource, resourceQueryParams) ->
@@ -112,10 +111,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     return recursiveHelper(req.apiExpand, 1)
 
 
-
-
-
-
   #Now we must clear out "id" and "password" props
   #NOTE: topResult should still be an array
   recursiveCleanProps = (arr) ->
@@ -131,7 +126,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
           if (subResultPropertyKey.indexOf('Id') > -1)
             delete subResult[subResultPropertyKey]
-
 
 
   #DRY - this optionally gets invoked from two places
@@ -150,10 +144,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     res.jsonAPIRespond
       code: 200
       response: topResultJSON
-
-
-
-
 
 
 
@@ -182,103 +172,119 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
 
 
+  firstLevelIncludeModels = []
+  secondLevelIncludeObjects = {}
 
 
+  for firstLevelIncludeObject in req.apiExpand
 
-  include       = []
-  secondInclude = []
-
-
-  for v in req.apiExpand
-    include.push ORM.model(v.resource.replace(/s+$/, ''))
-    if _.isArray v.expand
-      for k in v.expand
-        secondInclude.push {parentName: v.resource, parentModel: ORM.model(v.resource.replace(/s+$/, '')), childModel: ORM.model(k.resource.replace(/s+$/, ''))}
+    firstLevelIncludedResourceName = firstLevelIncludeObject.resource
+    firstLevelIncludedModelName    = firstLevelIncludeObject.resource.replace(/s+$/, '')
+    firstLevelIncludeModels.push ORM.model firstLevelIncludedModelName
 
 
+    if _.isArray(firstLevelIncludeObject.expand)
+      for secondLevelExpandIncludeObject in firstLevelIncludeObject.expand
+
+        if _.isUndefined secondLevelIncludeObjects[firstLevelIncludedResourceName]
+          secondLevelIncludeObjects[firstLevelIncludedResourceName] = [secondLevelExpandIncludeObject]
+        else
+          secondLevelIncludeObjects[firstLevelIncludedResourceName].push secondLevelExpandIncludeObject
 
 
-  if include.length > 0
-    resourceQueryParams.find.include = include
+  if firstLevelIncludeModels.length > 0
+    resourceQueryParams.find.include = firstLevelIncludeModels
+
+
+  #console.log 'secondLevelIncludeObjects'
+  #console.log secondLevelIncludeObjects
+  #client ->
+  #  employees -> expand to
+  #    { employees: [ { resource: 'templates' }, { resource: 'revisions' } ] }
+
 
   resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
 
+    if !_.isArray topResult
+      topResult = [topResult]
+    #TODO: CHECK LENGTH & VERIFY NO 404 MUST BE SENT
 
+    if Object.getOwnPropertyNames(secondLevelIncludeObjects).length is 0
+      #DONE, Nothing else to include
+      sendFinalResult topResult
+    else
 
+      topResult = JSON.parse JSON.stringify topResult
 
-
-    # Check if length of topResult matches length of specified IDs, if != send back 404
-    if resourceQueryParams.find and resourceQueryParams.find.where and resourceQueryParams.find.where.uid and _.isArray(resourceQueryParams.find.where.uid)
-      if resourceQueryParams.find.where.uid.length > topResult.length
-        res.jsonAPIRespond config.errorResponse(404)
-        return
-
-
-
-
-    if secondInclude.length > 0
-
-
-      #wrap it to make the next part simpler
-      if !_.isArray(topResult)
-        topResult = [topResult]
-
-
-
+      #console.log topResult
 
       asyncMethods = []
 
-      for subResult, subResultIndex in topResult
-        #ONCE 1
+      for subResult in topResult
 
-        #console.log '------ EACH CLIENT -----'
 
-        for includeItem in secondInclude
-          #ALSO ONCE
-          #console.log '------ ONCE FOR EACH CLIENT secondInclude -------'
-
-          ids = []
-          unextendedFetchedItems = subResult[includeItem.parentName]
+        #topResult == all clients []
+          #subResult == each client {}
 
 
 
+        #console.log secondLevelIncludeObjects
+        #continue
 
-          if unextendedFetchedItems.length > 0
+        for subResultPropertyToExpandKey, expandResourceObjectArrayValue of secondLevelIncludeObjects
 
-            #Get all the ids we need to grab for this item
-            for itemToExtend in unextendedFetchedItems
-              ids.push itemToExtend.id
+          #console.log subResultPropertyToExpandKey
+          #console.log expandResourceObjectArrayValue
+          #continue
 
-            #Now that we have all the ids... go fetch
-            ((includeItemCap, subResultCap, subResultIndexCap, topResultCap, idsCap) ->
+          #client
+          # -> employees... == subResultPropertyToExpandKey
+          # -> templates... == subResultPropertyToExpandKey
+
+          subResourceToExpandModel = ORM.model subResultPropertyToExpandKey.replace(/s+$/, '')
+
+          #console.log '======================='
+          #console.log subResult
+          #console.log subResultPropertyToExpandKey
+          #console.log '======================='
+
+          subResourceIds = []
+          for subResource in subResult[subResultPropertyToExpandKey]
+            subResourceIds.push subResource.id
+
+          subResourceExpandModels = []
 
 
-              asyncMethods.push (callback) ->
-
-                includeItemCap.parentModel.findAll(
-                  where:
-                    id: idsCap
-                  include: [includeItemCap.childModel]
-                ).success (result) ->
-
-                  #topResultCap[subResultIndexCap][includeItemCap.parentName] = result
-                  topResultCap[subResultIndexCap][includeItemCap.parentName] = _.extend topResultCap[subResultIndexCap][includeItemCap.parentName], result
-                  callback()
+          #console.log 'expandResourceObjectArrayValue'
+          #console.log expandResourceObjectArrayValue
+          #console.log '-------'
 
 
-            )(includeItem, subResult, subResultIndex, topResult, ids)
+          for resourceObject in expandResourceObjectArrayValue
+            ##resourceObject == { resource: 'modelname' }
+            #build array of models to use w/ expansion of
+            model = ORM.model resourceObject.resource.replace(/s+$/, '')
+            if model
+              subResourceExpandModels.push model
+
+          ((asyncMethods, subResourceToExpandModel, subResourceIds, subResourceExpandModels, subResult, subResultPropertyToExpandKey) ->
+
+            asyncMethods.push (callback) ->
+
+              subResourceToExpandModel.findAll(
+                where:
+                  id: subResourceIds
+                include: subResourceExpandModels
+              ).success (resultNewSubResource) ->
+                subResult[subResultPropertyToExpandKey] = resultNewSubResource
+                callback()
+
+          )(asyncMethods, subResourceToExpandModel, subResourceIds, subResourceExpandModels, subResult, subResultPropertyToExpandKey)
 
 
       async.parallel asyncMethods, () ->
-
         sendFinalResult topResult
-
-    else
-
-      sendFinalResult topResult
-
-
-
+        return
 
 
 

@@ -22,7 +22,7 @@ client     = ORM.model 'client'
 #Bind the routes
 getClients(app)
 
-buster.testCase 'API GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir + '/clients/:id',
+buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir + '/clients/:id',
   setUp: (done) ->
 
     this.request =
