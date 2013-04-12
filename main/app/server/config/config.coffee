@@ -1,3 +1,5 @@
+_ = require 'underscore'
+
 module.exports =
 
   apiSubDir: '/api'
@@ -23,24 +25,48 @@ module.exports =
     'yesNo'
     'slider'
   ]
+  apiResponseErrors:
+    'nestedTooDeep':
+      code: 400
+      message: 'extend can not nest resources deeper than two levels'
+    'invalidExpandJSON':
+      code: 400
+      message: 'invalid expand JSON parameter'
+    'unknownExpandResource':
+      code: 400
+      message: 'unknown expand resource'
+    'circularExpand':
+      code: 400
+      message: ''
+
   apiResponseCodes:
 
     #Non-errors
-    200: "OK"
-    201: "Created"
-    202: "Accepted"
+    200: 'OK'
+    201: 'Created'
+    202: 'Accepted'
 
     #errors
-    301: "Moved Permanently"
-    400: "Bad Request"
-    401: "Unauthorized"
-    402: "Forbidden"
-    404: "Not Found"
+    301: 'Moved Permanently'
+    400: 'Bad Request'
+    401: 'Unauthorized'
+    402: 'Forbidden'
+    404: 'Not Found'
+
   errorResponse: (code = 401) ->
 
     if [301, 400, 401, 402, 404].indexOf(code) is -1
-      throw new Error('Invalid API error response')
+      throw new Error 'Invalid API error response'
       return
 
     code: code
     error: @apiResponseCodes[code]
+  apiErrorResponse: (apiResponseErrorName) ->
+
+    apiResponseErrorsObject = @apiResponseErrors[apiResponseErrorName]
+
+    if _.isUndefined apiResponseErrorsObject
+      throw new Error 'Invalid API error response'
+      return
+
+    _.extend @errorResponse(apiResponseErrorsObject.code), message: apiResponseErrorsObject.message

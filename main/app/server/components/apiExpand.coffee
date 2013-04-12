@@ -25,12 +25,22 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       for v in expandArray
         if !_.isObject v
           return false
-        if typeof v.resource is not 'string'
+        if !_.isString(v.resource)
           return false
-      return true
 
-    if _.isArray(req.apiExpand) or _.isString(req.apiExpand)
 
+        if !_.isUndefined(v.expand)
+
+          if _.isArray(v.expand)
+            return checkHelper(v.expand)
+          else
+            return false
+
+        else
+          return true
+
+
+    if !_.isUndefined(req.apiExpand)   # and (_.isArray(req.apiExpand) or _.isString(req.apiExpand))
       if _.isArray(req.apiExpand)
         return checkHelper(req.apiExpand)
 
@@ -40,12 +50,12 @@ module.exports = (req, res, resource, resourceQueryParams) ->
         catch e
           #invalid JSON
           return false
-
         return checkHelper req.apiExpand
 
-    #No api expand
-    req.apiExpand = []
-    return true
+    else
+      #No api expand
+      req.apiExpand = []
+      return true
 
 
 
@@ -75,6 +85,35 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     return true
 
 
+  ###
+  Determine if any tree branch extends beyond 2 levels
+  ###
+  isExtendShallowerThanThree = (req) ->
+
+    maxLvl = 2
+    if _.isUndefined req.apiExpand
+      return true
+
+    recursiveHelper = (exp, lvl) ->
+
+      if lvl > maxLvl
+        return false
+
+      childNodesTests = []
+      for val, key in exp
+        if !_.isUndefined(val.expand)
+          childNodesTests.push recursiveHelper(val.expand, (lvl+1))
+
+      for val in childNodesTests
+        if val is false
+          return false
+      return true
+
+    return recursiveHelper(req.apiExpand, 1)
+
+
+
+
 
 
   #Now we must clear out "id" and "password" props
@@ -95,21 +134,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
 
 
-
-
-  #abort if invalid 'extend' parameter
-  if !isValidExtend(req)
-    res.jsonAPIRespond(_.extend({message: 'invalid expand format'}, config.errorResponse(400)))
-    return
-
-  #abort if invalid association-extend in 'extend' parameter
-  if !isValidExtendAssociation(resource, req)
-    res.jsonAPIRespond(_.extend({message: 'invalid/unknown expand resource specified'}, config.errorResponse(400)))
-    return
-
-
-
-
+  #DRY - this optionally gets invoked from two places
   sendFinalResult = (topResult) ->
     topResultJSON = JSON.parse JSON.stringify topResult
     recursiveCleanProps topResultJSON
@@ -118,9 +143,40 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     if _.isArray(topResultJSON) and topResultJSON.length is 1
       topResultJSON = topResultJSON[0]
 
+    #override if specified to wrap in array
+    if !_.isArray(topResultJSON) and resourceQueryParams.searchExpectsMultiple
+      topResultJSON = [topResultJSON]
+
     res.jsonAPIRespond
       code: 200
       response: topResultJSON
+
+
+
+
+
+
+
+  ###
+  STANDARD CHECKS...
+  ###
+
+  #abort if invalid 'extend' parameter
+  if !isValidExtend(req)
+    res.jsonAPIRespond config.apiErrorResponse 'invalidExpandJSON'
+    return
+
+  #abort if invalid association-extend in 'extend' parameter
+  if !isValidExtendAssociation(resource, req)
+    res.jsonAPIRespond config.apiErrorResponse 'unknownExpandResource'
+    return
+
+  if !isExtendShallowerThanThree(req)
+    res.jsonAPIRespond config.apiErrorResponse 'nestedTooDeep'
+    return
+
+
+
 
 
 
@@ -140,24 +196,35 @@ module.exports = (req, res, resource, resourceQueryParams) ->
         secondInclude.push {parentName: v.resource, parentModel: ORM.model(v.resource.replace(/s+$/, '')), childModel: ORM.model(k.resource.replace(/s+$/, ''))}
 
 
+
+
   if include.length > 0
     resourceQueryParams.find.include = include
 
   resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
 
 
+
+
+
     # Check if length of topResult matches length of specified IDs, if != send back 404
     if resourceQueryParams.find and resourceQueryParams.find.where and resourceQueryParams.find.where.uid and _.isArray(resourceQueryParams.find.where.uid)
-
       if resourceQueryParams.find.where.uid.length > topResult.length
         res.jsonAPIRespond config.errorResponse(404)
         return
 
 
 
+
     if secondInclude.length > 0
+
+
+      #wrap it to make the next part simpler
       if !_.isArray(topResult)
         topResult = [topResult]
+
+
+
 
       asyncMethods = []
 
@@ -168,10 +235,13 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
         for includeItem in secondInclude
           #ALSO ONCE
-          #console.log '------ ONCE FOR EACH CLIENT -------'
+          #console.log '------ ONCE FOR EACH CLIENT secondInclude -------'
 
           ids = []
           unextendedFetchedItems = subResult[includeItem.parentName]
+
+
+
 
           if unextendedFetchedItems.length > 0
 
@@ -191,7 +261,8 @@ module.exports = (req, res, resource, resourceQueryParams) ->
                   include: [includeItemCap.childModel]
                 ).success (result) ->
 
-                  topResultCap[subResultIndexCap][includeItemCap.parentName] = result
+                  #topResultCap[subResultIndexCap][includeItemCap.parentName] = result
+                  topResultCap[subResultIndexCap][includeItemCap.parentName] = _.extend topResultCap[subResultIndexCap][includeItemCap.parentName], result
                   callback()
 
 
@@ -205,19 +276,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     else
 
       sendFinalResult topResult
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

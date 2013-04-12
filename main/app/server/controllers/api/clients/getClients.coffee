@@ -15,34 +15,34 @@ module.exports = (app) ->
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
+
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
+
+        ###
+          Will return all clients for super-admin, or just current client for all other user types
+          searchExpectsMultiple, always wrap result in array even if only 1 result returned since
+          this is a collection resource request
+        ###
 
         switch userType
           when 'superAdmin'
 
             params =
-              method: 'findAll'
-              find: {}
-              #  where:
-              #    id: '*'
+              searchExpectsMultiple: true
+              method:                'findAll'
+              find:                  {}
             apiExpand(req, res, client, params)
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 
             params =
-              method: 'findAll'
+              searchExpectsMultiple: true
+              method:                'findAll'
               find:
                 where:
                   uid: clientUid
-
             apiExpand(req, res, client, params)
-
-            #apiExpand(req, res, client, params)
-            #client.find(clientId).success (client) ->
-            #  res.jsonAPIRespond
-            #    code: 200
-            #    response: client
 
     ]
 
@@ -56,63 +56,33 @@ module.exports = (app) ->
         clientUid = req.session.user.clientUid
         uids      = req.params.id.split ','
 
-        #console.log req.params.id
-        #console.log req.params.id.split(',')
-        #console.log parseInt req.params.id
-        #console.log _.isNumber req.params.id
-        #console.log '----'
-        #return
-
-
         ###
+          Will return that are specified in URL for super-admin, or just current client for
+          all other user types.
+          searchExpectsMultiple, always wrap result in array even if only 1 result returned
+        ###
+
         params =
           method: 'findAll'
           find:
             where:
               uid: uids
-        apiExpand(req, res, client, params)
-        return
-        ###
 
         switch userType
           when 'superAdmin'
 
-            params =
-              method: 'findAll'
-              find:
-                where:
-                  uid: uids
-
             apiExpand(req, res, client, params)
-
-
-            ###
-            client.find(req.params.id).success (client) ->
-              if !client
-                res.jsonAPIRespond
-                  code: 404
-                  error: 'Not Found'
-              else
-                res.jsonAPIRespond
-                  code: 200
-                  response: client
-            ###
-
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 
-            if (req.params.id + '') != (clientId + '')
+            if uids.length > 1
+              res.jsonAPIRespond config.errorResponse(401)
+
+            else if (uids[0] + '') is not (clientUid + '')
               res.jsonAPIRespond config.errorResponse(401)
 
             else
-              client.find(req.params.id).success (client) ->
-                if !client
-                  res.jsonAPIRespond
-                    code: 404
-                    error: 'Not Found'
-                else
-                  res.jsonAPIRespond
-                    code: 200
-                    response: client
+              apiExpand(req, res, client, params)
+
     ]
 
