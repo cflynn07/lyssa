@@ -22,7 +22,7 @@ buster.testCase 'Module components/routeParrot',
     nextSpy = this.spy()
     request =
       method: 'get'
-      url: config.apiSubDir + '/users'
+      url: config.apiSubDir + '/v1/clients'
       headers: []
     response = {}
     next     = this.spy()
@@ -35,12 +35,41 @@ buster.testCase 'Module components/routeParrot',
     buster.assert.isFunction response.jsonAPIRespond
     buster.assert.same('http', request.requestType)
 
+    #No query param w/ "expand" passed, this should be undefined
+    buster.refute.defined request.apiExpand
+
+
+
+  '--> Modifies HTTP request to API w/ "expand" GET param': () ->
+
+    nextSpy = this.spy()
+    request =
+      method: 'get'
+      url: config.apiSubDir + '/v1/clients'
+      headers: []
+      query:
+        expand: '[{"resource":"templates"}]'
+
+    response = {}
+    next     = this.spy()
+
+    routeParrot.http request, response, nextSpy
+
+    #routeParrot.http modified this request by adding required attributes
+    #to req & res objects
+    buster.assert.called nextSpy
+    buster.assert.isFunction response.jsonAPIRespond
+    buster.assert.same('http', request.requestType)
+
+    buster.assert.defined request.apiExpand
+
+
 
   '--> Does not modify HTTP request that is not to API': () ->
 
     request =
       method: 'get'
-      url: '/users' #<-- not prefixed with '/api'
+      url: '/v1/clients' #<-- not prefixed with '/api'
       headers: []
     response = {}
     nextSpy  = this.spy()
@@ -60,7 +89,7 @@ buster.testCase 'Module components/routeParrot',
     request =
       data:
         method: 'get'
-        url: '/users'
+        url: config.apiSubDir + '/v1/clients'
         headers: []
     #response will be an empty object
     response = {}
@@ -69,18 +98,60 @@ buster.testCase 'Module components/routeParrot',
     ###
       This is what we expect routeParrot.socketio to mutate request as
     ###
+   # mergedRequest = _.extend({
+   #   method:  'get'
+   #   url:     config.apiSubDir + '/v1/clients'
+   #   headers: []
+   #   requestType: 'socketio'
+   # }, request)
+
+    routeParrot.socketio request, response, callbackSpy
+
+    buster.assert.called callbackSpy #, mergedRequest, response
+    buster.assert.isFunction response.jsonAPIRespond
+    buster.assert.same request.requestType, 'socketio'
+    buster.assert.same request.method, 'get'
+
+    #We didn't pass in a request.data.query value
+    buster.refute.defined request.apiExpand
+
+
+  '--> Modifies socket.io request to API w/ simulated get param': () ->
+
+    #The client method is responsible for formatting the data object with
+    #3 properties - method, url, headers
+    request =
+      data:
+        method: 'get'
+        url: '/v1/clients'
+        headers: []
+        query:
+          expand: '[{"resource":"templates"}]'
+
+    #response will be an empty object
+    response = {}
+    callbackSpy  = this.spy()
+
+
+    ###
+      This is what we expect routeParrot.socketio to mutate request as
+    ###
     mergedRequest = _.extend({
       method:  'get'
-      url:     config.apiSubDir + '/users'
+      url:     config.apiSubDir + '/v1/clients'
       headers: []
       requestType: 'socketio'
     }, request)
 
     routeParrot.socketio request, response, callbackSpy
 
-    buster.assert.calledWith callbackSpy, mergedRequest, response
+
+    buster.assert.called callbackSpy      #, mergedRequest, response
+
     buster.assert.isFunction response.jsonAPIRespond
     buster.assert.same('socketio', request.requestType)
+
+    buster.assert.defined request.apiExpand
 
 
   '--> Forwards socketio & http api requests to same route': () ->
@@ -98,13 +169,13 @@ buster.testCase 'Module components/routeParrot',
 
     httpAPIRequest =
       method: 'get'
-      url: config.apiSubDir + '/users'
+      url: config.apiSubDir + '/v1/clients'
       headers: []
 
     socketioAPIRequest =
       data:
         method: 'get'
-        url: '/users'
+        url: '/v1/clients'
         headers: []
 
     httpResponse = {}
@@ -117,7 +188,7 @@ buster.testCase 'Module components/routeParrot',
     #TEST!
     buster.assert.called httpNextSpy
     buster.assert.called sioNextSpy
-    buster.assert.same httpAPIRequest.url, sioNextSpy.args[0][0].url, config.apiSubDir + '/users'
+    buster.assert.same httpAPIRequest.url, sioNextSpy.args[0][0].url, config.apiSubDir + '/v1/clients'
 
 
 

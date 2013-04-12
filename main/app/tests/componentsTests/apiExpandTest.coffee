@@ -16,11 +16,12 @@ buster.testCase 'Module components/apiExpand',
   setUp: (done) ->
 
     this.request =
-      url:          config.apiSubDir + '/clients'
+      url:          config.apiSubDir + '/v1/clients'
       method:       'GET'
       headers:      []
       requestType:  'http'
       session:      {}
+    #  apiExpand:    {}
     this.response =
       render:         this.spy()
       end:            this.spy()
@@ -31,8 +32,9 @@ buster.testCase 'Module components/apiExpand',
   tearDown: (done) ->
     done()
 
+
   # -------------------------------------------
-  '--> API request without expand parameter succeeds': (done) ->
+  '--> Returns single resource without "expand" parameter': (done) ->
 
     _this    = this
 
@@ -55,101 +57,76 @@ buster.testCase 'Module components/apiExpand',
       buster.assert.isObject apiResponse
       buster.assert.same apiResponse.code, 200
 
+      #should always be object not array
       buster.assert.isObject apiResponse.response
-      buster.refute.isArray apiResponse.response.employees
 
+      for val, index of apiResponse.response
+        #Assert there are no arrays or objects in the response object
+        buster.refute.isObject val
+        buster.refute.isArray val
 
     #Run test
     apiExpand this.request, this.response, client, resourceQueryParams
 
 
   # -------------------------------------------
-  '--> Single response object expands to one associated resource': (done) ->
+  '--> Returns multiple resources without "expand" parameter': (done) ->
 
     _this    = this
 
     testClientId = 2
-    testClientExpectedNumEmployees = 2
-
+    #testClientExpectedNumEmployees = 2
 
     client = ORM.model 'client'
     resourceQueryParams =
       method: 'findAll'
-      find:
-        where:
-          id: testClientId
+      find: {}
+      #  where:
+      #    id: testClientId
 
-
-    this.request.apiExpand = [{
-      resource: 'employees'
-    }]
-
+    #this.request.apiExpand = [{
+    #  resource: 'employees'
+    #}]
 
     _this.response.jsonAPIRespond = done (apiResponse) ->
 
       buster.assert.isObject apiResponse
       buster.assert.same apiResponse.code, 200
 
-      buster.assert.isObject apiResponse.response
-      buster.assert.isArray apiResponse.response.employees
-      buster.assert.same apiResponse.response.employees.length, testClientExpectedNumEmployees
+      buster.assert.isArray apiResponse.response
+
+      #make sure it didn't attach this...
+      buster.refute.isArray apiResponse.response.employees
+
+
+      for val, index in apiResponse.response
+        for subVal of val
+          #Assert there are no arrays or objects in the response object
+          buster.refute.isObject subVal
+          buster.refute.isArray subVal
 
 
     #Run test
     apiExpand this.request, this.response, client, resourceQueryParams
 
 
-
-
-
-
   # -------------------------------------------
-  '//--> Single response expands to two associations at one level': (done) ->
+  '--> Returns multiple resources without "expand" parameter': (done) ->
     done()
   # -------------------------------------------
-  '//--> Single response expands to three associations at one level': (done) ->
-    done()
-
-
-  # -------------------------------------------
-  '//--> Plural response expands to one associations at one level': (done) ->
+  '--> Returns multiple resources without "expand" parameter': (done) ->
     done()
   # -------------------------------------------
-  '//--> Plural response expands to two associations at one level': (done) ->
-    done()
-  # -------------------------------------------
-  '//--> Plural response expands to three associations at one level': (done) ->
+  '--> Returns multiple resources without "expand" parameter': (done) ->
     done()
 
 
   # -------------------------------------------
-  '//--> Single response expands to multiple associations at two levels': (done) ->
-    done()
-  # -------------------------------------------
-  '//--> Plural response expands to multiple associations at two levels': (done) ->
-    done()
+  #'//--> Circular expansion returns error': (done) ->
+  #  done()
 
-
-  # -------------------------------------------
-  '//--> Single response expands to multiple associations at three levels': (done) ->
-    done()
-  # -------------------------------------------
-  '//--> Plural response expands to multiple associations at three levels': (done) ->
-    done()
-
-
-  # -------------------------------------------
-  '//--> Circular expansion returns error': (done) ->
-    done()
-  # -------------------------------------------
-  '//--> Unknown associations returns error': (done) ->
-    done()
-  # -------------------------------------------
-  '//--> Malformed "expand" parameter returns error': (done) ->
-    done()
-
-
-
+  #'//--> Malformed "expand" parameter returns error': (done) ->
+  #  done()
 
 
 

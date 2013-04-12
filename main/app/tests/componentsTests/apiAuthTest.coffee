@@ -48,13 +48,13 @@ buster.testCase 'Module components/apiAuth',
       code: 401
 
 
-  'Allows authenticated "super_admin" HTTP request': ->
+  'Allows authenticated "superAdmin" HTTP request': ->
 
     request =
       requestType: 'http'
       session:
         user:
-          type: 'super_admin'
+          type: 'superAdmin'
 
     response =
       jsonAPIRespond: this.spy()
@@ -65,13 +65,13 @@ buster.testCase 'Module components/apiAuth',
     buster.assert.called callback
     buster.refute.called response.jsonAPIRespond
 
-  'Allows authenticated "super_admin" socketio request': ->
+  'Allows authenticated "superAdmin" socketio request': ->
 
     request =
       requestType: 'socketio'
       session:
         user:
-          type: 'super_admin'
+          type: 'superAdmin'
 
     response =
       jsonAPIRespond: this.spy()
@@ -83,14 +83,14 @@ buster.testCase 'Module components/apiAuth',
     buster.refute.called response.jsonAPIRespond
 
 
-  'Allows authenticated "client_super_admin" socketio & HTTP request': () ->
+  'Allows authenticated "clientSuperAdmin" socketio & HTTP request': () ->
 
     ((_this) ->
       request =
         requestType: 'socketio'
         session:
           user:
-            type: 'client_super_admin'
+            type: 'clientSuperAdmin'
       response =
         jsonAPIRespond: _this.spy()
       callback = _this.spy()
@@ -106,7 +106,7 @@ buster.testCase 'Module components/apiAuth',
         requestType: 'http'
         session:
           user:
-            type: 'client_super_admin'
+            type: 'clientSuperAdmin'
       response =
         jsonAPIRespond: _this.spy()
       callback = _this.spy()
@@ -118,14 +118,14 @@ buster.testCase 'Module components/apiAuth',
     )(this)
 
 
-  'Allows authenticated "client_admin" socketio & HTTP request': () ->
+  'Allows authenticated "clientAdmin" socketio & HTTP request': () ->
 
     ((_this) ->
       request =
         requestType: 'socketio'
         session:
           user:
-            type: 'client_admin'
+            type: 'clientAdmin'
       response =
         jsonAPIRespond: _this.spy()
       callback = _this.spy()
@@ -141,7 +141,7 @@ buster.testCase 'Module components/apiAuth',
         requestType: 'http'
         session:
           user:
-            type: 'client_admin'
+            type: 'clientAdmin'
       response =
         jsonAPIRespond: _this.spy()
       callback = _this.spy()
@@ -154,14 +154,14 @@ buster.testCase 'Module components/apiAuth',
 
 
 
-  'Allows authenticated "client_delegate" socketio & HTTP request': () ->
+  'Allows authenticated "clientDelegate" socketio & HTTP request': () ->
 
     ((_this) ->
       request =
         requestType: 'socketio'
         session:
           user:
-            type: 'client_delegate'
+            type: 'clientDelegate'
       response =
         jsonAPIRespond: _this.spy()
       callback = _this.spy()
@@ -177,7 +177,7 @@ buster.testCase 'Module components/apiAuth',
         requestType: 'http'
         session:
           user:
-            type: 'client_delegate'
+            type: 'clientDelegate'
       response =
         jsonAPIRespond: _this.spy()
       callback = _this.spy()
@@ -190,14 +190,14 @@ buster.testCase 'Module components/apiAuth',
 
 
 
-  'Allows authenticated "client_auditor" socketio & HTTP request': () ->
+  'Allows authenticated "clientAuditor" socketio & HTTP request': () ->
 
     ((_this) ->
       request =
         requestType: 'socketio'
         session:
           user:
-            type: 'client_auditor'
+            type: 'clientAuditor'
       response =
         jsonAPIRespond: _this.spy()
       callback = _this.spy()
@@ -213,7 +213,7 @@ buster.testCase 'Module components/apiAuth',
         requestType: 'http'
         session:
           user:
-            type: 'client_auditor'
+            type: 'clientAuditor'
       response =
         jsonAPIRespond: _this.spy()
       callback = _this.spy()

@@ -147,7 +147,8 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
 
     # Check if length of topResult matches length of specified IDs, if != send back 404
-    if _.isArray resourceQueryParams.find.where.uid
+    if resourceQueryParams.find and resourceQueryParams.find.where and resourceQueryParams.find.where.uid and _.isArray(resourceQueryParams.find.where.uid)
+
       if resourceQueryParams.find.where.uid.length > topResult.length
         res.jsonAPIRespond config.errorResponse(404)
         return

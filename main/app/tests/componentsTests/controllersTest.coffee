@@ -8,6 +8,7 @@ buster  = require 'buster'
 express = require 'express.io'
 app     = express().http().io()
 
+#This recursively searches the controllers directory and mounts everything
 require(appDir + 'server/components/controllers')(app)
 
 
@@ -29,6 +30,9 @@ buster.testCase 'Module components/controllers',
     done()
 
 
+  ###
+  Testing 4 routes that should always be present after loading all routes
+  ###
   'GET / - index present': () ->
 
     this.request.method = 'GET'

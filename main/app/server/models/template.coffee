@@ -24,6 +24,9 @@ module.exports =
   relations: [
     relation: 'belongsTo'
     model:    'client'
+  ,
+    relation: 'hasMany'
+    model:    'revision'
 #  ,
 #    relation: 'belongsTo'
 #    model:    'employee'
