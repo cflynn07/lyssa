@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.6.10, for osx10.7 (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.10, for osx10.6 (i386)
 --
 -- Host: localhost    Database: lyssa
 -- ------------------------------------------------------
@@ -76,7 +76,7 @@ CREATE TABLE `dictionaries` (
   KEY `fk_dictionaries_clients2` (`clientUid`),
   CONSTRAINT `fk_dictionaries_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_dictionaries_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,6 +85,7 @@ CREATE TABLE `dictionaries` (
 
 LOCK TABLES `dictionaries` WRITE;
 /*!40000 ALTER TABLE `dictionaries` DISABLE KEYS */;
+INSERT INTO `dictionaries` VALUES ('42901aba-c28a-43a9-8080-6f9d383a3644',1,'Buildings','44cc27a5-af8b-412f-855a-57c8205d86f5','2013-04-13 19:44:22','2013-04-13 19:44:24',NULL,1),('3b5c6c5b-ca10-4c96-a9e3-82cfa15e258c',2,'Apples','44cc27a5-af8b-412f-855a-57c8205d86f5','2013-04-13 19:44:54','2013-04-13 19:44:57',NULL,1),('7335505b-6a74-43c0-ae03-675c632806c1',3,'Actors','05817084-bc15-4dee-90a1-2e0735a242e1','2013-04-13 19:45:23','2013-04-13 19:45:25',NULL,2);
 /*!40000 ALTER TABLE `dictionaries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,7 +117,7 @@ CREATE TABLE `dictionaryItems` (
   CONSTRAINT `fk_dictionaryItems_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_dictionaryItems_dictionaries2` FOREIGN KEY (`dictionaryUid`) REFERENCES `dictionaries` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_dictionaryItems_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,6 +126,7 @@ CREATE TABLE `dictionaryItems` (
 
 LOCK TABLES `dictionaryItems` WRITE;
 /*!40000 ALTER TABLE `dictionaryItems` DISABLE KEYS */;
+INSERT INTO `dictionaryItems` VALUES ('ad755cb6-c1e3-4dd8-b73a-abe51652a55d',1,'Sears Tower','44cc27a5-af8b-412f-855a-57c8205d86f5','42901aba-c28a-43a9-8080-6f9d383a3644','2013-04-13 19:46:11','2013-04-13 19:46:13',NULL,1,1),('2d5c970f-a25a-41ec-bd9b-3abdd1bdbd2c',2,'World Trade Center','44cc27a5-af8b-412f-855a-57c8205d86f5','42901aba-c28a-43a9-8080-6f9d383a3644','2013-04-13 19:46:48','2013-04-13 19:46:51',NULL,1,1),('064225fe-372f-4a0f-bf84-28e8e38a12db',3,'Eiffel Tower','44cc27a5-af8b-412f-855a-57c8205d86f5','42901aba-c28a-43a9-8080-6f9d383a3644','2013-04-13 19:47:24','2013-04-13 19:47:28',NULL,1,1),('7db098a0-dc47-47c0-99a3-cad4a35ff80b',4,'Macintosh','05817084-bc15-4dee-90a1-2e0735a242e1','7335505b-6a74-43c0-ae03-675c632806c1','2013-04-13 19:48:02','2013-04-13 19:48:07',NULL,2,3);
 /*!40000 ALTER TABLE `dictionaryItems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,7 +330,7 @@ CREATE TABLE `revisions` (
   CONSTRAINT `fk_revisions_templates2` FOREIGN KEY (`templateUid`) REFERENCES `templates` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_revisions_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_revisions_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -337,6 +339,7 @@ CREATE TABLE `revisions` (
 
 LOCK TABLES `revisions` WRITE;
 /*!40000 ALTER TABLE `revisions` DISABLE KEYS */;
+INSERT INTO `revisions` VALUES ('edf9847e-9c18-46b8-a673-1d266a73cab4',1,'This is a change summary','This is a scope','44cc27a5-af8b-412f-855a-57c8205d86f5','ccb2a09e-7bc8-448d-ab9c-2011004a72c6','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-13 19:50:42','2013-04-13 19:50:44',NULL,1,1,1),('dad1065c-91cf-4796-8f8b-74edfc06f2db',2,'We make lots of changes',NULL,'05817084-bc15-4dee-90a1-2e0735a242e1','9e5a299b-eea3-46c6-a021-1fa404522e00','f755b54f-e918-4fcb-9024-2b48370df4a1','2013-04-13 19:51:49','2013-04-13 19:51:51',NULL,2,3,2);
 /*!40000 ALTER TABLE `revisions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -516,4 +519,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-10 23:26:00
+-- Dump completed on 2013-04-13 19:54:04

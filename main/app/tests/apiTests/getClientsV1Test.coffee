@@ -19,7 +19,6 @@ client     = ORM.model 'client'
 getClients(app)
 
 
-
 #Helpers
 testCorrectMatch = (type, done) ->
 
