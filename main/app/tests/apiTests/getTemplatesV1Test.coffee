@@ -1,22 +1,22 @@
 ###
-  Tests anticipated responses for GET requests to /clients and api
+  Tests anticipated responses for GET requests to /templates and api
   resource
 ###
 
-buster     = require 'buster'
-config     = require '../../server/config/config'
-express    = require 'express.io'
-getClients = require config.appRoot + 'server/controllers/api/v1/clients/getClientsV1'
-ORM        = require config.appRoot + 'server/components/orm'
-async      = require 'async'
-sequelize  = ORM.setup()
+buster       = require 'buster'
+config       = require '../../server/config/config'
+express      = require 'express.io'
+getTemplates = require config.appRoot + 'server/controllers/api/v1/templates/getTemplatesV1'
+ORM          = require config.appRoot + 'server/components/orm'
+async        = require 'async'
+sequelize    = ORM.setup()
 
-app        = express().http().io()
+app          = express().http().io()
 
-client     = ORM.model 'client'
+template     = ORM.model 'template'
 
 #Bind the routes
-getClients(app)
+getTemplates(app)
 
 
 
@@ -26,7 +26,7 @@ testCorrectMatch = (type, done) ->
   testClientUid      = '44cc27a5-af8b-412f-855a-57c8205d86f5'
   testParamClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
 
-  this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientUid
+  this.request.url     = config.apiSubDir + '/v1/templates/' + testParamClientUid
   this.request.session =
     user:
       type:      type #'clientAuditor'
@@ -55,7 +55,7 @@ testCorrectMismatch = (type, done) ->
   testclientUid      = '111'
   testParamclientUid = '555'
 
-  this.request.url     = config.apiSubDir + '/v1/clients/' + testParamclientUid
+  this.request.url     = config.apiSubDir + '/v1/templates/' + testParamclientUid
   this.request.session =
     user:
       type:      type #'clientAuditor'
@@ -106,11 +106,11 @@ testReturnCorrectClient = (type, done) ->
 
 
 
-buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.apiSubDir + '/v1/clients/:id',
+buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/templates & ' + config.apiSubDir + '/v1/templates/:id',
   setUp: (done) ->
 
     this.request =
-      url:          config.apiSubDir + '/v1/clients'
+      url:          config.apiSubDir + '/v1/templates'
       method:       'GET'
       headers:      []
       requestType:  'http'
@@ -126,7 +126,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
     done()
 
 
-  '--> GET v1/clients exists & rejects unauthorized request': (done) ->
+  '--> GET v1/templates exists & rejects unauthorized request': (done) ->
 
     this.response.jsonAPIRespond = done (apiResponse) ->
       buster.refute.called next
@@ -136,9 +136,9 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
     app.router this.request, this.response, next
 
 
-  '--> GET v1/clients/:id exists & rejects unauthorized request': (done) ->
+  '--> GET v1/templates/:id exists & rejects unauthorized request': (done) ->
 
-    this.request.url = config.apiSubDir + '/v1/clients/10'
+    this.request.url = config.apiSubDir + '/v1/templates/10'
     this.response.jsonAPIRespond = done (apiResponse) ->
       buster.refute.called  next
       buster.assert.same    JSON.stringify(apiResponse), JSON.stringify(config.errorResponse(401))
@@ -146,8 +146,8 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
     next = this.spy()
     app.router this.request, this.response, next
 
-
-  '--> GET v1/clients "superAdmin" returns all clients': (done) ->
+###
+  '--> GET v1/templates "superAdmin" returns all clients': (done) ->
 
     this.request.session =
       user:
@@ -173,28 +173,28 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
       app.router _this.request, _this.response, next
 
 
-  '--> GET /v1/clients "clientSuperAdmin" returns user client': (done) ->
+  '--> GET /v1/templates "clientSuperAdmin" returns user client': (done) ->
     testReturnCorrectClient.call(this, 'clientSuperAdmin', done)
 
 
-  '--> GET /v1/clients "clientAdmin" returns user client': (done) ->
+  '--> GET /v1/templates "clientAdmin" returns user client': (done) ->
     testReturnCorrectClient.call(this, 'clientAdmin', done)
 
 
-  '--> GET /clients "clientDelegate" returns user client': (done) ->
+  '--> GET /templates "clientDelegate" returns user client': (done) ->
     testReturnCorrectClient.call(this, 'clientDelegate', done)
 
 
-  '--> GET /clients "clientAuditor" returns user client': (done) ->
+  '--> GET /templates "clientAuditor" returns user client': (done) ->
     testReturnCorrectClient.call(this, 'clientAuditor', done)
 
 
-  '--> GET /clients/:uid "superAdmin" returns any client [including OTHER clientUid]': (done) ->
+  '--> GET /templates/:uid "superAdmin" returns any client [including OTHER clientUid]': (done) ->
 
     testClientUid      = '44cc27a5-af8b-412f-855a-57c8205d86f5'
     testParamClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
 
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientUid
+    this.request.url     = config.apiSubDir + '/v1/templates/' + testParamClientUid
     this.request.session =
       user:
         type: 'superAdmin'
@@ -221,12 +221,12 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
       app.router _this.request, _this.response, next
 
 
-  '--> GET /clients/:uid "superAdmin" returns any client [including SAME clientUid]': (done) ->
+  '--> GET /templates/:uid "superAdmin" returns any client [including SAME clientUid]': (done) ->
 
     testClientUid      = '05817084-bc15-4dee-90a1-2e0735a242e1'
     testParamClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
 
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientUid
+    this.request.url     = config.apiSubDir + '/v1/templates/' + testParamClientUid
     this.request.session =
       user:
         type:      'superAdmin'
@@ -254,12 +254,12 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
       app.router _this.request, _this.response, next
 
 
-  '--> GET /clients/:uid "superAdmin" returns 404 for client that does not exist': (done) ->
+  '--> GET /templates/:uid "superAdmin" returns 404 for client that does not exist': (done) ->
 
     testclientUid      = 1
     testParamclientUid = 999
 
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamclientUid
+    this.request.url     = config.apiSubDir + '/v1/templates/' + testParamclientUid
     this.request.session =
       user:
         type:     'superAdmin'
@@ -280,37 +280,37 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
     app.router _this.request, _this.response, next
 
 
-  '--> GET /clients/:id "clientSuperAdmin" returns 401 for :id that does not match clientUid': (done) ->
+  '--> GET /templates/:id "clientSuperAdmin" returns 401 for :id that does not match clientUid': (done) ->
     testCorrectMismatch.call(this, 'clientSuperAdmin', done)
 
 
-  '--> GET /clients/:id "clientSuperAdmin" returns 200 & client for match': (done) ->
+  '--> GET /templates/:id "clientSuperAdmin" returns 200 & client for match': (done) ->
     testCorrectMatch.call(this, 'clientSuperAdmin', done)
 
 
-  '--> GET /clients/:id "clientAdmin" returns 401 for :id that does not match clientUid': (done) ->
+  '--> GET /templates/:id "clientAdmin" returns 401 for :id that does not match clientUid': (done) ->
     testCorrectMismatch.call(this, 'clientAdmin', done)
 
 
-  '--> GET /clients/:id "clientAdmin" returns 200 & client for match': (done) ->
+  '--> GET /templates/:id "clientAdmin" returns 200 & client for match': (done) ->
     testCorrectMatch.call(this, 'clientAdmin', done)
 
 
-  '--> GET /clients/:id "clientDelegate" returns 401 for :id that does not match clientUid': (done) ->
+  '--> GET /templates/:id "clientDelegate" returns 401 for :id that does not match clientUid': (done) ->
     testCorrectMismatch.call(this, 'clientDelegate', done)
 
 
-  '--> GET /clients/:id "clientDelegate" returns 200 & client for match': (done) ->
+  '--> GET /templates/:id "clientDelegate" returns 200 & client for match': (done) ->
     testCorrectMatch.call(this, 'clientDelegate', done)
 
 
-  '--> GET /clients/:id "clientAuditor" returns 401 for :id that does not match clientUid': (done) ->
+  '--> GET /templates/:id "clientAuditor" returns 401 for :id that does not match clientUid': (done) ->
     testCorrectMismatch.call(this, 'clientAuditor', done)
 
 
-  '--> GET /clients/:id "clientAuditor" returns 200 & client for match': (done) ->
+  '--> GET /templates/:id "clientAuditor" returns 200 & client for match': (done) ->
     testCorrectMatch.call(this, 'clientAuditor', done)
-
+###
 
 
 
