@@ -6,11 +6,11 @@
 buster     = require 'buster'
 config     = require '../../server/config/config'
 express    = require 'express.io'
-getClients = require config.appRoot + 'server/controllers/api/clients/getClientsV1'
+getClients = require config.appRoot + 'server/controllers/api/v1/clients/getClientsV1'
 ORM        = require config.appRoot + 'server/components/orm'
 async      = require 'async'
-
 sequelize  = ORM.setup()
+
 
 uuid       = require 'node-uuid'
 app        = express().http().io()
@@ -22,11 +22,12 @@ client     = ORM.model 'client'
 #Bind the routes
 getClients(app)
 
-buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSubDir + '/clients/:id',
+
+buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.apiSubDir + '/v1/clients/:id',
   setUp: (done) ->
 
     this.request =
-      url:          config.apiSubDir + '/clients'
+      url:          config.apiSubDir + '/v1/clients'
       method:       'GET'
       headers:      []
       requestType:  'http'
@@ -41,7 +42,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
   tearDown: (done) ->
     done()
 
-  '--> GET /clients exists & rejects unauthorized request': (done) ->
+  '--> GET v1/clients exists & rejects unauthorized request': (done) ->
 
     this.response.jsonAPIRespond = done (response) ->
       buster.refute.called next
@@ -50,9 +51,10 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     next = this.spy()
     app.router this.request, this.response, next
 
-  '--> GET /clients/:id exists & rejects unauthorized request': (done) ->
 
-    this.request.url = config.apiSubDir + '/clients/10'
+  '--> GET v1/clients/:id exists & rejects unauthorized request': (done) ->
+
+    this.request.url = config.apiSubDir + '/v1/clients/10'
     this.response.jsonAPIRespond = done (response) ->
       buster.refute.called next
       buster.assert.same JSON.stringify(response), JSON.stringify(config.errorResponse(401))
@@ -60,7 +62,8 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     next = this.spy()
     app.router this.request, this.response, next
 
-  '--> GET /clients "superAdmin" returns all clients': (done) ->
+
+  '--> GET v1/clients "superAdmin" returns all clients': (done) ->
 
     this.request.session =
       user:
@@ -86,37 +89,36 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
       app.router _this.request, _this.response, next
 
 
-  '--> GET /clients "clientSuperAdmin" returns user client': (done) ->
+  '--> GET /v1/clients "clientSuperAdmin" returns user client': (done) ->
 
     testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
 
+
     this.request.session =
       user:
-        type: 'clientSuperAdmin'
+        type:      'clientSuperAdmin'
         clientUid: testClientUid
-    next = this.spy()
+    next  = this.spy()
     _this = this
 
 
-    client.find(
-      where:
-        uid: testClientUid
-    ).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
+    _this.response.jsonAPIRespond = done (result) ->
 
-        #this will fail because apiExpand removes all 'id' properties
-        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-        buster.assert.same testClientUid, result.response.uid
+      buster.assert.isObject result
+      buster.assert.same result.code, 200
 
+      buster.assert.isArray result.response
+      buster.assert.isObject result.response[0]
+      buster.assert.same result.response.length, 1
 
-        buster.refute.called next
+      buster.assert.same testClientUid, result.response[0].uid
 
-      app.router _this.request, _this.response, next
+      buster.refute.called next
 
-  '--> GET /clients "clientAdmin" returns user client': (done) ->
+    app.router _this.request, _this.response, next
+
+###
+  '--> GET /v1/clients "clientAdmin" returns user client': (done) ->
 
     testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
 
@@ -209,7 +211,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
     testParamClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientUid
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientUid
     this.request.session =
       user:
         type: 'superAdmin'
@@ -241,7 +243,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
     testParamClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientUid
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientUid
     this.request.session =
       user:
         type: 'superAdmin'
@@ -273,7 +275,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientId = 1
     testParamClientId = 999
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
     this.request.session =
       user:
         type: 'superAdmin'
@@ -294,12 +296,18 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
       app.router _this.request, _this.response, next
 
 ###
+
+
+
+
+
+###
   '--> GET /clients/:id "clientSuperAdmin" returns 401 for :id that does not match clientId': (done) ->
 
     testClientId = 1
     testParamClientId = 5
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
     this.request.session =
       user:
         type: 'clientSuperAdmin'
@@ -324,7 +332,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientId = 1
     testParamClientId = 1
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
     this.request.session =
       user:
         type: 'clientSuperAdmin'
@@ -351,7 +359,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientId = 1
     testParamClientId = 5
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
     this.request.session =
       user:
         type: 'clientAdmin'
@@ -374,7 +382,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientId = 3
     testParamClientId = 3
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
     this.request.session =
       user:
         type: 'clientAdmin'
@@ -401,7 +409,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientId = 1
     testParamClientId = 5
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
     this.request.session =
       user:
         type: 'clientDelegate'
@@ -424,7 +432,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientId = 2
     testParamClientId = 2
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
     this.request.session =
       user:
         type: 'clientDelegate'
@@ -452,7 +460,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientId = 1
     testParamClientId = 5
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
     this.request.session =
       user:
         type: 'clientAuditor'
@@ -475,7 +483,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/clients & ' + config.apiSub
     testClientId = 1
     testParamClientId = 1
 
-    this.request.url     = config.apiSubDir + '/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
     this.request.session =
       user:
         type: 'clientAuditor'

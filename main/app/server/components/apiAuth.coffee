@@ -6,6 +6,7 @@ config       = require '../config/config'
 
 module.exports = (req, res, callback) ->
 
+
   if req.requestType is 'http'
 
     #TEMP FOR debugging

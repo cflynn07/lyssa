@@ -8,6 +8,7 @@ _         = require 'underscore'
 
 module.exports = (app) ->
 
+
   client = ORM.model 'client'
 
   app.get config.apiSubDir + '/v1/clients', (req, res) ->
@@ -15,6 +16,7 @@ module.exports = (app) ->
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
+
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
 
