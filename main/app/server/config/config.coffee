@@ -38,6 +38,9 @@ module.exports =
     'circularExpand':
       code: 400
       message: ''
+    'unknownRootResourceId':
+      code: 404
+      message: 'unknown resource uid specified'
 
   apiResponseCodes:
 

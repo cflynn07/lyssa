@@ -128,6 +128,39 @@ module.exports = (req, res, resource, resourceQueryParams) ->
             delete subResult[subResultPropertyKey]
 
 
+
+  #Checks result against request uids, verifies match
+  verifyNoUnknownResource = (topResult, find) ->
+
+    topResult = JSON.parse JSON.stringify topResult
+
+    if !find.where or !find.where.uid
+      return true
+
+    if topResult.length is find.where.uid.length
+      return true
+
+
+    #Mismatch between # of results and # of ids specified, find missing results
+    unknownUids = []
+
+    if _.isArray find.where.uid
+      for specUid in find.where.uid
+
+        found = false
+        for result in topResult
+          if result.uid is specUid
+            found = true
+            break
+
+        if !found
+          unknownUids.push specUid
+
+    res.jsonAPIRespond _.extend config.apiErrorResponse('unknownRootResourceId'), {unknownUids: unknownUids}
+    return false
+
+
+
   #DRY - this optionally gets invoked from two places
   sendFinalResult = (topResult) ->
     topResultJSON = JSON.parse JSON.stringify topResult
@@ -144,7 +177,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     res.jsonAPIRespond
       code: 200
       response: topResultJSON
-
 
 
   ###
@@ -164,10 +196,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
   if !isExtendShallowerThanThree(req)
     res.jsonAPIRespond config.apiErrorResponse 'nestedTooDeep'
     return
-
-
-
-
 
 
 
@@ -203,11 +231,21 @@ module.exports = (req, res, resource, resourceQueryParams) ->
   #    { employees: [ { resource: 'templates' }, { resource: 'revisions' } ] }
 
 
+  if resourceQueryParams.find and resourceQueryParams.find.where and resourceQueryParams.find.where.uid
+    if !_.isArray resourceQueryParams.find.where.uid
+      resourceQueryParams.find.where.uid = [resourceQueryParams.find.where.uid]
+
+
   resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
 
     if !_.isArray topResult
       topResult = [topResult]
-    #TODO: CHECK LENGTH & VERIFY NO 404 MUST BE SENT
+
+
+    #Verify no unknown resources specified
+    if !verifyNoUnknownResource topResult, resourceQueryParams.find
+      return
+
 
     if Object.getOwnPropertyNames(secondLevelIncludeObjects).length is 0
       #DONE, Nothing else to include
@@ -222,11 +260,8 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
       for subResult in topResult
 
-
         #topResult == all clients []
           #subResult == each client {}
-
-
 
         #console.log secondLevelIncludeObjects
         #continue

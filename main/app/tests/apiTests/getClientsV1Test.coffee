@@ -11,16 +11,99 @@ ORM        = require config.appRoot + 'server/components/orm'
 async      = require 'async'
 sequelize  = ORM.setup()
 
-
-uuid       = require 'node-uuid'
 app        = express().http().io()
-
 
 client     = ORM.model 'client'
 
-
 #Bind the routes
 getClients(app)
+
+
+
+#Helpers
+testCorrectMatch = (type, done) ->
+
+  testClientUid      = '44cc27a5-af8b-412f-855a-57c8205d86f5'
+  testParamClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
+
+  this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientUid
+  this.request.session =
+    user:
+      type:      type #'clientAuditor'
+      clientUid: testClientUid
+  next  = this.spy()
+  _this = this
+
+  client.find(
+    where:
+      uid: testParamClientUid
+  ).success (returnClient) ->
+    _this.response.jsonAPIRespond = done (apiResult) ->
+
+      buster.assert.isObject apiResult
+      buster.assert.same     apiResult.code, 200
+      buster.assert.isObject apiResult.response
+
+      buster.assert.same     testParamClientUid, testClientUid, returnClient.id, apiResult.response.id
+
+      buster.refute.called   next
+
+    app.router _this.request, _this.response, next
+
+
+testCorrectMismatch = (type, done) ->
+  testclientUid      = '111'
+  testParamclientUid = '555'
+
+  this.request.url     = config.apiSubDir + '/v1/clients/' + testParamclientUid
+  this.request.session =
+    user:
+      type:      type #'clientAuditor'
+      clientUid: testclientUid
+  next = this.spy()
+  _this = this
+
+  _this.response.jsonAPIRespond = done (result) ->
+
+    buster.assert.isObject result
+    buster.assert.same     result.code, 401
+    buster.assert.same     result.error, config.apiResponseCodes[401]
+    buster.refute.called   next
+
+  app.router _this.request, _this.response, next
+
+
+testReturnCorrectClient = (type, done) ->
+  testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
+
+  this.request.session =
+    user:
+      type:      type #'clientSuperAdmin'
+      clientUid: testClientUid
+  next  = this.spy()
+  _this = this
+
+  _this.response.jsonAPIRespond = done (apiResponse) ->
+
+    buster.assert.isObject apiResponse
+    buster.assert.same     apiResponse.code, 200
+
+    buster.assert.isArray  apiResponse.response
+    buster.assert.isObject apiResponse.response[0]
+    buster.assert.same     apiResponse.response.length, 1
+
+    buster.assert.same     testClientUid, apiResponse.response[0].uid
+
+    buster.refute.called   next
+
+
+  app.router _this.request, _this.response, next
+
+
+
+
+
+
 
 
 buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.apiSubDir + '/v1/clients/:id',
@@ -42,11 +125,12 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
   tearDown: (done) ->
     done()
 
+
   '--> GET v1/clients exists & rejects unauthorized request': (done) ->
 
-    this.response.jsonAPIRespond = done (respones) ->
+    this.response.jsonAPIRespond = done (apiResponse) ->
       buster.refute.called next
-      buster.assert.same JSON.stringify(response), JSON.stringify(config.errorResponse(401))
+      buster.assert.same   JSON.stringify(apiResponse), JSON.stringify(config.errorResponse(401))
 
     next = this.spy()
     app.router this.request, this.response, next
@@ -55,9 +139,9 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
   '--> GET v1/clients/:id exists & rejects unauthorized request': (done) ->
 
     this.request.url = config.apiSubDir + '/v1/clients/10'
-    this.response.jsonAPIRespond = done (response) ->
-      buster.refute.called next
-      buster.assert.same JSON.stringify(response), JSON.stringify(config.errorResponse(401))
+    this.response.jsonAPIRespond = done (apiResponse) ->
+      buster.refute.called  next
+      buster.assert.same    JSON.stringify(apiResponse), JSON.stringify(config.errorResponse(401))
 
     next = this.spy()
     app.router this.request, this.response, next
@@ -76,139 +160,38 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
 
     client.findAll().success (clients) ->
 
-      _this.response.jsonAPIRespond = done (result) ->
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isArray result.response
+      _this.response.jsonAPIRespond = done (apiResponse) ->
+        buster.assert.isObject apiResponse
+        buster.assert.same     apiResponse.code, 200
+        buster.assert.isArray  apiResponse.response
 
-        buster.assert.same expectedNumClientsInDB, result.response.length
-        buster.assert.same clients.length, result.response.length
+        buster.assert.same     expectedNumClientsInDB, apiResponse.response.length
+        buster.assert.same     clients.length, apiResponse.response.length
 
-        buster.refute.called next
+        buster.refute.called   next
 
       app.router _this.request, _this.response, next
 
 
   '--> GET /v1/clients "clientSuperAdmin" returns user client': (done) ->
-
-    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
-
-
-    this.request.session =
-      user:
-        type:      'clientSuperAdmin'
-        clientUid: testClientUid
-    next  = this.spy()
-    _this = this
+    testReturnCorrectClient.call(this, 'clientSuperAdmin', done)
 
 
-    _this.response.jsonAPIRespond = done (result) ->
-
-      buster.assert.isObject result
-      buster.assert.same result.code, 200
-
-      buster.assert.isArray result.response
-      buster.assert.isObject result.response[0]
-      buster.assert.same result.response.length, 1
-
-      buster.assert.same testClientUid, result.response[0].uid
-
-      buster.refute.called next
-
-    app.router _this.request, _this.response, next
-
-  ###
   '--> GET /v1/clients "clientAdmin" returns user client': (done) ->
-
-    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
-
-    this.request.session =
-      user:
-        type: 'clientAdmin'
-        clientUid: testClientUid
-    next = this.spy()
-    _this = this
-
-
-    client.find(
-      where:
-        uid: testClientUid
-    ).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
-
-        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-        buster.assert.same testClientUid, result.response.uid
-
-        buster.refute.called next
-
-      app.router _this.request, _this.response, next
-
+    testReturnCorrectClient.call(this, 'clientAdmin', done)
 
 
   '--> GET /clients "clientDelegate" returns user client': (done) ->
-
-    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
-
-    this.request.session =
-      user:
-        type: 'clientDelegate'
-        clientUid: testClientUid
-    next = this.spy()
-    _this = this
-
-
-    client.find(
-      where:
-        uid: testClientUid
-    ).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
-
-        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-        buster.assert.same testClientUid, result.response.uid
-
-        buster.refute.called next
-
-      app.router _this.request, _this.response, next
+    testReturnCorrectClient.call(this, 'clientDelegate', done)
 
 
   '--> GET /clients "clientAuditor" returns user client': (done) ->
-
-    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
-
-    this.request.session =
-      user:
-        type: 'clientAuditor'
-        clientUid: testClientUid
-    next = this.spy()
-    _this = this
-
-
-    client.find(
-      where:
-        uid: testClientUid
-    ).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
-
-        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-        buster.assert.same testClientUid, result.response.uid
-
-        buster.refute.called next
-
-      app.router _this.request, _this.response, next
+    testReturnCorrectClient.call(this, 'clientAuditor', done)
 
 
   '--> GET /clients/:uid "superAdmin" returns any client [including OTHER clientUid]': (done) ->
 
-    testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
+    testClientUid      = '44cc27a5-af8b-412f-855a-57c8205d86f5'
     testParamClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
 
     this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientUid
@@ -223,30 +206,30 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
       where:
         uid: testParamClientUid
     ).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
+      _this.response.jsonAPIRespond = done (apiResponse) ->
 
-        buster.assert.same testParamClientUid, returnClient.uid, result.response.uid
-        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
+        buster.assert.isObject apiResponse
+        buster.assert.same     apiResponse.code, 200
+        buster.assert.isObject apiResponse.response
 
-        buster.assert.isString result.response.uid
-        buster.refute.same testClientUid, result.response.uid
-        buster.refute.called next
+        buster.assert.same     testParamClientUid, returnClient.uid, apiResponse.response.uid
+
+        buster.assert.isString apiResponse.response.uid
+        buster.refute.same     testClientUid, apiResponse.response.uid
+        buster.refute.called   next
 
       app.router _this.request, _this.response, next
 
 
   '--> GET /clients/:uid "superAdmin" returns any client [including SAME clientUid]': (done) ->
 
-    testClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
+    testClientUid      = '05817084-bc15-4dee-90a1-2e0735a242e1'
     testParamClientUid = '05817084-bc15-4dee-90a1-2e0735a242e1'
 
     this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientUid
     this.request.session =
       user:
-        type: 'superAdmin'
+        type:      'superAdmin'
         clientUid: testClientUid
     next = this.spy()
     _this = this
@@ -256,253 +239,77 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
         uid: testParamClientUid
     ).success (returnClient) ->
 
-      _this.response.jsonAPIRespond = done (result) ->
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
+      _this.response.jsonAPIRespond = done (apiResponse) ->
 
-        buster.assert.same testParamClientUid, returnClient.uid, result.response.uid
-        #buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
+        buster.assert.isObject apiResponse
+        buster.assert.same     apiResponse.code, 200
+        buster.assert.isObject apiResponse.response
 
-        buster.assert.isString result.response.uid
-        buster.assert.same testClientUid, result.response.uid
-        buster.refute.called next
+        buster.assert.same     testParamClientUid, returnClient.uid, apiResponse.response.uid
+
+        buster.assert.isString apiResponse.response.uid
+        buster.assert.same     testClientUid, apiResponse.response.uid
+        buster.refute.called   next
 
       app.router _this.request, _this.response, next
+
 
   '--> GET /clients/:uid "superAdmin" returns 404 for client that does not exist': (done) ->
 
-    testClientId = 1
-    testParamClientId = 999
+    testclientUid      = 1
+    testParamclientUid = 999
 
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
+    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamclientUid
     this.request.session =
       user:
-        type: 'superAdmin'
-        clientId: testClientId
+        type:     'superAdmin'
+        clientUid: testclientUid
     next = this.spy()
     _this = this
 
-    client.find(testParamClientId).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
 
-        buster.refute returnClient
-        buster.assert.isObject result
-        buster.assert.same result.code, 404
-        buster.assert.same result.error, config.apiResponseCodes[404]
+    _this.response.jsonAPIRespond = done (apiResult) ->
 
-        buster.refute.called next
+      buster.assert.isObject apiResult
+      buster.assert.same     apiResult.code, 404
+      buster.assert.same     apiResult.error, config.apiResponseCodes[404]
+      buster.assert.same     JSON.stringify(apiResult.unknownUids), JSON.stringify(["999"])
 
-      app.router _this.request, _this.response, next
-
-  '--> GET /clients/:id "clientSuperAdmin" returns 401 for :id that does not match clientId': (done) ->
-
-    testClientId = 1
-    testParamClientId = 5
-
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
-    this.request.session =
-      user:
-        type: 'clientSuperAdmin'
-        clientId: testClientId
-    next = this.spy()
-    _this = this
-
-    _this.response.jsonAPIRespond = done (result) ->
-
-      buster.assert.isObject result
-      buster.assert.same result.code, 401
-      buster.assert.same result.error, config.apiResponseCodes[401]
-
-      buster.refute.called next
+      buster.refute.called   next
 
     app.router _this.request, _this.response, next
 
+
+  '--> GET /clients/:id "clientSuperAdmin" returns 401 for :id that does not match clientUid': (done) ->
+    testCorrectMismatch.call(this, 'clientSuperAdmin', done)
 
 
   '--> GET /clients/:id "clientSuperAdmin" returns 200 & client for match': (done) ->
+    testCorrectMatch.call(this, 'clientSuperAdmin', done)
 
-    testClientId = 1
-    testParamClientId = 1
 
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
-    this.request.session =
-      user:
-        type: 'clientSuperAdmin'
-        clientId: testClientId
-    next = this.spy()
-    _this = this
+  '--> GET /clients/:id "clientAdmin" returns 401 for :id that does not match clientUid': (done) ->
+    testCorrectMismatch.call(this, 'clientAdmin', done)
 
-    client.find(testParamClientId).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
-
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
-
-        buster.assert.same testParamClientId, testClientId, returnClient.id, result.response.id
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-
-        buster.refute.called next
-
-      app.router _this.request, _this.response, next
-
-  '--> GET /clients/:id "clientAdmin" returns 401 for :id that does not match clientId': (done) ->
-
-    testClientId = 1
-    testParamClientId = 5
-
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
-    this.request.session =
-      user:
-        type: 'clientAdmin'
-        clientId: testClientId
-    next = this.spy()
-    _this = this
-
-    _this.response.jsonAPIRespond = done (result) ->
-
-      buster.assert.isObject result
-      buster.assert.same result.code, 401
-      buster.assert.same result.error, config.apiResponseCodes[401]
-
-      buster.refute.called next
-
-    app.router _this.request, _this.response, next
 
   '--> GET /clients/:id "clientAdmin" returns 200 & client for match': (done) ->
+    testCorrectMatch.call(this, 'clientAdmin', done)
 
-    testClientId = 3
-    testParamClientId = 3
 
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
-    this.request.session =
-      user:
-        type: 'clientAdmin'
-        clientId: testClientId
-    next = this.spy()
-    _this = this
+  '--> GET /clients/:id "clientDelegate" returns 401 for :id that does not match clientUid': (done) ->
+    testCorrectMismatch.call(this, 'clientDelegate', done)
 
-    client.find(testParamClientId).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
-
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
-
-        buster.assert.same testParamClientId, testClientId, returnClient.id, result.response.id
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-
-        buster.refute.called next
-
-      app.router _this.request, _this.response, next
-
-  '--> GET /clients/:id "clientDelegate" returns 401 for :id that does not match clientId': (done) ->
-
-    testClientId = 1
-    testParamClientId = 5
-
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
-    this.request.session =
-      user:
-        type: 'clientDelegate'
-        clientId: testClientId
-    next = this.spy()
-    _this = this
-
-    _this.response.jsonAPIRespond = done (result) ->
-
-      buster.assert.isObject result
-      buster.assert.same result.code, 401
-      buster.assert.same result.error, config.apiResponseCodes[401]
-
-      buster.refute.called next
-
-    app.router _this.request, _this.response, next
 
   '--> GET /clients/:id "clientDelegate" returns 200 & client for match': (done) ->
-
-    testClientId = 2
-    testParamClientId = 2
-
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
-    this.request.session =
-      user:
-        type: 'clientDelegate'
-        clientId: testClientId
-    next = this.spy()
-    _this = this
-
-    client.find(testParamClientId).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
-
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
-
-        buster.assert.same testParamClientId, testClientId, returnClient.id, result.response.id
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-
-        buster.refute.called next
-
-      app.router _this.request, _this.response, next
+    testCorrectMatch.call(this, 'clientDelegate', done)
 
 
-  '--> GET /clients/:id "clientAuditor" returns 401 for :id that does not match clientId': (done) ->
+  '--> GET /clients/:id "clientAuditor" returns 401 for :id that does not match clientUid': (done) ->
+    testCorrectMismatch.call(this, 'clientAuditor', done)
 
-    testClientId = 1
-    testParamClientId = 5
-
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
-    this.request.session =
-      user:
-        type: 'clientAuditor'
-        clientId: testClientId
-    next = this.spy()
-    _this = this
-
-    _this.response.jsonAPIRespond = done (result) ->
-
-      buster.assert.isObject result
-      buster.assert.same result.code, 401
-      buster.assert.same result.error, config.apiResponseCodes[401]
-
-      buster.refute.called next
-
-    app.router _this.request, _this.response, next
 
   '--> GET /clients/:id "clientAuditor" returns 200 & client for match': (done) ->
-
-    testClientId = 1
-    testParamClientId = 1
-
-    this.request.url     = config.apiSubDir + '/v1/clients/' + testParamClientId
-    this.request.session =
-      user:
-        type: 'clientAuditor'
-        clientId: testClientId
-    next = this.spy()
-    _this = this
-
-    client.find(testParamClientId).success (returnClient) ->
-      _this.response.jsonAPIRespond = done (result) ->
-
-        buster.assert.isObject result
-        buster.assert.same result.code, 200
-        buster.assert.isObject result.response
-
-        buster.assert.same testParamClientId, testClientId, returnClient.id, result.response.id
-        buster.assert.same JSON.stringify(returnClient), JSON.stringify(result.response)
-
-        buster.refute.called next
-
-      app.router _this.request, _this.response, next
-
-
-
-
-
-
+    testCorrectMatch.call(this, 'clientAuditor', done)
 
 
 

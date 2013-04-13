@@ -33,7 +33,7 @@ module.exports = (app) ->
 
             params =
               searchExpectsMultiple: true
-              method: 'findAll'
+              method:                'findAll'
               find:
                 where:
                   uid: clientUid
