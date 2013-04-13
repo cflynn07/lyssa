@@ -44,7 +44,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
 
   '--> GET v1/clients exists & rejects unauthorized request': (done) ->
 
-    this.response.jsonAPIRespond = done (response) ->
+    this.response.jsonAPIRespond = done (respones) ->
       buster.refute.called next
       buster.assert.same JSON.stringify(response), JSON.stringify(config.errorResponse(401))
 
@@ -117,7 +117,7 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
 
     app.router _this.request, _this.response, next
 
-###
+  ###
   '--> GET /v1/clients "clientAdmin" returns user client': (done) ->
 
     testClientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'
@@ -295,13 +295,6 @@ buster.testCase 'API V1 GET ' + config.apiSubDir + '/v1/clients & ' + config.api
 
       app.router _this.request, _this.response, next
 
-###
-
-
-
-
-
-###
   '--> GET /clients/:id "clientSuperAdmin" returns 401 for :id that does not match clientId': (done) ->
 
     testClientId = 1
