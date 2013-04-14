@@ -8,9 +8,9 @@ _         = require 'underscore'
 
 module.exports = (app) ->
 
-  dictionaryItem = ORM.model 'dictionaryItem'
+  group = ORM.model 'group'
 
-  app.get config.apiSubDir + '/v1/dictionaryItems', (req, res) ->
+  app.get config.apiSubDir + '/v1/groups', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
@@ -24,7 +24,7 @@ module.exports = (app) ->
             params =
               method: 'findAll'
               find: {}
-            apiExpand(req, res, dictionaryItem, params)
+            apiExpand(req, res, group, params)
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 
@@ -34,13 +34,13 @@ module.exports = (app) ->
                 where:
                   clientUid: clientUid
 
-            apiExpand(req, res, dictionaryItem, params)
+            apiExpand(req, res, group, params)
 
     ]
 
 
 
-  app.get config.apiSubDir + '/v1/dictionaryItems/:id', (req, res) ->
+  app.get config.apiSubDir + '/v1/groups/:id', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
@@ -59,7 +59,7 @@ module.exports = (app) ->
                 where:
                   uid: uids
 
-            apiExpand(req, res, dictionaryItem, params)
+            apiExpand(req, res, group, params)
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 
@@ -70,5 +70,5 @@ module.exports = (app) ->
                   uid: uids
                   clientUid: clientUid
 
-            apiExpand(req, res, dictionaryItem, params)
+            apiExpand(req, res, group, params)
     ]

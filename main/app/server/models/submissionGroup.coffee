@@ -26,6 +26,10 @@ module.exports =
     relation: 'belongsTo'
     model: 'submission'
   ,
+  #TODO: Implement
+  #    relation: 'hasOne'
+  #    model:    'group'
+  #  ,
     relation: 'hasMany'
     model: 'submissionField'
   ]

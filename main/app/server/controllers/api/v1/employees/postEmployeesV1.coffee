@@ -9,13 +9,14 @@ uuid                = require 'node-uuid'
 
 module.exports = (app) ->
 
-  client = ORM.model 'client'
+  employee = ORM.model 'employee'
 
-  app.post config.apiSubDir + '/v1/clients', (req, res) ->
+  app.post config.apiSubDir + '/v1/employee', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
+
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
 
@@ -30,11 +31,11 @@ module.exports = (app) ->
 
 
 
-            client.create(
-              body
-            ).success (resClient) ->
-              res.jsonAPIRespond
-                code: 201
+          #  client.create(
+          #   body
+          #  ).success (resClient) ->
+          #    res.jsonAPIRespond
+          #      code: 201
 
 
             postResourceCreate = (resourceModel, postObjects, requirements) ->
@@ -43,7 +44,20 @@ module.exports = (app) ->
 
 
             postResourceCreate client, req.body, {
-              foo: 'bar'
+              requiredFields: [
+                'name'
+                'identifier'
+                'address1'
+                'address2'
+                'address3'
+                'city'
+                'stateProvince'
+                'country'
+                'telephone'
+                'fax'
+              ]
+              requireRelationships: {}
+              clientUidRestriction: ''
             }
 
 
