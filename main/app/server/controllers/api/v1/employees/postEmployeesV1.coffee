@@ -11,7 +11,7 @@ module.exports = (app) ->
 
   employee = ORM.model 'employee'
 
-  app.post config.apiSubDir + '/v1/employee', (req, res) ->
+  app.post config.apiSubDir + '/v1/employees', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
@@ -23,6 +23,7 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
+
             console.log req.query
             console.log req.body
 
@@ -30,21 +31,31 @@ module.exports = (app) ->
             body.uid = uuid.v4()
 
 
+            postResourceCreate = (resourceModel, postObjects, req, res, requirements) ->
 
-          #  client.create(
-          #   body
-          #  ).success (resClient) ->
-          #    res.jsonAPIRespond
-          #      code: 201
+              if !_.isArray postObjects
+                postObjects = [postObjects]
+
+              for object, key in postObjects
+
+                missingProperties       = []
+
+                #verify this object has all properties of requiredProperties
+                for requiredProperty in requirements.requiredProperties
+
+                  #is requiredProperty in object
+                  if _.isUndefined object[requiredProperty]
+                    missingProperties.push requiredProperty
+
+                if missingProperties.length > 0
+                  res.jsonAPIRespond _.extend config.errorResponse(400), {missingProperties: missingProperties, objectMissingProperties:key}
+                  break
+
+              #res.jsonAPIRespond success: true
 
 
-            postResourceCreate = (resourceModel, postObjects, requirements) ->
-
-
-
-
-            postResourceCreate client, req.body, {
-              requiredFields: [
+            postResourceCreate employee, req.body, req, res, {
+              requiredProperties: [
                 'name'
                 'identifier'
                 'address1'
@@ -60,10 +71,6 @@ module.exports = (app) ->
               clientUidRestriction: ''
             }
 
-
-
-
-            #res.jsonAPIRespond config.errorResponse(401)
 
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
