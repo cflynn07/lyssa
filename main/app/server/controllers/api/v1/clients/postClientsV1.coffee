@@ -1,11 +1,11 @@
-config              = require '../../../../config/config'
-apiAuth             = require config.appRoot + '/server/components/apiAuth'
-ORM                 = require config.appRoot + '/server/components/orm'
-apiPostVerifyFields = require config.appRoot + '/server/components/apiPostVerifyFields'
-sequelize           = ORM.setup()
-async               = require 'async'
-_                   = require 'underscore'
-uuid                = require 'node-uuid'
+config                = require '../../../../config/config'
+apiPostValidateFields = require config.appRoot + 'server/components/apiPostValidateFields'
+apiAuth               = require config.appRoot + 'server/components/apiAuth'
+async                 = require 'async'
+uuid                  = require 'node-uuid'
+ORM                   = require config.appRoot + 'server/components/oRM'
+sequelize             = ORM.setup()
+_                     = require 'underscore'
 
 module.exports = (app) ->
 
@@ -16,40 +16,15 @@ module.exports = (app) ->
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
+
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
 
         switch userType
           when 'superAdmin'
 
-            console.log req.query
-            console.log req.body
 
-            body     = req.body
-            body.uid = uuid.v4()
-
-
-
-            client.create(
-              body
-            ).success (resClient) ->
-              res.jsonAPIRespond
-                code: 201
-
-
-            postResourceCreate = (resourceModel, postObjects, requirements) ->
-
-
-
-
-            postResourceCreate client, req.body, {
-              foo: 'bar'
-            }
-
-
-
-
-            #res.jsonAPIRespond config.errorResponse(401)
+            res.jsonAPIRespond config.errorResponse(401)
 
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'

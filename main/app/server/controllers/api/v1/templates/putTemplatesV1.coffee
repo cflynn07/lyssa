@@ -9,29 +9,34 @@ _                     = require 'underscore'
 
 module.exports = (app) ->
 
+  template = ORM.model 'template'
   employee = ORM.model 'employee'
+  client   = ORM.model 'client'
 
-  app.post config.apiSubDir + '/v1/employees', (req, res) ->
+  app.put config.apiSubDir + '/v1/templates', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
 
+
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
+
 
         switch userType
           when 'superAdmin'
 
+            console.log '1'
 
 
+          when 'clientSuperAdmin', 'clientAdmin'
+
+            console.log '2'
+
+
+          when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)
-
-
-          when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
-            res.jsonAPIRespond config.errorResponse(401)
-
-
 
     ]
 

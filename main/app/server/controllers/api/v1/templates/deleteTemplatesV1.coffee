@@ -6,32 +6,36 @@ uuid                  = require 'node-uuid'
 ORM                   = require config.appRoot + 'server/components/oRM'
 sequelize             = ORM.setup()
 _                     = require 'underscore'
+apiDeleteHelper       = require config.appRoot + 'server/components/apiDeleteHelper'
 
 module.exports = (app) ->
 
-  employee = ORM.model 'employee'
+  template = ORM.model 'template'
 
-  app.post config.apiSubDir + '/v1/employees', (req, res) ->
+  app.delete config.apiSubDir + '/v1/templates/:id', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
 
+
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
+        uids      = req.params.id.split ','
 
         switch userType
           when 'superAdmin'
 
+            apiDeleteHelper template, {uid: uids}, res
 
 
+          when 'clientSuperAdmin', 'clientAdmin'
+
+            console.log '2'
+
+
+          when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)
-
-
-          when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
-            res.jsonAPIRespond config.errorResponse(401)
-
-
 
     ]
 
