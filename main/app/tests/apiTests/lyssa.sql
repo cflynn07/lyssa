@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.6.10, for osx10.6 (i386)
+-- MySQL dump 10.13  Distrib 5.6.10, for osx10.7 (x86_64)
 --
 -- Host: localhost    Database: lyssa
 -- ------------------------------------------------------
@@ -26,7 +26,7 @@ CREATE TABLE `clients` (
   `uid` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `indentifier` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `identifier` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `address1` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `address2` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `address3` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -40,8 +40,8 @@ CREATE TABLE `clients` (
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE,
-  UNIQUE KEY `indentifier` (`indentifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  UNIQUE KEY `indentifier` (`identifier`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,7 +50,7 @@ CREATE TABLE `clients` (
 
 LOCK TABLES `clients` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-INSERT INTO `clients` VALUES ('44cc27a5-af8b-412f-855a-57c8205d86f5',1,'ClientA','clienta','asd','asdf','asdfas','asdfasdf','sdf','asdf','asdfas','sfd','2013-04-10 22:14:54','2013-04-10 22:14:58',NULL),('05817084-bc15-4dee-90a1-2e0735a242e1',2,'ClientB','clientb','kdfkd','dsk','aksdfg','asdf','asdf','sdaf','sadf','sdf','2013-04-10 22:15:23','2013-04-10 22:15:25',NULL),('c4602593-f460-41f8-bb42-a0f0afe021d6',3,'ClientC','clientc','kasdfui','asdf','asdfg','afsdg','adsfg','asdfga','asdgf','asdfg','2013-04-10 22:35:18','2013-04-10 22:35:21',NULL);
+INSERT INTO `clients` VALUES ('44cc27a5-af8b-412f-855a-57c8205d86f5',1,'ClientA','clienta','asd','asdf','asdfas','asdfasdf','sdf','asdf','asdfas','sfd','2013-04-10 22:14:54','2013-04-10 22:14:58',NULL),('05817084-bc15-4dee-90a1-2e0735a242e1',2,'ClientB','clientb','kdfkd','dsk','aksdfg','asdf','asdf','sdaf','sadf','sdf','2013-04-10 22:15:23','2013-04-10 22:15:25',NULL),('c4602593-f460-41f8-bb42-a0f0afe021d6',3,'ClientC','clientc','kasdfui','asdf','asdfg','afsdg','adsfg','asdfga','asdgf','asdfg','2013-04-10 22:35:18','2013-04-10 22:35:21',NULL),('b40a80a5-6211-487e-985b-19e79bc11d0f',4,'applebees',NULL,'115hestnuttreet','ptadfsasdfon','stdadosnidos','osasdfto','asdfasdf','asdfasdftst','444000444','444333444','2013-04-16 08:34:11','2013-04-16 08:34:11',NULL),('977a4788-252d-4099-9d79-332feca10301',5,'applebees','applebees','115hestnuttreet','ptadfsasdfon','stdadosnidos','osasdfto','asdfasdf','asdfasdftst','444000444','444333444','2013-04-16 08:35:48','2013-04-16 08:35:48',NULL);
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -497,7 +497,7 @@ CREATE TABLE `templates` (
   CONSTRAINT `templates_ibfk_2` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `templates_ibfk_3` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `templates_ibfk_4` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -506,7 +506,7 @@ CREATE TABLE `templates` (
 
 LOCK TABLES `templates` WRITE;
 /*!40000 ALTER TABLE `templates` DISABLE KEYS */;
-INSERT INTO `templates` VALUES ('ccb2a09e-7bc8-448d-ab9c-2011004a72c6',1,'Maric','full','44cc27a5-af8b-412f-855a-57c8205d86f5','04ad5b05-c9a5-430f-8d5c-8483d5d904e4','2013-04-10 22:20:50','2013-04-10 22:20:53',NULL,1,2),('9e5a299b-eea3-46c6-a021-1fa404522e00',2,'dupertemplate','mini','05817084-bc15-4dee-90a1-2e0735a242e1','0054d814-6d36-4573-bbfc-a2b6644266cc','2013-04-10 22:22:13','2013-04-10 22:22:15',NULL,2,4);
+INSERT INTO `templates` VALUES ('ccb2a09e-7bc8-448d-ab9c-2011004a72c6',1,'Maric','full','44cc27a5-af8b-412f-855a-57c8205d86f5','04ad5b05-c9a5-430f-8d5c-8483d5d904e4','2013-04-10 22:20:50','2013-04-10 22:20:53',NULL,1,2),('9e5a299b-eea3-46c6-a021-1fa404522e00',2,'dupertemplate','mini','05817084-bc15-4dee-90a1-2e0735a242e1','0054d814-6d36-4573-bbfc-a2b6644266cc','2013-04-10 22:22:13','2013-04-10 22:22:15',NULL,2,4),('7977ab52-cd42-4011-a4a2-6f16d3f73bae',3,'newtestobject','mini','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 04:08:54','2013-04-16 04:08:54',NULL,1,1);
 /*!40000 ALTER TABLE `templates` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -519,4 +519,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-13 19:54:04
+-- Dump completed on 2013-04-16  4:36:11
