@@ -3,6 +3,7 @@ config                  = require '../config/config'
 async                   = require 'async'
 uuid                    = require 'node-uuid'
 _                       = require 'underscore'
+preventUnknownFieldsHelper = require config.appRoot + 'server/components/preventUnknownFieldsHelper'
 
 
 module.exports = (scope, resourceModel, postObjects, req, res, requirements) ->
@@ -15,28 +16,15 @@ module.exports = (scope, resourceModel, postObjects, req, res, requirements) ->
     postObjects = [postObjects]
 
 
-  for object, key in postObjects
-
-
-    #Instead of enforcing no missing properties HERE, enforce no unknown properties
-    unknownProperties = []
-    for postObjectPropertyKey, postObjectPropertyValue of object
-
-      if _.isUndefined(requirements.requiredProperties[postObjectPropertyKey])
-        errorObj = {}
-        errorObj[postObjectPropertyKey] = 'unknown field'
-        unknownProperties.push errorObj
-
-    if unknownProperties.length > 0
-      res.jsonAPIRespond _.extend config.errorResponse(400), {messages: unknownProperties}
-      return
+  unknownProperties = preventUnknownFieldsHelper(resourceModel, postObjects, requirements)
+  if unknownProperties.length > 0
+    res.jsonAPIRespond _.extend config.errorResponse(400), {messages: unknownProperties}
+    return
 
 
 
   #validates each object property against any validation specs in resourceModel
   objectValidationErrors = ORMValidateFieldsHelper postObjects, resourceModel
-
-  #if errors, abort
   if objectValidationErrors.length > 0
     res.jsonAPIRespond _.extend config.errorResponse(400), messages: objectValidationErrors
     return

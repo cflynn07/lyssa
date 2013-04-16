@@ -31,7 +31,8 @@ module.exports = (app) ->
 
           when 'clientSuperAdmin', 'clientAdmin'
 
-            console.log '2'
+            apiDeleteHelper template, {uid: uids, clientUid: clientUid}, res
+
 
 
           when 'clientDelegate', 'clientAuditor'

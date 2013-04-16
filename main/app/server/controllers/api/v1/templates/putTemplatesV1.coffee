@@ -1,5 +1,5 @@
 config                = require '../../../../config/config'
-apiPostValidateFields = require config.appRoot + 'server/components/apiPostValidateFields'
+apiPutValidateFields  = require config.appRoot + 'server/components/apiPutValidateFields'
 apiAuth               = require config.appRoot + 'server/components/apiAuth'
 async                 = require 'async'
 uuid                  = require 'node-uuid'
@@ -10,8 +10,6 @@ _                     = require 'underscore'
 module.exports = (app) ->
 
   template = ORM.model 'template'
-  employee = ORM.model 'employee'
-  client   = ORM.model 'client'
 
   app.put config.apiSubDir + '/v1/templates', (req, res) ->
     async.series [
@@ -27,12 +25,21 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-            console.log '1'
+            apiPutValidateFields this, template, req.body, req, res, {
+              'uid': (val, objectKey, object, callback) ->
+                callback()
+              'name': (val, objectKey, object, callback) ->
+                callback()
+              'type': (val, objectKey, object, callback) ->
+                callback()
+              'employeeUid': (val, objectKey, object, callback) ->
+                callback()
+            }
 
 
           when 'clientSuperAdmin', 'clientAdmin'
 
-            console.log '2'
+            apiPutValidateFields
 
 
           when 'clientDelegate', 'clientAuditor'
