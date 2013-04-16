@@ -6,17 +6,17 @@ _                       = require 'underscore'
 preventUnknownFieldsHelper = require config.appRoot + 'server/components/preventUnknownFieldsHelper'
 
 
-module.exports = (scope, resourceModel, postObjects, req, res, requirements, finalMethod) ->
+module.exports = (scope, resourceModel, testObjects, req, res, requirements, finalMethod) ->
 
   ###
   First iterate over all the properties of all the objects and verify that all required fields are present
   Also build an array of callbacks to test each required field
   ###
-  if !_.isArray postObjects
-    postObjects = [postObjects]
+  if !_.isArray testObjects
+    testObjects = [testObjects]
 
 
-  unknownProperties = preventUnknownFieldsHelper(resourceModel, postObjects, requirements)
+  unknownProperties = preventUnknownFieldsHelper(resourceModel, testObjects, requirements)
   if unknownProperties.length > 0
     res.jsonAPIRespond _.extend config.errorResponse(400), {messages: unknownProperties}
     return
@@ -24,7 +24,7 @@ module.exports = (scope, resourceModel, postObjects, req, res, requirements, fin
 
 
   #validates each object property against any validation specs in resourceModel
-  objectValidationErrors = ORMValidateFieldsHelper postObjects, resourceModel
+  objectValidationErrors = ORMValidateFieldsHelper testObjects, resourceModel
   if objectValidationErrors.length > 0
     res.jsonAPIRespond _.extend config.errorResponse(400), messages: objectValidationErrors
     return
@@ -37,7 +37,7 @@ module.exports = (scope, resourceModel, postObjects, req, res, requirements, fin
     (superCallback) ->
 
       propertyAsyncMethods = []
-      for object, key in postObjects
+      for object, key in testObjects
         for propertyName, propertyValueCheckCallback of requirements.requiredProperties
 
           valueToTest = object[propertyName]
@@ -51,11 +51,9 @@ module.exports = (scope, resourceModel, postObjects, req, res, requirements, fin
 
 
 
-
+      errorMessages = []
       async.parallel propertyAsyncMethods, (err, results) ->
 
-        #uidMappings   = {}
-        errorMessages = []
         #results will be array of results from each callback test
         for val in results
           if val.success is false
@@ -70,7 +68,7 @@ module.exports = (scope, resourceModel, postObjects, req, res, requirements, fin
                 uidMappings[mappingUid] = mappingId
 
           if _.isArray val.transform
-            postObjects[val.transform[0]][val.transform[1]] = val.transform[2]
+            testObjects[val.transform[0]][val.transform[1]] = val.transform[2]
 
 
         if errorMessages.length > 0
@@ -80,43 +78,28 @@ module.exports = (scope, resourceModel, postObjects, req, res, requirements, fin
 
 
         #attach id's for uids
+        for object, key in testObjects
 
-      for object, key in postObjects
+          #Give everyone their own brand new uid
+          #testObjects[key]['uid'] = uuid.v4()
 
-        #Give everyone their own brand new uid
-        #postObjects[key]['uid'] = uuid.v4()
+          for objectPropKey, objectPropValue of object
 
-        for objectPropKey, objectPropValue of object
+            suffix = 'Uid'
+            if objectPropKey.indexOf(suffix, objectPropKey.length - suffix.length) > -1
+              #This property ends in Uid
 
-          suffix = 'Uid'
-          if objectPropKey.indexOf(suffix, objectPropKey.length - suffix.length) > -1
-            #This property ends in Uid
-
-            propertyAssocId  = uidMappings[objectPropValue]
-            propertyPrefix   = objectPropKey.substring(0, objectPropKey.indexOf('Uid'))
-            postObjects[key][propertyPrefix + 'Id'] = propertyAssocId
-
+              propertyAssocId  = uidMappings[objectPropValue]
+              propertyPrefix   = objectPropKey.substring(0, objectPropKey.indexOf('Uid'))
+              testObjects[key][propertyPrefix + 'Id'] = propertyAssocId
 
 
-
-        #success
-        superCallback(null, uidMappings)
+          #success
+          superCallback(null, uidMappings)
 
     (superCallback) ->
+      finalMethod testObjects
 
-
-      finalMethod postObjects
-
-
-      ###
-      async.map postObjects, (item, callback) ->
-
-        resourceModel.create(item).success () ->
-          callback()
-
-      , (err, results) ->
-        res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
-      ###
   ]
 
 

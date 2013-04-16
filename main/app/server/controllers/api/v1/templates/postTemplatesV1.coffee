@@ -1,6 +1,6 @@
-config                = require '../../../../config/config'
-apiPostValidateFields = require config.appRoot + 'server/components/apiPostValidateFields'
-apiAuth               = require config.appRoot + 'server/components/apiAuth'
+config                    = require '../../../../config/config'
+apiVerifyObjectProperties = require config.appRoot + 'server/components/apiVerifyObjectProperties'
+apiAuth                   = require config.appRoot + 'server/components/apiAuth'
 async                 = require 'async'
 uuid                  = require 'node-uuid'
 ORM                   = require config.appRoot + 'server/components/oRM'
@@ -24,12 +24,13 @@ module.exports = (app) ->
         clientUid = req.session.user.clientUid
 
 
+
         switch userType
           when 'superAdmin'
 
 
             _this = this
-            apiPostValidateFields _this, template, req.body, req, res, {
+            apiVerifyObjectProperties _this, template, req.body, req, res, {
               requiredProperties:
                 'name':        (val, objectKey, object, callback) ->
 
@@ -57,6 +58,9 @@ module.exports = (app) ->
 
                   where =
                     uid: val
+
+                  console.log 'employeeUid'
+                  console.log where
 
                   #Prevent mismatch between employee clientUid and clientUid of template
                   if !_.isUndefined object['clientUid']
@@ -125,7 +129,27 @@ module.exports = (app) ->
                           success: false
                           message: {'clientUid': 'unknown clientUid'}
 
-            }
+            }, (objects) ->
+
+              #Give everyone their own brand new uid
+              for object, key in objects
+                objects[key]['uid'] = uuid.v4()
+
+              async.map objects, (item, callback) ->
+                template.create(item).success () ->
+                  callback()
+              , (err, results) ->
+                res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
+
+
+
+
+
+
+
+
+
+
 
 
           when 'clientSuperAdmin', 'clientAdmin'
