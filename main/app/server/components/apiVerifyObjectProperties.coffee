@@ -25,14 +25,13 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
 
   #validates each object property against any validation specs in resourceModel
   objectValidationErrors = ORMValidateFieldsHelper testObjects, resourceModel
-  if objectValidationErrors.length > 0
-    res.jsonAPIRespond _.extend config.errorResponse(400), messages: objectValidationErrors
-    return
+  #if objectValidationErrors.length > 0
+  #  res.jsonAPIRespond _.extend config.errorResponse(400), messages: objectValidationErrors
+  #  return
 
 
 
-  #Asynchronously execute callbacks, if all tests pass insert objects, otherwise return error
-  uidMappings = {}
+
   async.series [
     (superCallback) ->
 
@@ -50,9 +49,11 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
           )(valueToTest, propertyValueCheckCallback, scope, key, object)
 
 
-
+      #Asynchronously execute callbacks, if all tests pass insert objects, otherwise return error
+      uidMappings = {}
       errorMessages = []
       async.parallel propertyAsyncMethods, (err, results) ->
+
 
         #results will be array of results from each callback test
         for val in results
@@ -63,18 +64,22 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
 
           else
 
-            if _.isObject val.mapping
-              for mappingUid, mappingId of val.mapping
-                uidMappings[mappingUid] = mappingId
+            if _.isObject val.uidMapping
+              for mappingUid, mappingORMResource of val.uidMapping
+                uidMappings[mappingUid] = mappingORMResource
+
 
           if _.isArray val.transform
             testObjects[val.transform[0]][val.transform[1]] = val.transform[2]
 
 
-        if errorMessages.length > 0
-          res.jsonAPIRespond _.extend config.errorResponse(400), messages: errorMessages
+
+        if (objectValidationErrors.length > 0) or (errorMessages.length > 0)
+          #  res.jsonAPIRespond _.extend config.errorResponse(400), messages: objectValidationErrors
+          res.jsonAPIRespond _.extend config.errorResponse(400), messages: errorMessages.concat objectValidationErrors
           superCallback(new Error 'object property test failed')
           return
+
 
 
         #attach id's for uids
@@ -88,10 +93,9 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
             suffix = 'Uid'
             if objectPropKey.indexOf(suffix, objectPropKey.length - suffix.length) > -1
               #This property ends in Uid
-
-              propertyAssocId  = uidMappings[objectPropValue]
-              propertyPrefix   = objectPropKey.substring(0, objectPropKey.indexOf('Uid'))
-              testObjects[key][propertyPrefix + 'Id'] = propertyAssocId
+              propertyAssocORM  = uidMappings[objectPropValue]
+              propertyPrefix    = objectPropKey.substring(0, objectPropKey.indexOf('Uid'))
+              testObjects[key][propertyPrefix + 'Id'] = propertyAssocORM.id
 
 
           #success

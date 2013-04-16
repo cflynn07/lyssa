@@ -56,6 +56,13 @@ module.exports =
     402: 'Forbidden'
     404: 'Not Found'
 
+  response: (code = 200) ->
+    if [200, 201, 202].indexOf(code) is -1
+      throw new Error 'Invalid API response'
+      return
+    code: code
+    message: @apiResponseCodes[code]
+
   errorResponse: (code = 401) ->
 
     if [301, 400, 401, 402, 404].indexOf(code) is -1

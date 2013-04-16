@@ -1,11 +1,11 @@
 config                    = require '../../../../config/config'
 apiVerifyObjectProperties = require config.appRoot + 'server/components/apiVerifyObjectProperties'
 apiAuth                   = require config.appRoot + 'server/components/apiAuth'
-async                 = require 'async'
-uuid                  = require 'node-uuid'
-ORM                   = require config.appRoot + 'server/components/oRM'
-sequelize             = ORM.setup()
-_                     = require 'underscore'
+async                     = require 'async'
+uuid                      = require 'node-uuid'
+ORM                       = require config.appRoot + 'server/components/oRM'
+sequelize                 = ORM.setup()
+_                         = require 'underscore'
 
 module.exports = (app) ->
 
@@ -13,24 +13,33 @@ module.exports = (app) ->
   employee = ORM.model 'employee'
   client   = ORM.model 'client'
 
+
+  insertHelper = (objects, res) ->
+    #Give everyone their own brand new uid
+    for object, key in objects
+      objects[key]['uid'] = uuid.v4()
+
+    async.map objects, (item, callback) ->
+      template.create(item).success () ->
+        callback()
+    , (err, results) ->
+      res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
+
+
+
   app.post config.apiSubDir + '/v1/templates', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
 
-
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
-
-
 
         switch userType
           when 'superAdmin'
 
-
-            _this = this
-            apiVerifyObjectProperties _this, template, req.body, req, res, {
+            apiVerifyObjectProperties this, template, req.body, req, res, {
               requiredProperties:
                 'name':        (val, objectKey, object, callback) ->
 
@@ -56,107 +65,80 @@ module.exports = (app) ->
 
                 'employeeUid': (val, objectKey, object, callback) ->
 
-                  where =
-                    uid: val
+                  if !val
+                    callback null,
+                      success: false
+                      message:
+                        employeeUid: 'required'
+                    return
 
-                  console.log 'employeeUid'
-                  console.log where
+                  clientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
-                  #Prevent mismatch between employee clientUid and clientUid of template
-                  if !_.isUndefined object['clientUid']
-                    where['clientUid'] = object['clientUid']
-                  else
-                    where['clientUid'] = clientUid #<-- use from session
+                  async.parallel [
+                    (callback) ->
+                      client.find(
+                        where:
+                          uid: clientUid
+                      ).success (resultClient) ->
+                        callback null, resultClient
 
-                  #check exists
-                  employee.find(
-                    where: where
-                  ).success (employee) ->
+                    (callback) ->
+                      employee.find(
+                        where:
+                          uid: val
+                      ).success (resultEmployee) ->
+                        callback null, resultEmployee
 
-                    if employee
 
-                      uidMap      = {}
-                      uidMap[val] = employee.id
+                  ], (error, results) ->
 
-                      callback null,
-                        success: true
-                        mapping: uidMap
+                    resultClient   = results[0]
+                    resultEmployee = results[1]
 
-                    else
-
+                    if !resultEmployee
                       callback null,
                         success: false
-                        message: {'employeeUid': 'unknown employeeUid'}
+                        message:
+                          'employeeUid': 'unknown'
+                      return
+
+                    if !resultClient
+                      callback null,
+                        success: false
+                        'clientUid': 'unknown'
+                      return
+
+                    #IF we do find the employee, but it doesn't belong to the same client...
+                    if resultEmployee.clientUid != resultClient.uid
+                      callback null,
+                        success: false
+                        message:
+                          'employeeUid': 'unknown'
+                      return
+
+                    mapObj = {}
+                    mapObj[resultEmployee.uid] = resultEmployee
+                    mapObj[resultClient.uid]   = resultClient
+                    callback null,
+                      success: true
+                      uidMapping: mapObj
+                      transform: [objectKey, 'clientUid', resultClient.uid]
+
 
                 'clientUid': (val, objectKey, object, callback) ->
 
-                  if !val
+                  callback null,
+                    success: true
+                  return
 
-                    #For superAdmins, not required to specify clientUid. It will assume to use session clientUid
-                    client.find(
-                      where:
-                        uid: clientUid    #<-- take from session
-                    ).success (client) ->
-
-                      uidMap            = {}
-                      uidMap[clientUid] = client.id
-
-                      callback null,
-                        success:   true
-                        mapping:   uidMap
-                        transform: [objectKey, 'clientUid', clientUid]
-
-                  else
-
-                    #check exists
-                    client.find(
-                      where:
-                        uid: val
-                    ).success (client) ->
-
-                      if client
-
-                        uidMap      = {}
-                        uidMap[val] = client.id
-
-                        callback null,
-                          success: true
-                          mapping: uidMap
-
-                      else
-
-                        callback null,
-                          success: false
-                          message: {'clientUid': 'unknown clientUid'}
 
             }, (objects) ->
 
-              #Give everyone their own brand new uid
-              for object, key in objects
-                objects[key]['uid'] = uuid.v4()
-
-              async.map objects, (item, callback) ->
-                template.create(item).success () ->
-                  callback()
-              , (err, results) ->
-                res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
-
-
-
-
-
-
-
-
-
-
-
+              insertHelper.call(this, objects, res)
 
           when 'clientSuperAdmin', 'clientAdmin'
 
-
-            _this = this
-            apiPostValidateFields _this, template, req.body, req, res, {
+            apiVerifyObjectProperties this, template, req.body, req, res, {
               requiredProperties:
                 'name':        (val, objectKey, object, callback) ->
 
@@ -179,15 +161,20 @@ module.exports = (app) ->
                   #check exists
                   employee.find(
                     where: where  #<-- make sure to limit to session clientUid
-                  ).success (employee) ->
+                  ).success (resultEmployee) ->
 
-                    if employee
+                    if resultEmployee
+                      mapObj = {}
+                      mapObj[resultEmployee.uid] = resultEmployee
                       callback null,
+                        uidMapping: mapObj
                         success: true
+
                     else
                       callback null,
                         success: false
-                        message: {'employeeUid': 'unknown employeeUid'}
+                        message:
+                          employeeUid: 'unknown'
 
                 'clientUid': (val, objectKey, object, callback) ->
 
@@ -195,12 +182,24 @@ module.exports = (app) ->
                   if !_.isUndefined val
                     callback null,
                       success: false
-                      message: {'clientUid': 'unknown property'}
+                      message:
+                        clientUid: 'unknown'
                     return
                   else
-                    foo() #<-- use transform
+                    client.find(
+                      where:
+                        uid: clientUid
+                    ).success (resultClient) ->
+                      #This should never fail, apiAuth should block
+                      mapObj = {}
+                      mapObj[resultClient.uid] = resultClient
+                      callback null,
+                        success: true
+                        uidMapping: mapObj
+                        transform: [objectKey, 'clientUid', clientUid] #<-- take from session
 
-            }
+            }, (objects) ->
+              insertHelper.call(this, objects, res)
 
 
           when 'clientDelegate', 'clientAuditor'
