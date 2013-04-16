@@ -26,14 +26,27 @@ module.exports = (app) ->
           when 'superAdmin'
 
             apiPutValidateFields this, template, req.body, req, res, {
-              'uid': (val, objectKey, object, callback) ->
-                callback()
-              'name': (val, objectKey, object, callback) ->
-                callback()
-              'type': (val, objectKey, object, callback) ->
-                callback()
-              'employeeUid': (val, objectKey, object, callback) ->
-                callback()
+              requiredProperties:
+                'uid': (val, objectKey, object, callback) ->
+
+                  if _.isUndefined val
+                    callback null,
+                      success: false
+                      message:
+                        uid: 'required'
+                  else
+                    callback null,
+                      success: true
+
+                'name': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+                'type': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+                'employeeUid': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
             }
 
 

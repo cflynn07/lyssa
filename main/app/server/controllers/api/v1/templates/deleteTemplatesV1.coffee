@@ -6,7 +6,7 @@ uuid                  = require 'node-uuid'
 ORM                   = require config.appRoot + 'server/components/oRM'
 sequelize             = ORM.setup()
 _                     = require 'underscore'
-apiDeleteHelper       = require config.appRoot + 'server/components/apiDeleteHelper'
+apiDelete             = require config.appRoot + 'server/components/apiDelete'
 
 module.exports = (app) ->
 
@@ -26,12 +26,12 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-            apiDeleteHelper template, {uid: uids}, res
+            apiDelete template, {uid: uids}, res
 
 
           when 'clientSuperAdmin', 'clientAdmin'
 
-            apiDeleteHelper template, {uid: uids, clientUid: clientUid}, res
+            apiDelete template, {uid: uids, clientUid: clientUid}, res
 
 
 

@@ -10,11 +10,13 @@ module.exports = (resourceModel, objects, requirements) ->
 
     #Instead of enforcing no missing properties HERE, enforce no unknown properties
 
-    for postObjectPropertyKey, postObjectPropertyValue of object
+    for objectPropertyKey, objectPropertyValue of object
 
-      if _.isUndefined(requirements.requiredProperties[postObjectPropertyKey])
-        errorObj = {}
-        errorObj[postObjectPropertyKey] = 'unknown field'
+      if _.isUndefined(requirements.requiredProperties[objectPropertyKey])
+
+        errorObj                    = {}
+        errorObj[objectPropertyKey] = 'unknown field'
+
         unknownProperties.push errorObj
 
   return unknownProperties

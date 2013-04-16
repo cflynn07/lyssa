@@ -6,11 +6,6 @@ _                       = require 'underscore'
 preventUnknownFieldsHelper = require config.appRoot + 'server/components/preventUnknownFieldsHelper'
 
 
-###
-TODO: Write tests, make dry by combining overlap with apiPostValidateFields
-###
-
-
 module.exports = (scope, resourceModel, putObjects, req, res, requirements) ->
 
   ###
@@ -87,7 +82,9 @@ module.exports = (scope, resourceModel, putObjects, req, res, requirements) ->
 
     (superCallback) ->
 
-
+      console.log 'finished'
+      res.jsonAPIRespond(code: 202, message: config.apiResponseCodes[202])
+      return
 
       #for object, key in putObjects
 
