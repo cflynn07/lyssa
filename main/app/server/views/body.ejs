@@ -1,5 +1,12 @@
-<body class="login">
+<body class="login" ng-controller="FirstController">
 
+<ul>
+    <li ng-repeat="phone in phones">{{phone}}</li>
+</ul>
+
+<input ng-model="query" value="get wild">
+<br><br>
+{{query}}
 
 
 
@@ -7,9 +14,6 @@
 
 
 <div class="logo"></div>
-
-
-
 
 
 <div class="content portlet box blue widget-themis-nofade">
@@ -49,9 +53,16 @@
   </div>
 <% } %>
 
-<% if(asset_hash == 'main'){ %>
-  <script async type="text/javascript" data-main="/client" src="vendor/require.js"></script>
-<% }else{ %>
-  <script async type="text/javascript" src="/assets/<%= asset_hash %>.js"></script>
+<% if(false){ %>
+    <% if(asset_hash == 'main'){ %>
+      <script async type="text/javascript" data-main="/client" src="vendor/require.js"></script>
+    <% }else{ %>
+      <script async type="text/javascript" src="/assets/<%= asset_hash %>.js"></script>
+    <% } %>
 <% } %>
+
+
+<script type="text/javascript" src="/vendor/angular.js" ></script>
+<script type="text/javascript" src="/clientAngular.js" ></script>
+
 </body>
