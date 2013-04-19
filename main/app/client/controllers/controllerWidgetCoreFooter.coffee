@@ -1,0 +1,9 @@
+define [
+  'angular'
+], (
+  angular
+) ->
+
+
+  ($scope) ->
+

@@ -1,68 +1,32 @@
-<body class="login" ng-controller="FirstController">
-
-<ul>
-    <li ng-repeat="phone in phones">{{phone}}</li>
-</ul>
-
-<input ng-model="query" value="get wild">
-<br><br>
-{{query}}
+<body class="fixed-top breakpoint-1280">
 
 
 
+     <div data-ng-switch="rootStatus">
+
+         <div data-ng-switch-when="loading">
+            <div class="logo"></div>
+                <div class="content portlet box blue widget-themis-nofade">
+                <div class="portlet-title">
+                    <h4 style="color:#FFF;"><i class="icon-plus"></i>Themis v0.1</h4>
+                </div>
+                <div class="portlet-body">
+                    <div class="progress progress-striped active">
+                        <div id="pre_loading_bar" style="width: 20%;" class="bar"></div>
+                    </div>
+                    <h4 data-ng-model="loadingStatus">Loading...</h4>
+                </div>
+            </div>
+         </div>
+
+         <div data-ng-switch-when="login"         data-ng-include="'viewWidgetCoreLogin'"></div>
+         <div data-ng-switch-when="authenticated" data-ng-include="'viewCore'"></div>
+
+     </div>
 
 
 
-<div class="logo"></div>
+     <script async type="text/javascript" data-main="/client" src="vendor/require.js"></script>
 
-
-<div class="content portlet box blue widget-themis-nofade">
-
-    <div class="portlet-title">
-        <h4 style="color:#FFF;"><i class="icon-plus"></i>Themis v0.1</h4>
-    </div>
-    <div class="portlet-body">
-        <div class="progress progress-striped active">
-            <div id="pre_loading_bar" style="width: 1%;" class="bar"></div>
-        </div>
-
-        <h4 id="status">Loading...</h4>
-    </div>
-
-</div>
-
-
-
-
-
-<% if(false){ %>
-  <div id="loading_indicator" style="margin-top:-125px; position:absolute; top:50%; text-align:center; width:100%;">
-
-    <div style="margin-bottom:5px;" class="progress progress-striped active">
-        <div style="width: 60%;" class="bar"></div>
-    </div>
-
-
-    <img src="/assets/img/loading_2.gif" />
-
-    <% if(true){ %>
-    <h2 id="status" style="font-style:italic;">Loading...</h2>
-    <% } %>
-
-
-  </div>
-<% } %>
-
-<% if(false){ %>
-    <% if(asset_hash == 'main'){ %>
-      <script async type="text/javascript" data-main="/client" src="vendor/require.js"></script>
-    <% }else{ %>
-      <script async type="text/javascript" src="/assets/<%= asset_hash %>.js"></script>
-    <% } %>
-<% } %>
-
-
-<script type="text/javascript" src="/vendor/angular.js" ></script>
-<script type="text/javascript" src="/clientAngular.js" ></script>
 
 </body>

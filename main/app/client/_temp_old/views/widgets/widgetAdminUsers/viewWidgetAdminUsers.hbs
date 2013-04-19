@@ -1,0 +1,61 @@
+<div class="row-fluid">
+  <div class="span12">
+    <!-- BEGIN EXAMPLE TABLE POR TLET-->
+    <div class="portlet box blue widget-themis">
+      <div class="portlet-title">
+        <h4><i class="icon-globe"></i>Team Members</h4>
+
+        {{# if false}}
+        <div class="tools">
+          <a href="javascript:;" class="collapse"></a>
+          <a href="#portlet-config" data-toggle="modal" class="config"></a>
+          <a href="javascript:;" class="reload"></a>
+          <a href="javascript:;" class="remove"></a>
+        </div>
+        {{/ if }}
+
+      </div>
+      <div class="portlet-body">
+        <div class="clearfix">
+          <div class="btn-group">
+            <button data-action="add-new-user" class="btn green">
+            Add User <i class="icon-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="holder-add-new-user"></div>
+
+        <table class="table table-striped table-bordered table-hover" id="sample_1">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Type</th>
+              <th>Date Added</th>
+              <th>Date Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {{#each users}}
+            <tr class="odd gradeX">
+              <td>{{this.first_name}} {{this.last_name}}</td>
+              <td>{{this.email}}</td>
+              <td>{{this.type}}</td>
+              <td>{{this.created_at}}</td>
+              <td>{{this.updated_at}}</td>
+              <td>
+                <a href="#" data-action="delete" data-user_id="{{this.id}}" class="btn red mini">Delete</a>
+              </td>
+            </tr>
+            {{/each}}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- END EXAMPLE TABLE PORTLET-->
+  </div>
+</div>

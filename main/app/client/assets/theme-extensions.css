@@ -52,9 +52,11 @@ td.details {
     Customize look and feel of menu
     -------------------------------
 */
+/*
 .page-sidebar > ul > li > a {
     border-top: 1px solid #595959 !important;
 }
+*/
 .page-sidebar > ul > li > a {
     font-size: 14px;
 }

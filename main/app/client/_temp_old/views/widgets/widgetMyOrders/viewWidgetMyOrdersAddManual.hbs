@@ -1,0 +1,62 @@
+
+<div class="portlet box blue">
+    <div class="portlet-title">
+        <h4><i class="icon-edit"></i>Manually Add Order</h4>
+        <div class="tools">
+            <a data-action="close" href="javascript:;" class="close"></a>
+        </div>
+    </div>
+    <div class="portlet-body form">
+
+
+        <form action="#" class="form-horizontal">
+            <h3 class="form-section">Order Info</h3>
+            <div class="row-fluid">
+
+                <div class="span6">
+                    <div class="control-group">
+                        <label class="control-label">PO Number</label>
+                        <div class="controls">
+                            <input name="po_num" type="text" class="m-wrap span12" placeholder="PO Number">
+                            <span class="help-block">This must be unique for all of your orders</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Shipper Email</label>
+                        <div class="controls">
+                            <div class="input-icon left">
+                                <i class="icon-envelope"></i>
+                                <input name="email" class="m-wrap " type="text" placeholder="Email Address">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
+                    <div class="control-group">
+                        <label class="control-label">Description</label>
+                        <div class="controls">
+                            <textarea name="description" class="medium m-wrap" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Requested By</label>
+                        <div class="controls">
+                            <input name="requested_by" type="text" class="m-wrap" placeholder="Jane Doe">
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="form-actions">
+              <button data-action="save-manual" type="submit" class="btn blue">Submit</button>
+              <button data-action="close" type="button" class="btn">Cancel</button>
+            </div>
+
+        </form>
+
+
+    </div>
+</div>
