@@ -6,14 +6,22 @@ define [
   viewCoreWidgets
 ) ->
 
-  ($scope, $templateCache) ->
-    $templateCache.put 'viewCoreWidgets', viewCoreWidgets
+  (Module) ->
+
+    Module.run ($templateCache) ->
+      $templateCache.put 'viewCoreWidgets', viewCoreWidgets
+
+    Module.controller 'ControllerCoreWidgets', ($scope, $route) ->
+
+      $scope.$on '$routeChangeSuccess', (event, current, previous) ->
+        console.log '$routeChangeSuccess'
+        console.log arguments
+        updateShit()
 
 
-    $scope.widgetRows = [
-      widget: 'viewWidgetBreadCrumbs'
-    ,
-      widget: 'viewWidgetBreadCrumbs'
-    ,
-      widget: 'viewWidgetBreadCrumbs'
-    ]
+      updateShit = () ->
+        $scope.widgetRows = [{
+          widget: 'viewWidgetBreadCrumbs'
+        },{
+          widget: 'viewWidgetExerciseBuilder'
+        }]

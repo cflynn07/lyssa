@@ -3,7 +3,6 @@ if !window.console?
 if !window.console.log?
   window.console.log = ->
 
-#window.WEB_SOCKET_SWF_LOCATION = '/socket.io/static/flashsocket/WebSocketMain.swf'
 
 requirejs.config
   baseUrl: '/'
@@ -54,55 +53,65 @@ requirejs.config
 
 
 require [
+  'jquery'
   'bootstrap'
   'angular'
+
+  'cs!directives/directiveAnimateIn'
+
   'cs!controllers/controllerApp'
+  'cs!controllers/controllerCoreWidgets'
   'cs!controllers/controllerWidgetCoreLeftMenu'
   'cs!controllers/controllerWidgetCoreLogin'
   'cs!controllers/controllerWidgetCoreHeader'
   'cs!controllers/widgets/controllerWidgetBreadCrumbs'
-  'cs!controllers/controllerCoreWidgets'
+  'cs!controllers/widgets/ControllerWidgetExerciseBuilder'
 ], (
+  jquery
   bootstrap
   angular
+  DirectiveAnimateIn
   ControllerApp
+  ControllerCoreWidgets
   ControllerWidgetCoreLeftMenu
   ControllerWidgetCoreLogin
   ControllerWidgetCoreHeader
   ControllerWidgetBreadCrumbs
-  ControllerCoreWidgets
+  ControllerWidgetExerciseBuilder
 ) ->
 
   #Modules
   CS = angular.module 'CS', []
 
-  console.log CS
-
-  #Animations
-  CS.animation 'animate-enter', () ->
-    return {}
-
+  #Directives
+  DirectiveAnimateIn CS
 
   #Routes
   CS.config ($routeProvider) ->
-    $routeProvider.when('/home/:id', {
-      action: 'standard.test'
-    }).when('/admin', {
-      action: 'standard.home'
-    }).otherwise({
-      redirectTo: '/'
-    })
+    $routeProvider
+      .when('/home/:id', {
+        action: 'standard.test'
+      }).when('/admin', {
+        action: 'standard.home'
+      }).otherwise({
+        redirectTo: '/'
+      })
+
+  ControllerApp                 CS
+  ControllerCoreWidgets         CS
+  ControllerWidgetCoreLeftMenu  CS
+  ControllerWidgetCoreHeader    CS
+  ControllerWidgetBreadCrumbs     CS
+  ControllerWidgetExerciseBuilder CS
 
   #Controllers
-  #Core
-  CS.controller 'ControllerApp',                ControllerApp
-  CS.controller 'ControllerCoreWidgets',        ControllerCoreWidgets
-  CS.controller 'ControllerWidgetCoreLeftMenu', ControllerWidgetCoreLeftMenu
-  CS.controller 'ControllerWidgetCoreLogin',    ControllerWidgetCoreLogin
-  CS.controller 'ControllerWidgetCoreHeader',   ControllerWidgetCoreHeader
+  #CS.controller 'ControllerApp',                ControllerApp
+  #CS.controller 'ControllerCoreWidgets',        ControllerCoreWidgets
+  #CS.controller 'ControllerWidgetCoreLeftMenu', ControllerWidgetCoreLeftMenu
+  #CS.controller 'ControllerWidgetCoreLogin',    ControllerWidgetCoreLogin
+  #CS.controller 'ControllerWidgetCoreHeader',   ControllerWidgetCoreHeader
+  #CS.controller 'ControllerWidgetBreadCrumbs',  ControllerWidgetBreadCrumbs
 
-  #Widgets
-  CS.controller 'ControllerWidgetBreadCrumbs',  ControllerWidgetBreadCrumbs
 
 
   angular.bootstrap document, ['CS']

@@ -6,12 +6,19 @@ define [
   viewCore
 ) ->
 
-  ($scope, $route, $templateCache) ->
+  (Module) ->
 
-    $templateCache.put 'viewCore', viewCore
+    Module.run ($templateCache) ->
+      $templateCache.put 'viewCore', viewCore
 
-    #temp
-    $scope.rootStatus = 'authenticated'
+    Module.controller 'ControllerApp' , ($scope, $route) ->
 
-    $scope.$on 'changeIt', (e, data) ->
-      $scope.rootStatus = data
+      #temp
+      $scope.rootStatus = 'authenticated'
+
+      $scope.user =
+        firstName: 'Casey1'
+        lastName: 'Flynn2'
+
+      $scope.$on 'changeIt', (e, data) ->
+        $scope.rootStatus = data

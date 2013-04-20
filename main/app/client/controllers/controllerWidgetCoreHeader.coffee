@@ -5,10 +5,9 @@ define [
   angular
   viewWidgetCoreHeader
 ) ->
+  (Module) ->
 
-  ($scope, $templateCache) ->
+    Module.run ($templateCache) ->
+      $templateCache.put 'viewWidgetCoreHeader', viewWidgetCoreHeader
 
-    $templateCache.put 'viewWidgetCoreHeader', viewWidgetCoreHeader
-
-    $scope.firstName = 'Casey'
-    $scope.lastName  = 'Flynn'
+    Module.controller 'ControllerWidgetCoreHeader', ($scope, $templateCache) ->

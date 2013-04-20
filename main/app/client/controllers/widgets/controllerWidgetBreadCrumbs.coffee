@@ -5,15 +5,12 @@ define [
   angular
   viewWidgetBreadCrumbs
 ) ->
+  (Module) ->
 
-  console.log 'viewWidgetBreadCrumbs'
-  console.log viewWidgetBreadCrumbs
+    Module.run ($templateCache) ->
+      $templateCache.put 'viewWidgetBreadCrumbs', viewWidgetBreadCrumbs
 
-  ($scope, $templateCache) ->
+    Module.controller 'ControllerWidgetBreadCrumbs', ($scope, $templateCache) ->
 
-    console.log 'controller WidgetBreadCrumbs'
-
-    $templateCache.put 'viewWidgetBreadCrumbs', viewWidgetBreadCrumbs
-
-    $scope.title    = 'Test Title'
-    $scope.subtitle = 'Test Subtitle'
+      $scope.title    = 'Test Title'
+      $scope.subtitle = 'Test Subtitle'
