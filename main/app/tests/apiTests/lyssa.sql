@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.6.10, for osx10.7 (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.10, for osx10.6 (i386)
 --
 -- Host: localhost    Database: lyssa
 -- ------------------------------------------------------
@@ -41,7 +41,7 @@ CREATE TABLE `clients` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE,
   UNIQUE KEY `indentifier` (`identifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,7 +50,7 @@ CREATE TABLE `clients` (
 
 LOCK TABLES `clients` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-INSERT INTO `clients` VALUES ('44cc27a5-af8b-412f-855a-57c8205d86f5',1,'ClientA','clienta','asd','asdf','asdfas','asdfasdf','sdf','asdf','asdfas','sfd','2013-04-10 22:14:54','2013-04-10 22:14:58',NULL),('05817084-bc15-4dee-90a1-2e0735a242e1',2,'ClientB','clientb','kdfkd','dsk','aksdfg','asdf','asdf','sdaf','sadf','sdf','2013-04-10 22:15:23','2013-04-10 22:15:25',NULL),('c4602593-f460-41f8-bb42-a0f0afe021d6',3,'ClientC','clientc','kasdfui','asdf','asdfg','afsdg','adsfg','asdfga','asdgf','asdfg','2013-04-10 22:35:18','2013-04-10 22:35:21',NULL),('b40a80a5-6211-487e-985b-19e79bc11d0f',4,'applebees',NULL,'115hestnuttreet','ptadfsasdfon','stdadosnidos','osasdfto','asdfasdf','asdfasdftst','444000444','444333444','2013-04-16 08:34:11','2013-04-16 08:34:11',NULL),('977a4788-252d-4099-9d79-332feca10301',5,'applebees','applebees','115hestnuttreet','ptadfsasdfon','stdadosnidos','osasdfto','asdfasdf','asdfasdftst','444000444','444333444','2013-04-16 08:35:48','2013-04-16 08:35:48',NULL);
+INSERT INTO `clients` VALUES ('44cc27a5-af8b-412f-855a-57c8205d86f5',1,'ClientA','clienta','asd','asdf','asdfas','asdfasdf','sdf','asdf','asdfas','sfd','2013-04-10 22:14:54','2013-04-10 22:14:58',NULL),('05817084-bc15-4dee-90a1-2e0735a242e1',2,'ClientB','clientb','kdfkd','dsk','aksdfg','asdf','asdf','sdaf','sadf','sdf','2013-04-10 22:15:23','2013-04-10 22:15:25',NULL),('c4602593-f460-41f8-bb42-a0f0afe021d6',3,'ClientC','clientc','kasdfui','asdf','asdfg','afsdg','adsfg','asdfga','asdgf','asdfg','2013-04-10 22:35:18','2013-04-10 22:35:21',NULL);
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,10 +113,10 @@ CREATE TABLE `dictionaryItems` (
   KEY `fk_dictionaryItems_clients1` (`clientId`),
   KEY `fk_dictionaryItems_dictionaries2` (`dictionaryUid`),
   KEY `fk_dictionaryItems_clients2` (`clientUid`),
-  CONSTRAINT `fk_dictionaryItems_dictionaries1` FOREIGN KEY (`dictionaryId`) REFERENCES `dictionaries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_dictionaryItems_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_dictionaryItems_dictionaries2` FOREIGN KEY (`dictionaryUid`) REFERENCES `dictionaries` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_dictionaryItems_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_dictionaryItems_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_dictionaryItems_dictionaries1` FOREIGN KEY (`dictionaryId`) REFERENCES `dictionaries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_dictionaryItems_dictionaries2` FOREIGN KEY (`dictionaryUid`) REFERENCES `dictionaries` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -168,7 +168,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES ('45b7c719-2049-4a44-ad9c-09e858afc48b',1,'petah','Peter','Griffin','dfs','asd','asdfas','asdf','clientSuperAdmin','44cc27a5-af8b-412f-855a-57c8205d86f5','2013-04-10 22:17:43','2013-04-10 22:17:45',NULL,1),('04ad5b05-c9a5-430f-8d5c-8483d5d904e4',2,'erici','divis','dids','did','dfi','sdf','dsaf','superAdmin','44cc27a5-af8b-412f-855a-57c8205d86f5','2013-04-10 22:18:16','2013-04-10 22:18:17',NULL,1),('f755b54f-e918-4fcb-9024-2b48370df4a1',3,'IDixs','kddi','kdid','dksdfo','dfsgksdgol','sdgl','sdfl','clientAdmin','05817084-bc15-4dee-90a1-2e0735a242e1','2013-04-10 22:18:52','2013-04-10 22:18:54',NULL,2),('0054d814-6d36-4573-bbfc-a2b6644266cc',4,'Marc','Xis','kdi','kdigf','lsdfsd','sdfgsgd','sdfsdfsdf','clientDelegate','05817084-bc15-4dee-90a1-2e0735a242e1','2013-04-10 22:19:26','2013-04-10 22:19:28',NULL,2);
+INSERT INTO `employees` VALUES ('45b7c719-2049-4a44-ad9c-09e858afc48b',1,'casey','Peter','Griffin','dfs','asd','casey','$2a$12$i5clYosAvZGPQTYvbYwYx.4GITiLev7.xYA0ZpFZV7Upziw1rRVBK','clientSuperAdmin','44cc27a5-af8b-412f-855a-57c8205d86f5','2013-04-10 22:17:43','2013-04-10 22:17:45',NULL,1),('04ad5b05-c9a5-430f-8d5c-8483d5d904e4',2,'erici','divis','dids','did','dfi','sdf','$2a$12$i5clYosAvZGPQTYvbYwYx.4GITiLev7.xYA0ZpFZV7Upziw1rRVBK','superAdmin','44cc27a5-af8b-412f-855a-57c8205d86f5','2013-04-10 22:18:16','2013-04-10 22:18:17',NULL,1),('f755b54f-e918-4fcb-9024-2b48370df4a1',3,'IDixs','kddi','kdid','dksdfo','dfsgksdgol','sdgl','$2a$12$i5clYosAvZGPQTYvbYwYx.4GITiLev7.xYA0ZpFZV7Upziw1rRVBK','clientAdmin','05817084-bc15-4dee-90a1-2e0735a242e1','2013-04-10 22:18:52','2013-04-10 22:18:54',NULL,2),('0054d814-6d36-4573-bbfc-a2b6644266cc',4,'Marc','Xis','kdi','kdigf','lsdfsd','sdfgsgd','$2a$12$i5clYosAvZGPQTYvbYwYx.4GITiLev7.xYA0ZpFZV7Upziw1rRVBK','clientDelegate','05817084-bc15-4dee-90a1-2e0735a242e1','2013-04-10 22:19:26','2013-04-10 22:19:28',NULL,2);
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,10 +197,10 @@ CREATE TABLE `events` (
   KEY `fk_events_clients1` (`clientId`),
   KEY `fk_events_employees2` (`employeeUid`),
   KEY `fk_events_clients2` (`clientUid`),
-  CONSTRAINT `fk_events_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_events_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_events_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_events_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_events_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_events_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_events_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -238,10 +238,10 @@ CREATE TABLE `fields` (
   KEY `fk_fields_clients1` (`clientId`),
   KEY `fk_fields_groups2` (`groupUid`),
   KEY `fk_fields_clients2` (`clientUid`),
-  CONSTRAINT `fk_fields_groups1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_fields_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_fields_groups2` FOREIGN KEY (`groupUid`) REFERENCES `groups` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_fields_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_fields_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_fields_groups1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_fields_groups2` FOREIGN KEY (`groupUid`) REFERENCES `groups` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -279,10 +279,10 @@ CREATE TABLE `groups` (
   KEY `fk_groups_clients1` (`clientId`),
   KEY `fk_groups_revisions2` (`revisionUid`),
   KEY `fk_groups_clients2` (`clientUid`),
-  CONSTRAINT `fk_groups_revisions1` FOREIGN KEY (`revisionId`) REFERENCES `revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_groups_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_groups_revisions2` FOREIGN KEY (`revisionUid`) REFERENCES `revisions` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_groups_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_groups_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_groups_revisions1` FOREIGN KEY (`revisionId`) REFERENCES `revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_groups_revisions2` FOREIGN KEY (`revisionUid`) REFERENCES `revisions` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -324,12 +324,12 @@ CREATE TABLE `revisions` (
   KEY `fk_revisions_templates2` (`templateUid`),
   KEY `fk_revisions_clients1` (`clientId`),
   KEY `fk_revisions_clients2` (`clientUid`),
-  CONSTRAINT `fk_revisions_templates1` FOREIGN KEY (`templateId`) REFERENCES `templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_revisions_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_revisions_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_revisions_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_revisions_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_revisions_templates2` FOREIGN KEY (`templateUid`) REFERENCES `templates` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_revisions_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_revisions_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_revisions_templates1` FOREIGN KEY (`templateId`) REFERENCES `templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_revisions_templates2` FOREIGN KEY (`templateUid`) REFERENCES `templates` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -367,10 +367,10 @@ CREATE TABLE `submissionFields` (
   KEY `fk_submissionFields_clients1` (`clientId`),
   KEY `fk_submissionFields_submissionGroups2` (`submissionGroupUid`),
   KEY `fk_submissionFields_clients2` (`clientUid`),
-  CONSTRAINT `fk_submissionFields_submissionGroups1` FOREIGN KEY (`submissionGroupId`) REFERENCES `submissionGroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissionFields_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissionFields_submissionGroups2` FOREIGN KEY (`submissionGroupUid`) REFERENCES `submissionGroups` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissionFields_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_submissionFields_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissionFields_submissionGroups1` FOREIGN KEY (`submissionGroupId`) REFERENCES `submissionGroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissionFields_submissionGroups2` FOREIGN KEY (`submissionGroupUid`) REFERENCES `submissionGroups` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -407,10 +407,10 @@ CREATE TABLE `submissionGroups` (
   KEY `fk_submissionGroups_submissions2` (`clientId`),
   KEY `fk_submissionGroups_submissions3` (`submissionUid`),
   KEY `fk_submissionGroups_clients1` (`clientUid`),
+  CONSTRAINT `fk_submissionGroups_clients1` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissionGroups_submissions1` FOREIGN KEY (`submissionId`) REFERENCES `submissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissionGroups_submissions2` FOREIGN KEY (`clientId`) REFERENCES `submissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissionGroups_submissions3` FOREIGN KEY (`submissionUid`) REFERENCES `submissions` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissionGroups_clients1` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_submissionGroups_submissions3` FOREIGN KEY (`submissionUid`) REFERENCES `submissions` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -450,12 +450,12 @@ CREATE TABLE `submissions` (
   KEY `fk_submissions_employees2` (`employeeUid`),
   KEY `fk_submissions_events2` (`eventUid`),
   KEY `fk_submissions_clients2` (`clientUid`),
-  CONSTRAINT `fk_submissions_events1` FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissions_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissions_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissions_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissions_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissions_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissions_events2` FOREIGN KEY (`eventUid`) REFERENCES `events` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_submissions_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_submissions_events1` FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_submissions_events2` FOREIGN KEY (`eventUid`) REFERENCES `events` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -497,7 +497,7 @@ CREATE TABLE `templates` (
   CONSTRAINT `templates_ibfk_2` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `templates_ibfk_3` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `templates_ibfk_4` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -506,7 +506,7 @@ CREATE TABLE `templates` (
 
 LOCK TABLES `templates` WRITE;
 /*!40000 ALTER TABLE `templates` DISABLE KEYS */;
-INSERT INTO `templates` VALUES ('ccb2a09e-7bc8-448d-ab9c-2011004a72c6',1,'Maric','full','44cc27a5-af8b-412f-855a-57c8205d86f5','04ad5b05-c9a5-430f-8d5c-8483d5d904e4','2013-04-10 22:20:50','2013-04-10 22:20:53',NULL,1,2),('9e5a299b-eea3-46c6-a021-1fa404522e00',2,'dupertemplate','mini','05817084-bc15-4dee-90a1-2e0735a242e1','0054d814-6d36-4573-bbfc-a2b6644266cc','2013-04-10 22:22:13','2013-04-10 22:22:15',NULL,2,4),('7977ab52-cd42-4011-a4a2-6f16d3f73bae',3,'newtestobject','mini','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 04:08:54','2013-04-16 04:08:54',NULL,1,1);
+INSERT INTO `templates` VALUES ('ccb2a09e-7bc8-448d-ab9c-2011004a72c6',1,'thisischanged123','mini','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-10 22:20:50','2013-04-16 08:09:53','2013-04-16 08:09:53',1,1),('9e5a299b-eea3-46c6-a021-1fa404522e00',2,'dupertemplate','mini','05817084-bc15-4dee-90a1-2e0735a242e1','0054d814-6d36-4573-bbfc-a2b6644266cc','2013-04-10 22:22:13','2013-04-16 08:09:53','2013-04-16 08:09:53',2,4),('ee58b0a0-248e-4c88-b4de-5d9f7e6db937',3,'dogsandcats','full','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 01:41:33','2013-04-16 08:10:31','2013-04-16 08:10:31',1,1),('c6268022-fdc2-465d-98c3-8c6195fb9aa9',4,'mangolians','full','44cc27a5-af8b-412f-855a-57c8205d86f5','04ad5b05-c9a5-430f-8d5c-8483d5d904e4','2013-04-16 01:41:33','2013-04-16 01:41:33',NULL,1,2),('67ecce1e-5dfc-4bbf-92a5-4200a803086f',5,'newdogsandcats','full','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 07:16:33','2013-04-16 07:16:33',NULL,1,1),('806007f1-ef91-4d01-894c-79919f068660',6,'newdogsandcats','full','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 07:49:23','2013-04-16 07:49:23',NULL,1,1),('a6c85807-106b-4c64-8e65-acfa11586c49',7,'newdogsandcats','full','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 07:56:26','2013-04-16 07:56:26',NULL,1,1),('110757b7-ea2d-4d3d-9b5c-5ae06f87ef73',8,'newdogsandcats','full','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 07:58:39','2013-04-16 07:58:39',NULL,1,1),('f2244262-51d3-4486-8e25-26017fe5ab20',9,'newdogsandcats','full','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 07:59:30','2013-04-16 07:59:30',NULL,1,1),('1b9b632c-2c8f-4272-9f4c-775ea5d8c2f3',10,'clientadmincreated','full','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 07:59:56','2013-04-16 07:59:56',NULL,1,1),('64ead8a3-8a59-4278-a3b2-12592723133a',11,'clientadmincreated','full','44cc27a5-af8b-412f-855a-57c8205d86f5','45b7c719-2049-4a44-ad9c-09e858afc48b','2013-04-16 08:00:22','2013-04-16 08:00:22',NULL,1,1);
 /*!40000 ALTER TABLE `templates` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -519,4 +519,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-16  4:36:11
+-- Dump completed on 2013-04-20  7:52:42

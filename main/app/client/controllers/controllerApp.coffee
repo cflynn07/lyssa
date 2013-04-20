@@ -17,7 +17,7 @@ define [
         #$scope.action = current.$$route.action
 
       #temp
-      $scope.rootStatus = 'loading'
+      $scope.rootStatus = 'login'
       $scope.loadingStatus = 'Establishing Secure Connection...'
       socket.emit 'authenticate:status', {}, (data) ->
 
@@ -25,8 +25,6 @@ define [
           $scope.rootStatus = 'authenticated'
         else
           $scope.rootStatus = 'login'
-
-
 
       $scope.user =
         firstName: 'Casey1'

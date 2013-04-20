@@ -85,21 +85,10 @@ app.configure () ->
     app.use express.errorHandler()
 
 
-#TODO: Bust this out into a module
-app.io.route 'authenticate',
-  status: (req) ->
-    if req.session.user?
-      req.io.respond _.extend
-        authenticated: true,
-        req.session.user
-    else
-      req.io.respond
-        authenticated: false
 
+#Authentication module
+require('./controllers/authenticate')(app)
 
-
-  #authenticate:   authenticate
-  #unauthenticate:  unauthenticate
 
 #API Requests
 app.io.route 'apiRequest', (req) ->

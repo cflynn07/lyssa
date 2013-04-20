@@ -124,7 +124,7 @@ require [
   ControllerWidgetExerciseBuilder CS
   ControllerWidgetCoreLogin       CS
 
-  #$('body').removeClass 'login'
-  #$('body').addClass 'fixed-top breakpoint-1280'
+  $('body').removeClass 'login'
+  $('body').addClass 'fixed-top breakpoint-1280'
 
   angular.bootstrap document, ['CS']

@@ -13,11 +13,13 @@ define [
 
     Module.controller 'ControllerCoreWidgets', ($scope, $route) ->
 
+      console.log 'hi i controller'
+
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
-        console.log current
-        console.log current.redirectTo
+
         #if current && (current.redirectTo is not undefined)
         #  console.log '$routeChangeSuccess'
+        console.log 'p23'
         updateShit()
 
 
@@ -26,4 +28,11 @@ define [
           widget: 'viewWidgetBreadCrumbs'
         },{
           widget: 'viewWidgetExerciseBuilder'
+        },{
+          widget: 'viewWidgetExerciseBuilder'
+        },{
+          widget: 'viewWidgetExerciseBuilder'
+        },{
+          widget: 'viewWidgetExerciseBuilder'
         }]
+      updateShit()

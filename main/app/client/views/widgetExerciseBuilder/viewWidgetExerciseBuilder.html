@@ -1,6 +1,6 @@
 <div data-ng-class="{true: 'loaded', false: ''}[loaded]" data-ng-controller="ControllerWidgetExerciseBuilder" class="span12">
 
-  <div class="portlet box blue widget-themis" data-animate-in>
+  <div class="portlet box blue widget-themis-finish">
     <div class="portlet-title">
       <h4><i class="icon-cogs"></i>Exercise Builder</h4>
 
@@ -26,7 +26,7 @@
                 <li data-ng-repeat="exercise in exercises">
                   <a href class="tree-toggle closed">{{exercise.name}}</a>
                   <ul class="branch in">
-                    <li data-role="leaf" data-ng-repeat="revision in exercise.revisions">
+                    <li data-role="leaf" data-ng-repeat="revision in exercise.revisions" data-ng-click="revisionDetail(revision)" style="{{getStyle(revision.uid)}}">
                       <i class="halflings-icon sort-by-attributes"></i>
                       {{revision.createdAt | date:'short'}}
                     </li>

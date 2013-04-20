@@ -1,4 +1,8 @@
-define [], () ->
+define [
+  'jquery'
+], (
+  $
+) ->
 
   (Module) ->
 
@@ -15,8 +19,7 @@ define [], () ->
         num = 0
         $el = element
 
-
-        element.find('.loading-indicator').hide()#fadeOut('fast')
+        #element.find('.loading-indicator').hide()#fadeOut('fast')
 
         timer = setInterval(() ->
           max = 4
@@ -39,7 +42,7 @@ define [], () ->
             'box-shadow': num + 'px ' + num + 'px 0 0 rgba(0,0,0,0.35)'
             top: (4 - num) + 'px'
             left: (4 - num) + 'px'
-            opacity: init_opacity + ((1.0 - init_opacity) * (num / max))
+          #  opacity: init_opacity + ((1.0 - init_opacity) * (num / max))
 
         , 50)
 

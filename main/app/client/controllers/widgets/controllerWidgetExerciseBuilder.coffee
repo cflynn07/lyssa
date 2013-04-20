@@ -14,6 +14,19 @@ define [
 
     Module.controller 'ControllerWidgetExerciseBuilder', ($scope, $templateCache, socket) ->
 
+      $scope.activeRevision = ''
+      $scope.revisionDetail = (revision) ->
+        console.log revision
+        $scope.activeRevision = revision.uid
+
+      $scope.getStyle = (uid) ->
+        if uid == $scope.activeRevision
+          return 'font-weight:bold;'
+        return ''
+
+
+
+
       $scope.loaded = false
       $scope.collapsed = false
       $scope.reload = () ->

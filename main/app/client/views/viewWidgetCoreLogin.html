@@ -6,7 +6,7 @@
 <div class="logo"></div>
 
 
-<div class="content portlet box blue widget-themis-nofade">
+<div data-ng-controller="ControllerWidgetCoreLogin" class="content portlet box blue widget-themis-finish">
 
     <div class="portlet-title">
         <h4 style="color:#FFF;"><i class="icon-plus"></i>Themis v0.1</h4>
@@ -21,7 +21,7 @@
           <div class="controls">
             <div class="input-icon left">
               <i class="icon-user"></i>
-              <input class="m-wrap" type="text" name="email" placeholder="Email" />
+              <input class="m-wrap" type="text" placeholder="Username" data-ng-model="username" data-ng-disabled="submitting"/>
             </div>
           </div>
         </div>
@@ -29,7 +29,7 @@
           <div class="controls">
             <div class="input-icon left">
               <i class="icon-lock"></i>
-              <input class="m-wrap" type="password" name="password" style="" placeholder="Password" />
+              <input class="m-wrap" type="password" style="" placeholder="Password" data-ng-model="password" data-ng-disabled="submitting"/>
             </div>
           </div>
         </div>
@@ -37,24 +37,22 @@
         <div style="border:0; margin-bottom:0;">
 
           <div>
-            <button id="login_btn"    type="button" class="btn green pull-right">Login <i class="m-icon-swapright m-icon-white"></i></button>
-            <img  id="loading_img"  class="hidden pull-right" style="margin:2px 20px;" src="/assets/img/loaders/loader10.gif" />
+            <button type="button" class="btn green pull-right" data-ng-click="authenticate()" data-ng-hide="submitting" >Login <i class="m-icon-swapright m-icon-white"></i></button>
+            <img class="pull-right" style="margin:2px 20px;" src="/assets/img/loaders/loader10.gif" data-ng-show="submitting" />
           </div>
 
         </div>
 
 
-
         <div class="clearfix"></div>
 
 
-
-        <div style="display:none; margin-top:10px; margin-bottom:0;" class="alert alert-error">
-          <strong>Error!</strong><br/><span id="error_msg"></span>
+        <div data-ng-show="errorMessage" style="margin-top:10px; margin-bottom:0;" class="alert alert-error">
+          <strong>Error!</strong><br/><span>{{errorMessage}}</span>
         </div>
 
 
-        <div style="margin-top:10px;" class="forget-password">
+        <div data-ng-show="false" style="margin-top:10px;" class="forget-password">
           <h4>Forgot your password?</h4>
           <p>
             no worries, click <a href="javascript:;" class="" id="forget-password">here</a>
@@ -69,7 +67,7 @@
 
 
       <!-- BEGIN FORGOT PASSWORD FORM -->
-      <form class="form-vertical forget-form" action="index.html">
+      <form data-ng-show="false" class="form-vertical forget-form" action="index.html">
         <h3 class="">Forget Password?</h3>
         <p>Enter your e-mail address below to reset your password.</p>
         <div class="control-group">
