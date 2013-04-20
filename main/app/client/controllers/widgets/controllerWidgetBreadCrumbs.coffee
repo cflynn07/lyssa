@@ -11,6 +11,8 @@ define [
 
   ($scope, $templateCache) ->
 
+    console.log 'controller WidgetBreadCrumbs'
+
     $templateCache.put 'viewWidgetBreadCrumbs', viewWidgetBreadCrumbs
 
     $scope.title    = 'Test Title'

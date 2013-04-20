@@ -76,6 +76,13 @@ require [
   #Modules
   CS = angular.module 'CS', []
 
+  console.log CS
+
+  #Animations
+  CS.animation 'animate-enter', () ->
+    return {}
+
+
   #Routes
   CS.config ($routeProvider) ->
     $routeProvider.when('/home/:id', {

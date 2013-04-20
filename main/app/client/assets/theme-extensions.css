@@ -7,15 +7,22 @@
     Adding custom widget styles to theme for themis unique appearance & dynamic "fade-in and up" effect
     ---------------------------------------------------------------------------------------------------
 */
-.widget-themis {
-    position: relative;
+.widget-themis-setup {
+    -webkit-transition: 1s linear all;
+    -moz-transition: 1s linear all;
+    -o-transition: 1s linear all;
+    transition: 1s linear all; /* future proof */
+
+    position: absolute;
     top: 4px;
     left: 4px;
     opacity: 0.4;
 
 }
-.widget-themis-nofade{
-    position: relative;
+.widget-themis-setup.widget-themis-start {
+
+    position: absolute;
+    left: 0px;
     opacity: 1;
     border-top: 1px solid #4b8df8 !important;
     border-left: 1px solid lightgray !important;
