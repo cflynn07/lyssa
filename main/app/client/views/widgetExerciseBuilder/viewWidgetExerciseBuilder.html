@@ -1,33 +1,55 @@
-<div data-ng-controller="ControllerWidgetExerciseBuilder" class="span6">
+<div data-ng-controller="ControllerWidgetExerciseBuilder" class="span12">
 
-  <div class="portlet box red widget-themis" data-animate-in>
+  <div class="portlet box blue widget-themis" data-animate-in>
     <div class="portlet-title">
-      <h4><i class="icon-cogs"></i>Tooltips</h4>
+      <h4><i class="icon-cogs"></i>Exercise Builder</h4>
+
       <div class="tools">
-        <a href="javascript:;" class="collapse"></a>
-        <a href="#portlet-config" data-toggle="modal" class="config"></a>
-        <a href="javascript:;" class="reload"></a>
-        <a href="javascript:;" class="remove"></a>
+        <a href data-ng-click="toggle()" data-ng-class="{true: 'expand', false: 'collapse'}[collapsed]"></a>
+        <a href data-ng-click="reload()" class="reload"></a>
       </div>
+
     </div>
-    <div class="portlet-body">
-      <p>
-        Tight pants next level keffiyeh
-        <a href="#" class="tooltips" data-original-title="Default tooltip">you probably</a>
-        haven't heard of them.
-        Photo booth beard raw denim letterpress vegan messenger bag stumptown. Farm-to-table seitan, mcsweeney's fixie sustainable quinoa 8-bit american apparel
-        <a href="#" class="tooltips" data-original-title="Another tooltip">have a</a>
-        terry richardson vinyl chambray.
-        <a href="#" class="tooltips" title="" data-original-title="12">twitter handle</a>
-        freegan cred raw denim single-origin coffee viral.
-      </p>
-      <p>
-        <button class="btn tooltips" data-placement="top" data-original-title="Tooltip in top">Top</button>
-        <button class="btn tooltips" data-placement="left" data-original-title="Tooltip in left">Left</button>
-        <button class="btn tooltips" data-placement="right" data-original-title="Tooltip in right">Right</button>
-        <button class="btn tooltips" data-placement="bottom" data-original-title="Tooltip in bottom">Bottom</button>
-      </p>
+    <div data-ng-class="{true: 'hidden', false: ''}[collapsed]" class="portlet-body">
+
+
+      <div class="row-fluid">
+        <div class="span3 responsive span8">
+
+
+
+          <div class="portlet box blue">
+            <div class="portlet-title"><h4>Templates</h4></div>
+            <div class="portlet-body">
+
+              <ul class="tree">
+                <li data-ng-repeat="exercise in exercises">
+                  <a href class="tree-toggle closed">{{exercise.name}}</a>
+                  <ul class="branch in">
+                    <li data-role="leaf" data-ng-repeat="revision in exercise.revisions">
+                      <i class="halflings-icon sort-by-attributes"></i>
+                      {{revision.createdAt | date:'short'}}
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+
+
+
+
+        </div>
+        <div class="span9">
+
+          <div class="portlet box blue">
+            <div class="portlet-title"><h4>Revision</h4></div>
+            <div class="portlet-body"></div>
+          </div>
+
+      </div>
+
     </div>
   </div>
-
 </div>

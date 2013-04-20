@@ -14,7 +14,6 @@ module.exports = (req, res, callback) ->
       req.session.user =
         req.query
 
-
     ## Token or session based authentication?
     if !req.session.user?
       res.jsonAPIRespond config.errorResponse(401)
@@ -26,6 +25,16 @@ module.exports = (req, res, callback) ->
 
 
   else if req.requestType is 'socketio'
+
+    #TEMP FOR debugging
+    if (req.query and req.session)
+      req.session.user =
+        req.query
+
+    req.session = {}
+    req.session.user =
+      type: 'superAdmin'
+
     ## Session based authentication
     if !req.session.user?
       res.jsonAPIRespond config.errorResponse(401)

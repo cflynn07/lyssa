@@ -26,6 +26,7 @@ requirejs.config
     'datatables':           'vendor/jquery-dataTables'
     'datatables_bootstrap': 'vendor/DT_bootstrap'
     'jqueryDateFormat':     'vendor/jquery-dateFormat'
+    'bootstrap-tree':       'vendor/bootstrap-tree'
   hbs:
     disableI18n: true
     helperDirectory: 'views/helpers/'
@@ -49,16 +50,16 @@ requirejs.config
       deps:    ['jquery']
     datatables:
       deps:    ['jquery']
-
+    'bootstrap-tree':
+      deps:    ['jquery']
 
 
 require [
   'jquery'
   'bootstrap'
   'angular'
-
   'cs!directives/directiveAnimateIn'
-
+  'cs!services/serviceSocket'
   'cs!controllers/controllerApp'
   'cs!controllers/controllerCoreWidgets'
   'cs!controllers/controllerWidgetCoreLeftMenu'
@@ -71,6 +72,7 @@ require [
   bootstrap
   angular
   DirectiveAnimateIn
+  ServiceSocket
   ControllerApp
   ControllerCoreWidgets
   ControllerWidgetCoreLeftMenu
@@ -86,14 +88,25 @@ require [
   #Directives
   DirectiveAnimateIn CS
 
+  #Services
+  ServiceSocket CS
+
   #Routes
   CS.config ($routeProvider) ->
     $routeProvider
-      .when('/home/:id', {
-        action: 'standard.test'
-      }).when('/admin', {
-        action: 'standard.home'
-      }).otherwise({
+      .when('/menu1a', {
+        action: 'menu.1.a'
+      })
+      .when('/menu1b', {
+        action: 'menu.1.b'
+      })
+      .when('/menu2', {
+        action: 'menu.2'
+      })
+      .when('/menu3', {
+        action: 'menu.3'
+      })
+      .otherwise({
         redirectTo: '/'
       })
 
@@ -103,15 +116,5 @@ require [
   ControllerWidgetCoreHeader    CS
   ControllerWidgetBreadCrumbs     CS
   ControllerWidgetExerciseBuilder CS
-
-  #Controllers
-  #CS.controller 'ControllerApp',                ControllerApp
-  #CS.controller 'ControllerCoreWidgets',        ControllerCoreWidgets
-  #CS.controller 'ControllerWidgetCoreLeftMenu', ControllerWidgetCoreLeftMenu
-  #CS.controller 'ControllerWidgetCoreLogin',    ControllerWidgetCoreLogin
-  #CS.controller 'ControllerWidgetCoreHeader',   ControllerWidgetCoreHeader
-  #CS.controller 'ControllerWidgetBreadCrumbs',  ControllerWidgetBreadCrumbs
-
-
 
   angular.bootstrap document, ['CS']

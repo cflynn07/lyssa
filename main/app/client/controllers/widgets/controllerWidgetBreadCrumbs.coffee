@@ -10,7 +10,10 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewWidgetBreadCrumbs', viewWidgetBreadCrumbs
 
-    Module.controller 'ControllerWidgetBreadCrumbs', ($scope, $templateCache) ->
+    Module.controller 'ControllerWidgetBreadCrumbs', ($scope, $templateCache, socket) ->
+      $scope.title    = 'Themis'
+      $scope.subtitle = 'by Cobar Systems LLC'
 
-      $scope.title    = 'Test Title'
-      $scope.subtitle = 'Test Subtitle'
+      socket.apiRequest 'GET', '/templates?type=superAdmin', {expand: [{resource: 'revisions'}]}, {}, (response) ->
+        console.log 'AND THE RESPONSE IS!'
+        console.log response.response

@@ -13,6 +13,10 @@ define [
 
     Module.controller 'ControllerApp' , ($scope, $route) ->
 
+      $scope.$on '$routeChangeSuccess', (event, current, previous) ->
+        $scope.action = current.$$route.action
+
+
       #temp
       $scope.rootStatus = 'authenticated'
 

@@ -32,19 +32,17 @@ module.exports.socketio = (req, res, callback) ->
     method:   if req.data.method then req.data.method else 'get'
     url:      config.apiSubDir + (if req.data.url then req.data.url else '/')
     headers:  []
-    query:    if req.data.query then req.data.query else {}
+    query:    if !_.isUndefined(req.data.query) then req.data.query else {}
 
   _.extend req, httpEmulatedRequest
 
-
-  if req.query and req.query.expand
+  console.log req.query
+  if !_.isUndefined(req.query) and !_.isUndefined(req.query.expand)
     req.apiExpand = req.query.expand
-
 
   res.jsonAPIRespond = (json) ->
     if !json.code?
       json.code = defaultCode
     req.io.respond json
-
 
   callback(req, res)

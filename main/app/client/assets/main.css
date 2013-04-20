@@ -18,8 +18,6 @@ OLD CSS
 */
 
 
-
-
 /**
  *  v1.1.2
  */
@@ -39,6 +37,7 @@ OLD CSS
 @import url("data-tables/DT_bootstrap.css");
 @import url("jquery-file-upload/css/jquery.fileupload-ui.css");
 @import url("jquery-autocomplete/jquery-ui-1.10.2.custom.css");
+@import url("bootstrap-tree/bootstrap-tree/css/bootstrap-tree.css");
 @import url("css/style_light.css");
 
 

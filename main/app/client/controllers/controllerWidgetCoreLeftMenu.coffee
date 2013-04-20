@@ -16,11 +16,28 @@ define [
 
     Module.controller 'ControllerWidgetCoreLeftMenu', ($scope, $route, $templateCache) ->
 
-      $scope.test = 'footest'
+
+      $scope.menuChoices = [{
+        hash: 'menu1a'
+        title: 'Menu Option 1'
+        sub: [{
+          hash: 'menu1a'
+          title: 'Menu Option 1'
+        }]
+      },{
+        hash: 'menu2'
+        title: 'Menu Option 2'
+      },{
+        hash: 'menu3'
+        title: 'Menu Option 3'
+      }]
+
+
+      $scope.activeRoute = ''
 
       $scope.$on '$routeChangeSuccess', (scope, current, previous) ->
 
-
+        return
         console.log current
         hash = window.location.hash
 
