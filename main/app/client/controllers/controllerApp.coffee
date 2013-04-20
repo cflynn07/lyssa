@@ -11,14 +11,22 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewCore', viewCore
 
-    Module.controller 'ControllerApp' , ($scope, $route) ->
+    Module.controller 'ControllerApp' , ($scope, $route, socket) ->
 
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
-        $scope.action = current.$$route.action
-
+        #$scope.action = current.$$route.action
 
       #temp
-      $scope.rootStatus = 'authenticated'
+      $scope.rootStatus = 'loading'
+      $scope.loadingStatus = 'Establishing Secure Connection...'
+      socket.emit 'authenticate:status', {}, (data) ->
+
+        if data.authenticated
+          $scope.rootStatus = 'authenticated'
+        else
+          $scope.rootStatus = 'login'
+
+
 
       $scope.user =
         firstName: 'Casey1'

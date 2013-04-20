@@ -113,17 +113,18 @@ require [
         action: 'menu.3'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/menu1a'
       })
 
-  ControllerApp                 CS
-  ControllerCoreWidgets         CS
-  ControllerWidgetCoreLeftMenu  CS
-  ControllerWidgetCoreHeader    CS
+  ControllerApp                   CS
+  ControllerCoreWidgets           CS
+  ControllerWidgetCoreLeftMenu    CS
+  ControllerWidgetCoreHeader      CS
   ControllerWidgetBreadCrumbs     CS
   ControllerWidgetExerciseBuilder CS
+  ControllerWidgetCoreLogin       CS
 
-  $('body').removeClass 'login'
-  $('body').addClass 'fixed-top breakpoint-1280'
+  #$('body').removeClass 'login'
+  #$('body').addClass 'fixed-top breakpoint-1280'
 
   angular.bootstrap document, ['CS']

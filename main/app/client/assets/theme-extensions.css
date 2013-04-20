@@ -37,6 +37,10 @@
     margin: 20px auto 0 auto;
 }
 
+.loaded .loading-indicator {
+    display: none;
+}
+
 .widget-themis-finish {
 
     position: relative;

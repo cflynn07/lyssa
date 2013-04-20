@@ -6,7 +6,10 @@ define [
   angular
   viewWidgetCoreLogin
 ) ->
+  (Module) ->
 
-  ($scope, $templateCache) ->
+    Module.run ($templateCache) ->
+      $templateCache.put 'viewWidgetCoreLogin', viewWidgetCoreLogin
 
-    $templateCache.put 'viewWidgetCoreLogin', viewWidgetCoreLogin
+    Module.controller 'ControllerWidgetCoreLogin', ($scope, $templateCache) ->
+

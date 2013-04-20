@@ -13,9 +13,13 @@ define [
       factory =
         on: (eventName, callback) ->
 
-        emit: (eventName, callback) ->
+        emit: (eventName, data, callback) ->
+          socket.emit eventName, data, () ->
+            args = arguments
+            $rootScope.$apply () ->
+              callback.apply socket, args
 
-        apiRequest: (method, url, query, data, response) ->
+        apiRequest: (method, url, query, data, callback) ->
           url = '/' + apiVersion + url
 
           socket.emit 'apiRequest', {
@@ -23,4 +27,7 @@ define [
               url:    url
               data:   data
               query:  query
-            }, response
+            }, () ->
+              args = arguments
+              $rootScope.$apply () ->
+                callback.apply socket, args
