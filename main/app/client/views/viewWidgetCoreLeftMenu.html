@@ -1,43 +1,19 @@
 <!-- BEGIN SIDEBAR MENU -->
-<ul id="sidebar_top">
+<ul>
 
-
-  <li class="has-sub active">
-    <a href="#/menu1a" class="">
-
-      <i class="icon-bookmark-empty"></i>
-      <span class="title">Menu Option 1</span>
+  <li data-ng-class="getClass(choice.hash, true)" data-ng-repeat="choice in menuChoices" data-animate-route-change>
+    <a data-ng-href="#/{{choice.hash}}">
+      <i class="icon-home"></i>
+      <span class="title">{{choice.title}}</span>
       <span class="arrow"></span>
       <span class="selected"></span>
-
     </a>
-    <ul class="sub">
-      <li class="active"><a class="" href="#/menu1a">Sub Menu Option 1</a></li>
-      <li><a class="" href="#/menu1b">Sub Menu Option 2</a></li>
+
+    <ul data-ng-show="choice.sub" class="sub">
+      <li data-ng-class="getClass(subChoice.hash, false)" data-ng-repeat="subChoice in choice.sub">
+        <a data-ng-href="#/{{subChoice.hash}}">{{subChoice.title}}</a>
+      </li>
     </ul>
-  </li>
-
-
-  <li>
-    <a href="#/menu2">
-
-      <i class="icon-home"></i>
-      <span class="title">Menu Option 2</span>
-      <span class="arrow"></span>
-      <span class="selected"></span>
-
-    </a>
-  </li>
-
-  <li>
-    <a href="#/menu3">
-
-      <i class="icon-home"></i>
-      <span class="title">Menu Option 3</span>
-      <span class="arrow"></span>
-      <span class="selected"></span>
-
-    </a>
   </li>
 
   <li>

@@ -59,6 +59,7 @@ require [
   'bootstrap'
   'angular'
   'cs!directives/directiveAnimateIn'
+  'cs!directives/directiveAnimateRouteChange'
   'cs!services/serviceSocket'
   'cs!controllers/controllerApp'
   'cs!controllers/controllerCoreWidgets'
@@ -68,10 +69,11 @@ require [
   'cs!controllers/widgets/controllerWidgetBreadCrumbs'
   'cs!controllers/widgets/ControllerWidgetExerciseBuilder'
 ], (
-  jquery
+  $
   bootstrap
   angular
   DirectiveAnimateIn
+  DirectiveAnimateRouteChange
   ServiceSocket
   ControllerApp
   ControllerCoreWidgets
@@ -86,7 +88,8 @@ require [
   CS = angular.module 'CS', []
 
   #Directives
-  DirectiveAnimateIn CS
+  DirectiveAnimateIn          CS
+  DirectiveAnimateRouteChange CS
 
   #Services
   ServiceSocket CS
@@ -96,6 +99,9 @@ require [
     $routeProvider
       .when('/menu1a', {
         action: 'menu.1.a'
+      })
+      .when('/menu1a/sub1', {
+        action: 'menu.1.SUB'
       })
       .when('/menu1b', {
         action: 'menu.1.b'
@@ -116,5 +122,8 @@ require [
   ControllerWidgetCoreHeader    CS
   ControllerWidgetBreadCrumbs     CS
   ControllerWidgetExerciseBuilder CS
+
+  $('body').removeClass 'login'
+  $('body').addClass 'fixed-top breakpoint-1280'
 
   angular.bootstrap document, ['CS']

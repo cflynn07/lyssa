@@ -1,9 +1,11 @@
 define [
   'jquery'
+  'underscore'
   'angular'
   'text!views/viewWidgetCoreLeftMenu.html'
 ], (
   $
+  _
   angular
   viewWidgetCoreLeftMenu
 ) ->
@@ -23,6 +25,9 @@ define [
         sub: [{
           hash: 'menu1a'
           title: 'Menu Option 1'
+        },{
+          hash: 'menu1a/sub1'
+          title: 'Menu Option 1sub'
         }]
       },{
         hash: 'menu2'
@@ -33,32 +38,25 @@ define [
       }]
 
 
-      $scope.activeRoute = ''
+      $scope.activeRoute = window.location.hash
+      $scope.getClass    = (hash, isTop) ->
+        hash      = '#/' + hash
+        className = ''
+        if isTop
+          if $scope.activeRoute.indexOf(hash) == 0
+            className = 'active'
+
+        else
+          if $scope.activeRoute == hash
+            className = 'active'
+        return className
+
 
       $scope.$on '$routeChangeSuccess', (scope, current, previous) ->
-
-        return
-        console.log current
-        hash = window.location.hash
+        $scope.activeRoute = window.location.hash
 
 
 
-        $('.active').removeClass 'active'
-        $('.open').removeClass('open')
 
-        #First check if it's a sub menu
-        $el = $('ul.sub a[href="' + hash + '"]')
-        if $el.length > 0
-          $el.parents('li').addClass 'active'
-          $el = $el.parents('ul.sub')
 
-          $el.parents('li.has-sub').addClass 'active'
-          $el.parents('li.has-sub').find('span.arrow').addClass 'open'
 
-          if !$el.is(':visible')
-            $('ul.sub').hide()
-            $el.slideDown 200
-        else
-          $el = $('#sidebar_top > li > a[href="' + hash + '"]')
-          $el.parent().addClass 'active'
-          $('ul.sub:visible').hide()
