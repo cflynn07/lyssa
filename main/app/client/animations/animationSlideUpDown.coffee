@@ -16,7 +16,7 @@ define [
           done()
 
     Module.animation 'slide-down', ($rootScope) ->
-      console.log 'animationInit'
+      #console.log 'animationInit'
       animation =
         setup: (element) ->
           console.log 'startrun'

@@ -11,11 +11,11 @@
 
             <ul class="tree">
               <li data-ng-repeat="template in templates">
-                <a href class="tree-toggle closed">{{template.name}}</a>
+                <a data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{template.revisions[template.revisions.length - 1].uid}}" class="tree-toggle closed">{{template.name}}</a>
                 <ul class="branch in">
-                  <li data-role="leaf" data-ng-repeat="revision in template.revisions" data-ng-click="setActive(template, revision)" style="{{getStyle(revision.uid)}}">
+                  <li data-role="leaf" data-ng-repeat="revision in template.revisions">
 
-                    <a data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
+                    <a data-ng-class="{true:'bold'}[template.uid == templateId]" data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
                       <i class="halflings-icon sort-by-attributes"></i>
                       {{revision.createdAt | date:'short'}}<br>- {{revision.employee.firstName + ' ' + revision.employee.lastName}}
                     </a>
@@ -32,10 +32,23 @@
         <div class="span9">
 
           <div data-collapse-widget data-title="Template" data-widget-themis="false" data-color="grey">
-            {{templateId}}
+            {{currentTemplate.name}}<br>
+            {{currentTemplateFirstRevision.createdAt}}<br>
+            {{currentTemplateFirstRevision.employee.firstName + ' ' + currentTemplateFirstRevision.employee.lastName}}
           </div>
           <div data-collapse-widget data-title="Revision" data-widget-themis="false" data-color="grey">
-            {{revisionId}}
+            Change Summary: {{currentRevision.changeSummary}}
+
+
+            <ul ui-sortable data-ng-model="currentTemplate.groups">
+              <li data-ng-repeat="group in currentTemplate.groups">
+                <h3>{{group.name}}</h3>
+                <ul style="min-height:10px;" class="children" data-ui-sortable="{connectWith:'.children'}" data-ng-model="group.fields">
+                  <li data-ng-repeat="field in group.fields">{{field.uid}}</li>
+                </ul>
+              </li>
+            </ul>
+
           </div>
 
         </div>

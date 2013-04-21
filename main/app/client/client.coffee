@@ -8,6 +8,7 @@ requirejs.config
   baseUrl: '/'
   paths:
     'angular':              'vendor/angular'
+    'angular-ui':           'vendor/angular-ui'
     'text':                 'vendor/text'
     'coffee-script':        'vendor/coffee-script'
     'cs':                   'vendor/cs'
@@ -19,6 +20,7 @@ requirejs.config
     'underscore':           'vendor/underscore'
     'backbone':             'vendor/backbone'
     'jquery':               'vendor/jquery'
+    'jquery-ui':            'vendor/jquery-ui'
     'bootstrap':            'vendor/bootstrap'
     'bootstrapFileUpload':  'vendor/bootstrap-fileupload'
     'jqueryUniform':        'vendor/jquery.uniform'
@@ -34,6 +36,10 @@ requirejs.config
     templateExtension: 'html'
   shim:
     angular:
+      deps: ['jquery-ui']
+      exports: 'angular'
+    'angular-ui':
+      deps:    ['angular', 'jquery', 'jquery-ui']
       exports: 'angular'
     underscore:
       exports: '_'
@@ -43,6 +49,8 @@ requirejs.config
       deps:    ['coffee-script']
     jquery:
       exports: '$'
+    'jquery-ui':
+      deps:    ['jquery']
     jqueryBrowser:
       deps:    ['jquery']
     jqueryUniform:
@@ -58,8 +66,10 @@ requirejs.config
 
 require [
   'jquery'
+  'jquery-ui'
   'bootstrap'
   'angular'
+  'angular-ui'
   'cs!animations/animationSlideUpDown'
   'cs!directives/directiveAnimateIn'
   'cs!directives/directiveCollapseWidget'
@@ -76,8 +86,10 @@ require [
   'cs!controllers/widgets/ControllerWidgetExerciseBuilder'
 ], (
   $
+  jqueryUi
   bootstrap
   angular
+  angularUi
   AnimationSlideUpDown
   DirectiveAnimateIn
   DirectiveCollapseWidget
@@ -95,7 +107,7 @@ require [
 ) ->
 
   #Modules
-  CS = angular.module 'CS', []
+  CS = angular.module 'CS', ['ui']
 
   #Animations
   AnimationSlideUpDown CS

@@ -43,7 +43,7 @@
 
 .widget-themis-finish {
 
-    position: relative;
+    //position: relative;
     opacity: 1;
     //border-top: 1px solid #4b8df8 !important;
     border-left: 1px solid lightgray !important;
@@ -123,4 +123,8 @@ div.header span.username {
 */
 .page-content {
     padding-bottom: 40px;
+}
+
+.bold {
+    font-weight: 700;
 }

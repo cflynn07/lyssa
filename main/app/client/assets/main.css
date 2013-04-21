@@ -38,6 +38,8 @@ OLD CSS
 @import url("jquery-file-upload/css/jquery.fileupload-ui.css");
 @import url("jquery-autocomplete/jquery-ui-1.10.2.custom.css");
 @import url("bootstrap-tree/bootstrap-tree/css/bootstrap-tree.css");
+@import url("angular-ui/angular-ui.css");
+@import url("jquery-ui/jquery.ui.all.css");
 @import url("css/style_light.css");
 
 
