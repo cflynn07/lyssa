@@ -15,7 +15,7 @@
                 <ul class="branch in">
                   <li data-role="leaf" data-ng-repeat="revision in template.revisions">
 
-                    <a data-ng-class="{true:'bold'}[template.uid == templateId]" data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
+                    <a data-ng-class="{true:'bold'}[revision.uid == revisionId]" data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
                       <i class="halflings-icon sort-by-attributes"></i>
                       {{revision.createdAt | date:'short'}}<br>- {{revision.employee.firstName + ' ' + revision.employee.lastName}}
                     </a>

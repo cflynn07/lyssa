@@ -127,6 +127,7 @@ module.exports = (app) ->
 
                 'clientUid': (val, objectKey, object, callback) ->
 
+                  #TODO: Verify legit client
                   callback null,
                     success: true
                   return
