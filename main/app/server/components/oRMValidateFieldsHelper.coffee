@@ -39,4 +39,13 @@ module.exports = (postObjects, resourceModel) ->
               errorObj[propertyName] = 'length must be between ' + testAttribute.validate.len[0] + ' and ' + testAttribute.validate.len[1]
               objectValidationErrors.push errorObj
 
+          #integer
+          if testAttribute.type and (testAttribute.type is 'INTEGER')
+            if ! /^\d+$/.test(propertyValue + '')
+              #ERROR, non-allowed value
+              errorObj = {}
+              errorObj[propertyName] = 'invalid value'
+              objectValidationErrors.push errorObj
+
+
   return objectValidationErrors
