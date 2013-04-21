@@ -128,3 +128,12 @@ div.header span.username {
 .bold {
     font-weight: 700;
 }
+
+
+/*
+    Make certain items flow inline within contents
+    ----------------------------------------------
+*/
+.inline-content *{
+    display: inline-block;
+}

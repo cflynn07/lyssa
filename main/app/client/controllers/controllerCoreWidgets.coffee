@@ -13,14 +13,13 @@ define [
 
     Module.controller 'ControllerCoreWidgets', ($scope, $route) ->
 
-      once = false
+      #once = false
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
 
         #if current && (current.redirectTo is not undefined)
         #  console.log '$routeChangeSuccess'
-        if !once
-          once = true
-          updateShit()
+
+        #updateShit()
 
 
       updateShit = () ->

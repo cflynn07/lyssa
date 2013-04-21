@@ -4,6 +4,11 @@
   <div data-collapse-widget data-title="Exercise Builder" data-widget-themis="true" data-color="blue">
 
     <div class="row-fluid">
+
+
+
+
+
         <div class="span3 responsive span8">
           <div data-collapse-widget data-title="Templates" data-widget-themis="false" data-color="grey">
 
@@ -17,7 +22,7 @@
 
                     <a data-ng-class="{true:'bold'}[template.uid == templateId]" data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
                       <i class="halflings-icon sort-by-attributes"></i>
-                      {{revision.createdAt | date:'short'}}<br>- {{revision.employee.firstName + ' ' + revision.employee.lastName}}
+                      {{$index+1}} - {{revision.createdAt | date:'shortDate'}}<br>
                     </a>
 
                   </li>
@@ -29,14 +34,74 @@
 
           </div>
         </div>
+
+
+
+
+
         <div class="span9">
 
-          <div data-collapse-widget data-title="Template" data-widget-themis="false" data-color="grey">
-            {{currentTemplate.name}}<br>
-            {{currentTemplateFirstRevision.createdAt}}<br>
-            {{currentTemplateFirstRevision.employee.firstName + ' ' + currentTemplateFirstRevision.employee.lastName}}
+
+
+
+
+          <div data-collapse-widget data-title="Template Editor" data-widget-themis="false" data-color="grey">
+            <div class="alert alert-block alert-success fade in">
+
+
+
+              <div class="row-fluid">
+
+
+                <div class="span6">
+                  <h2 style="margin-top:0px;" class="alert-heading">{{currentTemplate.name}}</h2>
+                  <div class="inline-content">
+                    <h4>15 revisions</h4>
+                  </div>
+                </div>
+
+
+                <div style="text-align:right;" class="span6">
+
+                  <label>Created At</lable>
+                  <h4>{{currentTemplateFirstRevision.createdAt | date:'short'}}</h4>
+                  <br>
+                  <label>Created By</lable>
+                  <h4>{{currentTemplateFirstRevision.employee.firstName + ' ' + currentTemplateFirstRevision.employee.lastName}}</h4>
+
+                </div>
+
+
+              </div>
+
+            </div>
+
+
+
+            <div class="alert alert-block alert-info fade in">
+
+              <label>TEMPLATE NAME:</label> {{currentTemplate.name}}<br>
+              TEMPLATE CREATED AT: {{currentTemplateFirstRevision.createdAt}}<br>
+              TEMPLATE CREATED BY: {{currentTemplateFirstRevision.employee.firstName + ' ' + currentTemplateFirstRevision.employee.lastName}}
+
+              <br><br>
+              <p class="">
+                <a class="btn red" href="#">Discard</a> <a class="btn green" href="#">Save</a>
+              </p>
+
+
+            </div>
+
+
           </div>
-          <div data-collapse-widget data-title="Revision" data-widget-themis="false" data-color="grey">
+
+
+
+
+
+
+
+          <div data-ng-show="false" data-collapse-widget data-title="Revision" data-widget-themis="false" data-color="grey">
             Change Summary: {{currentRevision.changeSummary}}
 
 
@@ -50,6 +115,11 @@
             </ul>
 
           </div>
+
+
+
+
+
 
         </div>
     </div>
