@@ -1,68 +1,46 @@
-<div data-ng-class="{true: 'loaded', false: ''}[loaded]" data-ng-controller="ControllerWidgetExerciseBuilder" class="span12">
-
-  <div class="portlet box blue widget-themis-finish">
-    <div class="portlet-title">
-      <h4><i class="icon-cogs"></i>Exercise Builder</h4>
-
-      <div class="tools">
-        <a href data-ng-click="toggle()" data-ng-class="{true: 'expand', false: 'collapse'}[collapsed]"></a>
-        <a href data-ng-click="reload()" class="reload"></a>
-      </div>
-
-    </div>
-    <div data-ng-class="{true: 'hidden', false: ''}[collapsed]" class="portlet-body">
+<div data-ng-controller="ControllerWidgetExerciseBuilder" class="span12">
 
 
-      <div class="row-fluid">
+  <div data-collapse-widget data-title="Exercise Builder" data-widget-themis="true" data-color="blue">
+
+    <div class="row-fluid">
         <div class="span3 responsive span8">
+          <div data-collapse-widget data-title="Templates" data-widget-themis="false" data-color="grey">
 
 
 
-          <div class="portlet box grey">
-            <div class="portlet-title"><h4>Templates</h4></div>
-            <div class="portlet-body">
+            <ul class="tree">
+              <li data-ng-repeat="template in templates">
+                <a href class="tree-toggle closed">{{template.name}}</a>
+                <ul class="branch in">
+                  <li data-role="leaf" data-ng-repeat="revision in template.revisions" data-ng-click="setActive(template, revision)" style="{{getStyle(revision.uid)}}">
 
-              <ul class="tree">
-                <li data-ng-repeat="template in templates">
-                  <a href class="tree-toggle closed">{{template.name}}</a>
-                  <ul class="branch in">
-                    <li data-role="leaf" data-ng-repeat="revision in template.revisions" data-ng-click="setActive(template, revision)" style="{{getStyle(revision.uid)}}">
+                    <a data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
+                      <i class="halflings-icon sort-by-attributes"></i>
+                      {{revision.createdAt | date:'short'}}<br>- {{revision.employee.firstName + ' ' + revision.employee.lastName}}
+                    </a>
 
-                      <a data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
-                        <i class="halflings-icon sort-by-attributes"></i>
-                        {{revision.createdAt | date:'short'}}<br>- {{revision.employee.firstName + ' ' + revision.employee.lastName}}
-                      </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
 
-                    </li>
-                  </ul>
-                </li>
-              </ul>
 
-            </div>
+
           </div>
-
-
-
-
         </div>
         <div class="span9">
 
-          <div class="portlet box grey">
-            <div class="portlet-title"><h4>Template</h4></div>
-            <div class="portlet-body">
-              {{templateId}}
-            </div>
+          <div data-collapse-widget data-title="Template" data-widget-themis="false" data-color="grey">
+            {{templateId}}
+          </div>
+          <div data-collapse-widget data-title="Revision" data-widget-themis="false" data-color="grey">
+            {{revisionId}}
           </div>
 
-          <div class="portlet box grey">
-            <div class="portlet-title"><h4>Revision</h4></div>
-            <div class="portlet-body">
-              {{revisionId}}
-            </div>
-          </div>
-
-      </div>
-
+        </div>
     </div>
+
   </div>
+
 </div>

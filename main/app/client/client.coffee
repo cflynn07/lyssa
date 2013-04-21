@@ -62,6 +62,7 @@ require [
   'angular'
   'cs!animations/animationSlideUpDown'
   'cs!directives/directiveAnimateIn'
+  'cs!directives/directiveCollapseWidget'
   'cs!directives/directiveAnimateRouteChange'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
@@ -77,10 +78,9 @@ require [
   $
   bootstrap
   angular
-
   AnimationSlideUpDown
-
   DirectiveAnimateIn
+  DirectiveCollapseWidget
   DirectiveAnimateRouteChange
   ServiceSocket
   ServicePubSub
@@ -101,6 +101,7 @@ require [
   AnimationSlideUpDown CS
 
   #Directives
+  DirectiveCollapseWidget     CS
   DirectiveAnimateIn          CS
   DirectiveAnimateRouteChange CS
 

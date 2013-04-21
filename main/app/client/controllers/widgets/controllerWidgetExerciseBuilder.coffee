@@ -14,8 +14,9 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewWidgetExerciseBuilder', viewWidgetExerciseBuilder
 
-    Module.controller 'ControllerWidgetExerciseBuilder', ($scope, $routeParams, $templateCache, socket) ->
 
+
+    Module.controller 'ControllerWidgetExerciseBuilder', ($scope, $routeParams, $templateCache, socket) ->
 
       $scope.loaded = false
       $scope.collapsed = false
