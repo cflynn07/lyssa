@@ -23,12 +23,16 @@
             <div class="portlet-body">
 
               <ul class="tree">
-                <li data-ng-repeat="exercise in exercises">
-                  <a href class="tree-toggle closed">{{exercise.name}}</a>
+                <li data-ng-repeat="template in templates">
+                  <a href class="tree-toggle closed">{{template.name}}</a>
                   <ul class="branch in">
-                    <li data-role="leaf" data-ng-repeat="revision in exercise.revisions" data-ng-click="revisionDetail(revision)" style="{{getStyle(revision.uid)}}">
-                      <i class="halflings-icon sort-by-attributes"></i>
-                      {{revision.createdAt | date:'short'}}
+                    <li data-role="leaf" data-ng-repeat="revision in template.revisions" data-ng-click="setActive(template, revision)" style="{{getStyle(revision.uid)}}">
+
+                      <a data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
+                        <i class="halflings-icon sort-by-attributes"></i>
+                        {{revision.createdAt | date:'short'}}<br>- {{revision.employee.firstName + ' ' + revision.employee.lastName}}
+                      </a>
+
                     </li>
                   </ul>
                 </li>
@@ -44,8 +48,17 @@
         <div class="span9">
 
           <div class="portlet box grey">
+            <div class="portlet-title"><h4>Template</h4></div>
+            <div class="portlet-body">
+              {{templateId}}
+            </div>
+          </div>
+
+          <div class="portlet box grey">
             <div class="portlet-title"><h4>Revision</h4></div>
-            <div class="portlet-body"></div>
+            <div class="portlet-body">
+              {{revisionId}}
+            </div>
           </div>
 
       </div>

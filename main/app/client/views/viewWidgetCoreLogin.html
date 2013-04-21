@@ -15,7 +15,10 @@
 
 
 
-      <form id="login_form" class="form-vertical login-form" action="">
+      <form class="form-vertical login-form" action="" data-ng-submit="authenticate()">
+
+        <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+
         <h3 class="form-title">Sign In</h3>
         <div class="control-group">
           <div class="controls">
@@ -47,7 +50,7 @@
         <div class="clearfix"></div>
 
 
-        <div data-ng-show="errorMessage" style="margin-top:10px; margin-bottom:0;" class="alert alert-error">
+        <div style="margin-top:10px; margin-bottom:0;" class="alert alert-error" data-ng-show="errorMessage" data-ng-animate="{enter: 'slide-down'}">
           <strong>Error!</strong><br/><span>{{errorMessage}}</span>
         </div>
 

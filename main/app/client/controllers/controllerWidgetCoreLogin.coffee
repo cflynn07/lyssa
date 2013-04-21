@@ -10,9 +10,7 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewWidgetCoreLogin', viewWidgetCoreLogin
 
-    Module.controller 'ControllerWidgetCoreLogin', ($scope, $templateCache, socket) ->
-      console.log 'p1'
-
+    Module.controller 'ControllerWidgetCoreLogin', ($scope, $templateCache, socket, authenticate) ->
 
       $scope.errorMessage = ''
       $scope.submitting   = false
@@ -29,4 +27,7 @@ define [
           $scope.submitting = true
           socket.emit 'authenticate:authenticate', {username: $scope.username, password: $scope.password}, (response) ->
             $scope.submitting = false
-            console.log response
+            if response.success and response.user
+              authenticate.authenticate response.user
+            else
+              $scope.errorMessage = 'Incorrect username or password'

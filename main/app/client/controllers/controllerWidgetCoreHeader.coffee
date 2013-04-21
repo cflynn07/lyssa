@@ -10,4 +10,7 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewWidgetCoreHeader', viewWidgetCoreHeader
 
-    Module.controller 'ControllerWidgetCoreHeader', ($scope, $templateCache) ->
+    Module.controller 'ControllerWidgetCoreHeader', ($scope, authenticate) ->
+      console.log $scope.rootUser
+      $scope.logout = () ->
+        authenticate.unauthenticate()

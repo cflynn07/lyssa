@@ -1,7 +1,9 @@
 define [
+  'jquery'
   'angular'
   'text!views/viewCore.html'
 ], (
+  $
   angular
   viewCore
 ) ->
@@ -11,24 +13,18 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewCore', viewCore
 
-    Module.controller 'ControllerApp' , ($scope, $route, socket) ->
+    Module.controller 'ControllerApp' , ($rootScope, $route, socket, authenticate) ->
 
-      $scope.$on '$routeChangeSuccess', (event, current, previous) ->
-        #$scope.action = current.$$route.action
+      #quick hack
+      $('body').removeClass 'login'
 
       #temp
-      $scope.rootStatus = 'login'
-      $scope.loadingStatus = 'Establishing Secure Connection...'
-      socket.emit 'authenticate:status', {}, (data) ->
+      $rootScope.rootStatus    = 'loading'
+      $rootScope.loadingStatus = 'Establishing Secure Connection...'
 
-        if data.authenticated
-          $scope.rootStatus = 'authenticated'
+      socket.emit 'authenticate:status', {}, (response) ->
+
+        if response.authenticated and response.user
+          authenticate.authenticate response.user
         else
-          $scope.rootStatus = 'login'
-
-      $scope.user =
-        firstName: 'Casey1'
-        lastName: 'Flynn2'
-
-      $scope.$on 'changeIt', (e, data) ->
-        $scope.rootStatus = data
+          authenticate.unauthenticate()

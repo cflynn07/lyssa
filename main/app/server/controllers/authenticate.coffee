@@ -14,7 +14,7 @@ module.exports = (app) ->
     if req.session.user?
       req.io.respond _.extend
         authenticated: true,
-        req.session.user
+        user: req.session.user
     else
       req.io.respond
         authenticated: false
@@ -44,9 +44,9 @@ module.exports = (app) ->
             #Dont send hashed password
           #  delete user.password
 
-            client = user.client.selectedValues
-            user   = user.selectedValues
-            user.client = client
+            respClient  = user.client.selectedValues
+            user        = user.selectedValues
+            user.client = respClient
 
             #user.client = user.client.selectedValues
             delete user.password

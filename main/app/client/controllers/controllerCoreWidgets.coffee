@@ -13,25 +13,17 @@ define [
 
     Module.controller 'ControllerCoreWidgets', ($scope, $route) ->
 
-      console.log 'hi i controller'
 
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
 
         #if current && (current.redirectTo is not undefined)
         #  console.log '$routeChangeSuccess'
-        console.log 'p23'
         updateShit()
 
 
       updateShit = () ->
         $scope.widgetRows = [{
           widget: 'viewWidgetBreadCrumbs'
-        },{
-          widget: 'viewWidgetExerciseBuilder'
-        },{
-          widget: 'viewWidgetExerciseBuilder'
-        },{
-          widget: 'viewWidgetExerciseBuilder'
         },{
           widget: 'viewWidgetExerciseBuilder'
         }]

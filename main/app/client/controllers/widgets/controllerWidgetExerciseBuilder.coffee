@@ -1,9 +1,11 @@
 define [
   'angular'
+  'underscore'
   #'bootstrap-tree'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilder.html'
 ], (
   angular
+  _
   #bootstrapTree
   viewWidgetExerciseBuilder
 ) ->
@@ -12,12 +14,28 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewWidgetExerciseBuilder', viewWidgetExerciseBuilder
 
-    Module.controller 'ControllerWidgetExerciseBuilder', ($scope, $templateCache, socket) ->
+    Module.controller 'ControllerWidgetExerciseBuilder', ($scope, $routeParams, $templateCache, socket) ->
 
-      $scope.activeRevision = ''
-      $scope.revisionDetail = (revision) ->
-        console.log revision
-        $scope.activeRevision = revision.uid
+
+      $scope.loaded = false
+      $scope.collapsed = false
+      $scope.reload = () ->
+      $scope.toggle = () ->
+        $scope.collapsed = !$scope.collapsed
+
+      $scope.viewRoot = 'templates'
+
+
+
+      console.log $routeParams
+      $scope = _.extend $scope, $routeParams
+
+
+      $scope.activeRevision = false
+      $scope.activeTemplate = false
+      $scope.setActive = (template, revision) ->
+        $scope.activeRevision = revision
+        $scope.activeTemplate = template
 
       $scope.getStyle = (uid) ->
         if uid == $scope.activeRevision
@@ -27,17 +45,10 @@ define [
 
 
 
-      $scope.loaded = false
-      $scope.collapsed = false
-      $scope.reload = () ->
-      $scope.toggle = () ->
-        $scope.collapsed = !$scope.collapsed
-
-      $scope.exercises = []
-      socket.apiRequest 'GET', '/templates?type=superAdmin', {expand: [{resource: 'revisions'}]}, {}, (response) ->
-        console.log 'AND THE RESPONSE IS!'
+      $scope.templates = []
+      socket.apiRequest 'GET', '/templates?type=superAdmin', {expand: [{resource: 'revisions', expand:[{resource: 'employee'}]}]}, {}, (response) ->
         console.log response.response
-        $scope.exercises = response.response
+        $scope.templates = response.response
         #$scope.loaded = true
 
 

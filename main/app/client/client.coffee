@@ -27,6 +27,7 @@ requirejs.config
     'datatables_bootstrap': 'vendor/DT_bootstrap'
     'jqueryDateFormat':     'vendor/jquery-dateFormat'
     'bootstrap-tree':       'vendor/bootstrap-tree'
+    'pubsub':               'vendor/pubsub'
   hbs:
     disableI18n: true
     helperDirectory: 'views/helpers/'
@@ -52,15 +53,19 @@ requirejs.config
       deps:    ['jquery']
     'bootstrap-tree':
       deps:    ['jquery']
-
+    pubsub:
+      exports: 'pubsub'
 
 require [
   'jquery'
   'bootstrap'
   'angular'
+  'cs!animations/animationSlideUpDown'
   'cs!directives/directiveAnimateIn'
   'cs!directives/directiveAnimateRouteChange'
   'cs!services/serviceSocket'
+  'cs!services/servicePubSub'
+  'cs!services/serviceAuthenticate'
   'cs!controllers/controllerApp'
   'cs!controllers/controllerCoreWidgets'
   'cs!controllers/controllerWidgetCoreLeftMenu'
@@ -72,9 +77,14 @@ require [
   $
   bootstrap
   angular
+
+  AnimationSlideUpDown
+
   DirectiveAnimateIn
   DirectiveAnimateRouteChange
   ServiceSocket
+  ServicePubSub
+  ServiceAuthenticate
   ControllerApp
   ControllerCoreWidgets
   ControllerWidgetCoreLeftMenu
@@ -87,12 +97,17 @@ require [
   #Modules
   CS = angular.module 'CS', []
 
+  #Animations
+  AnimationSlideUpDown CS
+
   #Directives
   DirectiveAnimateIn          CS
   DirectiveAnimateRouteChange CS
 
   #Services
   ServiceSocket CS
+  ServicePubSub CS
+  ServiceAuthenticate CS
 
   #Routes
   CS.config ($routeProvider) ->
@@ -112,6 +127,17 @@ require [
       .when('/menu3', {
         action: 'menu.3'
       })
+
+      .when('/templates', {
+        action: 'menu.3'
+      })
+      .when('/templates/:templateId', {
+        action: 'menu.3'
+      })
+      .when('/templates/:templateId/:revisionId', {
+        action: 'menu.3'
+      })
+
       .otherwise({
         redirectTo: '/menu1a'
       })
@@ -123,8 +149,5 @@ require [
   ControllerWidgetBreadCrumbs     CS
   ControllerWidgetExerciseBuilder CS
   ControllerWidgetCoreLogin       CS
-
-  $('body').removeClass 'login'
-  $('body').addClass 'fixed-top breakpoint-1280'
 
   angular.bootstrap document, ['CS']
