@@ -78,6 +78,7 @@ require [
   'cs!directives/directiveAnimateIn'
   'cs!directives/directiveCollapseWidget'
   'cs!directives/directiveAnimateRouteChange'
+  'cs!directives/directiveDatePicker'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
@@ -101,6 +102,7 @@ require [
   DirectiveAnimateIn
   DirectiveCollapseWidget
   DirectiveAnimateRouteChange
+  DirectiveDatePicker
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
@@ -125,6 +127,7 @@ require [
   DirectiveCollapseWidget     CS
   DirectiveAnimateIn          CS
   DirectiveAnimateRouteChange CS
+  DirectiveDatePicker         CS
 
   #Services
   ServiceSocket CS

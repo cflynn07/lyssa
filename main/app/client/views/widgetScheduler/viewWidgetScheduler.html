@@ -17,7 +17,6 @@
                   data-color="grey"
                   data-model="model"></div>
 
-
             <button
                       data-ng-hide="showNew"
                       data-ng-click="model.buttons.toggleShowNew()"
@@ -36,6 +35,86 @@
                     data-widget-themis="false"
                     data-color="grey"
                     data-model="model">
+
+
+                <div class="form">
+                  <form class="form-horizontal">
+
+
+
+                    <div class="control-group">
+
+                      <label class="control-label">Type</label>
+                      <div class="controls">
+                        <select>
+                          <option value="mini">Quiz</option>
+                          <option value="full">Full Exercise</option>
+                        </select>
+                      </div>
+
+                    </div>
+
+
+
+
+                    <div class="control-group">
+
+                      <label class="control-label">Name</label>
+                      <div class="controls">
+                        <input type="text" class="span6 m-wrap" />
+                      </div>
+
+                    </div>
+
+
+
+
+
+
+                    <div class="control-group">
+
+                      <label class="control-label">Target Date</label>
+                      <div class="controls">
+                        <div data-datepicker data-months="1"></div>
+                      </div>
+
+                    </div>
+
+
+
+                    <div class="control-group">
+
+                      <label class="control-label">Allow Rescheduling</label>
+                      <div class="controls">
+                        <input type="checkbox" checked="checked"/>
+                      </div>
+
+                    </div>
+
+
+
+                    <div class="control-group">
+
+                      <label class="control-label">Date Range</label>
+                      <div class="controls">
+                        <div data-datepicker data-months="2"></div>
+                      </div>
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+                  </form>
+                </div>
+
 
                 <button  data-ng-click="model.buttons.toggleShowNew()"
                          class="btn red btn-block">close</button>
