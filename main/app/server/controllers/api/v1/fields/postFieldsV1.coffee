@@ -14,6 +14,7 @@ module.exports = (app) ->
   employee = ORM.model 'employee'
   client   = ORM.model 'client'
   revision = ORM.model 'revision'
+  field    = ORM.model 'field'
 
   insertHelper = (objects, res) ->
     #Give everyone their own brand new uid
@@ -21,14 +22,14 @@ module.exports = (app) ->
       objects[key]['uid'] = uuid.v4()
 
     async.map objects, (item, callback) ->
-      group.create(item).success () ->
+      field.create(item).success () ->
         callback()
     , (err, results) ->
       res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
 
 
 
-  app.post config.apiSubDir + '/v1/groups', (req, res) ->
+  app.post config.apiSubDir + '/v1/fields', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
@@ -40,6 +41,12 @@ module.exports = (app) ->
 
         switch userType
           when 'superAdmin'
+
+
+
+
+
+
 
             apiVerifyObjectProperties this, group, req.body, req, res, {
               requiredProperties:
@@ -54,7 +61,7 @@ module.exports = (app) ->
                       message:
                         name: 'required'
 
-                'ordinal': (val, objectKey, object, callback) ->
+                'type': (val, objectKey, object, callback) ->
 
                   if !_.isUndefined val
                     callback null,
@@ -63,7 +70,10 @@ module.exports = (app) ->
                     callback null,
                       success: false
                       message:
-                        ordinal: 'required'
+                        type: 'required'
+
+
+
 
                 'clientUid': (val, objectKey, object, callback) ->
 
@@ -73,13 +83,16 @@ module.exports = (app) ->
                     success:   true
                     transform: [objectKey, 'clientUid', testClientUid]
 
-                'revisionUid': (val, objectKey, object, callback) ->
+
+
+
+                'groupUid': (val, objectKey, object, callback) ->
 
                   if _.isUndefined val
                     callback null,
                       success: false
                       message:
-                        revisionUid: 'required'
+                        groupUid: 'required'
                     return
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
@@ -93,24 +106,24 @@ module.exports = (app) ->
                         callback null, resultClient
 
                     (callback) ->
-                      revision.find(
+                      group.find(
                         where:
                           clientUid: testClientUid
                           uid: val
-                      ).success (resultRevision) ->
-                        callback null, resultRevision
+                      ).success (resultGroup) ->
+                        callback null, resultGroup
 
 
                   ], (error, results) ->
 
                     resultClient   = results[0]
-                    resultRevision = results[1]
+                    resultGroup    = results[1]
 
-                    if !resultRevision
+                    if !resultGroup
                       callback null,
                         success: false
                         message:
-                          'revisionUid': 'unknown'
+                          'resultGroup': 'unknown'
                       return
 
                     if !resultClient
@@ -120,16 +133,16 @@ module.exports = (app) ->
                       return
 
                     #IF we do find the employee, but it doesn't belong to the same client...
-                    if resultRevision.clientUid != resultClient.uid
+                    if resultGroup.clientUid != resultClient.uid
                       callback null,
                         success: false
                         message:
-                          'revisionUid': 'unknown'
+                          'resultGroup': 'unknown'
                       return
 
                     mapObj = {}
-                    mapObj[resultRevision.uid] = resultRevision
-                    mapObj[resultClient.uid]   = resultClient
+                    mapObj[resultGroup.uid]  = resultGroup
+                    mapObj[resultClient.uid] = resultClient
                     callback null,
                       success: true
                       uidMapping: mapObj
@@ -137,6 +150,18 @@ module.exports = (app) ->
             }, (objects) ->
 
               insertHelper.call(this, objects, res)
+
+
+
+
+
+
+
+
+
+
+
+
 
           when 'clientSuperAdmin', 'clientAdmin'
 

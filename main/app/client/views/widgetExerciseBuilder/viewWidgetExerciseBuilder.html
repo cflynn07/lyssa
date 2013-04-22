@@ -2,15 +2,13 @@
 
 
   <div data-collapse-widget data-title="Exercise Builder" data-widget-themis="true" data-color="blue">
-
     <div class="row-fluid">
-
-
-
 
 
         <div class="span3 responsive span8">
           <div data-collapse-widget data-title="Templates" data-widget-themis="false" data-color="grey">
+
+
 
 
 
@@ -32,31 +30,26 @@
 
 
 
+
+
           </div>
         </div>
 
 
 
-
-
         <div class="span9">
 
-
-
-
-
           <div data-collapse-widget data-title="Template Editor" data-widget-themis="false" data-color="grey">
-            <div class="alert alert-block alert-success fade in">
-
+            <div class="box template-info-box fade in">
 
 
               <div class="row-fluid">
 
 
                 <div class="span6">
-                  <h2 style="margin-top:0px;" class="alert-heading">{{currentTemplate.name}}</h2>
+                  <h2 style="margin-top:0px; font-weight:600;" class="alert-heading">{{currentTemplate.name}}</h2>
                   <div class="inline-content">
-                    <h4>15 revisions</h4>
+                    <h4>{{currentTemplate.revisions.length}} revisions</h4>
                   </div>
                 </div>
 
@@ -72,26 +65,87 @@
                 </div>
 
 
+
+
+
+              </div>
+            </div>
+
+
+
+
+
+            <div class="">
+
+              <div class="box revision-group-box fade in" data-ng-repeat="group in currentRevision.groups">
+
+                <div class="navbar navbar" style="position: static;">
+
+                  <div class="navbar-inner">
+                    <div class="container">
+
+                      <a class="brand" href="#">{{group.name}}</a>
+
+
+
+                      <div class="nav-collapse collapse navbar-inverse-collapse">
+
+                        <ul class="nav pull-right">
+
+                          <li><a href>Move Down</a></li>
+                          <li><a href>Move Up</a></li>
+                          <li><a href>Remove</a></li>
+
+                          <li class="divider-vertical"></li>
+
+
+                          <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Add Field <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                              <li><a href>Open Response</a></li>
+                              <li><a href>Select Individual</a></li>
+                              <li><a href>Select Multiple</a></li>
+                              <li><a href>Yes/No</a></li>
+                              <li><a href>Slider</a></li>
+                            </ul>
+                          </li>
+
+
+
+                        </ul>
+
+                      </div><!-- /.nav-collapse -->
+
+
+
+                    </div>
+                  </div><!-- /navbar-inner -->
+
+                </div>
+
+
+
+
+
+                <div class="revision-fields-box" ui-sortable="{connectWith:'.revision-fields-box'}" ng-model="group.fields">
+
+                  <div class="field-box" data-ng-repeat="field in group.fields" data-ng-switch="field.type">
+                    CLOSE X
+
+                    <div data-ng-class="open-response" data-ng-switch-when="openResponse" data-ng-include="'viewWidgetExerciseBuilderFieldOpenResponse'"></div>
+
+
+                  </div>
+
+                </div>
+
+
+
+
+
               </div>
 
             </div>
-
-
-
-            <div class="alert alert-block alert-info fade in">
-
-              <label>TEMPLATE NAME:</label> {{currentTemplate.name}}<br>
-              TEMPLATE CREATED AT: {{currentTemplateFirstRevision.createdAt}}<br>
-              TEMPLATE CREATED BY: {{currentTemplateFirstRevision.employee.firstName + ' ' + currentTemplateFirstRevision.employee.lastName}}
-
-              <br><br>
-              <p class="">
-                <a class="btn red" href="#">Discard</a> <a class="btn green" href="#">Save</a>
-              </p>
-
-
-            </div>
-
 
           </div>
 

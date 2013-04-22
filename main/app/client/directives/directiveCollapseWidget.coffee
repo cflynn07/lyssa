@@ -17,6 +17,7 @@ define [
           title:        '@title'
           widgetThemis: '@widgetThemis'
           color:        '@color'
+
         replace: true
         compile: (element, attrs, transclusionFunc) ->
           (scope, iterStartElement, attrs) ->
