@@ -1,0 +1,66 @@
+
+<div data-ng-controller="ControllerWidgetScheduler">
+  <div
+        data-collapse-widget
+        data-title="Exercise Schedule"
+        data-widget-themis="true"
+        data-color="blue">
+
+      <div class="row-fluid">
+
+          <div class="span3 responsive">
+            <!-- BEGIN DRAGGABLE EVENTS PORTLET-->
+
+            <div  data-collapse-widget
+                  data-title="Upcoming Events"
+                  data-widget-themis="false"
+                  data-color="grey"
+                  data-model="model"></div>
+
+
+            <button
+                      data-ng-hide="showNew"
+                      data-ng-click="model.buttons.toggleShowNew()"
+                      class="btn green btn-block">Schedule New Exercise/Quiz <i class="m-icon-swapright m-icon-white"></i></button>
+
+          </div>
+
+
+
+          <div class="span9 calendar">
+
+
+            <div data-ng-show="showNew">
+              <div  data-collapse-widget
+                    data-title="Schedule New Exercise/Test"
+                    data-widget-themis="false"
+                    data-color="grey"
+                    data-model="model">
+
+                <button  data-ng-click="model.buttons.toggleShowNew()"
+                         class="btn red btn-block">close</button>
+
+              </div>
+            </div>
+
+
+
+
+            <div  data-collapse-widget
+                  data-title="Calendar"
+                  data-widget-themis="false"
+                  data-color="grey">
+
+              <div  data-ui-calendar="{width: '100%',editable: false}"
+                    data-ng-model="eventSources"
+                    class="calendar" ></div>
+            </div>
+
+
+          </div>
+        </div>
+        <!-- END CALENDAR PORTLET-->
+      </div>
+
+  </div>
+</div>

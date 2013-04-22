@@ -26,6 +26,10 @@ define [
         $scope.widgetRows = [{
           widget: 'viewWidgetBreadCrumbs'
         },{
+          widget: 'viewWidgetScheduler'
+        },{
+          widget: 'viewWidgetDictionaryManager'
+        },{
           widget: 'viewWidgetExerciseBuilder'
         }]
       updateShit()

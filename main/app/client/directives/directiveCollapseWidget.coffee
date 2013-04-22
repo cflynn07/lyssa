@@ -17,12 +17,16 @@ define [
           title:        '@title'
           widgetThemis: '@widgetThemis'
           color:        '@color'
+          model:        '='
 
         replace: true
         compile: (element, attrs, transclusionFunc) ->
           (scope, iterStartElement, attrs) ->
 
+            if scope.buttons
+              console.log scope.buttons
             scope.collapsed = false
+
             scope.toggle = () ->
               scope.collapsed = !scope.collapsed
 

@@ -30,6 +30,7 @@ requirejs.config
     'jqueryDateFormat':     'vendor/jquery-dateFormat'
     'bootstrap-tree':       'vendor/bootstrap-tree'
     'pubsub':               'vendor/pubsub'
+    'fullCalendar':         'vendor/fullcalendar'
   hbs:
     disableI18n: true
     helperDirectory: 'views/helpers/'
@@ -61,12 +62,15 @@ requirejs.config
       deps:    ['jquery']
     'bootstrap-tree':
       deps:    ['jquery']
+    fullCalendar:
+      deps:    ['jquery']
     pubsub:
       exports: 'pubsub'
 
 require [
   'jquery'
   'jquery-ui'
+  'fullCalendar'
   'bootstrap'
   'angular'
   'angular-ui'
@@ -84,9 +88,12 @@ require [
   'cs!controllers/controllerWidgetCoreHeader'
   'cs!controllers/widgets/controllerWidgetBreadCrumbs'
   'cs!controllers/widgets/ControllerWidgetExerciseBuilder'
+  'cs!controllers/widgets/ControllerWidgetDictionaryManager'
+  'cs!controllers/widgets/ControllerWidgetScheduler'
 ], (
   $
   jqueryUi
+  jqueryFullCalendar
   bootstrap
   angular
   angularUi
@@ -104,6 +111,8 @@ require [
   ControllerWidgetCoreHeader
   ControllerWidgetBreadCrumbs
   ControllerWidgetExerciseBuilder
+  ControllerWidgetDictionaryManager
+  ControllerWidgetScheduler
 ) ->
 
   #Modules
@@ -155,12 +164,18 @@ require [
         redirectTo: '/menu1a'
       })
 
-  ControllerApp                   CS
-  ControllerCoreWidgets           CS
-  ControllerWidgetCoreLeftMenu    CS
-  ControllerWidgetCoreHeader      CS
-  ControllerWidgetBreadCrumbs     CS
-  ControllerWidgetExerciseBuilder CS
-  ControllerWidgetCoreLogin       CS
+
+
+  ControllerApp                     CS
+  ControllerCoreWidgets             CS
+  ControllerWidgetCoreLeftMenu      CS
+  ControllerWidgetCoreHeader        CS
+  ControllerWidgetBreadCrumbs       CS
+  ControllerWidgetExerciseBuilder   CS
+  ControllerWidgetCoreLogin         CS
+  ControllerWidgetDictionaryManager CS
+  ControllerWidgetScheduler         CS
+
+
 
   angular.bootstrap document, ['CS']

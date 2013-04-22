@@ -3,7 +3,7 @@
     <h4><span>{{title}}</span></h4>
     <div class="actions">
 
-      <a href="javascript:;" id="tree_1_collapse" class="btn green">New</a>
+      <a data-ng-show="false" href="javascript:;" id="tree_1_collapse" class="btn green">New</a>
 
     </div>
     <div data-ng-hide="true" class="tools">
@@ -11,6 +11,6 @@
       <a href data-ng-click="reload()" class="reload"></a>
     </div>
   </div>
-  <div data-ng-class="{true: 'hidden', false: ''}[collapsed]" class="portlet-body" data-ng-transclude>
+  <div data-ng-class="{true: 'hidden', false: ''}[collapsed]" class="portlet-body light-grey" data-ng-transclude>
   </div>
 </div>

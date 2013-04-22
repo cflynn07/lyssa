@@ -65,7 +65,7 @@ define [
           $scope.$watch 'currentRevision.groups', (newVal) ->
             console.log 'newVal'
             console.log newVal
-            console.log angular.toJson($scope.currentRevision.groups)
+            #console.log angular.toJson($scope.currentRevision.groups)
           , true
 
 

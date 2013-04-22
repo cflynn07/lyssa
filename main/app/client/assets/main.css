@@ -30,7 +30,13 @@ OLD CSS
 @import url("gritter/css/jquery.gritter.css");
 @import url("uniform/css/uniform.default.css");
 @import url("bootstrap-daterangepicker/daterangepicker.css");
+
+
+@import url("fullcalendar/fullcalendar/fullcalendar.css");
+/*
 @import url("fullcalendar/fullcalendar/bootstrap-fullcalendar.css");
+*/
+
 @import url("jqvmap/jqvmap/jqvmap.css");
 @import url("glyphicons/css/glyphicons.css");
 @import url("glyphicons_halflings/css/halflings.css");
@@ -41,6 +47,7 @@ OLD CSS
 @import url("angular-ui/angular-ui.css");
 @import url("jquery-ui/jquery.ui.all.css");
 @import url("css/style_light.css");
+
 
 
 @import url("theme-extensions.css");

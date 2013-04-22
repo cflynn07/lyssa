@@ -68,6 +68,16 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
         restrict: 'A',
           link: function(scope, elm, attrs, $timeout) {
             var sources = scope.$eval(attrs.ngModel);
+
+
+
+            console.log('sources');
+            console.log(sources);
+            if(typeof sources === 'undefined')
+              sources = []
+
+
+
             var tracker = 0;
             /* returns the length of all source arrays plus the length of eventSource itself */
             var getSources = function () {
