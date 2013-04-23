@@ -31,6 +31,7 @@ requirejs.config
     'bootstrap-tree':       'vendor/bootstrap-tree'
     'pubsub':               'vendor/pubsub'
     'fullCalendar':         'vendor/fullcalendar'
+    'bootstrap-toggle-buttons': '/vendor/bootstrap-toggle-buttons'
   hbs:
     disableI18n: true
     helperDirectory: 'views/helpers/'
@@ -66,19 +67,25 @@ requirejs.config
       deps:    ['jquery']
     pubsub:
       exports: 'pubsub'
+    'bootstrap-toggle-buttons':
+      deps:     ['jquery', 'bootstrap']
+
 
 require [
   'jquery'
   'jquery-ui'
+  'bootstrap-toggle-buttons'
   'fullCalendar'
   'bootstrap'
   'angular'
   'angular-ui'
   'cs!animations/animationSlideUpDown'
+  'cs!animations/animationFadeInOut'
   'cs!directives/directiveAnimateIn'
   'cs!directives/directiveCollapseWidget'
   'cs!directives/directiveAnimateRouteChange'
   'cs!directives/directiveDatePicker'
+  'cs!directives/directiveToggleButton'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
@@ -94,15 +101,18 @@ require [
 ], (
   $
   jqueryUi
+  bootstrapToggleButtons
   jqueryFullCalendar
   bootstrap
   angular
   angularUi
   AnimationSlideUpDown
+  AnimationFadeInOut
   DirectiveAnimateIn
   DirectiveCollapseWidget
   DirectiveAnimateRouteChange
   DirectiveDatePicker
+  DirectiveToggleButton
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
@@ -122,12 +132,14 @@ require [
 
   #Animations
   AnimationSlideUpDown CS
+  AnimationFadeInOut   CS
 
   #Directives
   DirectiveCollapseWidget     CS
   DirectiveAnimateIn          CS
   DirectiveAnimateRouteChange CS
   DirectiveDatePicker         CS
+  DirectiveToggleButton       CS
 
   #Services
   ServiceSocket CS

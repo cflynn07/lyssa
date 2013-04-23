@@ -8,20 +8,20 @@ define [
 
   (Module) ->
 
-    Module.animation 'slide-up', ($rootScope) ->
+    Module.animation 'fade-out', ($rootScope) ->
       animation =
         setup: (element) ->
           #element.css display: 'none'
         start: (element, done) ->
-          element.slideUp 'fast', () ->
+          element.fadeOut 'fast', () ->
             done()
 
-    Module.animation 'slide-down', ($rootScope) ->
+    Module.animation 'fade-in', ($rootScope) ->
       #console.log 'animationInit'
       animation =
         setup: (element) ->
           element.css display: 'none'
         start: (element, done, memo) ->
-          element.slideDown 'fast', () ->
+          element.fadeIn 'fast', () ->
             done()
 

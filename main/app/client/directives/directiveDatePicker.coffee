@@ -29,9 +29,3 @@ define [
             #    return
           )
               #$parse()
-
-          origElem   = transclusionFunc scope
-          content    = origElem.text()
-          scope.orig = content
-          #scope.obj = my_custom_parsing(content)
-          scope.obj  = content

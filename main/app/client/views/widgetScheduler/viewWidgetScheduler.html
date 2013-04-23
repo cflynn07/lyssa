@@ -1,4 +1,3 @@
-
 <div data-ng-controller="ControllerWidgetScheduler">
   <div
         data-collapse-widget
@@ -19,31 +18,27 @@
 
             <button
                       data-ng-hide="showNew"
+                      data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}"
                       data-ng-click="model.buttons.toggleShowNew()"
-                      class="btn green btn-block">Schedule New Exercise/Quiz <i class="m-icon-swapright m-icon-white"></i></button>
+                      class="btn green btn-block">Schedule New <i class="m-icon-swapright m-icon-white"></i></button>
 
           </div>
-
-
-
           <div class="span9 calendar">
 
+            <div  data-ng-show="showNew"
+                  data-ng-animate="{show:'slide-down', hide:'slide-up'}">
 
-            <div data-ng-show="showNew">
               <div  data-collapse-widget
                     data-title="Schedule New Exercise/Test"
                     data-widget-themis="false"
                     data-color="grey"
                     data-model="model">
 
-
                 <div class="form">
                   <form class="form-horizontal">
 
 
-
                     <div class="control-group">
-
                       <label class="control-label">Type</label>
                       <div class="controls">
                         <select>
@@ -51,79 +46,130 @@
                           <option value="full">Full Exercise</option>
                         </select>
                       </div>
-
                     </div>
 
 
-
-
                     <div class="control-group">
-
                       <label class="control-label">Name</label>
                       <div class="controls">
                         <input type="text" class="span6 m-wrap" />
                       </div>
-
                     </div>
 
 
-
-
+                    <div class="control-group">
+                      <label class="control-label">Description</label>
+                      <div class="controls">
+                        <textarea class="large m-wrap" rows="3"></textarea>
+                      </div>
+                    </div>
 
 
                     <div class="control-group">
+                      <label class="control-label">Exercise Template</label>
+                      <div class="controls">
+                        <select>
+                          <option value="1">Report Template 1</option>
+                          <option value="1">Report Template 2</option>
+                          <option value="1">Report Template 3</option>
+                          <option value="1">Report Template 4</option>
+                          <option value="1">Report Template 5</option>
+                        </select>
+                        <span class="help-inline">multi-char placeholder</span>
+                      </div>
+                    </div>
 
+
+                    <div class="control-group">
+                      <label class="control-label">Delegate</label>
+                      <div class="controls">
+
+
+                        <table class="table table-striped table-bordered table-hover">
+                          <thead>
+                            <tr>
+                              <th style="width:8px;"></th>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Employee ID</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+
+                            <tr class="odd gradeX">
+                              <td>
+                                <input type="radio" name="name"/>
+                              </td>
+                              <td>David Tavare</td>
+                              <td>david.tavare@gmail.com</td>
+                              <td>357843873</td>
+                            </tr>
+
+                            <tr class="odd gradeX">
+                              <td>
+                                <input type="radio" name="name"/>
+                              </td>
+                              <td>Sean Erricson</td>
+                              <td>sean.erricson@gmail.com</td>
+                              <td>242344346</td>
+                            </tr>
+
+                            <tr class="odd gradeX">
+                              <td>
+                                <input type="radio" name="name"/>
+                              </td>
+                              <td>Ben Johnson</td>
+                              <td>ben.johnson@gmail.com</td>
+                              <td>345345344</td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+
+
+
+
+
+                      </div>
+                    </div>
+
+
+                    <div class="control-group">
                       <label class="control-label">Target Date</label>
                       <div class="controls">
                         <div data-datepicker data-months="1"></div>
                       </div>
-
                     </div>
 
 
-
                     <div class="control-group">
-
                       <label class="control-label">Allow Rescheduling</label>
                       <div class="controls">
-                        <input type="checkbox" checked="checked"/>
+                        <input class="toggle" data-ng-model="allowRescheduling" data-ng-init="allowRescheduling = false" type="checkbox" checked="checked"/>
                       </div>
-
                     </div>
 
 
-
-                    <div class="control-group">
+                    <div
+                        data-ng-show="allowRescheduling"
+                        data-ng-animate="{show: 'slide-down', hide: 'slide-up'}"
+                        class="control-group">
 
                       <label class="control-label">Date Range</label>
                       <div class="controls">
                         <div data-datepicker data-months="2"></div>
                       </div>
-
                     </div>
-
-
-
-
-
-
-
-
-
 
 
                   </form>
                 </div>
-
 
                 <button  data-ng-click="model.buttons.toggleShowNew()"
                          class="btn red btn-block">close</button>
 
               </div>
             </div>
-
-
-
 
             <div  data-collapse-widget
                   data-title="Calendar"
@@ -134,7 +180,6 @@
                     data-ng-model="eventSources"
                     class="calendar" ></div>
             </div>
-
 
           </div>
         </div>

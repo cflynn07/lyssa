@@ -31,7 +31,7 @@ OLD CSS
 @import url("uniform/css/uniform.default.css");
 @import url("bootstrap-daterangepicker/daterangepicker.css");
 
-
+@import url("bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css");
 @import url("fullcalendar/fullcalendar/fullcalendar.css");
 /*
 @import url("fullcalendar/fullcalendar/bootstrap-fullcalendar.css");

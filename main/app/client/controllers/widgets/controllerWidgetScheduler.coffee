@@ -22,10 +22,15 @@ define [
 
 
       $scope.toggleShowNew = () ->
-        console.log 'tsn'
         $scope.showNew = !$scope.showNew
 
       $scope.model =
         showNew: false
         buttons:
           'toggleShowNew': $scope.toggleShowNew
+        form:
+          type: 'full'
+          name: ''
+          targetDate: ''
+          allowRescheduling: false
+          dateRange: ''
