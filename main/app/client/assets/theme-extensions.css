@@ -10,6 +10,20 @@
 body {
     background-color: #F1F1F1;
 }
+.page-content {
+    background-color: #DDD;
+    margin-left: 223px;
+    border-left: 2px solid #EEE !important;
+}
+
+.page-title small {
+    color: #434343;
+}
+
+.header .navbar-inner {
+    background-color: #555555!important;
+}
+
 
 /*
     Adding custom widget styles to theme for themis unique appearance & dynamic "fade-in and up" effect
@@ -57,7 +71,11 @@ body {
     border-left: 1px solid lightgray !important;
     border-bottom: 1px solid lightgray !important;
     border-right: 0px solid lightgray !important;
-    box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35) !important;
+    box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35);// !important;
+}
+
+ul.breadcrumb {
+    box-shadow: rgba(0, 0, 0, 0.35) 4px 4px 3px 0px;
 }
 
 /*

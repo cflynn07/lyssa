@@ -47,7 +47,7 @@ define [
 
           $el.css
             'border-right': '0px !important'
-            'box-shadow': num + 'px ' + num + 'px 0 0 rgba(0,0,0,0.35)'
+            'box-shadow': num + 'px ' + num + 'px 3px 0 rgba(0,0,0,0.35)'
             top: (4 - num) + 'px'
             left: (4 - num) + 'px'
           #  opacity: init_opacity + ((1.0 - init_opacity) * (num / max))
