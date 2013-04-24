@@ -33,13 +33,13 @@ define [
         return result
 
       stripAllButBC = () ->
-        $scope.widgetRows = $scope.widgetRows.splice 0, 1
+        $scope.widgetRows.splice 0, 1
 
       trigger4oh4 = () ->
-        stripAllButBC()
+        widgets = stripAllButBC()
         previousRouteTitle = ''
-        $scope.widgetRows.push
-          widget: 'viewWidget4oh4'
+        widgets = widgets.push widget:'viewWidget4oh4'
+        $scope.widgetRows = widgets
 
       loadNewRoute = () ->
 
@@ -59,9 +59,11 @@ define [
 
         if !isDerivativeRoute($route.current.pathValue.title)
           $('body').scrollTop 0
-          stripAllButBC()
+          widgets = stripAllButBC()
+          addWidgets = []
           for value in $route.current.pathValue.widgets
-            $scope.widgetRows.push widget: value
+            addWidgets.push widget: value
+          $scope.widgetRows = widgets.concat addWidgets
 
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
         loadNewRoute()
