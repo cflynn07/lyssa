@@ -7,7 +7,7 @@ testConstants = require '../testConstants'
 buster        = require 'buster'
 _             = require 'underscore'
 apiExpand     = require config.appRoot + 'server/components/apiExpand'
-ORM           = require config.appRoot + '/server/components/oRM'
+ORM           = require config.appRoot + 'server/components/oRM'
 sequelize     = ORM.setup()
 async         = require 'async'
 

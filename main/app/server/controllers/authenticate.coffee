@@ -1,6 +1,6 @@
 config    = require '../config/config'
 bcrypt    = require 'bcrypt'
-ORM       = require config.appRoot + '/server/components/oRM'
+ORM       = require config.appRoot + 'server/components/oRM'
 sequelize = ORM.setup()
 async     = require 'async'
 _         = require 'underscore'

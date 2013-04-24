@@ -6,7 +6,7 @@ permissions, and validation
 
 config    = require '../config/config'
 _         = require 'underscore'
-ORM       = require config.appRoot + '/server/components/oRM'
+ORM       = require config.appRoot + 'server/components/oRM'
 sequelize = ORM.setup()
 async     = require 'async'
 
