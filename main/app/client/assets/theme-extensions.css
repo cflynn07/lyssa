@@ -4,6 +4,14 @@
  */
 
 /*
+    Tweaking appearance
+    -------------------
+*/
+body {
+    background-color: #F1F1F1;
+}
+
+/*
     Adding custom widget styles to theme for themis unique appearance & dynamic "fade-in and up" effect
     ---------------------------------------------------------------------------------------------------
 */
