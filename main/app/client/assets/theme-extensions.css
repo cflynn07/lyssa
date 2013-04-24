@@ -57,7 +57,7 @@ body {
     border-left: 1px solid lightgray !important;
     border-bottom: 1px solid lightgray !important;
     border-right: 0px solid lightgray !important;
-    box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35);
+    box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35) !important;
 }
 
 /*
