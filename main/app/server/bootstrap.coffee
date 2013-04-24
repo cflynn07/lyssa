@@ -33,14 +33,10 @@ else
         optimizeCss: 'standard' #standard
         preserveLicenseComments: false
         (buildResponse) ->
-          console.log 'requirejs br 1'
-          console.log buildResponse
           cb()
             #console.log 'requirejs comp'
             #console.log buildResponse
         (err) ->
-          console.log 'requirejs err 1'
-          console.log err
           cb()
             #console.log 'requirejs err'
             #console.log err
@@ -132,12 +128,8 @@ else
 
       requirejs.optimize config,
         (buildResponse) ->
-          console.log 'requirejs br 2'
-          console.log buildResponse
           cb()
         (err) ->
-          console.log 'requirejs err 2'
-          console.log err
           cb()
 
   ], (err, results) ->

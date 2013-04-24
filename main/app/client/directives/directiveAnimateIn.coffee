@@ -8,7 +8,7 @@ define [
 
     Module.directive 'animateIn', () ->
       (scope, element, attrs) ->
-
+        #console.log 'p1'
         loadingHTML = "<div class=\"loading-indicator\">
           <div class=\"progress progress-striped active\">
             <div style=\"width: 100%;\" class=\"bar\"></div>
@@ -18,6 +18,11 @@ define [
 
         num = 0
         $el = element
+
+        $el.removeClass 'widget-themis-finish'
+        $el.addClass    'widget-themis'
+        $el.css 'position', 'relative'
+        $el.hide().fadeIn('fast')
 
         #element.find('.loading-indicator').hide()#fadeOut('fast')
 
@@ -32,6 +37,9 @@ define [
             #  $el.find('.loading-indicator').remove()
             #, 100)
             clearTimeout timer
+            $el.removeClass 'widget-themis'
+            $el.addClass    'widget-themis-finish'
+            $el.css 'position', null
             return
 
           #$el.find('.loading-indicator').css

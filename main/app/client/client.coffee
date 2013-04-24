@@ -78,6 +78,7 @@ require [
   'fullCalendar'
   'bootstrap'
   'angular'
+  'cs!config/clientConfig'
   'angular-ui'
   'cs!animations/animationSlideUpDown'
   'cs!animations/animationFadeInOut'
@@ -94,10 +95,13 @@ require [
   'cs!controllers/controllerWidgetCoreLeftMenu'
   'cs!controllers/controllerWidgetCoreLogin'
   'cs!controllers/controllerWidgetCoreHeader'
-  'cs!controllers/widgets/controllerWidgetBreadCrumbs'
-  'cs!controllers/widgets/ControllerWidgetExerciseBuilder'
-  'cs!controllers/widgets/ControllerWidgetDictionaryManager'
-  'cs!controllers/widgets/ControllerWidgetScheduler'
+  'cs!controllers/controllerWidgetCoreFooter'
+  'cs!controllers/widgets/widgetBreadCrumbs/controllerWidgetBreadCrumbs'
+  'cs!controllers/widgets/widgetExerciseBuilder/controllerWidgetExerciseBuilder'
+  'cs!controllers/widgets/widgetDictionaryManager/controllerWidgetDictionaryManager'
+  'cs!controllers/widgets/widgetScheduler/controllerWidgetScheduler'
+  'cs!controllers/widgets/widgetFullExerciseSubmitter/controllerWidgetFullExerciseSubmitter'
+  'cs!controllers/widgets/widget4oh4/controllerWidget4oh4'
 ], (
   $
   jqueryUi
@@ -105,6 +109,7 @@ require [
   jqueryFullCalendar
   bootstrap
   angular
+  clientConfig
   angularUi
   AnimationSlideUpDown
   AnimationFadeInOut
@@ -121,10 +126,13 @@ require [
   ControllerWidgetCoreLeftMenu
   ControllerWidgetCoreLogin
   ControllerWidgetCoreHeader
+  ControllerWidgetCoreFooter
   ControllerWidgetBreadCrumbs
   ControllerWidgetExerciseBuilder
   ControllerWidgetDictionaryManager
   ControllerWidgetScheduler
+  ControllerWidgetFullExerciseSubmitter
+  ControllerWidget4oh4
 ) ->
 
   #Modules
@@ -146,8 +154,43 @@ require [
   ServicePubSub CS
   ServiceAuthenticate CS
 
+
+
+
+
+  #Admin
+  # - #/themis/admin/dashboard
+  # - #/themis/admin/templates
+  # - #/themis/admin/schedule
+  # - #/themis/admin/timeline
+
+  #Delegate
+  # - #/themis/exercises
+
+
+
   #Routes
   CS.config ($routeProvider) ->
+    for key, value of clientConfig.routes
+
+      $routeProvider.when key,
+        path: key
+        pathValue: value
+
+      if _.isArray value.subRoutes
+        for value2 in value.subRoutes
+          for objectKey, objectValue of value2
+            console.log key + objectKey
+            $routeProvider.when key + objectKey,
+              path:      key + objectKey
+              pathValue: _.extend(value, objectValue)
+
+
+
+    $routeProvider.otherwise
+      invalid: true
+
+    ###
     $routeProvider
       .when('/menu1a', {
         action: 'menu.1.a'
@@ -178,19 +221,22 @@ require [
       .otherwise({
         redirectTo: '/menu1a'
       })
+      ###
 
 
 
-  ControllerApp                     CS
-  ControllerCoreWidgets             CS
-  ControllerWidgetCoreLeftMenu      CS
-  ControllerWidgetCoreHeader        CS
-  ControllerWidgetBreadCrumbs       CS
-  ControllerWidgetExerciseBuilder   CS
-  ControllerWidgetCoreLogin         CS
-  ControllerWidgetDictionaryManager CS
-  ControllerWidgetScheduler         CS
-
+  ControllerApp                         CS
+  ControllerCoreWidgets                 CS
+  ControllerWidgetCoreLeftMenu          CS
+  ControllerWidgetCoreHeader            CS
+  ControllerWidgetBreadCrumbs           CS
+  ControllerWidgetExerciseBuilder       CS
+  ControllerWidgetCoreLogin             CS
+  ControllerWidgetDictionaryManager     CS
+  ControllerWidgetScheduler             CS
+  ControllerWidgetFullExerciseSubmitter CS
+  ControllerWidget4oh4                  CS
+  ControllerWidgetCoreFooter            CS
 
 
   angular.bootstrap document, ['CS']

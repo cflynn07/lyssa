@@ -1,8 +1,8 @@
 <!-- BEGIN SIDEBAR MENU -->
 <ul>
 
-  <li data-ng-class="getClass(choice.hash, true)" data-ng-repeat="choice in menuChoices" data-animate-route-change>
-    <a data-ng-href="#/{{choice.hash}}">
+  <li data-ng-class="getClass(choice.title, true)" data-ng-repeat="choice in menuChoices" data-animate-route-change>
+    <a data-ng-href="#{{choice.hash}}">
       <i class="icon-home"></i>
       <span class="title">{{choice.title}}</span>
       <span class="arrow"></span>
@@ -10,8 +10,8 @@
     </a>
 
     <ul data-ng-show="choice.sub" class="sub">
-      <li data-ng-class="getClass(subChoice.hash, false)" data-ng-repeat="subChoice in choice.sub">
-        <a data-ng-href="#/{{subChoice.hash}}">{{subChoice.title}}</a>
+      <li data-ng-class="getClass(subChoice.title, false)" data-ng-repeat="subChoice in choice.sub">
+        <a data-ng-href="#{{subChoice.hash}}">{{subChoice.title}}</a>
       </li>
     </ul>
   </li>

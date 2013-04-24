@@ -1,24 +1,18 @@
 <div data-ng-controller="ControllerWidgetExerciseBuilder" class="span12">
 
-
-  <div data-collapse-widget data-title="Exercise Builder" data-widget-themis="true" data-color="blue">
+  <div data-animate-in data-collapse-widget data-title="Exercise Builder" data-widget-themis="true" data-color="blue">
     <div class="row-fluid">
-
 
         <div class="span3 responsive span8">
           <div data-collapse-widget data-title="Templates" data-widget-themis="false" data-color="grey">
 
-
-
-
-
             <ul class="tree">
               <li data-ng-repeat="template in templates">
-                <a data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{template.revisions[template.revisions.length - 1].uid}}" class="tree-toggle closed">{{template.name}}</a>
+                <a data-ng-href="#{{viewRoot}}/{{template.uid}}/{{template.revisions[template.revisions.length - 1].uid}}" class="tree-toggle closed">{{template.name}}</a>
                 <ul class="branch in">
                   <li data-role="leaf" data-ng-repeat="revision in template.revisions">
 
-                    <a data-ng-class="{true:'bold'}[revision.uid == revisionId]" data-ng-href="#/{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
+                    <a data-ng-class="{true:'bold'}[revision.uid == revisionId]" data-ng-href="#{{viewRoot}}/{{template.uid}}/{{revision.uid}}">
                       <i class="halflings-icon sort-by-attributes"></i>
                       {{$index+1}} - {{revision.createdAt | date:'shortDate'}}<br>
                     </a>
@@ -28,23 +22,15 @@
               </li>
             </ul>
 
-
-
-
-
           </div>
         </div>
-
-
 
         <div class="span9">
 
           <div data-collapse-widget data-title="Template Editor" data-widget-themis="false" data-color="grey">
             <div class="box template-info-box fade in">
 
-
               <div class="row-fluid">
-
 
                 <div class="span6">
                   <h2 style="margin-top:0px; font-weight:600;" class="alert-heading">{{currentTemplate.name}}</h2>
@@ -52,7 +38,6 @@
                     <h4>{{currentTemplate.revisions.length}} revisions</h4>
                   </div>
                 </div>
-
 
                 <div style="text-align:right;" class="span6">
 
@@ -64,16 +49,8 @@
 
                 </div>
 
-
-
-
-
               </div>
             </div>
-
-
-
-
 
             <div class="">
 
@@ -86,8 +63,6 @@
 
                       <a class="brand" href="#">{{group.name}}</a>
 
-
-
                       <div class="nav-collapse collapse navbar-inverse-collapse">
 
                         <ul class="nav pull-right">
@@ -97,7 +72,6 @@
                           <li><a href>Remove</a></li>
 
                           <li class="divider-vertical"></li>
-
 
                           <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Add Field <b class="caret"></b></a>
@@ -110,22 +84,14 @@
                             </ul>
                           </li>
 
-
-
                         </ul>
 
                       </div><!-- /.nav-collapse -->
-
-
 
                     </div>
                   </div><!-- /navbar-inner -->
 
                 </div>
-
-
-
-
 
                 <div class="revision-fields-box" ui-sortable="{connectWith:'.revision-fields-box'}" ng-model="group.fields">
 
@@ -134,14 +100,9 @@
 
                     <div data-ng-class="open-response" data-ng-switch-when="openResponse" data-ng-include="'viewWidgetExerciseBuilderFieldOpenResponse'"></div>
 
-
                   </div>
 
                 </div>
-
-
-
-
 
               </div>
 
@@ -149,15 +110,8 @@
 
           </div>
 
-
-
-
-
-
-
           <div data-ng-show="false" data-collapse-widget data-title="Revision" data-widget-themis="false" data-color="grey">
             Change Summary: {{currentRevision.changeSummary}}
-
 
             <ul ui-sortable data-ng-model="currentTemplate.groups">
               <li data-ng-repeat="group in currentTemplate.groups">
@@ -170,12 +124,8 @@
 
           </div>
 
-
-
-
-
-
         </div>
+
     </div>
 
   </div>

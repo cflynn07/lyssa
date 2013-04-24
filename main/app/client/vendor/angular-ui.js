@@ -10,7 +10,6 @@ angular.module('ui.config', []).value('ui.config', {});
 angular.module('ui.filters', ['ui.config']);
 angular.module('ui.directives', ['ui.config']);
 angular.module('ui', ['ui.filters', 'ui.directives', 'ui.config']);
-console.log('angularui')
 
 /**
  * Animates the injection of new DOM elements by simply creating the DOM with a class and then immediately removing it
@@ -71,8 +70,8 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
 
 
 
-            console.log('sources');
-            console.log(sources);
+            //console.log('sources');
+            //console.log(sources);
             if(typeof sources === 'undefined')
               sources = []
 

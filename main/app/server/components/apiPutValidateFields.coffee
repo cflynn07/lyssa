@@ -82,7 +82,6 @@ module.exports = (scope, resourceModel, putObjects, req, res, requirements) ->
 
     (superCallback) ->
 
-      console.log 'finished'
       res.jsonAPIRespond(code: 202, message: config.apiResponseCodes[202])
       return
 

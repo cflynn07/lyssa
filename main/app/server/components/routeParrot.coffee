@@ -36,7 +36,6 @@ module.exports.socketio = (req, res, callback) ->
 
   _.extend req, httpEmulatedRequest
 
-  console.log req.query
   if !_.isUndefined(req.query) and !_.isUndefined(req.query.expand)
     req.apiExpand = req.query.expand
 

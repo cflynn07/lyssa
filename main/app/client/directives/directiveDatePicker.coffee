@@ -18,8 +18,6 @@ define [
         replace: true
         link: (scope, iterStartElement, attrs) ->
 
-          console.log 'scope.months'
-          console.log scope.months
 
           iterStartElement.datepicker(
             dateFormat: 'yy-mm-dd'

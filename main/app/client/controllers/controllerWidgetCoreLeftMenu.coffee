@@ -3,11 +3,13 @@ define [
   'underscore'
   'angular'
   'text!views/viewWidgetCoreLeftMenu.html'
+  'cs!config/clientConfig'
 ], (
   $
   _
   angular
   viewWidgetCoreLeftMenu
+  clientConfig
 ) ->
 
   (Module) ->
@@ -15,11 +17,20 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewWidgetCoreLeftMenu', viewWidgetCoreLeftMenu
 
-
     Module.controller 'ControllerWidgetCoreLeftMenu', ($scope, $route, $templateCache) ->
 
+      $scope.menuChoices = []
 
-      $scope.menuChoices = [{
+      for key, value of clientConfig.routes
+        if clientConfig.routeMatchClientType(key, $scope.rootUser.type)
+          menuObj       = {}
+          menuObj.hash  = key
+          menuObj.title = value.title
+
+          $scope.menuChoices.push menuObj
+
+      ###
+      [{
         hash: 'menu1a'
         title: 'Menu Option 1'
         sub: [{
@@ -36,27 +47,24 @@ define [
         hash: 'menu3'
         title: 'Menu Option 3'
       }]
+      ###
 
-
-      $scope.activeRoute = window.location.hash
-      $scope.getClass    = (hash, isTop) ->
-        hash      = '#/' + hash
+      $scope.getClass    = (menuTitle, isTop) ->
         className = ''
         if isTop
-          if $scope.activeRoute.indexOf(hash) == 0
+          if $scope.activeMenuItem.indexOf(menuTitle) == 0
             className = 'active'
-
-        else
-          if $scope.activeRoute == hash
-            className = 'active'
+        #else
+        #  if $scope.activeMenuItem == menuTitle
+        #    className = 'active'
         return className
 
+      $scope.updateActiveMenuItem = () ->
+        $scope.activeMenuItem    = ''
+        #$scope.activeSubMenuItem = ''
+        if !_.isUndefined($route.current) and !_.isUndefined($route.current.pathValue)
+          $scope.activeMenuItem = $route.current.pathValue.title
 
       $scope.$on '$routeChangeSuccess', (scope, current, previous) ->
-        $scope.activeRoute = window.location.hash
-
-
-
-
-
-
+       $scope.updateActiveMenuItem()
+      $scope.updateActiveMenuItem()

@@ -34,7 +34,6 @@ module.exports = (app) ->
     .success (user) ->
 
 
-      console.log user
 
       if !user?
         req.io.respond success: false
