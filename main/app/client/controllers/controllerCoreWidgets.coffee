@@ -1,10 +1,12 @@
 define [
   'angular'
+  'jquery'
   'underscore'
   'text!views/viewCoreWidgets.html'
   'cs!config/clientConfig'
 ], (
   angular
+  $
   _
   viewCoreWidgets
   clientConfig
@@ -43,8 +45,12 @@ define [
 
         #Determine if this is a valid application route
         if _.isUndefined($route.current) || _.isUndefined($route.current.path) || _.isUndefined($route.current.pathValue)
-          trigger4oh4()
-          return
+          if previousRouteTitle == ''
+            window.location.hash = '/' + clientConfig.simplifiedUserCategories[$scope.rootUser.type] + '/themis'
+            return
+          else
+            trigger4oh4()
+            return
 
         #Determine if this is a valid route for the given user-type
         if !clientConfig.routeMatchClientType($route.current.path, $scope.rootUser.type)
@@ -52,6 +58,7 @@ define [
           return
 
         if !isDerivativeRoute($route.current.pathValue.title)
+          $('body').scrollTop 0
           stripAllButBC()
           for value in $route.current.pathValue.widgets
             $scope.widgetRows.push widget: value
@@ -60,24 +67,3 @@ define [
         loadNewRoute()
 
       loadNewRoute()
-
-
-
-
-
-
-      ###
-      updateShit = () ->
-        $scope.widgetRows = [
-          widget: 'viewWidgetBreadCrumbs'
-        ,
-          widget: 'viewWidgetFullExerciseSubmitter'
-        ,
-          widget: 'viewWidgetScheduler'
-        ,
-          widget: 'viewWidgetDictionaryManager'
-        ,
-          widget: 'viewWidgetExerciseBuilder'
-        ]
-      updateShit()
-      ###

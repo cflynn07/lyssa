@@ -1,7 +1,7 @@
 # employee model
 
 config = require '../config/config'
-orm = require '../components/orm'
+orm = require '../components/oRM'
 SEQ = orm.SEQ
 
 module.exports =

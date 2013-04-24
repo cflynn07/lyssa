@@ -14,7 +14,7 @@ catch error
   GLOBAL.env = false
 
 #set up orm
-require('./components/orm').setup()
+require('./components/oRM').setup()
 
 ###
 if GLOBAL.env

@@ -1,6 +1,6 @@
 # field model
 
-orm = require '../components/orm'
+orm = require '../components/oRM'
 SEQ = orm.SEQ
 
 module.exports =

@@ -1,4 +1,4 @@
-ORMValidateFieldsHelper = require './ORMValidateFieldsHelper'
+ORMValidateFieldsHelper = require './oRMValidateFieldsHelper'
 config                  = require '../config/config'
 async                   = require 'async'
 uuid                    = require 'node-uuid'

@@ -39,7 +39,7 @@ define [
             clearTimeout timer
             $el.removeClass 'widget-themis'
             $el.addClass    'widget-themis-finish'
-            $el.css 'position', null
+            $el.css 'position', ''
             return
 
           #$el.find('.loading-indicator').css

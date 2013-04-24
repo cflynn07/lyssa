@@ -7,7 +7,7 @@ buster     = require 'buster'
 config     = require '../../server/config/config'
 express    = require 'express.io'
 getClients = require config.appRoot + 'server/controllers/api/v1/clients/getClientsV1'
-ORM        = require config.appRoot + 'server/components/orm'
+ORM        = require config.appRoot + 'server/components/oRM'
 async      = require 'async'
 sequelize  = ORM.setup()
 

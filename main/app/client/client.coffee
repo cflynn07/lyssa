@@ -194,7 +194,7 @@ require [
     $routeProvider
       .when('/menu1a', {
         action: 'menu.1.a'
-      })
+      })π
       .when('/menu1a/sub1', {
         action: 'menu.1.SUB'
       })
