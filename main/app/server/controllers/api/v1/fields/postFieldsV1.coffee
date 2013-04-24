@@ -42,12 +42,6 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-
-
-
-
-
-
             apiVerifyObjectProperties this, group, req.body, req, res, {
               requiredProperties:
                 'name': (val, objectKey, object, callback) ->
@@ -72,9 +66,6 @@ module.exports = (app) ->
                       message:
                         type: 'required'
 
-
-
-
                 'clientUid': (val, objectKey, object, callback) ->
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
@@ -82,9 +73,6 @@ module.exports = (app) ->
                   callback null,
                     success:   true
                     transform: [objectKey, 'clientUid', testClientUid]
-
-
-
 
                 'groupUid': (val, objectKey, object, callback) ->
 
@@ -151,29 +139,111 @@ module.exports = (app) ->
 
               insertHelper.call(this, objects, res)
 
-
-
-
-
-
-
-
-
-
-
-
-
           when 'clientSuperAdmin', 'clientAdmin'
 
-            res.jsonAPIRespond config.errorResponse(401)
+            apiVerifyObjectProperties this, group, req.body, req, res, {
+              requiredProperties:
+                'name': (val, objectKey, object, callback) ->
+
+                  if !_.isUndefined val
+                    callback null,
+                      success: true
+                  else
+                    callback null,
+                      success: false
+                      message:
+                        name: 'required'
+
+                'type': (val, objectKey, object, callback) ->
+
+                  if !_.isUndefined val
+                    callback null,
+                      success: true
+                  else
+                    callback null,
+                      success: false
+                      message:
+                        type: 'required'
+
+                'clientUid': (val, objectKey, object, callback) ->
+
+                  if !_.isUndefined val
+                    callback null,
+                      success: false
+                      message:
+                        clientUid: 'unknown'
+                    return
+
+                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
+                  callback null,
+                    success:   true
+                    transform: [objectKey, 'clientUid', testClientUid]
+
+                'groupUid': (val, objectKey, object, callback) ->
+
+                  if _.isUndefined val
+                    callback null,
+                      success: false
+                      message:
+                        groupUid: 'required'
+                    return
+
+                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
+                  async.parallel [
+                    (callback) ->
+                      client.find(
+                        where:
+                          uid: testClientUid
+                      ).success (resultClient) ->
+                        callback null, resultClient
+
+                    (callback) ->
+                      group.find(
+                        where:
+                          clientUid: testClientUid
+                          uid:       val
+                      ).success (resultGroup) ->
+                        callback null, resultGroup
 
 
+                  ], (error, results) ->
 
+                    resultClient   = results[0]
+                    resultGroup    = results[1]
 
+                    if !resultGroup
+                      callback null,
+                        success: false
+                        message:
+                          'resultGroup': 'unknown'
+                      return
 
+                    if !resultClient
+                      callback null,
+                        success: false
+                        'clientUid': 'unknown'
+                      return
 
+                    #IF we do find the employee, but it doesn't belong to the same client...
+                    if resultGroup.clientUid != resultClient.uid
+                      callback null,
+                        success: false
+                        message:
+                          'resultGroup': 'unknown'
+                      return
 
+                    mapObj = {}
+                    mapObj[resultGroup.uid]  = resultGroup
+                    mapObj[resultClient.uid] = resultClient
+                    callback null,
+                      success: true
+                      uidMapping: mapObj
 
+            }, (objects) ->
+
+              insertHelper.call(this, objects, res)
 
 
 

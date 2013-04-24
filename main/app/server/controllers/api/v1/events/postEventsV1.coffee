@@ -9,11 +9,9 @@ _                         = require 'underscore'
 
 module.exports = (app) ->
 
-  group    = ORM.model 'group'
-  template = ORM.model 'template'
-  employee = ORM.model 'employee'
-  client   = ORM.model 'client'
-  revision = ORM.model 'revision'
+  employee  = ORM.model 'employee'
+  client    = ORM.model 'client'
+  event     = ORM.model 'event'
 
   insertHelper = (objects, res) ->
     #Give everyone their own brand new uid
@@ -21,27 +19,26 @@ module.exports = (app) ->
       objects[key]['uid'] = uuid.v4()
 
     async.map objects, (item, callback) ->
-      group.create(item).success () ->
+      event.create(item).success () ->
         callback()
     , (err, results) ->
       res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
 
 
-
-  app.post config.apiSubDir + '/v1/groups', (req, res) ->
+  app.post config.apiSubDir + '/v1/events', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
       (callback) ->
 
-        userType  = req.session.user.type
-        clientUid = req.session.user.clientUid
+        userType    = req.session.user.type
+        clientUid   = req.session.user.clientUid
         employeeUid = req.session.user.uid
 
         switch userType
           when 'superAdmin'
 
-            apiVerifyObjectProperties this, group, req.body, req, res, {
+            apiVerifyObjectProperties this, event, req.body, req, res, {
               requiredProperties:
                 'name': (val, objectKey, object, callback) ->
 
@@ -54,16 +51,17 @@ module.exports = (app) ->
                       message:
                         name: 'required'
 
-                'ordinal': (val, objectKey, object, callback) ->
+                'dateTime': (val, objectKey, object, callback) ->
 
                   if !_.isUndefined val
                     callback null,
                       success: true
+                      transform: [objectKey, 'dateTime', (new Date(val))]
                   else
                     callback null,
                       success: false
                       message:
-                        ordinal: 'required'
+                        name: 'required'
 
                 'clientUid': (val, objectKey, object, callback) ->
 
@@ -73,13 +71,13 @@ module.exports = (app) ->
                     success:   true
                     transform: [objectKey, 'clientUid', testClientUid]
 
-                'revisionUid': (val, objectKey, object, callback) ->
+                'employeeUid': (val, objectKey, object, callback) ->
 
                   if _.isUndefined val
                     callback null,
                       success: false
                       message:
-                        revisionUid: 'required'
+                        employeeUid: 'required'
                     return
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
@@ -93,46 +91,47 @@ module.exports = (app) ->
                         callback null, resultClient
 
                     (callback) ->
-                      revision.find(
+                      employee.find(
                         where:
                           clientUid: testClientUid
-                          uid: val
-                      ).success (resultRevision) ->
-                        callback null, resultRevision
-
+                          uid:       val
+                      ).success (resultEmployee) ->
+                        callback null, resultEmployee
 
                   ], (error, results) ->
 
-                    resultClient   = results[0]
-                    resultRevision = results[1]
+                    resultClient      = results[0]
+                    resultEmployee  = results[1]
 
-                    if !resultRevision
+                    if !resultEmployee
                       callback null,
                         success: false
                         message:
-                          'revisionUid': 'unknown'
+                          employeeUid: 'unknown'
                       return
 
                     if !resultClient
                       callback null,
                         success: false
-                        'clientUid': 'unknown'
+                        message:
+                          clientUid: 'unknown'
                       return
 
                     #IF we do find the employee, but it doesn't belong to the same client...
-                    if resultRevision.clientUid != resultClient.uid
+                    if resultEmployee.clientUid != resultClient.uid
                       callback null,
                         success: false
                         message:
-                          'revisionUid': 'unknown'
+                          employeeUid: 'unknown'
                       return
 
                     mapObj = {}
-                    mapObj[resultRevision.uid] = resultRevision
-                    mapObj[resultClient.uid]   = resultClient
+                    mapObj[resultEmployee.uid]  = resultEmployee
+                    mapObj[resultClient.uid]      = resultClient
                     callback null,
                       success: true
                       uidMapping: mapObj
+
 
             }, (objects) ->
 
@@ -140,8 +139,7 @@ module.exports = (app) ->
 
           when 'clientSuperAdmin', 'clientAdmin'
 
-
-            apiVerifyObjectProperties this, group, req.body, req, res, {
+            apiVerifyObjectProperties this, event, req.body, req, res, {
               requiredProperties:
                 'name': (val, objectKey, object, callback) ->
 
@@ -154,21 +152,22 @@ module.exports = (app) ->
                       message:
                         name: 'required'
 
-                'ordinal': (val, objectKey, object, callback) ->
+                'dateTime': (val, objectKey, object, callback) ->
 
                   if !_.isUndefined val
                     callback null,
                       success: true
+                      transform: [objectKey, 'dateTime', (new Date(val))]
                   else
                     callback null,
                       success: false
                       message:
-                        ordinal: 'required'
+                        name: 'required'
 
                 'clientUid': (val, objectKey, object, callback) ->
 
                   if !_.isUndefined val
-                    callback null
+                    callback null,
                       success: false
                       message:
                         clientUid: 'unknown'
@@ -180,13 +179,13 @@ module.exports = (app) ->
                     success:   true
                     transform: [objectKey, 'clientUid', testClientUid]
 
-                'revisionUid': (val, objectKey, object, callback) ->
+                'employeeUid': (val, objectKey, object, callback) ->
 
                   if _.isUndefined val
                     callback null,
                       success: false
                       message:
-                        revisionUid: 'required'
+                        employeeUid: 'required'
                     return
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
@@ -200,54 +199,53 @@ module.exports = (app) ->
                         callback null, resultClient
 
                     (callback) ->
-                      revision.find(
+                      employee.find(
                         where:
                           clientUid: testClientUid
                           uid:       val
-                      ).success (resultRevision) ->
-                        callback null, resultRevision
+                      ).success (resultEmployee) ->
+                        callback null, resultEmployee
 
                   ], (error, results) ->
 
                     resultClient   = results[0]
-                    resultRevision = results[1]
+                    resultEmployee = results[1]
 
-                    if !resultRevision
+                    if !resultEmployee
                       callback null,
                         success: false
                         message:
-                          'revisionUid': 'unknown'
+                          employeeUid: 'unknown'
                       return
 
                     if !resultClient
                       callback null,
                         success: false
-                        'clientUid': 'unknown'
+                        message:
+                          clientUid: 'unknown'
                       return
 
                     #IF we do find the employee, but it doesn't belong to the same client...
-                    if resultRevision.clientUid != resultClient.uid
+                    if resultEmployee.clientUid != resultClient.uid
                       callback null,
                         success: false
                         message:
-                          'revisionUid': 'unknown'
+                          employeeUid: 'unknown'
                       return
 
                     mapObj = {}
-                    mapObj[resultRevision.uid] = resultRevision
-                    mapObj[resultClient.uid]   = resultClient
+                    mapObj[resultEmployee.uid]  = resultEmployee
+                    mapObj[resultClient.uid]      = resultClient
                     callback null,
-                      success: true
+                      success:    true
                       uidMapping: mapObj
+
 
             }, (objects) ->
 
               insertHelper.call(this, objects, res)
 
-
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)
 
     ]
-
-
