@@ -168,7 +168,7 @@ module.exports = (app) ->
                 'clientUid': (val, objectKey, object, callback) ->
 
                   if !_.isUndefined val
-                    callback null
+                    callback null,
                       success: false
                       message:
                         clientUid: 'unknown'
