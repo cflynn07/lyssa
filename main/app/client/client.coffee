@@ -87,6 +87,7 @@ require [
   'cs!directives/directiveAnimateRouteChange'
   'cs!directives/directiveDatePicker'
   'cs!directives/directiveToggleButton'
+  'cs!directives/directiveInlineEdit'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
@@ -118,6 +119,7 @@ require [
   DirectiveAnimateRouteChange
   DirectiveDatePicker
   DirectiveToggleButton
+  DirectiveInlineEdit
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
@@ -138,9 +140,11 @@ require [
   #Modules
   CS = angular.module 'CS', ['ui']
 
+
   #Animations
   AnimationSlideUpDown CS
   AnimationFadeInOut   CS
+
 
   #Directives
   DirectiveCollapseWidget     CS
@@ -148,14 +152,13 @@ require [
   DirectiveAnimateRouteChange CS
   DirectiveDatePicker         CS
   DirectiveToggleButton       CS
+  DirectiveInlineEdit         CS
+
 
   #Services
   ServiceSocket CS
   ServicePubSub CS
   ServiceAuthenticate CS
-
-
-
 
 
   #Admin
@@ -166,7 +169,6 @@ require [
 
   #Delegate
   # - #/themis/exercises
-
 
 
   #Routes

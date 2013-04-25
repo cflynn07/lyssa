@@ -1,4 +1,5 @@
-<div ddata-ng-controller="ControllerWidgetDictionaryManager">
+<div data-ng-controller="ControllerWidgetDictionaryManager">
+
   <div data-animate-in data-collapse-widget data-title="Manage Dictionaries" data-widget-themis="true" data-color="blue">
     <div class="row-fluid">
       <div class="span3 responsive span8">
@@ -36,7 +37,9 @@
             <tbody role="alert" aria-live="polite" aria-relevant="all">
 
               <tr class="gradeX odd" data-ng-repeat="item in items">
-                  <td class="">{{item}}</td>
+                  <td class="">
+                    <div data-inline-edit data-model="item">{{item}}</div>
+                  </td>
                   <td class="">
                     <a href class="btn blue mini">Edit</a>
                     <a href class="btn red mini">Delete</a>
@@ -50,4 +53,5 @@
       </div>
     </div>
   </div>
+
 </div>

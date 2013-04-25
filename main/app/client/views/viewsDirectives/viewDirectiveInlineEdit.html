@@ -1,0 +1,8 @@
+<span
+  data-ng-hide="editMode"
+  data-ng-click="editMode=true;value=model">{{model}}</span>
+<input
+  type="text"
+  data-ng-model="value"
+  data-ng-show="editMode"
+  data-ng-change="model=value"/>
