@@ -9,11 +9,11 @@
           <table class="table table-striped table-bordered table-hover dataTable">
             <thead></thead>
             <tbody>
-              <tr data-ng-repeat="dictionary in dictionaries">
+              <tr data-ng-repeat="(uid, dictionary) in viewModel.dictionaries">
                 <td>
 
                   <a data-ng-href="#{{viewRoot}}/{{dictionary.uid}}">
-                    {{dictionary.name}} ({{dictionary.dictionaryItems.length}})
+                    {{dictionary.name}} ({{ getKeysLength(dictionary.dictionaryItems) }})
                   </a>
 
                 </td>
@@ -24,6 +24,11 @@
         </div>
       </div>
       <div class="span9">
+
+
+
+
+
 
         <div
           data-collapse-widget
@@ -48,65 +53,34 @@
               role="alert"
               aria-live="polite"
               aria-relevant="all"
-              data-ng-show="activeDictionary !== false">
-
-              <tr
-                class="gradeX odd"
-                data-ng-repeat="item in activeDictionary.dictionaryItems">
-                  <td class="">
-                    <div
-                      data-inline-edit
-                      data-model="item.name">{{item.name}}</div>
-                  </td>
-                  <td class="">
-                    <a href class="btn red mini">Delete</a>
-                  </td>
-              </tr>
-
-            </tbody>
-          </table>
-
-
-          <h3>Deleted Dictionary Items</h3>
-          <table class="table table-striped table-bordered table-hover dataTable">
-            <thead>
-              <tr role="row">
-                <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: auto;" aria-label="Username: activate to sort column ascending">
-                  Value
-                </th>
-                <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 140px;" aria-label=": activate to sort column ascending">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-
-            <tbody
-              role="alert"
-              aria-live="polite"
-              aria-relevant="all"
-              data-ng-show="activeDictionary !== false">
+              data-ng-show="viewModel.dictionaries[viewModel.activeDictionaryUid]">
 
               <tr
                 class="gradeX odd"
                 data-ng-init=""
                 data-ng-init="updating=false"
                 data-ng-class="{true:'updating', false: ''}[updating]"
-                data-ng-repeat="item in activeDictionary.dictionaryItems">
+                data-ng-repeat="(uid, dictionaryItem) in viewModel.dictionaries[viewModel.activeDictionaryUid].dictionaryItems">
                   <td class="">
                     <div
                       data-inline-edit
-                      data-model="item.name">{{item.name}}</div>
+                      data-model="dictionaryItem.name">{{dictionaryItem.name}}</div>
                   </td>
+                  <td>{{uid}}</td>
                   <td class="">
                     <a
                       href
                       class="btn green mini"
-                      data-ng-click="updating=true">Restore</a>
+                      data-ng-click="updating=true;persist(dictionaryItem)">Restore</a>
                   </td>
               </tr>
 
             </tbody>
           </table>
+
+
+
+
 
         </div>
       </div>

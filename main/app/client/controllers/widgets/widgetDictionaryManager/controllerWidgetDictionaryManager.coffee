@@ -12,11 +12,24 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewWidgetDictionaryManager', viewWidgetDictionaryManager
 
-    Module.controller 'ControllerWidgetDictionaryManager', ($scope, $route, $routeParams, socket) ->
 
-      $scope.dictionaries     = []
-      $scope.activeDictionary = false
-      $scope.items            = ['foo', 'bar', 'tst']
+
+
+    Module.controller 'ControllerWidgetDictionaryManager', ($scope, $route, $routeParams, socket, apiRequest) ->
+
+
+      $scope.viewModel =
+        dictionaries: {}
+        activeDictionaryUid: ''
+
+
+      $scope.getKeysLength = (obj) ->
+        length = 0
+        for key, value of obj
+          if !_.isUndefined value['uid']
+            length++
+        return length
+
 
 
       $scope.putDictionaryItem = (dictionaryItem) ->
@@ -32,34 +45,24 @@ define [
             if response.code is 200
               $scope.fetchData()
 
-      #$scope.
-
-
-
-      $scope.findActiveDictionary = () ->
-        if _.isUndefined $routeParams.dictionaryUid
-          $scope.activeDictionary = false
-        else
-          for obj in $scope.dictionaries
-            if obj.uid == $routeParams.dictionaryUid
-              $scope.activeDictionary = obj
-              return
 
       $scope.fetchData = () ->
-        socket.apiRequest 'GET',
-          '/dictionaries',
-          {
-            expand: [{resource: 'dictionaryItems'}]
-          },
-          {},
-          (response) ->
-            if response.code is 200
-              $scope.dictionaries = response.response
-              $scope.findActiveDictionary()
+
+        apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
+          window.responsePlay           = response
+          $scope.viewModel.dictionaries = response.response
 
       $scope.fetchData()
 
 
+      $scope.persist = (dictionaryItem) ->
+        apiRequest.put 'dictionaryItem',
+          dictionaryItem.uid, {
+            name: dictionaryItem.name
+          }, (response) ->
+            console.log response
 
+
+      $scope.viewModel.activeDictionaryUid = $routeParams.dictionaryUid
       $scope.$on '$routeChangeSuccess', () ->
-        $scope.findActiveDictionary()
+        $scope.viewModel.activeDictionaryUid = $routeParams.dictionaryUid

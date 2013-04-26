@@ -29,11 +29,11 @@ module.exports.socketio = (req, res, callback) ->
   #a regular HTTP request
   httpEmulatedRequest =
     requestType: 'socketio'
-    method:   if req.data.method then req.data.method else 'get'
-    url:      config.apiSubDir + (if req.data.url then req.data.url else '/')
+    method:   if !_.isUndefined(req.data.method) then req.data.method else 'get'
+    url:      config.apiSubDir + (if !_.isUndefined(req.data.url) then req.data.url else '/')
     headers:  []
     query:    if !_.isUndefined(req.data.query) then req.data.query else {}
-
+    body:     if !_.isUndefined(req.data.data)  then req.data.data  else {}
   _.extend req, httpEmulatedRequest
 
   if !_.isUndefined(req.query) and !_.isUndefined(req.query.expand)

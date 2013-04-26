@@ -178,6 +178,30 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       code: 200
       response: topResultJSON
 
+    #Join rooms here for all requested resources
+    if !_.isUndefined(req.io) and _.isFunction(req.io.join)
+
+      recursiveBindToRooms = (collection) ->
+
+        if !_.isArray collection
+          collection = [collection]
+
+        for obj in collection
+
+          if !_.isUndefined obj['uid']
+            req.io.join obj.uid
+            console.log 'join room: ' + obj.uid
+
+          for propertyName, propertyValue of obj
+            if _.isArray propertyValue
+              recursiveBindToRooms propertyValue
+
+      recursiveBindToRooms topResultJSON
+
+
+
+
+
 
   ###
   STANDARD CHECKS...

@@ -12,6 +12,10 @@ define [
 
       factory =
         on: (eventName, callback) ->
+          socket.on eventName, () ->
+            args = arguments
+            $rootScope.$apply () ->
+              callback.apply socket, args
 
         emit: (eventName, data, callback) ->
           socket.emit eventName, data, () ->
