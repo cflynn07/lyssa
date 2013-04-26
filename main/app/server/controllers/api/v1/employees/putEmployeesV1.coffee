@@ -7,25 +7,13 @@ ORM                       = require config.appRoot + 'server/components/oRM'
 sequelize                 = ORM.setup()
 _                         = require 'underscore'
 bcrypt                    = require 'bcrypt'
+updateHelper              = require config.appRoot + 'server/components/updateHelper'
+
 
 module.exports = (app) ->
 
   client   = ORM.model 'client'
   employee = ORM.model 'employee'
-
-  updateHelper = (objects, res) ->
-    async.map objects, (item, callback) ->
-      employee.find(
-        where:
-          uid: item.uid
-      ).success (resultClient) ->
-        if resultClient
-          resultClient.updateAttributes(item).success () ->
-            callback()
-        else
-          callback()
-    , () ->
-      res.jsonAPIRespond config.response(202)
 
   app.put config.apiSubDir + '/v1/employees', (req, res) ->
     async.series [
@@ -162,7 +150,7 @@ module.exports = (app) ->
                     success: false
 
             }, (objects) ->
-              updateHelper objects, res
+              updateHelper employee, objects, res, app
 
 
           when 'clientSuperAdmin'
@@ -289,7 +277,7 @@ module.exports = (app) ->
                     success: false
 
             }, (objects) ->
-              updateHelper objects, res
+              updateHelper employee, objects, res, app
 
 
           when 'clientAdmin'
@@ -416,7 +404,7 @@ module.exports = (app) ->
                     success: false
 
             }, (objects) ->
-              updateHelper objects, res
+              updateHelper employee, objects, res, app
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

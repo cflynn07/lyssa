@@ -6,6 +6,8 @@ uuid                      = require 'node-uuid'
 ORM                       = require config.appRoot + 'server/components/oRM'
 sequelize                 = ORM.setup()
 _                         = require 'underscore'
+insertHelper              = require config.appRoot + 'server/components/insertHelper'
+
 
 module.exports = (app) ->
 
@@ -13,19 +15,6 @@ module.exports = (app) ->
   client         = ORM.model 'client'
   dictionary     = ORM.model 'dictionary'
   dictionaryItem = ORM.model 'dictionaryItem'
-
-
-  insertHelper = (objects, res) ->
-    #Give everyone their own brand new uid
-    for object, key in objects
-      objects[key]['uid'] = uuid.v4()
-
-    async.map objects, (item, callback) ->
-      dictionaryItem.create(item).success () ->
-        callback()
-    , (err, results) ->
-      res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
-
 
   app.post config.apiSubDir + '/v1/dictionaryItems', (req, res) ->
     async.series [
@@ -98,7 +87,7 @@ module.exports = (app) ->
                       callback null,
                         success: false
                         message:
-                          'resultDictionary': 'unknown'
+                          'dictionarUid': 'unknown'
                       return
 
                     if !resultClient
@@ -112,7 +101,7 @@ module.exports = (app) ->
                       callback null,
                         success: false
                         message:
-                          'resultDictionary': 'unknown'
+                          'dictionarUid': 'unknown'
                       return
 
                     mapObj = {}
@@ -126,7 +115,8 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              insertHelper.call(this, objects, res)
+              #insertHelper.call(this, objects, res)
+              insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, res, app
 
           when 'clientSuperAdmin', 'clientAdmin'
 
@@ -221,7 +211,8 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              insertHelper.call(this, objects, res)
+              #insertHelper.call(this, objects, res)
+              insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, res, app
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

@@ -6,25 +6,14 @@ uuid                      = require 'node-uuid'
 ORM                       = require config.appRoot + 'server/components/oRM'
 sequelize                 = ORM.setup()
 _                         = require 'underscore'
+updateHelper              = require config.appRoot + 'server/components/updateHelper'
+
 
 module.exports = (app) ->
 
   template = ORM.model 'template'
   employee = ORM.model 'employee'
 
-  updateHelper = (objects, res) ->
-    async.map objects, (item, callback) ->
-      template.find(
-        where:
-          uid: item.uid
-      ).success (resultTemplate) ->
-        if resultTemplate
-          resultTemplate.updateAttributes(item).success () ->
-            callback()
-        else
-          callback()
-    , () ->
-      res.jsonAPIRespond config.response(202)
 
   app.put config.apiSubDir + '/v1/templates', (req, res) ->
     async.series [
@@ -135,7 +124,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper objects, res
+              updateHelper template, objects, res, app
 
 
           when 'clientSuperAdmin', 'clientAdmin'
@@ -239,7 +228,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper objects, res
+              updateHelper template, objects, res, app
 
 
           when 'clientDelegate', 'clientAuditor'

@@ -2,7 +2,8 @@
 #  Verify access credentials
 ###
 
-config       = require '../config/config'
+config  = require '../config/config'
+_       = require 'underscore'
 
 module.exports = (req, res, callback) ->
 
@@ -10,9 +11,8 @@ module.exports = (req, res, callback) ->
   if req.requestType is 'http'
 
     #TEMP FOR debugging
-    if (req.query and req.session)
-      req.session.user =
-        req.query
+    #if (req.query and req.session)
+    #  _.extend req.session.user, req.query
 
     ## Token or session based authentication?
     if !req.session.user?
@@ -27,13 +27,12 @@ module.exports = (req, res, callback) ->
   else if req.requestType is 'socketio'
 
     #TEMP FOR debugging
-    if (req.query and req.session)
-      req.session.user =
-        req.query
+    #if (req.query and req.session)
+    #  _.extend req.session.user, req.query
 
-    req.session = {}
-    req.session.user =
-      type: 'superAdmin'
+    #req.session = {}
+    #req.session.user =
+    #  type: 'superAdmin'
 
     ## Session based authentication
     if !req.session.user?

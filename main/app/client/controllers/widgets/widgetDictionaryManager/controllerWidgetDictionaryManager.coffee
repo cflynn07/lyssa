@@ -47,12 +47,22 @@ define [
 
 
       $scope.fetchData = () ->
-
+        return
         apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
           window.responsePlay           = response
           $scope.viewModel.dictionaries = response.response
 
       $scope.fetchData()
+
+
+
+
+      apiRequest.get 'dictionary', [], {}, (response) ->
+        window.responsePlay           = response
+        $scope.viewModel.dictionaries = response.response
+
+
+
 
 
       $scope.persist = (dictionaryItem) ->

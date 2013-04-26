@@ -12,13 +12,38 @@ define [
     Module.factory 'apiRequest', (socket, $rootScope) ->
 
 
+      #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
           updatePoolResource resourcePool[data['uid']], data
 
+
       socket.on 'resourcePost', (data) ->
+
         console.log 'resourcePost'
         console.log data
+
+        if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])
+          #resourcePoolCollections[data['resourceName']][data['resource']['uid']] = data['resource']
+
+          #turn it into a hash obj on uid
+          obj = {}
+          obj[data['resource']['uid']] = data['resource']
+          data['resource'] = obj
+
+
+          #Add in to resourcePool also (this might be happening twice)
+          _.extend resourcePool, data['resource']
+          #attach to parent resources if exist
+          attachResourcesToParentsInPool data['apiCollectionName'], data['resource']
+
+
+          addResourcesToOpenEndedGet data['apiCollectionName'],
+            data['resourceName'],
+            data['resource'],
+            {},
+            false
+
 
 
 
@@ -28,6 +53,79 @@ define [
 
       #Store results from open-ended (no specified uids) GET requests to resources
       resourcePoolCollections = {}
+
+      #Store all eager-loaded child resources for each open-ended query
+      resourcePoolCollectionsExpands = {}
+
+
+
+      #TEMP
+      window.playRPC = resourcePoolCollections
+
+
+
+      attachResourcesToParentsInPool = (apiCollectionName, resources) ->
+        if !_.isArray resources
+          resources = [resources]
+
+        #Helper
+        endsWith = (string, suffix) ->
+          return string.indexOf(suffix, string.length - suffix.length) != -1
+
+        for obj in resources
+          for propName, propValue of obj #HASH
+            for propName2, propValue2 of propValue  #RESOURCE OBJECT
+              #Does it end in "Uid"
+              if endsWith propName2, 'Uid'
+                #Does the resource/hash (propValue2) exist in our pool?
+                if !_.isUndefined resourcePool[propValue2]
+                  if !_.isUndefined resourcePool[propValue2][apiCollectionName]
+                    _.extend resourcePool[propValue2][apiCollectionName], obj
+
+
+
+
+
+      addResourcesToOpenEndedGet = (apiCollectionName, resourceName, resources, expand, cacheSyncRequest) ->
+
+        console.log arguments
+
+        if _.isUndefined resourcePoolCollections[apiCollectionName]
+          resourcePoolCollections[apiCollectionName] = resources
+        else
+          _.extend resourcePoolCollections[apiCollectionName], resources
+
+
+
+
+
+        presentExpand = resourcePoolCollectionsExpands[apiCollectionName]
+
+        #First load, we don't need this
+        if _.isUndefined presentExpand
+          resourcePoolCollectionsExpands[apiCollectionName] = expand
+          return
+
+
+        if JSON.stringify presentExpand != JSON.stringify expand
+
+          _.extend presentExpand, expand
+          resourcePoolCollectionsExpands[apiCollectionName] = presentExpand
+
+          if !cacheSyncRequest
+            #We must execute a GET to load the nested resources
+            factory.get resourceName, [], presentExpand, (response) ->
+
+              console.log 'updated eager associations'
+              console.log response
+
+            , true #Don't run again
+
+
+
+
+
+
 
 
       updatePoolResource = (poolResource, updatedResource) ->
@@ -88,7 +186,7 @@ define [
 
       factory =
         # Request resources and bind callbacks
-        get: (resourceName, uids = [], expand = {}, callback) ->
+        get: (resourceName, uids = [], expand = {}, callback, cacheSyncRequest = false) ->
 
           if !validateResource resourceName
             return
@@ -112,15 +210,10 @@ define [
           apiCollectionName = getCollectionName resourceName
 
 
-
-
-
           collectionHashSaved = false
           if !_.isUndefined resourcePoolCollections[apiCollectionName]
             collectionHashSaved = true
             callback({code: 200, response: resourcePoolCollections[apiCollectionName]})
-
-
 
 
           socket.apiRequest 'GET',
@@ -135,7 +228,8 @@ define [
 
                 if uids.length == 0
                   #This was open-ended GET request. Store it.
-                  resourcePoolCollections[apiCollectionName] = response.response
+                  #resourcePoolCollections[apiCollectionName] = response.response
+                  addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response, expand, cacheSyncRequest
 
 
                 if !allUids and !collectionHashSaved

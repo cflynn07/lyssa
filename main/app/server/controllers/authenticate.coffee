@@ -49,7 +49,7 @@ module.exports = (app) ->
             delete user.password
 
             #user.client = user.client
-            req.session.user = user
+            req.session.user = JSON.parse JSON.stringify user
 
             #Hang out with the other cool super admins if you're a super admin
          #   if user.super_admin

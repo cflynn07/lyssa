@@ -26,7 +26,7 @@ define [
       #$templateCache.put 'viewWidgetExerciseBuilder', viewWidgetExerciseBuilder
 
 
-    Module.controller 'ControllerWidgetExerciseBuilder', ($scope, $route, $routeParams, $templateCache, socket) ->
+    Module.controller 'ControllerWidgetExerciseBuilder', ($scope, $route, $routeParams, $templateCache, socket, apiRequest) ->
 
 
       $scope.test = () ->
@@ -38,6 +38,13 @@ define [
       $scope.currentRevision              = {}
       $scope.currentTemplate              = {}
       $scope.currentTemplateFirstRevision = {}
+
+
+
+
+      apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
+        window.responsePlay           = response
+        #$scope.viewModel.dictionaries = response.response
 
 
 

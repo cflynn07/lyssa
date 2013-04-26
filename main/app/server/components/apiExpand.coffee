@@ -178,8 +178,21 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       code: 200
       response: topResultJSON
 
+
     #Join rooms here for all requested resources
     if !_.isUndefined(req.io) and _.isFunction(req.io.join)
+      if !_.isUndefined(req.session) and !_.isUndefined(req.session.user) and !_.isUndefined(req.session.user.clientUid)
+
+          roomName = req.session.user.clientUid + '-postResources'
+          req.io.join(roomName)
+          console.log 'joined room ' + roomName
+
+      #if _.isUndefined(resourceQueryParams.find) || _.isUndefined(resourceQueryParams.find.where) || _.isUndefined(resourceQueryParams.find.where.uid)
+      #  if !_.isUndefined(req.session) and !_.isUndefined(req.session.user) and !_.isUndefined(req.session.user.clientUid)
+      #    req.io.join(req.session.user.clientUid + '-' + resource.name)
+      #    console.log 'joined room ' + req.session.user.clientUid + '-postResources'
+
+
 
       recursiveBindToRooms = (collection) ->
 
