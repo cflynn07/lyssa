@@ -2,6 +2,7 @@ Sequelize = require 'sequelize'
 fs        = require 'fs'
 _         = require 'underscore'
 modelsPath    = __dirname + '/../models'
+config    = require '../config/config'
 
 module.exports =
   setup: (mode = 'standard') ->
@@ -73,6 +74,9 @@ module.exports =
 
     relationships = @relationships
     models = @models
+
+    #Hash of model objects to write to JSON file & share with client
+    exportModels = {}
     fs.readdirSync(modelsPath).forEach (name) ->
 
       if name.indexOf('coffee') > 0
@@ -91,11 +95,17 @@ module.exports =
           unique: true
       }, object.model)
 
-
-      models[modelName] = sequelize.define modelName, object.model, options
+      models[modelName]       = sequelize.define modelName, object.model, options
+      exportModels[modelName] =
+        model: object.model
 
       if object.relations
-        relationships[modelName] = object.relations
+        relationships[modelName]          = object.relations
+        exportModels[modelName].relations = object.relations
+
+    #Write to JSON
+    fs.writeFileSync config.appRoot + 'client/config/clientOrmShare.json', JSON.stringify(exportModels)
+
 
     for modelName, relations of @relationships
       for relObject in relations

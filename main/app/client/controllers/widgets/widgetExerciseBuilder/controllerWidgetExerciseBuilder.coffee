@@ -32,7 +32,7 @@ define [
       $scope.test = () ->
         alert 'test!'
 
-      $scope.viewRoot = $route.current.path #'templates'
+      #$scope.viewRoot = $route.current.path #'templates'
 
       $scope.templates                    = []
       $scope.currentRevision              = {}

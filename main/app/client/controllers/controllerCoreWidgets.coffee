@@ -14,17 +14,17 @@ define [
 
   (Module) ->
 
-    Module.run ($templateCache) ->
+    Module.run ($templateCache, apiRequest) ->
       $templateCache.put 'viewCoreWidgets', viewCoreWidgets
 
     ###
       Manages the dynamic insertion of widgets to the main content area of the application
     ###
-    Module.controller 'ControllerCoreWidgets', ($scope, $route) ->
+    Module.controller 'ControllerCoreWidgets', ($scope, $route, $rootScope) ->
 
-      $scope.widgetRows = [{widget: 'viewWidgetBreadCrumbs'}]
-
+      $scope.widgetRows   = [{widget: 'viewWidgetBreadCrumbs'}]
       previousRouteTitle  = ''
+
       isDerivativeRoute   = (newRouteTitle) ->
         result = true
         if newRouteTitle != previousRouteTitle
@@ -37,9 +37,9 @@ define [
 
       trigger4oh4 = () ->
         widgets = stripAllButBC()
-        previousRouteTitle = ''
-        widgets = widgets.push widget:'viewWidget4oh4'
+        widgets.push widget:'viewWidget4oh4'
         $scope.widgetRows = widgets
+        previousRouteTitle = ''
 
       loadNewRoute = () ->
 
@@ -64,6 +64,9 @@ define [
           for value in $route.current.pathValue.widgets
             addWidgets.push widget: value
           $scope.widgetRows = widgets.concat addWidgets
+
+          #Used by widgets for forming links
+          $rootScope.viewRoot = $route.current.pathValue.root
 
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
         loadNewRoute()

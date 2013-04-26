@@ -72,13 +72,13 @@ module.exports = (app) ->
                         employeeUid: 'required'
                     return
 
-                  clientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
                   async.parallel [
                     (callback) ->
                       client.find(
                         where:
-                          uid: clientUid
+                          uid: testClientUid
                       ).success (resultClient) ->
                         callback null, resultClient
 

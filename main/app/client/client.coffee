@@ -91,6 +91,7 @@ require [
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
+  'cs!services/serviceAPIRequest'
   'cs!controllers/controllerApp'
   'cs!controllers/controllerCoreWidgets'
   'cs!controllers/controllerWidgetCoreLeftMenu'
@@ -123,6 +124,7 @@ require [
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
+  ServiceAPIRequest
   ControllerApp
   ControllerCoreWidgets
   ControllerWidgetCoreLeftMenu
@@ -140,11 +142,9 @@ require [
   #Modules
   CS = angular.module 'CS', ['ui']
 
-
   #Animations
   AnimationSlideUpDown CS
   AnimationFadeInOut   CS
-
 
   #Directives
   DirectiveCollapseWidget     CS
@@ -154,22 +154,11 @@ require [
   DirectiveToggleButton       CS
   DirectiveInlineEdit         CS
 
-
   #Services
   ServiceSocket CS
   ServicePubSub CS
   ServiceAuthenticate CS
-
-
-  #Admin
-  # - #/themis/admin/dashboard
-  # - #/themis/admin/templates
-  # - #/themis/admin/schedule
-  # - #/themis/admin/timeline
-
-  #Delegate
-  # - #/themis/exercises
-
+  ServiceAPIRequest   CS
 
   #Routes
   CS.config ($routeProvider) ->
@@ -187,45 +176,8 @@ require [
               path:      key + objectKey
               pathValue: _.extend(value, objectValue)
 
-
-
     $routeProvider.otherwise
       invalid: true
-
-    ###
-    $routeProvider
-      .when('/menu1a', {
-        action: 'menu.1.a'
-      })π
-      .when('/menu1a/sub1', {
-        action: 'menu.1.SUB'
-      })
-      .when('/menu1b', {
-        action: 'menu.1.b'
-      })
-      .when('/menu2', {
-        action: 'menu.2'
-      })
-      .when('/menu3', {
-        action: 'menu.3'
-      })
-
-      .when('/templates', {
-        action: 'menu.3'
-      })
-      .when('/templates/:templateId', {
-        action: 'menu.3'
-      })
-      .when('/templates/:templateId/:revisionId', {
-        action: 'menu.3'
-      })
-
-      .otherwise({
-        redirectTo: '/menu1a'
-      })
-      ###
-
-
 
   ControllerApp                         CS
   ControllerCoreWidgets                 CS

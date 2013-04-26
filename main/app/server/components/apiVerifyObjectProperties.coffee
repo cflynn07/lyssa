@@ -1,4 +1,4 @@
-ORMValidateFieldsHelper = require './oRMValidateFieldsHelper'
+oRMValidateFieldsHelper = require './oRMValidateFieldsHelper'
 config                  = require '../config/config'
 async                   = require 'async'
 uuid                    = require 'node-uuid'
@@ -24,7 +24,7 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
 
 
   #validates each object property against any validation specs in resourceModel
-  objectValidationErrors = ORMValidateFieldsHelper testObjects, resourceModel
+  objectValidationErrors = oRMValidateFieldsHelper testObjects, resourceModel
   #if objectValidationErrors.length > 0
   #  res.jsonAPIRespond _.extend config.errorResponse(400), messages: objectValidationErrors
   #  return

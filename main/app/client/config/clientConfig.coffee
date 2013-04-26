@@ -6,13 +6,19 @@ define [], () ->
       #Admin Dashboard
       '/admin/themis':
         title:     'Dashboard'
-        subRoutes: []
-        widgets:   []
+        root:      '/admin/themis'
+        subRoutes: [
+
+        ]
+        widgets:   [
+
+        ]
       #Admin template builder
       '/admin/themis/templates':
         title:     'Templates'
+        root:      '/admin/themis/templates'
         subRoutes: [
-          '/:templateId/:revisionId':
+          '/:templateUid/:revisionUid':
             title:       'Templates'
             subMenuItem: false
         ]
@@ -22,15 +28,18 @@ define [], () ->
       #Admin schedule editor
       '/admin/themis/schedule':
         title:     'Schedule'
-        subRoutes: []
+        root:      '/admin/themis/schedule'
+        subRoutes: [
+        ]
         widgets:   [
           'viewWidgetScheduler'
         ]
       #Admin dictionaries editor
       '/admin/themis/dictionaries':
         title:     'Dictionaries'
+        root:       '/admin/themis/dictionaries'
         subRoutes: [
-          '/:dictionaryId':
+          '/:dictionaryUid':
             title:       'Dictionaries'
             subMenuItem: false
         ]
@@ -41,18 +50,23 @@ define [], () ->
       #Delegate dashboard
       '/delegate/themis':
         title:     'Dashboard'
-        subRoutes: []
-        widgets:   []
+        root:       '/delegate/themis'
+        subRoutes: [
+        ]
+        widgets:   [
+        ]
 
       #Delegate exercise submission
       '/delegate/themis/exercises':
         title:     'Exercises'
+        root:      '/delegate/themis/exercises'
         subRoutes: [
-          '/:exerciseId':
+          '/:exerciseUid':
             title:       'Exercises'
             subMenuItem: false
         ]
-        widgets:   []
+        widgets:   [
+        ]
 
     simplifiedUserCategories:
       'clientSuperAdmin': 'admin'

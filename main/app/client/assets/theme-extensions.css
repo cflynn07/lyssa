@@ -163,3 +163,7 @@ div.header span.username {
 .inline-content *{
     display: inline-block;
 }
+
+.updating {
+    opacity: 0.5;
+}

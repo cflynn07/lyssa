@@ -32,6 +32,17 @@ module.exports = (app) ->
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
 
+
+        #Make sure no duplicate identifiers
+        identifiers = []
+        if _.isArray req.body
+          for value in req.body
+            if identifiers.indexOf(value.identifer) != -1
+              res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
+              return
+
+
+
         switch userType
           when 'superAdmin'
 
@@ -49,8 +60,16 @@ module.exports = (app) ->
 
                 'identifier': (val, objectKey, object, callback) ->
                   if val
+
+                    #Make sure no duplicates
+                    clients.find(
+                      where:
+                        identifier: val
+                    ).success
+
                     callback null,
                       success: true
+
                   else
                     callback null,
                       success: false

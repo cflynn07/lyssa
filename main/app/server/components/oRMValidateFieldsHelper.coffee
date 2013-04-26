@@ -27,7 +27,7 @@ module.exports = (postObjects, resourceModel) ->
 
           #alphanumeric
           if !_.isUndefined(testAttribute.validate.isAlphanumeric) and testAttribute.validate.isAlphanumeric
-            if (propertyValue.length > 0) and !propertyValue.match(/^[0-9a-z]+$/)
+            if (propertyValue.length > 0) and !propertyValue.match(/^[ 0-9a-zA-Z]+$/)
               errorObj = {}
               errorObj[propertyName] = 'must be alphanumeric'
               objectValidationErrors.push errorObj
