@@ -17,6 +17,27 @@ define [
       $scope.viewModel =
         dictionaries:        {}
         activeDictionaryUid: ''
+        showAddNewDictionary: false
+        newDictionaryForm: {}
+        postNewDictionary: () ->
+          apiRequest.post 'dictionary', {
+            name: $scope.viewModel.newDictionaryForm.name
+          }, (response) ->
+            console.log 'new dictionary'
+            console.log arguments
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       $scope.getKeysLength = (obj) ->
         length = 0

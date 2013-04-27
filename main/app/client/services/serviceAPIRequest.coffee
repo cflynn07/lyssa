@@ -229,6 +229,9 @@ define [
             {}       #query
             objects, #data
             (response) ->
+              console.log 'response'
+              console.log response
+              console.log callback
               callback(response)
 
 

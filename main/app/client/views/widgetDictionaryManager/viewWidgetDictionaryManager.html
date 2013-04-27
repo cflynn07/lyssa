@@ -6,6 +6,12 @@
 
         <div data-collapse-widget data-title="Dictionaries" data-widget-themis="false" data-color="grey">
 
+          <button
+            data-ng-hide="viewModel.showAddNewDictionary"
+            data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}"
+            data-ng-click="viewModel.showAddNewDictionary=true;"
+            class="btn green btn-block">New Dictionary <i class="m-icon-swapright m-icon-white"></i></button>
+
           <table class="table table-striped table-bordered table-hover dataTable">
             <thead></thead>
             <tbody>
@@ -22,12 +28,44 @@
           </table>
 
         </div>
+
       </div>
       <div class="span9">
 
 
 
+        <div
+          style="display:none;"
+          data-ng-show="viewModel.showAddNewDictionary"
+          data-ng-animate="{show: 'slideDown', hide: 'slideUp'}">
+          <div
+            data-collapse-widget
+            data-title="New Dictionary"
+            data-widget-themis="false"
+            data-color="grey">
 
+            <form data-novalidate>
+              <input type="text" data-ng-model="viewModel.newDictionaryForm.name"><br/>
+            </form>
+
+            <div class="row-fluid">
+              <div class="span6 responsive span8">
+                <button
+                  data-ng-click="viewModel.showAddNewDictionary=false"
+                  class="btn red btn-block"><i class="m-icon-swapleft m-icon-white"></i> Cancel</button>
+              </div>
+              <div class="span6 responsive span8">
+                <button
+                  data-ng-click="viewModel.postNewDictionary()"
+                  class="btn green btn-block">Add <i class="m-icon-swapright m-icon-white"></i></button>
+              </div>
+            </div>
+
+
+
+
+          </div>
+        </div>
 
 
         <div
@@ -58,13 +96,12 @@
               <tr
                 class="gradeX odd"
                 data-ng-repeat="(uid, dictionaryItem) in viewModel.dictionaries[viewModel.activeDictionaryUid].dictionaryItems"
-                data-ng-class="{true:'', false: 'stale'}[dictionaryItem.isFresh]"
+                data-ng-class="{true:'', false: 'stale'}[dictionaryItem.isFresh]">
                   <td class="">
                     <div
                       data-inline-edit
                       data-model="dictionaryItem.name">{{dictionaryItem.name + ' - ' + dictionaryItem.isFresh}}</div>
                   </td>
-                  <td>{{uid}}</td>
                   <td class="">
                     <a
                       href
