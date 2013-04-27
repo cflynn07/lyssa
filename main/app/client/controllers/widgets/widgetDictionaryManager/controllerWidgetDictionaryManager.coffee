@@ -12,16 +12,11 @@ define [
     Module.run ($templateCache) ->
       $templateCache.put 'viewWidgetDictionaryManager', viewWidgetDictionaryManager
 
-
-
-
     Module.controller 'ControllerWidgetDictionaryManager', ($scope, $route, $routeParams, socket, apiRequest) ->
 
-
       $scope.viewModel =
-        dictionaries: {}
+        dictionaries:        {}
         activeDictionaryUid: ''
-
 
       $scope.getKeysLength = (obj) ->
         length = 0
@@ -29,8 +24,6 @@ define [
           if !_.isUndefined value['uid']
             length++
         return length
-
-
 
       $scope.putDictionaryItem = (dictionaryItem) ->
         socket.apiRequest 'PUT',
@@ -45,7 +38,6 @@ define [
             if response.code is 200
               $scope.fetchData()
 
-
       $scope.fetchData = () ->
         return
         apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
@@ -54,12 +46,10 @@ define [
 
       $scope.fetchData()
 
-
-
-
-      apiRequest.get 'dictionary', [], {}, (response) ->
+      apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
         window.responsePlay           = response
         $scope.viewModel.dictionaries = response.response
+
 
 
 

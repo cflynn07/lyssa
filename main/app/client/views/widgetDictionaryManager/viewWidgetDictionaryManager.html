@@ -57,14 +57,12 @@
 
               <tr
                 class="gradeX odd"
-                data-ng-init=""
-                data-ng-init="updating=false"
-                data-ng-class="{true:'updating', false: ''}[updating]"
-                data-ng-repeat="(uid, dictionaryItem) in viewModel.dictionaries[viewModel.activeDictionaryUid].dictionaryItems">
+                data-ng-repeat="(uid, dictionaryItem) in viewModel.dictionaries[viewModel.activeDictionaryUid].dictionaryItems"
+                data-ng-class="{true:'', false: 'stale'}[dictionaryItem.isFresh]"
                   <td class="">
                     <div
                       data-inline-edit
-                      data-model="dictionaryItem.name">{{dictionaryItem.name}}</div>
+                      data-model="dictionaryItem.name">{{dictionaryItem.name + ' - ' + dictionaryItem.isFresh}}</div>
                   </td>
                   <td>{{uid}}</td>
                   <td class="">

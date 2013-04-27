@@ -164,6 +164,6 @@ div.header span.username {
     display: inline-block;
 }
 
-.updating {
+.stale {
     opacity: 0.5;
 }
