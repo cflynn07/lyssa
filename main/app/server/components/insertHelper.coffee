@@ -8,8 +8,12 @@ module.exports = (apiCollectionName, clientUid, resource, objects, res, app) ->
   for object, key in objects
     objects[key]['uid'] = uuid.v4()
 
+  responseUids = []
+
   async.map objects, (item, callback) ->
     resource.create(item).success (createdItem) ->
+
+      responseUids.push createdItem.uid
 
       if !_.isUndefined(app.io) and _.isFunction(app.io.room)
 
@@ -23,4 +27,4 @@ module.exports = (apiCollectionName, clientUid, resource, objects, res, app) ->
 
       callback()
   , (err, results) ->
-    res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
+    res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201], uids: responseUids)

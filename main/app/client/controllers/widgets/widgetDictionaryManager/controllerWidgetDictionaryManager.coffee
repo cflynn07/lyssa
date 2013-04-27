@@ -46,11 +46,20 @@ define [
 
       $scope.fetchData()
 
+
+
       apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
+      #apiRequest.get 'dictionary', [], {}, (response) ->
         window.responsePlay           = response
         $scope.viewModel.dictionaries = response.response
 
-
+      testObj = {
+        "name":"gasdfasdfasdfasdfasdf",
+        "dictionaryUid":"3b5c6c5b-ca10-4c96-a9e3-82cfa15e258c"
+      }
+      apiRequest.post 'dictionaryItem', [testObj], (response) ->
+        console.log 'post test'
+        console.log response
 
 
 

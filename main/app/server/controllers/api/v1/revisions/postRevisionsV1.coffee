@@ -6,6 +6,7 @@ uuid                      = require 'node-uuid'
 ORM                       = require config.appRoot + 'server/components/oRM'
 sequelize                 = ORM.setup()
 _                         = require 'underscore'
+insertHelper              = require config.appRoot + 'server/components/insertHelper'
 
 module.exports = (app) ->
 
@@ -13,22 +14,6 @@ module.exports = (app) ->
   template = ORM.model 'template'
   client   = ORM.model 'client'
   employee = ORM.model 'employee'
-
-
-
-
-
-  insertHelper = (objects, res) ->
-    #Give everyone their own brand new uid
-    for object, key in objects
-      objects[key]['uid'] = uuid.v4()
-
-    async.map objects, (item, callback) ->
-      revision.create(item).success () ->
-        callback()
-    , (err, results) ->
-      res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
-
 
   app.post config.apiSubDir + '/v1/revisions', (req, res) ->
     async.series [
@@ -164,23 +149,10 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              insertHelper.call(this, objects, res)
-
-
-
-
-
-
+              #insertHelper.call(this, objects, res)
+              insertHelper 'revisions', clientUid, revision, objects, res, app
 
           when 'clientSuperAdmin', 'clientAdmin'
-
-
-
-
-
-
-
-
 
             apiVerifyObjectProperties this, revision, req.body, req, res, {
               requiredProperties:
@@ -349,8 +321,8 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              insertHelper.call(this, objects, res)
-
+              #insertHelper.call(this, objects, res)
+              insertHelper 'revisions', clientUid, revision, objects, res, app
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

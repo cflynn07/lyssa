@@ -21,7 +21,6 @@ define [
       resourcePoolCollectionsExpands = {}
 
 
-
       #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
@@ -48,7 +47,6 @@ define [
             data['resource'],
             {},
             false
-
 
       #
       # MSC Helpers
@@ -79,7 +77,6 @@ define [
         else
           _.extend resourcePoolCollections[apiCollectionName], resources
 
-
         presentExpand = resourcePoolCollectionsExpands[apiCollectionName]
 
         #First load, we don't need this
@@ -87,17 +84,22 @@ define [
           resourcePoolCollectionsExpands[apiCollectionName] = expand
           return
 
+        #TODO: This runs more than it has to, fix
+        #console.log '---'
+        #console.log JSON.stringify presentExpand
+        #console.log JSON.stringify expand
 
-        if JSON.stringify presentExpand != JSON.stringify expand
+        if JSON.stringify(presentExpand) != JSON.stringify(expand)
 
-          _.extend presentExpand, expand
-          resourcePoolCollectionsExpands[apiCollectionName] = presentExpand
+          _.extend resourcePoolCollectionsExpands[apiCollectionName], expand
 
           if !cacheSyncRequest
             #We must execute a GET to load the nested resources
-            factory.get resourceName, [], presentExpand, (response) ->
+
+            factory.get resourceName, [], resourcePoolCollectionsExpands[apiCollectionName], (response) ->
 
               console.log 'updated eager associations'
+              console.log resourcePoolCollectionsExpands[apiCollectionName]
               console.log response
 
             , true #Don't run again
@@ -159,8 +161,6 @@ define [
           apiCollectionName = 'dictionaries'
         return apiCollectionName
 
-
-
       #
       # Response Object
       #
@@ -170,6 +170,9 @@ define [
 
           if !validateResource resourceName
             return
+
+          apiCollectionName = getCollectionName resourceName
+
 
           #Opportunity to return from cache, then update cache if
           #we have all of the specified uids in the resourcePool
@@ -187,12 +190,13 @@ define [
           else
             allUids = false
 
-          apiCollectionName = getCollectionName resourceName
 
-          collectionHashSaved = false
-          if !_.isUndefined resourcePoolCollections[apiCollectionName]
-            collectionHashSaved = true
-            callback({code: 200, response: resourcePoolCollections[apiCollectionName]})
+          if uids.length == 0
+            collectionHashSaved = false
+            if !_.isUndefined resourcePoolCollections[apiCollectionName]
+              collectionHashSaved = true
+              callback({code: 200, response: resourcePoolCollections[apiCollectionName]})
+
 
           socket.apiRequest 'GET',
             '/' + apiCollectionName + '/' + uids.join(','),
@@ -214,15 +218,18 @@ define [
                 if !allUids and !collectionHashSaved
                   callback response
 
-
-
-        post: (resourceName) ->
+        post: (resourceName, objects, callback) ->
           if !validateResource resourceName
             return
 
           apiCollectionName = getCollectionName resourceName
 
-
+          socket.apiRequest 'POST',
+            '/' + apiCollectionName,
+            {}       #query
+            objects, #data
+            (response) ->
+              callback(response)
 
 
         put: (resourceName, uid, properties, callback) ->

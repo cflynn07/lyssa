@@ -6,6 +6,7 @@ uuid                      = require 'node-uuid'
 ORM                       = require config.appRoot + 'server/components/oRM'
 sequelize                 = ORM.setup()
 _                         = require 'underscore'
+insertHelper              = require config.appRoot + 'server/components/insertHelper'
 
 module.exports = (app) ->
 
@@ -15,18 +16,6 @@ module.exports = (app) ->
   client   = ORM.model 'client'
   revision = ORM.model 'revision'
   field    = ORM.model 'field'
-
-  insertHelper = (objects, res) ->
-    #Give everyone their own brand new uid
-    for object, key in objects
-      objects[key]['uid'] = uuid.v4()
-
-    async.map objects, (item, callback) ->
-      field.create(item).success () ->
-        callback()
-    , (err, results) ->
-      res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
-
 
 
   app.post config.apiSubDir + '/v1/fields', (req, res) ->
@@ -137,7 +126,8 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              insertHelper.call(this, objects, res)
+              #insertHelper.call(this, objects, res)
+              insertHelper 'fields', clientUid, field, objects, res, app
 
           when 'clientSuperAdmin', 'clientAdmin'
 
@@ -243,8 +233,8 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              insertHelper.call(this, objects, res)
-
+              #insertHelper.call(this, objects, res)
+              insertHelper 'fields', clientUid, field, objects, res, app
 
 
 
