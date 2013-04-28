@@ -1,10 +1,10 @@
 define [
   'underscore'
-  'uuid'
+  #'uuid'
   'text!config/clientOrmShare.json'
 ], (
   _
-  uuid
+  #uuid
   clientOrmShare
 ) ->
 
@@ -248,6 +248,8 @@ define [
 
           if !_.isUndefined resourcePool[uid]
             resourcePool[uid].isFresh = false
+            _.extend resourcePool[uid], properties
+
 
           socket.apiRequest 'PUT',
             '/' + apiCollectionName,
@@ -262,14 +264,12 @@ define [
               callback(response)
 
 
-        delete: (resourceName, uids, callback) ->
+        delete: (resourceName, uid, callback) ->
           if !validateResource resourceName
             return
 
           apiCollectionName = getCollectionName resourceName
 
-          if !_.isArray uids
-            uids = [uids]
 
           if !_.isUndefined resourcePool[uid]
             resourcePool[uid].isFresh = false
@@ -277,7 +277,7 @@ define [
           socket.apiRequest 'DELETE',
             '/' + apiCollectionName,
             {} #query
-            uids, #data
+            uid, #data
             (response) ->
 
               callback response

@@ -17,16 +17,42 @@ define [], () ->
 
           checkDuplicates = (viewValue) ->
             if viewValue
-              apiRequest.get attrData.resource, [], {}, (response) ->
+
+
+              uids = []
+              if attrData.uids
+                if !_.isArray attrData.uids
+                  uids = [attrData.uids]
+                else
+                  uids = attrData.uids
+
+
+
+              apiRequest.get attrData.resource, uids, {}, (response) ->
                 isValid = true
                 if response.code == 200
                   for uid, obj of response.response
-                    if obj[attrData.property].toLowerCase() == viewValue.toLowerCase() and !obj.deletedAt
-                      isValid = false
-                      break
+
+                    if attrData.subProperty
+                      if obj[attrData.property]
+                        for uid2, obj2 of obj[attrData.property]
+                          if obj2[attrs.subProperty].toLowerCase() == viewValue.toLowerCase() and !obj2[attrs.subProperty].deletedAt
+                            isValid = false
+                            break
+
+                    else
+                      if obj[attrData.property].toLowerCase() == viewValue.toLowerCase() and !obj.deletedAt
+                        isValid = false
+                        break
+
+
+
                   ctrl.$setValidity 'uniqueField', isValid
                 else
                   ctrl.$setValidity 'uniqueField', true
+
+
+
             else
               ctrl.$setValidity 'uniqueField', true
             return viewValue

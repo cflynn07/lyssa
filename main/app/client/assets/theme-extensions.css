@@ -8,7 +8,7 @@
     -------------------
 */
 body {
-    background-color: #F1F1F1;
+    background-color: #F1F1F1 !important;
 }
 .page-content {
     background-color: #DDD;
@@ -169,6 +169,9 @@ div.header span.username {
     Make certain items flow inline within contents
     ----------------------------------------------
 */
+.inline-content {
+    white-space: nowrap;
+}
 .inline-content *{
     display: inline-block;
 }
@@ -219,4 +222,73 @@ div.header span.username {
 }
 .DataTables_sort_wrapper .DataTables_sort_icon {
     display: none;
+}
+
+
+.dataTables_wrapper .row-fluid {
+    min-height: 0 !important;
+}
+.dataTables_wrapper .row-fluid div.span6{
+    min-height: 0 !important;
+}
+.dataTables_wrapper .dataTables_length {
+    padding-top: 5px;
+}
+
+/*
+  Box for info and fields, different colors for each
+  --------------------------------------------------
+*/
+.box {
+  padding: 14px 8px 14px 8px;
+  margin-bottom: 20px;
+  border: 2px solid;
+}
+.box.template-info-box {
+  /*
+  color: #468847;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  */
+  color: #666;
+  background-color: #EEE;
+  border-color: #DDDDDD;
+}
+.box.revision-group-box {
+  color: #3a87ad;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+
+/*
+  Box for all fields in a revision
+  --------------------------------
+*/
+.revision-fields-box {
+  min-height: 10px;
+}
+
+/*
+  Fields in a revision box
+  ------------------------
+*/
+.field-box {
+  background-color: #ccc;
+  border: 2px solid #777;
+  padding: 12px 6px 12px 6px;
+  margin-bottom: 10px;
+}
+.field-box.ui-sortable-placeholder {
+  opacity: 0.5;
+  min-height: 40px;
+}
+.field-box.ui-sortable-helper {
+  opacity:0.95;
+}
+.field-box .open-response {
+
+}
+.field-box .open-response textarea {
+  width: 100%;
+  resize: none;
 }

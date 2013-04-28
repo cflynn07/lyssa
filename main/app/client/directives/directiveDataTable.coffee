@@ -69,7 +69,7 @@ define [
               dataTable.fnAddData convertedVal
 
 
-              $compile(element.find('*[data-ng-click]'))(scope)
+              $compile(element.find('tr'))(scope)
 
           , true
 

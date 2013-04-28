@@ -17,12 +17,6 @@ define [
 
     Module.controller 'ControllerWidgetDictionaryManager', ($scope, $route, $routeParams, socket, apiRequest, $filter, $dialog) ->
 
-
-
-
-
-
-
       $scope.viewModel =
         dictionaries:               {}
 
@@ -31,7 +25,10 @@ define [
 
         activeDictionaryUid:        ''
         showAddNewDictionary:       false
+        showAddDictionaryItems:     false
+
         newDictionaryForm:          {}
+        newDictionaryItemForm:      {}
 
         dictionaryItemsOptions:
           bStateSave: true
@@ -53,16 +50,42 @@ define [
           bInfo: true
           bDestroy: true
 
-
-
         columnDefsActiveDictionaryItems: [
           mDataProp: "name"
           aTargets: [0]
+          sWidth: '50%'
+          mRender: (data, type, full) ->
+
+            name = 'editDictionaryItemForm' + full.uid.replace /-/g, '_'
+
+            html = '<form name="' + name + '" novalidate>'
+            html += '<span data-ng-model="$parent.viewModel.dictionaries[$parent.viewModel.activeDictionaryUid].dictionaryItems[$parent.viewModel.editingDictionaryItemUid].name" data-ng-hide="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" >' + data + '</span>'
+            html += '<input name="name" data-required data-ng-minlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[0]}}" data-ng-maxlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[1]}}" data-ng-show="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" type="text" data-ng-model="$parent.viewModel.editingDictionaryItemTempValue">'
+            html += '<span data-ng-show="' + name + '.name.$error.minlength" style="color:red;" class="help-inline">Name must be longer than {{clientOrmShare.dictionaryItem.model.name.validate.len[0]}} characters</span>'
+            html += '<span data-ng-show="' + name + '.name.$error.maxlength" style="color:red;" class="help-inline">Name must be shorter than {{clientOrmShare.dictionaryItem.model.name.validate.len[1]}} characters</span>'
+            html += '</form>'
+
         ,
           mData: null
           aTargets: [1]
-        ]
+          mRender: (data, type, full) ->
+            return '0 templates'
+        ,
+          mData: null
+          sWidth: '30%'
+          aTargets: [2]
+          mRender: (data, type, full) ->
 
+            name = 'editDictionaryItemForm' + full.uid.replace /-/g, '_'
+
+            html = '<div class="inline-content" style="text-align:center;">'
+            html +=  '<a href data-ng-hide="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" data-ng-click="$parent.viewModel.deleteConfirmDialogDictionaryItem(\'' + full.uid + '\')" class="btn red">Delete</a>'
+            html += ' <a href data-ng-hide="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" data-ng-click="$parent.viewModel.editDictionaryItem(\'' + full.uid + '\')" class="btn blue">Edit</a>'
+            html += ' <a href data-ng-disabled="' + name + '.$invalid" data-ng-show="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" data-ng-click="$parent.viewModel.saveEditingDictionaryItem(' + name + '.$invalid' + ')" class="btn green">Save</a>'
+            html += ' <a href data-ng-show="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" data-ng-click="$parent.viewModel.cancelEditDictionaryItem()" class="btn red">Cancel</a></div>'
+
+            return html
+        ]
 
         columnDefsDictionaryList: [
           mDataProp: "name"
@@ -74,18 +97,18 @@ define [
           aTargets: [0]
         ,
           mData: null
+          sWidth: '15%'
           mRender: (data, type, full) ->
             return $scope.getKeysLength(full.dictionaryItems)
           aTargets: [1]
         ,
           mData: null
           bSortable: false
+          sWidth: '35%'
           mRender: (data, type, full) ->
-            return '<div class="inline-content" style="text-align:center;"><a data-ng-href data-ng-click="$parent.viewModel.deleteConfirmDialog(\'' + full.uid + '\')" class="btn red mini">Delete</a> <a href="#' + $scope.viewRoot + '/' + full.uid  + '" class="btn blue mini">Edit</a></div>'
+            return '<div class="inline-content" style="text-align:center;"><a data-ng-href data-ng-click="$parent.viewModel.deleteConfirmDialogDictionary(\'' + full.uid + '\')" class="btn red">Delete</a> <a href="#' + $scope.viewRoot + '/' + full.uid  + '" class="btn blue">Edit</a></div>'
           aTargets: [2]
         ]
-
-
 
         postNewDictionary: () ->
           apiRequest.post 'dictionary', {
@@ -94,13 +117,20 @@ define [
             return
           $scope.viewModel.newDictionaryForm = {}
 
+        postNewDictionaryItem: () ->
+          console.log 'p1'
+          apiRequest.post 'dictionaryItem', {
+            dictionaryUid: $scope.viewModel.dictionaries[$scope.viewModel.activeDictionaryUid].uid
+            name: $scope.viewModel.newDictionaryItemForm.name
+          }, (response) ->
+            console.log response
+            return
+          $scope.viewModel.newDictionaryItemForm = {}
 
 
 
 
-
-
-      $scope.viewModel.deleteConfirmDialog = (dictionaryUid) ->
+      $scope.viewModel.deleteConfirmDialogDictionary = (dictionaryUid) ->
 
         apiRequest.get 'dictionary', [dictionaryUid], {}, (response) ->
           console.log response
@@ -120,11 +150,57 @@ define [
 
           $dialog.messageBox(title, msg, btns).open()
             .then (result) ->
-              return
-              alert('dialog closed with result: ' + result)
+              if result
+                apiRequest.delete 'dictionary', dictionaryUid, (result) ->
+                  console.log result
 
 
 
+      $scope.viewModel.deleteConfirmDialogDictionaryItem = (dictionaryItemUid) ->
+
+        apiRequest.get 'dictionaryItem', [dictionaryItemUid], {}, (response) ->
+          console.log response
+
+
+          title = 'Delete Dialog'
+          msg   = 'Dire Consequences...'
+          btns  = [
+            result:   false
+            label:    'Cancel'
+            cssClass: 'red'
+          ,
+            result:   true
+            label:    'Confirm'
+            cssClass: 'green'
+          ]
+
+          $dialog.messageBox(title, msg, btns).open()
+            .then (result) ->
+              if result
+                apiRequest.delete 'dictionaryItem', dictionaryItemUid, (result) ->
+                  console.log result
+
+
+      $scope.viewModel.cancelEditDictionaryItem = () ->
+        $scope.viewModel.editingDictionaryItemTempValue = ''
+        $scope.viewModel.editingDictionaryItemUid       = ''
+
+      $scope.viewModel.editDictionaryItem = (dictionaryUid) ->
+        $scope.viewModel.editingDictionaryItemUid       = dictionaryUid
+        $scope.viewModel.editingDictionaryItemTempValue = $scope.viewModel.dictionaries[$scope.viewModel.activeDictionaryUid].dictionaryItems[$scope.viewModel.editingDictionaryItemUid].name
+      $scope.viewModel.saveEditingDictionaryItem = (isInvalid) ->
+        if isInvalid
+          return
+        apiRequest.put 'dictionaryItem', $scope.viewModel.editingDictionaryItemUid, {
+          name: $scope.viewModel.editingDictionaryItemTempValue
+        }, (response) ->
+          console.log 'response'
+          console.log response
+        $scope.viewModel.cancelEditDictionaryItem()
+
+
+      $scope.viewModel.editingDictionaryItemUid = ''
+      $scope.viewModel.editingDictionaryItemTempValue = ''
 
 
 
@@ -133,7 +209,21 @@ define [
 
 
       $scope.$on '$routeChangeSuccess', () ->
+
+        $scope.viewModel.showAddDictionaryItems = false
+        $scope.newDictionaryItemForm.$setPristine()
+        $scope.viewModel.newDictionaryItemForm  = {}
+
+        $scope.viewModel.showAddNewDictionary = false
+        $scope.newDictionaryForm.$setPristine()
+        $scope.viewModel.newDictionaryForm    = {}
+
         $scope.viewModel.activeDictionaryUid = $routeParams.dictionaryUid
+
+
+
+
+
 
 
 
@@ -299,7 +389,7 @@ define [
       $scope.getKeysLength = (obj) ->
         length = 0
         for key, value of obj
-          if !_.isUndefined value['uid']
+          if !_.isUndefined(value['uid']) and _.isNull(value['deletedAt'])
             length++
         return length
 
