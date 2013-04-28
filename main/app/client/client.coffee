@@ -9,6 +9,7 @@ requirejs.config
   paths:
     'angular':              'vendor/angular'
     'angular-ui':           'vendor/angular-ui'
+    'angular-bootstrap':    'vendor/angular-bootstrap'
     'text':                 'vendor/text'
     'coffee-script':        'vendor/coffee-script'
     'cs':                   'vendor/cs'
@@ -42,6 +43,9 @@ requirejs.config
       exports: 'angular'
     'angular-ui':
       deps:    ['angular', 'jquery', 'jquery-ui']
+      exports: 'angular'
+    'angular-bootstrap':
+      deps:    ['angular', 'jquery', 'jquery-ui', 'bootstrap']
       exports: 'angular'
     underscore:
       exports: '_'
@@ -80,6 +84,7 @@ require [
   'angular'
   'cs!config/clientConfig'
   'angular-ui'
+  'angular-bootstrap'
   'cs!animations/animationSlideUpDown'
   'cs!animations/animationFadeInOut'
   'cs!directives/directiveAnimateIn'
@@ -88,10 +93,13 @@ require [
   'cs!directives/directiveDatePicker'
   'cs!directives/directiveToggleButton'
   'cs!directives/directiveInlineEdit'
+  'cs!directives/directiveUniqueField'
+  'cs!directives/directiveDataTable'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
   'cs!services/serviceAPIRequest'
+  'cs!filters/filterToArray'
   'cs!controllers/controllerApp'
   'cs!controllers/controllerCoreWidgets'
   'cs!controllers/controllerWidgetCoreLeftMenu'
@@ -113,6 +121,7 @@ require [
   angular
   clientConfig
   angularUi
+  angularBootstrap
   AnimationSlideUpDown
   AnimationFadeInOut
   DirectiveAnimateIn
@@ -121,10 +130,13 @@ require [
   DirectiveDatePicker
   DirectiveToggleButton
   DirectiveInlineEdit
+  DirectiveUniqueField
+  DirectiveDataTable
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
   ServiceAPIRequest
+  FilterToArray
   ControllerApp
   ControllerCoreWidgets
   ControllerWidgetCoreLeftMenu
@@ -140,7 +152,7 @@ require [
 ) ->
 
   #Modules
-  CS = angular.module 'CS', ['ui']
+  CS = angular.module 'CS', ['ui', 'ui.bootstrap']
 
   #Animations
   AnimationSlideUpDown CS
@@ -153,6 +165,8 @@ require [
   DirectiveDatePicker         CS
   DirectiveToggleButton       CS
   DirectiveInlineEdit         CS
+  DirectiveUniqueField        CS
+  DirectiveDataTable          CS
 
   #Services
   ServiceSocket CS
@@ -160,14 +174,15 @@ require [
   ServiceAuthenticate CS
   ServiceAPIRequest   CS
 
+  #Filters
+  FilterToArray CS
+
   #Routes
   CS.config ($routeProvider) ->
     for key, value of clientConfig.routes
-
       $routeProvider.when key,
         path: key
         pathValue: value
-
       if _.isArray value.subRoutes
         for value2 in value.subRoutes
           for objectKey, objectValue of value2
@@ -175,7 +190,6 @@ require [
             $routeProvider.when key + objectKey,
               path:      key + objectKey
               pathValue: _.extend(value, objectValue)
-
     $routeProvider.otherwise
       invalid: true
 
@@ -191,6 +205,5 @@ require [
   ControllerWidgetFullExerciseSubmitter CS
   ControllerWidget4oh4                  CS
   ControllerWidgetCoreFooter            CS
-
 
   angular.bootstrap document, ['CS']
