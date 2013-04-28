@@ -19,10 +19,10 @@ define [
           color:        '@color'
           model:        '='
 
-        replace: true
+        #replace: true
         compile: (element, attrs, transclusionFunc) ->
           (scope, iterStartElement, attrs) ->
-
+            console.log 'cw link f'
             #if scope.buttons
               #console.log scope.buttons
             scope.collapsed = false
@@ -33,5 +33,4 @@ define [
             origElem   = transclusionFunc scope
             content    = origElem.text()
             scope.orig = content
-            #scope.obj = my_custom_parsing(content)
             scope.obj  = content

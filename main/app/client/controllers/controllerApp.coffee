@@ -2,11 +2,15 @@ define [
   'jquery'
   'angular'
   'text!views/viewCore.html'
+  'text!config/clientOrmShare.json'
 ], (
   $
   angular
   viewCore
+  clientOrmShare
 ) ->
+
+  clientOrmShare = JSON.parse clientOrmShare
 
   (Module) ->
 
@@ -17,6 +21,9 @@ define [
 
       #quick hack
       $('body').removeClass 'login'
+
+
+      $rootScope.clientOrmShare = clientOrmShare
 
 
       #temp

@@ -21,7 +21,16 @@ body {
 }
 
 .header .navbar-inner {
-    background-color: #555555!important;
+    background-color: #555555 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25),inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    background: rgb(85,85,85); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(85,85,85,1) 0%, rgba(64,64,64,1) 100%) !important;/* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(85,85,85,1)), color-stop(100%,rgba(64,64,64,1))) !important;/* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(85,85,85,1) 0%,rgba(64,64,64,1) 100%) !important;/* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(85,85,85,1) 0%,rgba(64,64,64,1) 100%) !important;/* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(85,85,85,1) 0%,rgba(64,64,64,1) 100%) !important;/* IE10+ */
+    background: linear-gradient(to bottom, rgba(85,85,85,1) 0%,rgba(64,64,64,1) 100%) !important;/* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#555555', endColorstr='#404040',GradientType=0 ) !important;/* IE6-9 */
 }
 
 
@@ -164,6 +173,50 @@ div.header span.username {
     display: inline-block;
 }
 
+
+/*
+    Give a simple universal appearance of data that
+    is out of sync with the server
+    ----------------------------------------------
+*/
 .stale {
     opacity: 0.5;
+}
+
+
+/*
+    Custom appearances to go with angularjs form
+    validations.
+    NOTE: These classes are applied to <form> and
+    the individual input elements
+    ----------------------------------------------
+*/
+.ng-pristine span, .ng-pristine input, .ng-pristine label {
+    color: #000 !important;
+    border-color: #000 !important;
+}
+.ng-pristine span > i, .ng-pristine .help-inline {
+    display: none !important;
+}
+
+
+
+.error i.icon-ok {
+    display: none !important;
+}
+
+.success i.icon-exclamation-sign, .success .help-inline {
+    display: none !important;
+}
+
+
+/*
+    Minor tweaks to datatables appearance
+    ----------------------------------------------
+*/
+.DataTables_sort_wrapper th {
+    color: #000;
+}
+.DataTables_sort_wrapper .DataTables_sort_icon {
+    display: none;
 }

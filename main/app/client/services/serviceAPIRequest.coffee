@@ -25,12 +25,13 @@ define [
 
       #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
+        $rootScope.$broadcast 'resourcePut'
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
           updatePoolResource resourcePool[data['uid']], data
 
 
       socket.on 'resourcePost', (data) ->
-
+        $rootScope.$broadcast 'resourcePost'
         if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])
           #resourcePoolCollections[data['resourceName']][data['resource']['uid']] = data['resource']
 
@@ -99,10 +100,11 @@ define [
             #We must execute a GET to load the nested resources
 
             factory.get resourceName, [], resourcePoolCollectionsExpands[apiCollectionName], (response) ->
+              return
 
-              console.log 'updated eager associations'
-              console.log resourcePoolCollectionsExpands[apiCollectionName]
-              console.log response
+              #console.log 'updated eager associations'
+              #console.log resourcePoolCollectionsExpands[apiCollectionName]
+              #console.log response
 
             , true #Don't run again
 
@@ -231,9 +233,9 @@ define [
             {}       #query
             objects, #data
             (response) ->
-              console.log 'response'
-              console.log response
-              console.log callback
+              #console.log 'response'
+              #console.log response
+              #console.log callback
               callback(response)
 
 
@@ -260,7 +262,23 @@ define [
               callback(response)
 
 
-        delete: (resourceName) ->
+        delete: (resourceName, uids, callback) ->
           if !validateResource resourceName
             return
+
+          apiCollectionName = getCollectionName resourceName
+
+          if !_.isArray uids
+            uids = [uids]
+
+          if !_.isUndefined resourcePool[uid]
+            resourcePool[uid].isFresh = false
+
+          socket.apiRequest 'DELETE',
+            '/' + apiCollectionName,
+            {} #query
+            uids, #data
+            (response) ->
+
+              callback response
 

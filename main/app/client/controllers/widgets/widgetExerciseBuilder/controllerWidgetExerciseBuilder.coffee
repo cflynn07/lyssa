@@ -42,9 +42,9 @@ define [
 
 
 
-      apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
-        window.responsePlay           = response
-        #$scope.viewModel.dictionaries = response.response
+    #  apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
+    #    window.responsePlay            = response
+    #    #$scope.viewModel.dictionaries = response.response
 
 
 
@@ -60,19 +60,17 @@ define [
           $scope.currentTemplateFirstRevision = _.first $scope.currentTemplate.revisions
 
       fetchTemplates = () ->
-        socket.apiRequest 'GET', '/templates?type=superAdmin', {expand: [{resource: 'revisions', expand:[{resource: 'employee'}]}]}, {}, (response) ->
+        apiRequest.get 'template', [], {expand: [{resource: 'revisions', expand:[{resource: 'employee'}]}]}, (response) ->
+          console.log response
           $scope.templates = response.response
-        fetchCurrentTemplate()
+
+        #socket.apiRequest 'GET', '/templates', {expand: [{resource: 'revisions', expand:[{resource: 'employee'}]}]}, {}, (response) ->
+        #  $scope.templates = response.response
+        #fetchCurrentTemplate()
 
       fetchCurrentRevision = () ->
-        socket.apiRequest 'GET', '/revisions/' + $scope.revisionId + '/?type=superAdmin', {expand: [{resource: 'groups', expand:[{resource: 'fields'}]}]}, {}, (response) ->
+        socket.apiRequest 'GET', '/revisions/' + $scope.revisionId, {expand: [{resource: 'groups', expand:[{resource: 'fields'}]}]}, {}, (response) ->
           $scope.currentRevision = response.response
-
-
-          $scope.$watch 'currentRevision.groups', (newVal) ->
-            return
-            #console.log angular.toJson($scope.currentRevision.groups)
-          , true
 
 
 
