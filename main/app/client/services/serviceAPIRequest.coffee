@@ -1,8 +1,10 @@
 define [
   'underscore'
+  'uuid'
   'text!config/clientOrmShare.json'
 ], (
   _
+  uuid
   clientOrmShare
 ) ->
 

@@ -32,6 +32,7 @@ requirejs.config
     'pubsub':               'vendor/pubsub'
     'fullCalendar':         'vendor/fullcalendar'
     'bootstrap-toggle-buttons': '/vendor/bootstrap-toggle-buttons'
+    'uuid':                 'vendor/uuid'
   hbs:
     disableI18n: true
     helperDirectory: 'views/helpers/'
