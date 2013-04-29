@@ -34,7 +34,6 @@ define [
         fetchTemplates: () ->
           #API request loads templats -> revisions -> groups -> fields thanks to api uid hash reconciliation
           apiRequest.get 'template', [], {expand:[{resource: 'revisions'}]}, (responseA) ->
-
             if responseA.code == 200
               revisionUids = []
               for propName, propValue of responseA.response
@@ -43,11 +42,21 @@ define [
               apiRequest.get 'revision', revisionUids, {expand:[{resource: 'groups', expand:[{resource: 'fields'}]}]}, (responseB) ->
                 $scope.viewModel.templates = responseA.response
 
-
         templates:         {}
         activeTemplateUid: ''
 
         dataTable:
+          detailRow: (obj) ->
+
+            return '<div class="portlet box grey" style="margin-bottom:0;">
+                      <div class="portlet-title">
+                        <h4><span>' + obj.name + ' Revisions</span></h4>
+                      </div>
+                      <div class="portlet-body light-grey">
+                      </div>
+                    </div>'
+
+
           columnDefs: [
             mDataProp:  'name'
             aTargets:   [0]
@@ -64,6 +73,11 @@ define [
           ,
             mData:      null
             aTargets:   [2]
+            mRender: (data, type, full) ->
+              html  = '<div class="inline-content" style="text-align:center;">'
+              html += '<a data-ng-href data-ng-click="$parent.viewModel.deleteConfirmDialogDictionary(\'' + full.uid + '\')" class="btn red">Delete</a>'
+              html += ' '
+              html += '<a class="btn blue detail">Revisions</a></div>'
           ]
           options:
             bStateSave:      true
@@ -76,15 +90,9 @@ define [
             bDestroy:        true
 
 
-
       $scope.viewModel.fetchTemplates()
 
-
-
-
       return
-
-
 
 
       #$scope.viewRoot = $route.current.path #'templates'

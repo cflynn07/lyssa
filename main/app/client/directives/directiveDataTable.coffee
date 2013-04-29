@@ -16,10 +16,19 @@ define [
         scope: 'isolate'
         link: (scope, element, attrs) ->
 
+
           bindDetailCallbacks = () ->
-            element.find('tr').bind 'click', () ->
-              dataTable.fnOpen this, 'test', 'something'
-              console.log dataTable.fnGetData this
+            element.find('.detail').bind 'click', () ->
+              el = $(this).parents('tr').get(0)
+
+              if dataTable.fnIsOpen el
+                dataTable.fnClose el
+              else
+                data = dataTable.fnGetData el
+
+                html = scope.$parent.viewModel.dataTable.detailRow(data)
+                dataTable.fnOpen el, html, ''
+
 
           # apply DataTable options, use defaults if none specified by user
           options = {}
