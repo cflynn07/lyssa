@@ -52,6 +52,10 @@ define [
           if attrs.fnRowCallback
             options["fnRowCallback"] = scope.$eval(attrs.fnRowCallback)
 
+          if options
+            options['fnCreatedRow'] = (nRow, aData, iDataIndex) ->
+              $compile(nRow)(scope)
+
           # apply the plugin
           dataTable = element.dataTable(options)
 
@@ -67,9 +71,6 @@ define [
 
               dataTable.fnClearTable()
               dataTable.fnAddData convertedVal
-
-
-              $compile(element.find('tr'))(scope)
 
           , true
 
