@@ -51,6 +51,7 @@ define [
             {},
             false
 
+
       #
       # MSC Helpers
       #
@@ -64,6 +65,7 @@ define [
 
         for obj in resources
           for propName, propValue of obj #HASH
+
             for propName2, propValue2 of propValue  #RESOURCE OBJECT
               #Does it end in "Uid"
               if endsWith propName2, 'Uid'
@@ -71,6 +73,9 @@ define [
                 if !_.isUndefined resourcePool[propValue2]
                   if !_.isUndefined resourcePool[propValue2][apiCollectionName]
                     _.extend resourcePool[propValue2][apiCollectionName], obj
+
+
+
 
 
       addResourcesToOpenEndedGet = (apiCollectionName, resourceName, resources, expand, cacheSyncRequest) ->
@@ -117,6 +122,8 @@ define [
         resourcePool[resource.uid] = resource
         resourcePool[resource.uid].isFresh = true
 
+
+
       #Merge each result with resourcePool hash
       reconcileResultsWithPool = (results) ->
 
@@ -125,9 +132,7 @@ define [
           responseHash = {}
 
           #Temporary convert to array
-          isArray = true
           if !_.isArray passedValueObjOrArray
-            isArray = false
             passedValueObjOrArray = [passedValueObjOrArray]
 
           for obj in passedValueObjOrArray
@@ -144,6 +149,7 @@ define [
 
             for objKey, objValue of obj
               if _.isArray objValue
+                #We turn properties that are arrays of objects into hashes of objects indexed by Uid
                 obj[objKey] = recursiveCallback objValue
                 updatePoolResource resourcePool[obj.uid], obj
 
@@ -151,6 +157,9 @@ define [
 
         responseHash = recursiveCallback results
         return responseHash
+
+
+
 
       validateResource = (resourceName) ->
         if _.isUndefined clientOrmShare[resourceName]
@@ -169,7 +178,9 @@ define [
       # Response Object
       #
       factory =
-        # Request resources and bind callbacks
+
+
+
         get: (resourceName, uids = [], expand = {}, callback, cacheSyncRequest = false) ->
 
           if !validateResource resourceName
@@ -209,6 +220,8 @@ define [
             (response) ->
 
               if response.code == 200
+
+                #HERE we turn array into hash indexed by uids
                 response.response = reconcileResultsWithPool (response.response)
 
                 if uids.length == 0
@@ -221,6 +234,9 @@ define [
               else
                 if !allUids and !collectionHashSaved
                   callback response
+
+
+
 
         post: (resourceName, objects, callback) ->
           if !validateResource resourceName

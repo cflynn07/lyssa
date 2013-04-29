@@ -29,8 +29,63 @@ define [
     Module.controller 'ControllerWidgetExerciseBuilder', ($scope, $route, $routeParams, $templateCache, socket, apiRequest) ->
 
 
-      $scope.test = () ->
-        alert 'test!'
+
+      $scope.viewModel =
+        fetchTemplates: () ->
+          #API request loads templats -> revisions -> groups -> fields thanks to api uid hash reconciliation
+          apiRequest.get 'template', [], {expand:[{resource: 'revisions'}]}, (responseA) ->
+
+            if responseA.code == 200
+              revisionUids = []
+              for propName, propValue of responseA.response
+                for propName2, propValue2 of propValue.revisions
+                  revisionUids.push propValue2.uid
+              apiRequest.get 'revision', revisionUids, {expand:[{resource: 'groups', expand:[{resource: 'fields'}]}]}, (responseB) ->
+                $scope.viewModel.templates = responseA.response
+
+
+        templates:         {}
+        activeTemplateUid: ''
+
+        dataTable:
+          columnDefs: [
+            mDataProp:  'name'
+            aTargets:   [0]
+            mRender: (data, type, full) ->
+              resHtml  = '<a href="#' + $scope.viewRoot + '/' + full.uid + '">'
+              resHtml += data
+              resHtml += '</a>'
+              return resHtml
+          ,
+            mData:      null
+            aTargets:   [1]
+            mRender: (data, type, full) ->
+              return $scope.getKeysLength(full.revisions)
+          ,
+            mData:      null
+            aTargets:   [2]
+          ]
+          options:
+            bStateSave:      true
+            iCookieDuration: 2419200
+            bJQueryUI:       true
+            bPaginate:       false
+            bLengthChange:   false
+            bFilter:         false
+            bInfo:           false
+            bDestroy:        true
+
+
+
+      $scope.viewModel.fetchTemplates()
+
+
+
+
+      return
+
+
+
 
       #$scope.viewRoot = $route.current.path #'templates'
 

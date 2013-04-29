@@ -18,6 +18,10 @@ define [], () ->
         title:     'Templates'
         root:      '/admin/themis/templates'
         subRoutes: [
+          '/:templateUid':
+            title:       'Templates'
+            subMenuItem: false
+        ,
           '/:templateUid/:revisionUid':
             title:       'Templates'
             subMenuItem: false

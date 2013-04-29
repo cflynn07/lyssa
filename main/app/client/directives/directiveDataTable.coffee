@@ -16,7 +16,10 @@ define [
         scope: 'isolate'
         link: (scope, element, attrs) ->
 
-
+          bindDetailCallbacks = () ->
+            element.find('tr').bind 'click', () ->
+              dataTable.fnOpen this, 'test', 'something'
+              console.log dataTable.fnGetData this
 
           # apply DataTable options, use defaults if none specified by user
           options = {}
@@ -55,6 +58,8 @@ define [
           if options
             options['fnCreatedRow'] = (nRow, aData, iDataIndex) ->
               $compile(nRow)(scope)
+            options['fnDrawCallback'] = () ->
+              bindDetailCallbacks()
 
           # apply the plugin
           dataTable = element.dataTable(options)

@@ -43,13 +43,13 @@ define [
           bDestroy: true
 
         dictionaryListOptions:
-          bStateSave: true
+          bStateSave:     true
           iCookieDuration: 2419200 # 1 month
           bJQueryUI: true
           bPaginate: false
           bLengthChange: false
           bFilter: false
-          bInfo: true
+          bInfo: false
           bDestroy: true
 
         columnDefsActiveDictionaryItems: [
