@@ -1,0 +1,10 @@
+<div class="inline-content" style="text-align:center;">
+  <button data-ng-click="$parent.viewModel.deleteConfirmDialogDictionary('<%= uid %>')" class="btn red">Delete</button>
+  <a
+    data-ng-class="{true:'black', false:'blue'}[viewModel.activeDictionaryUid == '<%= uid %>']"
+    href="#<%= viewRoot %>/<%= uid %>"
+    class="btn">Edit
+    <i data-ng-show="viewModel.activeDictionaryUid == '<%= uid %>'" class="m-icon-swapleft m-icon-white"></i>
+    <i data-ng-hide="viewModel.activeDictionaryUid == '<%= uid %>'" class="m-icon-swapright m-icon-white"></i>
+  </a>
+</div>

@@ -14,22 +14,13 @@ define [
 
   (Module) ->
 
-    Module.run ($templateCache, apiRequest) ->
+    Module.run ($templateCache, apiRequest, $routeParams, $route) ->
       $templateCache.put 'viewCoreWidgets', viewCoreWidgets
 
     ###
       Manages the dynamic insertion of widgets to the main content area of the application
     ###
     Module.controller 'ControllerCoreWidgets', ($scope, $route, $rootScope) ->
-
-      #Global Helper
-      $rootScope.getKeysLength = (obj) ->
-        length = 0
-        for key, value of obj
-          if !_.isUndefined(value['uid']) and _.isNull(value['deletedAt'])
-            length++
-        return length
-
 
 
       $scope.widgetRows   = [{widget: 'viewWidgetBreadCrumbs'}]
@@ -68,7 +59,10 @@ define [
           return
 
         if !isDerivativeRoute($route.current.pathValue.title)
-          $('body').scrollTop 0
+
+          #$('body').scrollTop 0
+          $('body').animate({scrollTop: 0}, 700)
+
           widgets = stripAllButBC()
           addWidgets = []
           for value in $route.current.pathValue.widgets

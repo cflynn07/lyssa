@@ -1,0 +1,6 @@
+<div class="inline-content" style="text-align:center;">
+  <button data-ng-hide="$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'" data-ng-click="$parent.viewModel.deleteConfirmDialogDictionaryItem('<%= full.uid %>')" class="btn red">Delete</button>
+  <button data-ng-hide="$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'" data-ng-click="$parent.viewModel.editDictionaryItem('<%= full.uid %>')" class="btn blue">Edit</button>
+  <button data-ng-show="$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'" data-ng-disabled="' + name + '.$invalid" data-ng-click="$parent.viewModel.saveEditingDictionaryItem(<%= name %>.$invalid)" class="btn green">Save</button>
+  <button data-ng-show="$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'" data-ng-click="$parent.viewModel.cancelEditDictionaryItem()" class="btn red">Cancel</button>
+</div>

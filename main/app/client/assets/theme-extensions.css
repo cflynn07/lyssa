@@ -85,7 +85,7 @@ body {
 }
 
 ul.breadcrumb {
-    box-shadow: rgba(0, 0, 0, 0.35) 4px 4px 3px 0px;
+    box-shadow: rgba(0, 0, 0, 0.35) 4px 4px 0px 0px !important;
 }
 
 /*
@@ -234,6 +234,9 @@ div.header span.username {
 }
 .dataTables_wrapper .dataTables_length {
     padding-top: 5px;
+}
+div.dataTables_length select {
+  margin-bottom: 2px;
 }
 
 /*

@@ -3,7 +3,6 @@ if !window.console?
 if !window.console.log?
   window.console.log = ->
 
-
 requirejs.config
   baseUrl: '/'
   paths:
@@ -23,17 +22,19 @@ requirejs.config
     'jquery':               'vendor/jquery'
     'jquery-ui':            'vendor/jquery-ui'
     'bootstrap':            'vendor/bootstrap'
-    'bootstrapFileUpload':  'vendor/bootstrap-fileupload'
-    'jqueryUniform':        'vendor/jquery.uniform'
-    'jqueryBrowser':        'vendor/jquery.browser'
-    'datatables':           'vendor/jquery-dataTables'
-    'datatables_bootstrap': 'vendor/DT_bootstrap'
-    'jqueryDateFormat':     'vendor/jquery-dateFormat'
-    'bootstrap-tree':       'vendor/bootstrap-tree'
-    'pubsub':               'vendor/pubsub'
-    'fullCalendar':         'vendor/fullcalendar'
+    'bootstrapFileUpload':      'vendor/bootstrap-fileupload'
+    'jqueryUniform':            'vendor/jquery.uniform'
+    'jqueryBrowser':            'vendor/jquery.browser'
+    'datatables':               'vendor/jquery-dataTables'
+    'datatables_bootstrap':     'vendor/DT_bootstrap'
+    'jqueryDateFormat':         'vendor/jquery-dateFormat'
+    'bootstrap-tree':           'vendor/bootstrap-tree'
+    'pubsub':                   'vendor/pubsub'
+    'fullCalendar':             'vendor/fullcalendar'
     'bootstrap-toggle-buttons': '/vendor/bootstrap-toggle-buttons'
     'uuid':                     'vendor/uuid'
+    'ejs':                      'vendor/ejs'
+    'async':                    'vendor/async'
   hbs:
     disableI18n: true
     helperDirectory: 'views/helpers/'
@@ -74,6 +75,10 @@ requirejs.config
       exports: 'pubsub'
     'bootstrap-toggle-buttons':
       deps:     ['jquery', 'bootstrap']
+    ejs:
+      exports: 'EJS'
+    async:
+      exports: 'async'
 
 
 require [
@@ -170,8 +175,8 @@ require [
   DirectiveDataTable          CS
 
   #Services
-  ServiceSocket CS
-  ServicePubSub CS
+  ServiceSocket       CS
+  ServicePubSub       CS
   ServiceAuthenticate CS
   ServiceAPIRequest   CS
 
@@ -187,7 +192,7 @@ require [
       if _.isArray value.subRoutes
         for value2 in value.subRoutes
           for objectKey, objectValue of value2
-            console.log key + objectKey
+            #console.log key + objectKey
             $routeProvider.when key + objectKey,
               path:      key + objectKey
               pathValue: _.extend(value, objectValue)

@@ -1,9 +1,11 @@
 define [
   'jquery'
+  'angular'
   'datatables'
   'datatables_bootstrap'
 ], (
   $
+  angular
   dataTables
   dataTables_bootstrap
 ) ->
@@ -18,16 +20,40 @@ define [
 
 
           bindDetailCallbacks = () ->
-            element.find('.detail').bind 'click', () ->
-              el = $(this).parents('tr').get(0)
+            element.find('.detail').unbind('click').bind 'click', () ->
+
+              $el   = $(this).parents('tr')
+              el    = $el.get(0)
+              _this = this
 
               if dataTable.fnIsOpen el
-                dataTable.fnClose el
-              else
-                data = dataTable.fnGetData el
+                detailRow = $el.find('+ tr:first')
+                detailRow.find('> td > div').slideUp () ->
 
-                html = scope.$parent.viewModel.dataTable.detailRow(data)
-                dataTable.fnOpen el, html, ''
+                  $(_this).addClass 'blue'
+                  $(_this).removeClass 'black'
+
+                  dataTable.fnClose el
+                  $el.find('.m-icon-swapup').hide()
+                  $el.find('.m-icon-swapdown').fadeIn()
+
+              else
+                $el.find('.m-icon-swapdown').hide()
+                $el.find('.m-icon-swapup').fadeIn()
+
+                $(this).removeClass 'blue'
+                $(this).addClass 'black'
+
+                data     = dataTable.fnGetData el
+                html     = scope.$parent.viewModel[attrs['parentDataTableViewModelProp']].detailRow(data)
+                accessor = 'detailRow' + data.uid
+                dataTable.fnOpen el, '', accessor + ' details'
+
+                accessor   = '.' + accessor
+                newElement = element.find accessor
+                newElement.html $compile(html)(scope)
+                newElement.find('> div').hide().slideDown 'fast'
+                scope.$apply()
 
 
           # apply DataTable options, use defaults if none specified by user
@@ -66,9 +92,19 @@ define [
 
           if options
             options['fnCreatedRow'] = (nRow, aData, iDataIndex) ->
-              $compile(nRow)(scope)
-            options['fnDrawCallback'] = () ->
+              return
+
+            options['fnDrawCallback'] = (data) ->
+              #html = $(data.nTable).find('tbody').html()
+              #$(data.nTable).find('tbody').html($compile(html)(scope))
+              $compile($(data.nTable).find('tbody'))(scope)
+              if !scope.$$phase
+                scope.$apply()
+
               bindDetailCallbacks()
+            options['fnRowCallback'] = () ->
+              return
+              #console.log 'fnRowCallback'
 
           # apply the plugin
           dataTable = element.dataTable(options)

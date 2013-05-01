@@ -24,6 +24,9 @@ module.exports = (app) ->
             params =
               method: 'findAll'
               find: {}
+              #find:
+              #  where:
+              #    clientUid: clientUid
             apiExpand(req, res, revision, params)
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'

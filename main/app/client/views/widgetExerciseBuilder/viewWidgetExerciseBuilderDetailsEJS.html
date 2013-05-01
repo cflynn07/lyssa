@@ -1,0 +1,27 @@
+<div>
+  <table class="table table-striped table-bordered table-advance">
+     <thead>
+        <tr style="background:gray !important;">
+
+           <th>ID</th>
+           <th>Date</th>
+           <th></th>
+
+        </tr>
+     </thead>
+     <tbody>
+
+        <tr data-ng-repeat="(key, value) in resourcePool['<%= templateUid %>'].revisions">
+          <td></td>
+          <td>{{value.createdAt | toArray | date:'short' }}</td>
+          <td>
+            <div style="text-align:center;" class="inline-content">
+              <a href="#" class="mini btn blue"><i class="m-icon-swapup m-icon-white"></i> Exercises</a>
+              <a href="#" class="mini btn blue">View</a>
+            </div>
+          </td>
+        </tr>
+
+     </tbody>
+  </table>
+</div>

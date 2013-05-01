@@ -15,6 +15,8 @@ define [
 
       #Hash of all ORM resources
       resourcePool = {}
+      #Make available...
+      $rootScope.resourcePool = resourcePool
 
       #Store results from open-ended (no specified uids) GET requests to resources
       resourcePoolCollections = {}

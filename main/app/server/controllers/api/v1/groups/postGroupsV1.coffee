@@ -125,7 +125,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'groups', clientUid, groups, objects, res, app
+              insertHelper 'groups', clientUid, group, objects, res, app
 
           when 'clientSuperAdmin', 'clientAdmin'
 
@@ -232,7 +232,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'groups', clientUid, groups, objects, res, app
+              insertHelper 'groups', clientUid, group, objects, res, app
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)
