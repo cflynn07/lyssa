@@ -32,12 +32,30 @@ define [
 
     Module.controller 'ControllerWidgetExerciseBuilder', ($scope, $route, $routeParams, $templateCache, socket, apiRequest, $dialog) ->
 
+
+      console.log $scope.clientOrmShare
+
+
       $scope.viewModel =
 
         showAddNewTemplate: false
 
         routeParams: {}
         templates:   {}
+
+        newTemplateForm: {}
+
+        clearNewTemplateForm: () ->
+          $scope.viewModel.showAddNewTemplate = false
+          $scope.newTemplateForm.$setPristine()
+          $scope.viewModel.newTemplateForm = {}
+        postNewTemplate: () ->
+          apiRequest.post 'template', {
+            name: $scope.viewModel.newTemplateForm.name
+            type: $scope.viewModel.newTemplateForm.type
+          }, (result) ->
+            $scope.viewModel.clearNewTemplateForm()
+            console.log result
 
 
         fetchTemplates: () ->
@@ -127,6 +145,9 @@ define [
             return
           $scope.viewModel.currentTemplate = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
           console.log $scope.viewModel.currentTemplate
+
+
+
 
       hashChangeUpdate = () ->
         $scope.viewModel.routeParams = $routeParams

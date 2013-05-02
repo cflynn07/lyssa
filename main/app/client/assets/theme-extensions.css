@@ -173,7 +173,7 @@ div.header span.username {
 .inline-content {
     white-space: nowrap;
 }
-.inline-content *{
+.inline-content > *{
     display: inline-block;
 }
 

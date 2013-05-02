@@ -1,0 +1,21 @@
+<form name="<%= name %>" novalidate>
+  <span
+    data-ng-model = "$parent.viewModel.dictionaries[$parent.viewModel.activeDictionaryUid].dictionaryItems[$parent.viewModel.editingDictionaryItemUid].name"
+    data-ng-hide  = "$parent.viewModel.editingDictionaryItemUid == '<%= uid %>'" ><%= data %></span>
+  <input
+    name = "name"
+    data-required
+    data-ng-minlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[0]}}"
+    data-ng-maxlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[1]}}"
+    data-ng-show="$parent.viewModel.editingDictionaryItemUid == '<%= uid %>'"
+    type="text"
+    data-ng-model="$parent.viewModel.editingDictionaryItemTempValue">
+  <span
+    data-ng-show="<%= name %>.name.$error.minlength"
+    style="color:red;"
+    class="help-inline">Name must be longer than {{clientOrmShare.dictionaryItem.model.name.validate.len[0]}} characters</span>
+  <span
+    data-ng-show="<%= name %>.name.$error.maxlength"
+    style="color:red;"
+    class="help-inline">Name must be shorter than {{clientOrmShare.dictionaryItem.model.name.validate.len[1]}} characters</span>
+</form>

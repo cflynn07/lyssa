@@ -24,6 +24,7 @@
 
           <div class="portlet-body light-grey">
 
+
             <button
               style           = "margin-bottom: 5px;"
               data-ng-hide    = "viewModel.showAddNewDictionary"
@@ -47,6 +48,8 @@
               </tr>
               </thead>
             </table>
+
+
 
 
 
@@ -79,7 +82,7 @@
                 data-ng-class = "{success:newDictionaryForm.name.$valid, error:!newDictionaryForm.name.$valid, 'ng-pristine':newDictionaryForm.name.$pristine}"
                 class         = "control-group">
 
-                <label class="control-label">Dictionary Name</label>
+                <label class="control-label">Name</label>
 
                 <div class="controls input-icon">
 
@@ -148,7 +151,6 @@
 
           <!-- portlet-body -->
           <div class = "portlet-body light-grey">
-
 
 
             <div data-ng-hide = "viewModel.dictionaries[viewModel.activeDictionaryUid] && !viewModel.dictionaries[viewModel.activeDictionaryUid].deletedAt">

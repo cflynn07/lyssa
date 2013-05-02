@@ -1,12 +1,41 @@
 <div class="inline-content" style="text-align:center;">
 
-  <button data-ng-click="$parent.viewModel.deleteConfirmDialogTemplate('<%= templateUid %>')" class="btn red">Delete</button>
 
-  <button class="btn purple detail">
+  <button class="btn green detail">
     <i style="display:none;" class="m-icon-swapup m-icon-white"></i>
     <i class="m-icon-swapdown m-icon-white"></i> Revisions
   </button>
 
-  <a href="#{{viewRoot}}/<%= templateUid %>" class="btn blue">Edit <i class="m-icon-swapright m-icon-white"></i></a>
+
+  <div
+    style = "margin-bottom:0px !important; text-align:left;"
+    class = "btn-group">
+
+    <a
+      data-ng-class = "{true:'black', false:'blue'}[viewModel.currentTemplate.uid == '<%= templateUid %>']"
+      href          = "#{{viewRoot}}/<%= templateUid %>"
+      class         = "btn">Edit
+
+      <i data-ng-hide="viewModel.currentTemplate.uid == '<%= templateUid %>'" class="m-icon-swapright m-icon-white"></i>
+      <i data-ng-show="viewModel.currentTemplate.uid == '<%= templateUid %>'" class="m-icon-swapleft m-icon-white"></i>
+
+    </a>
+
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <!-- dropdown menu links -->
+      <li>
+        <a href="#"><i class="icon-pencil"></i> Rename</a>
+      </li>
+      <li>
+        <a data-ng-click="$parent.viewModel.deleteConfirmDialogTemplate('<%= templateUid %>')"><i class="icon-trash"></i> Archive</a>
+      </li>
+    </ul>
+  </div>
+
+
+
 
 </div>

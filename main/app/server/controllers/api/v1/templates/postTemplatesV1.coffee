@@ -23,6 +23,9 @@ module.exports = (app) ->
 
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
+        uid       = req.session.user.uid
+
+        console.log uid
 
         switch userType
           when 'superAdmin'
@@ -145,6 +148,9 @@ module.exports = (app) ->
 
                 'employeeUid': (val, objectKey, object, callback) ->
 
+                  if _.isUndefined val
+                    val = uid
+
                   where =
                     uid:       val
                     clientUid: clientUid
@@ -159,7 +165,8 @@ module.exports = (app) ->
                       mapObj[resultEmployee.uid] = resultEmployee
                       callback null,
                         uidMapping: mapObj
-                        success: true
+                        success:    true
+                        transform:  [objectKey, 'employeeUid', resultEmployee.uid]
 
                     else
                       callback null,

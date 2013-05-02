@@ -46,8 +46,135 @@
         </div>
       </div><!-- /Templates list -->
 
-      <!-- Active Template -->
       <div class="span7">
+
+
+
+
+        <div
+          class           = "portlet box grey"
+          style           = "display:none;"
+          data-ng-show    = "viewModel.showAddNewTemplate"
+          data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}">
+
+          <div class="portlet-title">
+            <h4><span>New Template</span></h4>
+          </div>
+
+          <!-- portlet body -->
+          <div class="portlet-body light-grey">
+
+            <form
+              name  = "newTemplateForm"
+              class = "form-horizontal" novalidate>
+
+              <div
+                data-ng-class = "{success:newTemplateForm.name.$valid, error:!newTemplateForm.name.$valid, 'ng-pristine':newTemplateForm.name.$pristine}"
+                class         = "control-group">
+
+                <label class="control-label">Name</label>
+
+                <div class="controls input-icon">
+
+                  <input
+                    type              = "text"
+                    class             = "span11 m-wrap"
+                    name              = "name"
+                    data-ng-model     = "viewModel.newTemplateForm.name"
+                    data-ng-minlength = "{{clientOrmShare.template.model.name.validate.len[0]}}"
+                    data-ng-maxlength = "{{clientOrmShare.template.model.name.validate.len[1]}}"
+                    data-unique-field = '{"resource": "template", "property": "name"}'
+                    data-required>
+
+                  <span class="input-success">
+                    <i class="icon-ok"></i>
+                  </span>
+
+                  <span class="input-error">
+                    <i class="icon-exclamation-sign"></i>
+                  </span>
+
+                  <div class="clear"></div>
+                  <span
+                    data-ng-show="newTemplateForm.name.$error.minlength"
+                    class="help-inline">Name must be longer than {{clientOrmShare.template.model.name.validate.len[0]}} characters</span>
+
+                  <span
+                    data-ng-show="newTemplateForm.name.$error.maxlength"
+                    class="help-inline">Name must be shorter than {{clientOrmShare.template.model.name.validate.len[1]}} characters</span>
+
+                  <span
+                    data-ng-show="newTemplateForm.name.$error.uniqueField"
+                    class="help-inline">A template with the name "{{viewModel.newTemplateForm.name}}" already exists</span>
+
+                </div>
+              </div><!-- template name control group -->
+
+
+
+              <div
+                data-ng-class = "{success:newTemplateForm.type.$valid, error:!newTemplateForm.type.$valid, 'ng-pristine':newTemplateForm.type.$pristine}"
+                class         = "control-group">
+
+                <label class="control-label">Type</label>
+
+                <div class="controls input-icon">
+
+                  <!-- clientOrmShare.template.model.type.values -->
+
+
+                  <select
+                    name = "type"
+                    data-ng-model   = "viewModel.newTemplateForm.type"
+                    data-ng-options = "type for type in clientOrmShare.template.model.type.values"
+                    data-required
+                    class = "m-wrap span6"></select>
+
+
+
+                  <div class="clear"></div>
+                  <span
+                    data-ng-show="newTemplateForm.name.$error.minlength"
+                    class="help-inline">Name must be longer than {{clientOrmShare.template.model.name.validate.len[0]}} characters</span>
+
+                  <span
+                    data-ng-show="newTemplateForm.name.$error.maxlength"
+                    class="help-inline">Name must be shorter than {{clientOrmShare.template.model.name.validate.len[1]}} characters</span>
+
+                  <span
+                    data-ng-show="newTemplateForm.name.$error.uniqueField"
+                    class="help-inline">A template with the name "{{viewModel.newTemplateForm.name}}" already exists</span>
+
+                </div>
+              </div> <!-- template type control group -->
+
+
+
+
+              <div class="row-fluid">
+                <div class="span6 responsive span8">
+                  <button
+                    data-ng-click = "viewModel.clearNewTemplateForm()"
+                    class         = "btn red btn-block"><i class="m-icon-swapleft m-icon-white"></i> Cancel</button>
+                </div>
+                <div class="span6 responsive span8">
+                  <button
+                    type             = "submit"
+                    data-ng-disabled = "newTemplateForm.$invalid"
+                    data-ng-click    = "viewModel.postNewTemplate()"
+                    class            = "btn green btn-block">Add <i class="m-icon-swapright m-icon-white"></i></button>
+                </div>
+              </div>
+
+            </form>
+
+          </div><!-- portlet-body -->
+        </div><!-- portlet -->
+
+
+
+
+
         <div class="portlet box grey">
           <div class="portlet-title">
             <h4><span>Edit Template</span></h4>
@@ -60,17 +187,23 @@
             <div data-ng-hide = "viewModel.routeParams.templateUid">
               <div class="box template-info-box fade in ng-scope">
                 <div class="inline-content">
-                  <strong><i style="vertical-align:middle; margin-top:0;" class="m-icon-big-swapleft"></i></strong><h3>Select Template Revision</h3>
+                  <strong><i style="vertical-align:middle; margin-top:0;" class="m-icon-big-swapleft"></i></strong><h3>Select Template</h3>
                 </div>
               </div>
             </div>
 
 
-            <div data-ng-show = "viewModel.currentTemplate && viewModel.currentTemplateRevision">
 
 
 
-              <div class="navbar navbar-inverse">
+
+
+            <div data-ng-show = "viewModel.currentTemplate">
+
+
+
+
+              <div data-ng-hide="true" class="navbar navbar-inverse">
 
                 <div class="navbar-inner" style="border-bottom:1px solid #999;">
                   <div class="container">
@@ -97,23 +230,33 @@
               </div>
 
 
+
+
+
+
               <div class="box template-info-box fade in">
-                <div class="inline-content">
-                  <h4><span>{{viewModel.currentTemplate.name}}</span></h4>
+                <div class="row-fluid">
+                  <div class="span6">
+                    <h4><span>{{viewModel.currentTemplate.name}}</span></h4>
+                  </div>
+                  <div class="span6"></div>
+
                 </div>
+
               </div>
 
 
-              <div
-                data-ng-repeat = "(key, group) in viewModel.currentTemplateRevision.groups | toArray"
-                class          = "box template-info-box fade in">
 
+
+
+              <div data-ng-repeat = "(key, group) in viewModel.currentTemplateRevision.groups | toArray">
 
                 <div
+                  style="margin-bottom:0;"
                   data-ng-init = "nameEditing=false"
-                  class="navbar navbar-inverse">
+                  class="navbar">
 
-                  <div class="navbar-inner" style="border-bottom:1px solid #999;">
+                  <div class="navbar-inner" style="border-bottom:1px solid #DDD;">
                     <div class="container">
 
                       <span>
@@ -178,37 +321,32 @@
                       </div><!-- /.nav-collapse -->
                     </div>
                   </div><!-- /navbar-inner -->
-                </div>
+                </div><!-- group menu bar -->
+
+                <div class = "box template-info-box fade in">
+                  <h3>Info</h3>
+                </div><!-- template-info-box -->
+
+              </div>
 
 
 
 
-              </div><!-- group menu bar -->
-
-
-
-              <h2>Groups</h2>
-              <ul>
-                <li data-ng-repeat="(key, group) in viewModel.currentTemplateRevision.groups | toArray">
-                  <p>{{group.name}}</p>
-                  <ul>
-                    <li data-ng-repeat="(key, field) in group.fields | toArray">
-
-                      <p>{{field.name}}</p>
-
-                    </li>
-                  </ul>
-                </li>
-              </ul>
 
 
 
             </div><!-- /exercise editor -->
 
 
+
+
+
+
+
+
           </div><!-- /portlet body -->
         </div>
-      </div><!-- /Active Template -->
+      </div><!-- /Current Template -->
     </div>
   </div>
 </div>
