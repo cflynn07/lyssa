@@ -106,6 +106,7 @@ require [
   'cs!services/serviceAuthenticate'
   'cs!services/serviceAPIRequest'
   'cs!filters/filterToArray'
+  'cs!filters/filterDeleted'
   'cs!controllers/controllerApp'
   'cs!controllers/controllerCoreWidgets'
   'cs!controllers/controllerWidgetCoreLeftMenu'
@@ -143,6 +144,7 @@ require [
   ServiceAuthenticate
   ServiceAPIRequest
   FilterToArray
+  FilterDeleted
   ControllerApp
   ControllerCoreWidgets
   ControllerWidgetCoreLeftMenu
@@ -182,6 +184,7 @@ require [
 
   #Filters
   FilterToArray CS
+  FilterDeleted CS
 
   #Routes
   CS.config ($routeProvider) ->

@@ -6,8 +6,17 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id:      SEQ.INTEGER
-    name:    SEQ.STRING
+
+    name:
+      type: SEQ.STRING
+      validate:
+        len: [2, 50]
+
+    description:
+      type: SEQ.TEXT
+
     ordinal: SEQ.INTEGER
+
 
     clientUid:
       type: SEQ.STRING

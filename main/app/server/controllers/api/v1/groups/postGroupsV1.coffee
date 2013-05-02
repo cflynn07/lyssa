@@ -53,6 +53,11 @@ module.exports = (app) ->
                       message:
                         ordinal: 'required'
 
+                'description': (val, objectKey, object, callback) ->
+
+                  callback null,
+                    success: true
+
                 'clientUid': (val, objectKey, object, callback) ->
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
@@ -125,7 +130,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'groups', clientUid, group, objects, res, app
+              insertHelper 'groups', clientUid, group, objects, req, res, app
 
           when 'clientSuperAdmin', 'clientAdmin'
 
@@ -153,6 +158,11 @@ module.exports = (app) ->
                       success: false
                       message:
                         ordinal: 'required'
+
+                'description': (val, objectKey, object, callback) ->
+
+                  callback null,
+                    success: true
 
                 'clientUid': (val, objectKey, object, callback) ->
 
@@ -232,7 +242,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'groups', clientUid, group, objects, res, app
+              insertHelper 'groups', clientUid, group, objects, req, res, app
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

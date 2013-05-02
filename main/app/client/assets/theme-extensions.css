@@ -296,3 +296,12 @@ div.dataTables_length select {
   width: 100%;
   resize: none;
 }
+
+/*
+  Tweaking twitter bootstrap for special situations
+  ------------------------
+*/
+ul.nav .dropdown-submenu > .dropdown-menu {
+  margin-top:0 !important;
+  margin-left:0 !important;
+}

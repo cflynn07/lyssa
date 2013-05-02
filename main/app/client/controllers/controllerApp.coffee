@@ -50,6 +50,12 @@ define [
         sortedHashArray = helperSortHash hash, timeProp
         _.first sortedHashArray
 
+      $rootScope.getArrayFromHash = (hash) ->
+        resArray = []
+        for prop, val of hash
+          resArray.push val
+        #Sorting?
+        return resArray
 
 
 

@@ -185,7 +185,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
           roomName = req.session.user.clientUid + '-postResources'
           req.io.join(roomName)
-          console.log 'joined room ' + roomName
+          #console.log 'joined room ' + roomName
 
       #if _.isUndefined(resourceQueryParams.find) || _.isUndefined(resourceQueryParams.find.where) || _.isUndefined(resourceQueryParams.find.where.uid)
       #  if !_.isUndefined(req.session) and !_.isUndefined(req.session.user) and !_.isUndefined(req.session.user.clientUid)
@@ -203,7 +203,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
           if !_.isUndefined obj['uid']
             req.io.join obj.uid
-            console.log 'join room: ' + obj.uid
+            #console.log 'join room: ' + obj.uid
 
           for propertyName, propertyValue of obj
             if _.isArray propertyValue

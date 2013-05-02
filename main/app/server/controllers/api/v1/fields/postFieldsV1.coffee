@@ -127,7 +127,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'fields', clientUid, field, objects, res, app
+              insertHelper 'fields', clientUid, field, objects, req, res, app
 
           when 'clientSuperAdmin', 'clientAdmin'
 
@@ -234,7 +234,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'fields', clientUid, field, objects, res, app
+              insertHelper 'fields', clientUid, field, objects, req, res, app
 
 
 

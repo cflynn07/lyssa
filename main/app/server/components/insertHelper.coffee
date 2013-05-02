@@ -3,7 +3,7 @@ _      = require 'underscore'
 config = require '../config/config'
 uuid   = require 'node-uuid'
 
-module.exports = (apiCollectionName, clientUid, resource, objects, res, app) ->
+module.exports = (apiCollectionName, clientUid, resource, objects, req, res, app) ->
   #Give everyone their own brand new uid
   for object, key in objects
     objects[key]['uid'] = uuid.v4()
@@ -18,12 +18,20 @@ module.exports = (apiCollectionName, clientUid, resource, objects, res, app) ->
       if !_.isUndefined(app.io) and _.isFunction(app.io.room)
 
         roomName = clientUid + '-postResources'
-        console.log 'broadcast to: ' + roomName
+        #console.log 'broadcast to: ' + roomName
 
         app.io.room(roomName).broadcast 'resourcePost',
           apiCollectionName: apiCollectionName
           resourceName:      resource.name
           resource:          JSON.parse(JSON.stringify(createdItem))
+
+
+        if !_.isUndefined(req.io) and _.isFunction(req.io.join)
+          if !_.isUndefined(req.session) and !_.isUndefined(req.session.user) and !_.isUndefined(req.session.user.clientUid)
+            for uid in responseUids
+              req.io.join(uid)
+
+
 
       callback()
   , (err, results) ->

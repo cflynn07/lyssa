@@ -25,7 +25,8 @@ module.exports = (app) ->
         clientUid = req.session.user.clientUid
         uid       = req.session.user.uid
 
-        console.log uid
+        #console.log req.session
+        #console.log uid
 
         switch userType
           when 'superAdmin'
@@ -127,7 +128,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'templates', clientUid, template, objects, res, app
+              insertHelper 'templates', clientUid, template, objects, req, res, app
 
 
           when 'clientSuperAdmin', 'clientAdmin'
@@ -198,7 +199,7 @@ module.exports = (app) ->
 
             }, (objects) ->
               #insertHelper.call(this, objects, res)
-              insertHelper 'templates', clientUid, template, objects, res, app
+              insertHelper 'templates', clientUid, template, objects, req, res, app
 
 
           when 'clientDelegate', 'clientAuditor'

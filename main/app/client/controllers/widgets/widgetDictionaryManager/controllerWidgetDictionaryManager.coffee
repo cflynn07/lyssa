@@ -32,7 +32,6 @@ define [
       $scope.viewModel =
         dictionaries:               {}
 
-
         currentDictionaryUid:        ''
         showAddNewDictionary:       false
         showAddDictionaryItems:     false
@@ -240,6 +239,7 @@ define [
 
       setCurrentDictionary = () ->
         $scope.viewModel.currentDictionaryUid = $routeParams.dictionaryUid
+
       $scope.$on '$routeChangeSuccess', () ->
         #reset forms...
         $scope.viewModel.showAddDictionaryItems = false

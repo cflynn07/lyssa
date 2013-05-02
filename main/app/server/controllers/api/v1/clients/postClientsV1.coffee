@@ -148,7 +148,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'clients', clientUid, client, objects, res, app
+              insertHelper 'clients', clientUid, client, objects, req, res, app
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

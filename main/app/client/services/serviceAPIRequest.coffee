@@ -27,12 +27,17 @@ define [
 
       #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
+        console.log 'resourcePut'
+        console.log data
+        console.log resourcePool[data['uid']]
         $rootScope.$broadcast 'resourcePut'
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
           updatePoolResource resourcePool[data['uid']], data
-
+        console.log resourcePool[data['uid']]
 
       socket.on 'resourcePost', (data) ->
+        console.log 'resourcePost'
+        console.log data
         $rootScope.$broadcast 'resourcePost'
         if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])
           #resourcePoolCollections[data['resourceName']][data['resource']['uid']] = data['resource']
@@ -183,7 +188,7 @@ define [
 
 
 
-        get: (resourceName, uids = [], expand = {}, callback, cacheSyncRequest = false) ->
+        get: (resourceName, uids = [], expand = {}, callback = null, cacheSyncRequest = false) ->
 
           if !validateResource resourceName
             return
@@ -212,7 +217,8 @@ define [
             collectionHashSaved = false
             if !_.isUndefined resourcePoolCollections[apiCollectionName]
               collectionHashSaved = true
-              callback({code: 200, response: resourcePoolCollections[apiCollectionName]})
+              if _.isFunction callback
+                callback({code: 200, response: resourcePoolCollections[apiCollectionName]})
 
 
           socket.apiRequest 'GET',
@@ -232,10 +238,12 @@ define [
                   addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response, expand, cacheSyncRequest
 
                 if !allUids and !collectionHashSaved
-                  callback response
+                  if _.isFunction callback
+                    callback response
               else
                 if !allUids and !collectionHashSaved
-                  callback response
+                  if _.isFunction callback
+                    callback response
 
 
 

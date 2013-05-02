@@ -116,7 +116,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, res, app
+              insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, req, res, app
 
           when 'clientSuperAdmin', 'clientAdmin'
 
@@ -212,7 +212,7 @@ module.exports = (app) ->
             }, (objects) ->
 
               #insertHelper.call(this, objects, res)
-              insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, res, app
+              insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, req, res, app
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

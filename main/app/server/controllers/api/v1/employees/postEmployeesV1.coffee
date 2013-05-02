@@ -152,7 +152,7 @@ module.exports = (app) ->
 
             }, (objects) ->
               #insertHelper objects, res
-              insertHelper 'employees', clientUid, employee, objects, res, app
+              insertHelper 'employees', clientUid, employee, objects, req, res, app
 
 
 
@@ -317,7 +317,7 @@ module.exports = (app) ->
 
             }, (objects) ->
               #insertHelper objects, res
-              insertHelper 'employees', clientUid, employee, objects, res, app
+              insertHelper 'employees', clientUid, employee, objects, req, res, app
 
 
 
@@ -425,7 +425,7 @@ module.exports = (app) ->
 
             }, (objects) ->
               #insertHelper objects, res
-              insertHelper 'employees', clientUid, employee, objects, res, app
+              insertHelper 'employees', clientUid, employee, objects, req, res, app
 
 
           when 'clientDelegate', 'clientAuditor'
