@@ -1,12 +1,14 @@
 define [
   'underscore'
-  #'uuid'
+  'uuid'
   'text!config/clientOrmShare.json'
 ], (
   _
-  #uuid
+  uuid
   clientOrmShare
 ) ->
+
+
 
   clientOrmShare = JSON.parse clientOrmShare
 
@@ -186,8 +188,6 @@ define [
       #
       factory =
 
-
-
         get: (resourceName, uids = [], expand = {}, callback = null, cacheSyncRequest = false) ->
 
           if !validateResource resourceName
@@ -254,6 +254,13 @@ define [
 
           apiCollectionName = getCollectionName resourceName
 
+
+          if !_.isArray objects
+            objects = [objects]
+          for obj in objects
+            obj.tempUid = uuid.v4()
+
+
           socket.apiRequest 'POST',
             '/' + apiCollectionName,
             {}       #query
@@ -263,6 +270,19 @@ define [
               #console.log response
               #console.log callback
               callback(response)
+
+
+          for obj in objects
+            obj.uid = obj.tempUid
+
+          #attachResourcesToParentsInPool apiCollectionName, objects
+          addResourcesToOpenEndedGet apiCollectionName, resourceName, objects, {}, false
+
+          if !$rootScope.$$phase
+            $rootScope.$apply()
+
+          #helper
+
 
 
         put: (resourceName, uid, properties, callback) ->
@@ -296,9 +316,9 @@ define [
 
           apiCollectionName = getCollectionName resourceName
 
-
           if !_.isUndefined resourcePool[uid]
-            resourcePool[uid].isFresh = false
+            resourcePool[uid].isFresh   = false
+            resourcePool[uid].deletedAt = (new Date()).toString()
 
           socket.apiRequest 'DELETE',
             '/' + apiCollectionName,
@@ -307,4 +327,6 @@ define [
             (response) ->
 
               callback response
+
+
 

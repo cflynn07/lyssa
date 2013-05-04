@@ -77,6 +77,8 @@ requirejs.config
       deps:     ['jquery', 'bootstrap']
     ejs:
       exports: 'EJS'
+    uuid:
+      exports: 'uuid'
     async:
       exports: 'async'
 

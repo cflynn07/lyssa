@@ -118,6 +118,16 @@ define [
                 apiRequest.delete 'group', [groupUid], (result) ->
                   console.log result
 
+                  helperReorderGroupOrdinals $scope,
+                    apiRequest,
+                    $scope.$parent.viewModel.currentTemplateRevision.groups,
+                    _.toArray($scope.$parent.viewModel.currentTemplateRevision.groups).length,
+                    false,
+                    () ->
+                      console.log 'groups reindexed'
+
+
+
 
         putGroup: (groupUid) ->
 
@@ -234,30 +244,24 @@ define [
           $scope.newTemplateForm.$setPristine()
           $scope.viewModel.newTemplateForm = {}
 
-
-
-
-
         postNewTemplateGroup: () ->
           $groupsObj   = $scope.viewModel.currentTemplateRevision.groups
 
           helperReorderGroupOrdinals $scope,
-          apiRequest,
-          $groupsObj,
-          0,
-          false,
-          () ->
-            apiRequest.post 'group', {
-              name:        $scope.viewModel.newTemplateGroupForm.name
-              description: $scope.viewModel.newTemplateGroupForm.description
-              ordinal:     0
-              revisionUid: $scope.viewModel.currentTemplateRevision.uid
-            }, (result) ->
+            apiRequest,
+            $groupsObj,
+            0,
+            false,
+            () ->
+              apiRequest.post 'group', {
+                name:        $scope.viewModel.newTemplateGroupForm.name
+                description: $scope.viewModel.newTemplateGroupForm.description
+                ordinal:     0
+                revisionUid: $scope.viewModel.currentTemplateRevision.uid
+              }, (result) ->
 
-              $scope.viewModel.clearnewTemplateGroupForm()
-              console.log result
-
-
+                $scope.viewModel.clearnewTemplateGroupForm()
+                console.log result
 
         postNewTemplate: () ->
           apiRequest.post 'template', {
