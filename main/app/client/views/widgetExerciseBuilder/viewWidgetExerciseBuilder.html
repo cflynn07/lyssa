@@ -189,12 +189,76 @@
               <div class="box template-info-box fade in">
 
                 <div class="row-fluid">
-                  <div class="span6">
-                    <h2><span>{{viewModel.currentTemplate.name}}</span></h2>
-                  </div>
-                </div>
+                  <div class="span12">
+
+                    <h2
+                      data-ng-hide = "viewModel.showEditTemplateName"
+                      style="margin-top:0;"><span>{{viewModel.currentTemplate.name}}</span></h2>
+
+
+                    <form
+                      name         = "formEditTemplateName"
+                      data-ng-show = "viewModel.showEditTemplateName"
+                      class        = "form-horizontal" novalidate>
+                      <div
+                        data-ng-class = "{success:formEditTemplateName.name.$valid, error:!formEditTemplateName.name.$valid, 'ng-pristine':formEditTemplateName.name.$pristine}"
+                        class         = "control-group">
+
+                        <div class="row-fluid">
+                          <div class="span6">
+                            <input
+                              name              = "name"
+                              data-ng-model     = "viewModel.formEditTemplateName.name"
+                              data-ng-minlength = "{{clientOrmShare.template.model.name.validate.len[0]}}"
+                              data-ng-maxlength = "{{clientOrmShare.template.model.name.validate.len[1]}}"
+                              data-unique-field = '{"resource": "template", "property": "name"}'
+                              type              = "text"
+                              class             = "span12 m-wrap"/>
+
+                            <span
+                              data-ng-show="formEditTemplateName.name.$error.minlength"
+                              class="help-inline">Name must be longer than {{clientOrmShare.template.model.name.validate.len[0]}} characters</span>
+
+                            <span
+                              data-ng-show="formEditTemplateName.name.$error.maxlength"
+                              class="help-inline">Name must be shorter than {{clientOrmShare.template.model.name.validate.len[1]}} characters</span>
+
+                            <span
+                              data-ng-show="formEditTemplateName.name.$error.uniqueField"
+                              class="help-inline">A template with the name "{{viewModel.formEditTemplateName.name}}" already exists</span>
+
+                          </div>
+                          <div class="span6">
+                            <button
+                              style            = "margin-bottom: 5px;"
+                              data-ng-disabled = "formEditTemplateName.$invalid"
+                              data-ng-click    = "viewModel.putTemplate(viewModel.currentTemplate.uid)"
+                              class            = "btn btn-block span6"><i class="icon-save m-icon-white"></i> Save</button>
+                            <button
+                              style            = "margin-bottom: 5px; margin-top: 0;"
+                              data-ng-click    = "viewModel.showEditTemplateName = false"
+                              class            = "btn red btn-block span6"><i class="icon-save m-icon-white"></i> Cancel</button>
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </form>
+
+
+
+                  </div><!-- span 12 -->
+                </div><!-- row-fluid -->
 
                 <div class="row-fluid">
+                  <div class="span6">
+                    <button
+                      style           = "margin-bottom: 5px;"
+                      data-ng-hide    = "viewModel.showEditTemplateName"
+                      data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
+                      data-ng-click   = "viewModel.showEditTemplateName=true; viewModel.formEditTemplateName.name=viewModel.currentTemplate.name;"
+                      class           = "btn blue btn-block"><i class="icon-pencil m-icon-white"></i> Edit Name</button>
+                  </div>
                   <div class="span6">
                     <button
                       style           = "margin-bottom: 5px;"

@@ -55,8 +55,14 @@ module.exports = (app) ->
 
                 'description': (val, objectKey, object, callback) ->
 
-                  callback null,
-                    success: true
+                  if _.isUndefined val
+                    callback null,
+                      success: true
+                      transform: [objectKey, 'description', '']
+                  else
+                    callback null,
+                      success: true
+
 
                 'clientUid': (val, objectKey, object, callback) ->
 
@@ -161,8 +167,13 @@ module.exports = (app) ->
 
                 'description': (val, objectKey, object, callback) ->
 
-                  callback null,
-                    success: true
+                  if _.isUndefined val
+                    callback null,
+                      success: true
+                      transform: [objectKey, 'description', '']
+                  else
+                    callback null,
+                      success: true
 
                 'clientUid': (val, objectKey, object, callback) ->
 

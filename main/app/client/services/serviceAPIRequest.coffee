@@ -29,17 +29,17 @@ define [
 
       #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
-        console.log 'resourcePut'
-        console.log data
-        console.log resourcePool[data['uid']]
+        #console.log 'resourcePut'
+        #console.log data
+        #console.log resourcePool[data['uid']]
         $rootScope.$broadcast 'resourcePut'
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
           updatePoolResource resourcePool[data['uid']], data
-        console.log resourcePool[data['uid']]
+        #console.log resourcePool[data['uid']]
 
       socket.on 'resourcePost', (data) ->
-        console.log 'resourcePost'
-        console.log data
+        #console.log 'resourcePost'
+        #console.log data
         $rootScope.$broadcast 'resourcePost'
         if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])
           #resourcePoolCollections[data['resourceName']][data['resource']['uid']] = data['resource']
@@ -254,12 +254,12 @@ define [
 
           apiCollectionName = getCollectionName resourceName
 
-
+          ###
           if !_.isArray objects
             objects = [objects]
           for obj in objects
             obj.tempUid = uuid.v4()
-
+          ###
 
           socket.apiRequest 'POST',
             '/' + apiCollectionName,
@@ -271,15 +271,17 @@ define [
               #console.log callback
               callback(response)
 
-
+          ###
           for obj in objects
             obj.uid = obj.tempUid
 
           #attachResourcesToParentsInPool apiCollectionName, objects
           addResourcesToOpenEndedGet apiCollectionName, resourceName, objects, {}, false
 
+
           if !$rootScope.$$phase
             $rootScope.$apply()
+          ###
 
           #helper
 

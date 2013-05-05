@@ -180,17 +180,21 @@ define [
 
         newTemplateForm:      {}
         newTemplateGroupForm: {}
+        editTemplateNameForm: {}
 
         templatesListDataTable:
           detailRow: (obj) ->
             uid = $scope.escapeHtml obj.uid
             return new EJS(text: viewWidgetExerciseBuilderDetailsEJS).render({templateUid: uid})
           columnDefs: [
-            mDataProp:  'name'
+            mData:  null
             aTargets:   [0]
             mRender: (data, type, full) ->
               resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
-              resHtml += $scope.escapeHtml(data)
+
+              if full.name
+                resHtml += $scope.escapeHtml(full.name)
+
               resHtml += '</a>'
               #resHtml += '<span>{{resourcePool[\'' + $scope.escapeHtml(full.uid) + '\'].revisions}} Revisions</span>'
               return resHtml
@@ -263,6 +267,10 @@ define [
                 $scope.viewModel.clearnewTemplateGroupForm()
                 console.log result
 
+        putTemplate: (templateUid) ->
+          console.log templateUid
+
+
         postNewTemplate: () ->
           apiRequest.post 'template', {
             name:        $scope.viewModel.newTemplateForm.name
@@ -325,8 +333,8 @@ define [
 
 
 
-
       hashChangeUpdate = () ->
+        $scope.viewModel.showEditTemplateName = false
         $scope.viewModel.routeParams = $routeParams
         $scope.viewModel.fetchCurrentTemplateRevision()
         $scope.viewModel.fetchCurrentTemplate()

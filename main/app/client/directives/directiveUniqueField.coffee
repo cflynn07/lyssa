@@ -15,9 +15,15 @@ define [], () ->
           ctrl.$setValidity 'uniqueField', true
           attrData = JSON.parse attrs.uniqueField
 
+          isPristine = ctrl.$pristine
+
           checkDuplicates = (viewValue) ->
+
             if viewValue
 
+              if isPristine
+                isPristine = ctrl.$pristine
+                return viewValue
 
               uids = []
               if attrData.uids
