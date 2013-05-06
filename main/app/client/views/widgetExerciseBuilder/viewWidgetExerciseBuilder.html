@@ -53,8 +53,10 @@
 
       <div class="span7">
 
+
         <div
-          class           = "portlet box grey"
+          data-ng-class   = "{'green sub-portlet':newTemplateForm.$valid, 'grey':newTemplateForm.$invalid}"
+          class           = "portlet box"
           style           = "display:none;"
           data-ng-show    = "viewModel.showAddNewTemplate"
           data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}">
@@ -273,12 +275,13 @@
 
 
               <div
+                data-ng-class   = "{'green sub-portlet':newTemplateGroupForm.$valid, 'grey':newTemplateGroupForm.$invalid}"
                 data-ng-show    = "viewModel.showAddNewTemplateGroup"
                 data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
                 style           = "display:none;"
-                class           = "portlet box grey">
+                class           = "portlet box">
                 <div class="portlet-title">
-                  <h4><span>Add Group</span></h4>
+                  <h4><span>New Group</span></h4>
                 </div>
                 <div class="portlet-body light-grey">
 
@@ -454,34 +457,34 @@
                                     data-ng-click="viewModel.deleteGroup(group.uid)"
                                     href><i class="icon-trash"></i> Archive</a>
                                 </li>
-                                <li class="dropdown-submenu">
+                                <li class="dropdown-submenu bootstrap-menu-bar">
 
                                   <a data-ng-click="" href>Add Question</a>
 
                                   <ul class="dropdown-menu">
                                     <li>
                                       <a
-                                        data-ng-click="viewModel.showAddNewField('OpenResponse')"
+                                        data-ng-click="viewModel.showAddNewField_OpenType = 'OpenResponse'"
                                         href>Open Response</a>
                                     </li>
                                     <li>
                                       <a
-                                        data-ng-click="viewModel.showAddNewField('SelectIndividual')"
+                                        data-ng-click="viewModel.showAddNewField_OpenType = 'SelectIndividual'"
                                         href>Select Individual</a>
                                     </li>
                                     <li>
                                       <a
-                                        data-ng-click="viewModel.showAddNewField('SelectMultiple')"
+                                        data-ng-click="viewModel.showAddNewField_OpenType = 'SelectMultiple'"
                                         href>Select Multiple</a>
                                     </li>
                                     <li>
                                       <a
-                                        data-ng-click="viewModel.showAddNewField('YesNo')"
+                                        data-ng-click="viewModel.showAddNewField_OpenType = 'YesNo'"
                                         href>Yes / No</a>
                                     </li>
                                     <li>
                                       <a
-                                        data-ng-click="viewModel.showAddNewField('PercentageSlider')"
+                                        data-ng-click="viewModel.showAddNewField_OpenType = 'PercentageSlider'"
                                         href>Percentage Slider</a>
                                     </li>
                                   </ul>
@@ -506,27 +509,69 @@
 
 
 
+
+                    <div
+                      data-ng-show = "viewModel.showAddNewField_OpenType == ''"
+                      data-ng-animate = "{show:'fadeIn', hide: 'fadeOut'}"
+                      class="inline-content">
+                      <strong><i style="vertical-align:middle; margin-top:0;" class="m-icon-big-swapup"></i></strong><h3>Add Fields To Exercise Group</h3>
+                    </div>
+
+
+
+
+
+
+
+
+
                     <div
                       data-ng-controller = "ControllerWidgetExerciseBuilderGroupFieldOpenResponse"
-                      style           = "style:none;"
-                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
-                      data-ng-show    = "viewModel.showAddNewField_OpenResponse"
-                      class           = "portlet box gray">
+                      style              = "display:none;"
+                      data-ng-animate    = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show       = "viewModel.showAddNewField_OpenType == 'OpenResponse'"
+                      data-ng-class      = "{'sub-portlet':formOpenResponseAdd.$valid}"
+                      class              = "portlet box green">
                       <div class="portlet-title">
-                        <h4><span>Open Response</span></h4>
+                        <h4><span>New <strong>Open Response</strong> Field</span></h4>
                       </div>
                       <div class="portlet-body light-grey">
-
-
-
 
                         <form name="formOpenResponseAdd" class="form-horizontal" novalidate>
 
 
-                          <div class="control-group">
+                          <div
+                            data-ng-class = "{success:formOpenResponseAdd.name.$valid, error:!formOpenResponseAdd.name.$valid, 'ng-pristine':formOpenResponseAdd.name.$pristine}"
+                            class="control-group">
                             <label class="control-label">Name</label>
-                            <div class="controls">
-                              <input type="text" name="name">
+                            <div class="controls input-icon">
+                              <input
+                                required
+                                class = "span11 m-wrap"
+                                data-ng-minlength = "{{clientOrmShare.field.model.name.validate.len[0]}}"
+                                data-ng-maxlength = "{{clientOrmShare.field.model.name.validate.len[1]}}"
+                                data-ng-model = "form.name"
+                                type = "text"
+                                name = "name">
+
+                              <span class="input-success">
+                                <i class="icon-ok"></i>
+                              </span>
+
+                              <span class="input-error">
+                                <i class="icon-exclamation-sign"></i>
+                              </span>
+
+                              <div class="clear"></div>
+
+                              <span
+                                data-ng-show="formOpenResponseAdd.name.$error.minlength"
+                                class="help-inline">Name must be longer than {{clientOrmShare.field.model.name.validate.len[0]}} characters</span>
+
+                              <span
+                                data-ng-show="formOpenResponseAdd.name.$error.maxlength"
+                                class="help-inline">Name must be shorter than {{clientOrmShare.field.model.name.validate.len[1]}} characters</span>
+
                             </div>
                           </div>
 
@@ -534,29 +579,33 @@
                           <div class="control-group">
                             <label class="control-label">Description</label>
                             <div class="controls">
-                              <textarea name="description" class="medium m-wrap" rows="3"></textarea>
+                              <textarea
+                                data-ng-model = "form.description"
+                                name="description"
+                                class="span11 medium m-wrap"
+                                rows="3"></textarea>
                             </div>
                           </div>
 
 
                         </form>
 
-
-
-
                         <div data-ng-include="'viewWidgetExerciseBuilderFieldButtons'"></div>
 
                       </div>
                     </div>
 
 
+
+
+
                     <div
-                      style           = "style:none;"
-                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
-                      data-ng-show    = "viewModel.showAddNewField_SelectIndividual"
-                      class           = "portlet box gray">
+                      style              = "display:none;"
+                      data-ng-animate    = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show       = "viewModel.showAddNewField_OpenType == 'SelectIndividual'"
+                      class              = "portlet box gray">
                       <div class="portlet-title">
-                        <h4><span>Select Individual</span></h4>
+                        <h4><span>New Select Individual Field</span></h4>
                       </div>
                       <div class="portlet-body light-grey">
 
@@ -567,12 +616,12 @@
 
 
                     <div
-                      style           = "style:none;"
-                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
-                      data-ng-show    = "viewModel.showAddNewField_SelectMultiple"
-                      class           = "portlet box gray">
+                      style              = "display:none;"
+                      data-ng-animate    = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show       = "viewModel.showAddNewField_OpenType == 'SelectMultiple'"
+                      class              = "portlet box gray">
                       <div class="portlet-title">
-                        <h4><span>Select Multiple</span></h4>
+                        <h4><span>New Select Multiple Field</span></h4>
                       </div>
                       <div class="portlet-body light-grey">
 
@@ -583,12 +632,12 @@
 
 
                     <div
-                      style           = "style:none;"
-                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
-                      data-ng-show    = "viewModel.showAddNewField_YesNo"
-                      class           = "portlet box gray">
+                      style              = "display:none;"
+                      data-ng-animate    = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show       = "viewModel.showAddNewField_OpenType == 'YesNo'"
+                      class              = "portlet box gray">
                       <div class="portlet-title">
-                        <h4><span>Yes/No</span></h4>
+                        <h4><span>New Yes/No Field</span></h4>
                       </div>
                       <div class="portlet-body light-grey">
 
@@ -599,12 +648,12 @@
 
 
                     <div
-                      style           = "style:none;"
-                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
-                      data-ng-show    = "viewModel.showAddNewField_PercentageSlider"
-                      class           = "portlet box gray">
+                      style              = "display:none;"
+                      data-ng-animate    = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show       = "viewModel.showAddNewField_OpenType == 'PercentageSlider'"
+                      class              = "portlet box gray">
                       <div class="portlet-title">
-                        <h4><span>Percentage Slider</span></h4>
+                        <h4><span>New Percentage Slider Field</span></h4>
                       </div>
                       <div class="portlet-body light-grey">
 
@@ -612,6 +661,13 @@
 
                       </div>
                     </div>
+
+
+
+
+
+
+
 
 
 

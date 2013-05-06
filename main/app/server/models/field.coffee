@@ -7,7 +7,10 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id:   SEQ.INTEGER
-    name: SEQ.STRING
+    name:
+      type: SEQ.STRING
+      validate:
+        len: [5, 50]
     type: SEQ.ENUM config.fieldTypes
 
     clientUid:

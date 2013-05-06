@@ -68,8 +68,9 @@
 
         <!-- new dictionary form -->
         <div
+          data-ng-class   = "{'green sub-portlet':newDictionaryForm.$valid, 'grey':newDictionaryForm.$invalid}"
           style           = "display:none;"
-          class           = "portlet box grey"
+          class           = "portlet box"
           data-ng-show    = "viewModel.showAddNewDictionary"
           data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}">
 
@@ -205,9 +206,10 @@
 
 
               <div
+                data-ng-class   = "{'green sub-portlet':newDictionaryItemForm.$valid, 'grey':newDictionaryItemForm.$invalid}"
                 data-ng-show    = "viewModel.showAddDictionaryItems"
                 data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
-                class           = "portlet box grey">
+                class           = "portlet box">
 
                 <div class="portlet-title">
                   <h4><span>Add Item</span></h4>

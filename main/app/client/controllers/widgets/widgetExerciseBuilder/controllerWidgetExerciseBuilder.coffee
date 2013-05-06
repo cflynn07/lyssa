@@ -76,10 +76,23 @@ define [
 
 
 
+
+
     Module.controller 'ControllerWidgetExerciseBuilderGroupFieldOpenResponse', ($scope, apiRequest, $dialog) ->
-      return
+
+      $scope.form = {}
+
+      $scope.cancelAddNewField = () ->
+        $scope.form = {}
+        $scope.formOpenResponseAdd.$setPristine()
+        $scope.$parent.viewModel.cancelAddNewField()
+
+      $scope.submitField = () ->
+        $scope.cancelSubmitField()
 
 
+      $scope.isFormInvalid = () ->
+        return $scope.formOpenResponseAdd.$invalid
 
 
 
@@ -95,26 +108,12 @@ define [
       ]
 
       $scope.viewModel =
-        showAddNewField_OpenResponse:     false
-        showAddNewField_SelectIndividual: false
-        showAddNewField_SelectMultiple:   false
-        showAddNewField_YesNo:            false
-        showAddNewField_PercentageSlider: false
-        showAddNewField: (field) ->
+        showAddNewField_OpenType: ''
 
-          if $scope.viewModel['showAddNewField_' + field]
-            return
-
-          for type in fieldTypes
-            if type != field
-              $scope.viewModel['showAddNewField_' + type] = false
-
-          $scope.viewModel['showAddNewField_' + field] = true
         cancelAddNewField: () ->
           for type in fieldTypes
-            $scope.viewModel['showAddNewField_' + type] = false
-        submitAddNewField: () ->
-          for type in fieldTypes
+            $scope.viewModel.showAddNewField_OpenType = ''
+
 
 
 

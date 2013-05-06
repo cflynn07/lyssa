@@ -299,9 +299,26 @@ div.dataTables_length select {
 
 /*
   Tweaking twitter bootstrap for special situations
-  ------------------------
+  -------------------------------------------------
 */
 ul.nav .dropdown-submenu > .dropdown-menu {
   margin-top:0 !important;
   margin-left:0 !important;
 }
+.dropdown-submenu.bootstrap-menu-bar > a:after {
+  margin-right: 8px;
+}
+
+/*
+  Enabling Sub-Porlets to have different title-bar colors than their parents
+  --------------------------------------------------------------------------
+*/
+
+.portlet.box.green.sub-portlet .portlet-title {
+  background-color: #35aa47 !important;
+}
+
+.portlet.box.blue.sub-portlet .portlet-title {
+  background-color: #4b8df8 !important;
+}
+

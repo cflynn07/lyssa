@@ -21,8 +21,9 @@ module.exports = (app) ->
         apiAuth req, res, callback
       (callback) ->
 
-        userType  = req.session.user.type
-        clientUid = req.session.user.clientUid
+        userType    = req.session.user.type
+        clientUid   = req.session.user.clientUid
+        employeeUid = req.session.user.uid
 
         switch userType
           when 'superAdmin'
@@ -71,6 +72,9 @@ module.exports = (app) ->
                       success: false
                     return
 
+                  if _.isUndefined val
+                    val = employeeUid
+
                   callbacks = []
 
                   ((val) ->
@@ -120,6 +124,7 @@ module.exports = (app) ->
                     callback null,
                       success: true
                       uidMapping: mapObj
+                      transform: [objectKey, 'employeeUid', resultEmployee.uid]
 
 
             }, (objects) ->
@@ -168,11 +173,15 @@ module.exports = (app) ->
 
                   #find this template by checking uid, check to see if uid is set
                   #find clientUid of this template, verify that it matches this employeeUid
-                  #uid = object['uid']
-                  if _.isUndefined val
+                  uid = object['uid']
+                  if _.isUndefined uid
                     callback null,
                       success: false
                     return
+
+                  #If unspecified
+                  if _.isUndefined val
+                    val = employeeUid
 
                   callbacks = []
 
@@ -225,6 +234,7 @@ module.exports = (app) ->
                     callback null,
                       success: true
                       uidMapping: mapObj
+                      transform: [objectKey, 'employeeUid', resultEmployee.uid]
 
             }, (objects) ->
 
