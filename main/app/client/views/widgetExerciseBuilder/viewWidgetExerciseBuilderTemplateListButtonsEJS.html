@@ -14,7 +14,7 @@
     <a
       data-ng-class = "{true:'black', false:'blue'}[viewModel.currentTemplate.uid == '<%= templateUid %>']"
       href          = "#{{viewRoot}}/<%= templateUid %>"
-      class         = "btn">Edit
+      class         = "btn">View
 
       <i data-ng-hide="viewModel.currentTemplate.uid == '<%= templateUid %>'" class="m-icon-swapright m-icon-white"></i>
       <i data-ng-show="viewModel.currentTemplate.uid == '<%= templateUid %>'" class="m-icon-swapleft m-icon-white"></i>
@@ -26,9 +26,11 @@
     </button>
     <ul class="dropdown-menu">
       <!-- dropdown menu links -->
-
       <li>
-        <a data-ng-click="$parent.viewModel.deleteConfirmDialogTemplate('<%= templateUid %>')"><i class="icon-trash"></i> Archive</a>
+        <a data-ng-click=""><i class="icon-plus"></i> New Revision</a>
+      </li>
+      <li >
+        <a class="color-red" data-ng-click="$parent.viewModel.deleteConfirmDialogTemplate('<%= templateUid %>')"><i class="icon-trash"></i> Archive Template</a>
       </li>
     </ul>
   </div>

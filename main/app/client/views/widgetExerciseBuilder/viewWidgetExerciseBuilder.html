@@ -235,11 +235,11 @@
                               style            = "margin-bottom: 5px;"
                               data-ng-disabled = "formEditTemplateName.$invalid"
                               data-ng-click    = "viewModel.putTemplate(viewModel.currentTemplate.uid)"
-                              class            = "btn btn-block span6"><i class="icon-save m-icon-white"></i> Save</button>
+                              class            = "btn btn-block green span6"><i class="icon-save m-icon-white"></i> Save</button>
                             <button
                               style            = "margin-bottom: 5px; margin-top: 0;"
-                              data-ng-click    = "viewModel.showEditTemplateName = false; viewModel.formEditTemplateName.name=viewModel.currentTemplate.name;"
-                              class            = "btn red btn-block span6"><i class="icon-save m-icon-white"></i> Cancel</button>
+                              data-ng-click    = "viewModel.showEditTemplateName = false; formEditTemplateName.$setPristine(); viewModel.formEditTemplateName.name=viewModel.currentTemplate.name;"
+                              class            = "btn red btn-block span6"><i class="icon-remove m-icon-white"></i> Cancel</button>
                           </div>
 
                         </div>
@@ -454,8 +454,9 @@
                                     href><i class="m-icon-swapdown"></i> Move Down</a>
 
                                   <a
+                                    class = "color-red"
                                     data-ng-click="viewModel.deleteGroup(group.uid)"
-                                    href><i class="icon-trash"></i> Archive</a>
+                                    href><i class="icon-trash"></i> Archive Group</a>
                                 </li>
                                 <li class="dropdown-submenu bootstrap-menu-bar">
 
@@ -530,8 +531,8 @@
                       style              = "display:none;"
                       data-ng-animate    = "{show: 'slideDown', hide: 'slideUp'}"
                       data-ng-show       = "viewModel.showAddNewField_OpenType == 'OpenResponse'"
-                      data-ng-class      = "{'sub-portlet':formOpenResponseAdd.$valid}"
-                      class              = "portlet box green">
+                      data-ng-class      = "{'green sub-portlet':formOpenResponseAdd.$valid, 'grey':formOpenResponseAdd.$invalid}"
+                      class              = "portlet box">
                       <div class="portlet-title">
                         <h4><span>New <strong>Open Response</strong> Field</span></h4>
                       </div>
@@ -594,6 +595,15 @@
 
                       </div>
                     </div>
+
+
+
+
+
+
+
+
+
 
 
 

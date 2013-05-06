@@ -322,3 +322,9 @@ ul.nav .dropdown-submenu > .dropdown-menu {
   background-color: #4b8df8 !important;
 }
 
+.color-red {
+  color: #e02222 !important;
+}
+.color-green {
+  color: #35aa47 !important;
+}

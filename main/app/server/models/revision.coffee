@@ -8,6 +8,7 @@ module.exports =
     id:            SEQ.INTEGER
     changeSummary: SEQ.TEXT
     scope:         SEQ.TEXT
+    finalized:     SEQ.BOOLEAN
 
     clientUid:
       type: SEQ.STRING
