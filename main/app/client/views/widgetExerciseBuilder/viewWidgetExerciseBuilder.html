@@ -236,7 +236,7 @@
                               class            = "btn btn-block span6"><i class="icon-save m-icon-white"></i> Save</button>
                             <button
                               style            = "margin-bottom: 5px; margin-top: 0;"
-                              data-ng-click    = "viewModel.showEditTemplateName = false"
+                              data-ng-click    = "viewModel.showEditTemplateName = false; viewModel.formEditTemplateName.name=viewModel.currentTemplate.name;"
                               class            = "btn red btn-block span6"><i class="icon-save m-icon-white"></i> Cancel</button>
                           </div>
 
@@ -385,105 +385,242 @@
 
               <div
                 data-ng-repeat = "group in viewModel.currentTemplateRevision.groups | toArray | deleted | orderBy:'ordinal':false"
-                data-ng-init = "nameEditing=false">
-                <div
-                  data-ng-controller="ControllerWidgetExerciseBuilderGroupEdit"
-                  style="margin-bottom:0;"
-                  class="navbar">
+                data-ng-init   = "nameEditing=false;">
 
-                  <div class="navbar-inner">
-                    <div class="container">
 
-                      <span class="pull-right">
-                        <a
-                          data-ng-hide  = "nameEditing"
-                          data-ng-click = "nameEditing=true"
-                          class="brand"
-                          href>{{group.name}}</a>
+                <div data-ng-controller="ControllerWidgetExerciseBuilderGroupEdit">
+                  <div
+                    style="margin-bottom:0;"
+                    class="navbar">
 
-                        <ul
-                          data-ng-show  = "nameEditing"
-                          class="nav">
-                          <li>
-                            <a
-                              data-ng-disabled = "groupNameEditingForm.$invalid"
-                              data-ng-click    = "nameEditing = viewModel.putGroup(group.uid)"
-                              href>Save</a>
-                          </li>
-                        </ul>
+                    <div class="navbar-inner">
+                      <div class="container">
 
-                        <form
-                          name         = "groupNameEditingForm"
-                          data-ng-show = "nameEditing"
-                          class        = "navbar-search"
-                          novalidate>
-                          <input
-                            name              = "groupName"
-                            data-ng-model     = "group.name"
-                            style             = "width:100%;"
-                            type              = "text"
-                            class             = "search-query span2"
-                            placeholder       = "">
+                        <span class="pull-right">
+                          <a
+                            data-ng-hide  = "nameEditing"
+                            data-ng-click = "nameEditing = true"
+                            class="brand"
+                            href>{{group.name}}</a>
+
+                          <ul
+                            data-ng-show  = "nameEditing"
+                            class="nav">
+                            <li>
+                              <a
+                                data-ng-disabled = "groupNameEditingForm.$invalid"
+                                data-ng-click    = "nameEditing = viewModel.putGroup(group.uid)"
+                                href>Save</a>
+                            </li>
+                          </ul>
+
+                          <form
+                            name         = "groupNameEditingForm"
+                            data-ng-show = "nameEditing"
+                            class        = "navbar-search"
+                            novalidate>
+                            <input
+                              name              = "groupName"
+                              data-ng-model     = "group.name"
+                              style             = "width:100%;"
+                              type              = "text"
+                              class             = "search-query span2"
+                              placeholder       = "">
+                          </form>
+
+                        </span>
+
+
+                        <div class="nav-collapse collapse navbar-responsive-collapse">
+
+                          <ul class="nav">
+
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b> Options</a>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a
+                                    data-ng-click = "nameEditing=true;"
+                                    href><i class="icon-pencil"></i> Edit</a>
+
+                                  <a
+                                    data-ng-click="viewModel.moveGroup('up')"
+                                    href><i class="m-icon-swapup"></i> Move Up</a>
+                                  <a
+                                    data-ng-click="viewModel.moveGroup('down')"
+                                    href><i class="m-icon-swapdown"></i> Move Down</a>
+
+                                  <a
+                                    data-ng-click="viewModel.deleteGroup(group.uid)"
+                                    href><i class="icon-trash"></i> Archive</a>
+                                </li>
+                                <li class="dropdown-submenu">
+
+                                  <a data-ng-click="" href>Add Question</a>
+
+                                  <ul class="dropdown-menu">
+                                    <li>
+                                      <a
+                                        data-ng-click="viewModel.showAddNewField('OpenResponse')"
+                                        href>Open Response</a>
+                                    </li>
+                                    <li>
+                                      <a
+                                        data-ng-click="viewModel.showAddNewField('SelectIndividual')"
+                                        href>Select Individual</a>
+                                    </li>
+                                    <li>
+                                      <a
+                                        data-ng-click="viewModel.showAddNewField('SelectMultiple')"
+                                        href>Select Multiple</a>
+                                    </li>
+                                    <li>
+                                      <a
+                                        data-ng-click="viewModel.showAddNewField('YesNo')"
+                                        href>Yes / No</a>
+                                    </li>
+                                    <li>
+                                      <a
+                                        data-ng-click="viewModel.showAddNewField('PercentageSlider')"
+                                        href>Percentage Slider</a>
+                                    </li>
+                                  </ul>
+                                </li>
+
+                              </ul>
+                            </li>
+                          </ul>
+
+                        </div><!-- /.nav-collapse -->
+
+
+                      </div>
+                    </div><!-- /navbar-inner -->
+                  </div><!-- group menu bar -->
+
+
+
+
+
+                  <div class = "box template-info-box fade in">
+
+
+
+                    <div
+                      data-ng-controller = "ControllerWidgetExerciseBuilderGroupFieldOpenResponse"
+                      style           = "style:none;"
+                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show    = "viewModel.showAddNewField_OpenResponse"
+                      class           = "portlet box gray">
+                      <div class="portlet-title">
+                        <h4><span>Open Response</span></h4>
+                      </div>
+                      <div class="portlet-body light-grey">
+
+
+
+
+                        <form name="formOpenResponseAdd" class="form-horizontal" novalidate>
+
+
+                          <div class="control-group">
+                            <label class="control-label">Name</label>
+                            <div class="controls">
+                              <input type="text" name="name">
+                            </div>
+                          </div>
+
+
+                          <div class="control-group">
+                            <label class="control-label">Description</label>
+                            <div class="controls">
+                              <textarea name="description" class="medium m-wrap" rows="3"></textarea>
+                            </div>
+                          </div>
+
+
                         </form>
 
-                      </span>
 
 
 
+                        <div data-ng-include="'viewWidgetExerciseBuilderFieldButtons'"></div>
 
-
-
-
-                      <div class="nav-collapse collapse navbar-responsive-collapse">
-
-                        <ul class="nav">
-
-                          <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                              <li>
-                                <a
-                                  data-ng-click = "nameEditing=true;"
-                                  href><i class="icon-pencil"></i> Edit</a>
-
-                                <a
-                                  data-ng-click="viewModel.moveGroup('up')"
-                                  href><i class="m-icon-swapup"></i> Move Up</a>
-                                <a
-                                  data-ng-click="viewModel.moveGroup('down')"
-                                  href><i class="m-icon-swapdown"></i> Move Down</a>
-
-                                <a
-                                  data-ng-click="viewModel.deleteGroup(group.uid)"
-                                  href><i class="icon-trash"></i> Archive</a>
-                              </li>
-                              <li class="dropdown-submenu">
-                                <a href="#">Add Question</a>
-                                <ul class="dropdown-menu">
-                                  <li><a href="#">Open Response</a></li>
-                                  <li><a href="#">Select Individual</a></li>
-                                  <li><a href="#">Select Multiple</a></li>
-                                  <li><a href="#">Yes / No</a></li>
-                                  <li><a href="#">Percentage Slider</a></li>
-                                </ul>
-                              </li>
-
-                            </ul>
-                          </li>
-                        </ul>
-
-                      </div><!-- /.nav-collapse -->
-
-
+                      </div>
                     </div>
-                  </div><!-- /navbar-inner -->
-                </div><!-- group menu bar -->
 
-                <div class = "box template-info-box fade in">
-                  <h3>Info</h3>
-                </div><!-- template-info-box -->
 
-              </div>
+                    <div
+                      style           = "style:none;"
+                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show    = "viewModel.showAddNewField_SelectIndividual"
+                      class           = "portlet box gray">
+                      <div class="portlet-title">
+                        <h4><span>Select Individual</span></h4>
+                      </div>
+                      <div class="portlet-body light-grey">
+
+                        <div data-ng-include="'viewWidgetExerciseBuilderFieldButtons'"></div>
+
+                      </div>
+                    </div>
+
+
+                    <div
+                      style           = "style:none;"
+                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show    = "viewModel.showAddNewField_SelectMultiple"
+                      class           = "portlet box gray">
+                      <div class="portlet-title">
+                        <h4><span>Select Multiple</span></h4>
+                      </div>
+                      <div class="portlet-body light-grey">
+
+                        <div data-ng-include="'viewWidgetExerciseBuilderFieldButtons'"></div>
+
+                      </div>
+                    </div>
+
+
+                    <div
+                      style           = "style:none;"
+                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show    = "viewModel.showAddNewField_YesNo"
+                      class           = "portlet box gray">
+                      <div class="portlet-title">
+                        <h4><span>Yes/No</span></h4>
+                      </div>
+                      <div class="portlet-body light-grey">
+
+                        <div data-ng-include="'viewWidgetExerciseBuilderFieldButtons'"></div>
+
+                      </div>
+                    </div>
+
+
+                    <div
+                      style           = "style:none;"
+                      data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}"
+                      data-ng-show    = "viewModel.showAddNewField_PercentageSlider"
+                      class           = "portlet box gray">
+                      <div class="portlet-title">
+                        <h4><span>Percentage Slider</span></h4>
+                      </div>
+                      <div class="portlet-body light-grey">
+
+                        <div data-ng-include="'viewWidgetExerciseBuilderFieldButtons'"></div>
+
+                      </div>
+                    </div>
+
+
+
+                  </div><!-- template-info-box -->
+
+
+                </div><!-- controller: ControllerWidgetExerciseBuilderGroupEdit -->
+
+              </div><!-- data-ng-repeat -->
 
 
 

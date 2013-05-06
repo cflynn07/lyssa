@@ -4,6 +4,7 @@ define [
   'underscore'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilder.html'
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldOpenResponse.html'
+  'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldButtons.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderDetailsEJS.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderTemplateListButtonsEJS.html'
   'ejs'
@@ -14,6 +15,7 @@ define [
   _
   viewWidgetExerciseBuilder
   viewWidgetExerciseBuilderFieldOpenResponse
+  viewWidgetExerciseBuilderFieldButtons
 
   viewWidgetExerciseBuilderDetailsEJS
   viewWidgetExerciseBuilderTemplateListButtonsEJS
@@ -25,9 +27,14 @@ define [
 
     Module.run ($templateCache) ->
       #main Template
-      $templateCache.put 'viewWidgetExerciseBuilder', viewWidgetExerciseBuilder
+      $templateCache.put 'viewWidgetExerciseBuilder',
+        viewWidgetExerciseBuilder
+
       #Field Templates
-      $templateCache.put 'viewWidgetExerciseBuilderFieldOpenResponse', viewWidgetExerciseBuilderFieldOpenResponse
+      $templateCache.put 'viewWidgetExerciseBuilderFieldOpenResponse',
+        viewWidgetExerciseBuilderFieldOpenResponse
+      $templateCache.put 'viewWidgetExerciseBuilderFieldButtons',
+        viewWidgetExerciseBuilderFieldButtons
 
 
 
@@ -68,11 +75,52 @@ define [
 
 
 
+
+    Module.controller 'ControllerWidgetExerciseBuilderGroupFieldOpenResponse', ($scope, apiRequest, $dialog) ->
+      return
+
+
+
+
+
+
     Module.controller 'ControllerWidgetExerciseBuilderGroupEdit', ($scope, apiRequest, $dialog) ->
 
+      fieldTypes = [
+        'OpenResponse'
+        'SelectIndividual'
+        'SelectMultiple'
+        'YesNo'
+        'PercentageSlider'
+      ]
+
       $scope.viewModel =
+        showAddNewField_OpenResponse:     false
+        showAddNewField_SelectIndividual: false
+        showAddNewField_SelectMultiple:   false
+        showAddNewField_YesNo:            false
+        showAddNewField_PercentageSlider: false
+        showAddNewField: (field) ->
+
+          if $scope.viewModel['showAddNewField_' + field]
+            return
+
+          for type in fieldTypes
+            if type != field
+              $scope.viewModel['showAddNewField_' + type] = false
+
+          $scope.viewModel['showAddNewField_' + field] = true
+        cancelAddNewField: () ->
+          for type in fieldTypes
+            $scope.viewModel['showAddNewField_' + type] = false
+        submitAddNewField: () ->
+          for type in fieldTypes
+
+
+
+
         moveGroup: (dir) ->
-          newOrdinal  = $scope.group.ordinal
+          newOrdinal   = $scope.group.ordinal
           groupsLength = _.filter(_.toArray($scope.$parent.viewModel.currentTemplateRevision.groups), (item) -> !item.deletedAt).length
 
           if dir == 'down'
@@ -116,7 +164,7 @@ define [
             .then (result) ->
               if result
                 apiRequest.delete 'group', [groupUid], (result) ->
-                  console.log result
+                  #console.log result
 
                   helperReorderGroupOrdinals $scope,
                     apiRequest,
@@ -126,10 +174,9 @@ define [
                     () ->
                       console.log 'groups reindexed'
 
-
-
-
         putGroup: (groupUid) ->
+          console.log 'groupUid'
+          console.log groupUid
 
           name = $scope.resourcePool[groupUid].name
 
@@ -198,6 +245,7 @@ define [
               resHtml += '</a>'
               #resHtml += '<span>{{resourcePool[\'' + $scope.escapeHtml(full.uid) + '\'].revisions}} Revisions</span>'
               return resHtml
+
           ,
             mData:      null
             aTargets:   [1]
@@ -268,8 +316,12 @@ define [
                 console.log result
 
         putTemplate: (templateUid) ->
-          console.log templateUid
-
+          apiRequest.put 'template', [templateUid], {
+            name: $scope.viewModel.formEditTemplateName.name
+          }, (response) ->
+            console.log response
+            $scope.viewModel.showEditTemplateName = false
+            $scope.viewModel.formEditTemplateName.name = $scope.viewModel.currentTemplate.name
 
         postNewTemplate: () ->
           apiRequest.post 'template', {
@@ -317,7 +369,8 @@ define [
 
           template = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
           $scope.viewModel.currentTemplateRevision = $scope.getLastObjectFromHash template.revisions
-          console.log $scope.viewModel.currentTemplateRevision
+          #console.log $scope.viewModel.currentTemplateRevision
+
 
         currentTemplate: false
         fetchCurrentTemplate: () ->
@@ -335,7 +388,7 @@ define [
 
       hashChangeUpdate = () ->
         $scope.viewModel.showEditTemplateName = false
-        $scope.viewModel.routeParams = $routeParams
+        $scope.viewModel.routeParams          = $routeParams
         $scope.viewModel.fetchCurrentTemplateRevision()
         $scope.viewModel.fetchCurrentTemplate()
 
@@ -343,9 +396,6 @@ define [
         hashChangeUpdate()
 
       $scope.viewModel.fetchTemplates()
-
-
-
 
 
 

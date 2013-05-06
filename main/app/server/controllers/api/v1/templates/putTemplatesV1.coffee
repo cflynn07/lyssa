@@ -168,8 +168,8 @@ module.exports = (app) ->
 
                   #find this template by checking uid, check to see if uid is set
                   #find clientUid of this template, verify that it matches this employeeUid
-                  uid = object['uid']
-                  if _.isUndefined uid
+                  #uid = object['uid']
+                  if _.isUndefined val
                     callback null,
                       success: false
                     return
