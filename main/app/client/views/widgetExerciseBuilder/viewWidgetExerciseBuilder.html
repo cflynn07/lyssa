@@ -388,7 +388,8 @@
 
               <div
                 data-ng-repeat = "group in viewModel.currentTemplateRevision.groups | toArray | deleted | orderBy:'ordinal':false"
-                data-ng-init   = "nameEditing=false;">
+                data-ng-init   = "nameEditing=false;"
+                data-group-uid = "{{group.uid}}">
 
 
                 <div data-ng-controller="ControllerWidgetExerciseBuilderGroupEdit" class="template-builder-group">
@@ -673,11 +674,11 @@
                     <form class="form-horizontal template-builder-form">
 
                       <div
-                        data-ui-sortable
-                        data-ui-model = "group.fields">
+                        data-ui-sortable = "fieldsSortableOptions">
 
                         <div
-                          data-ng-repeat = "field in group.fields">
+                          data-ng-repeat = "field in group.fields"
+                          data-field-uid = "{{field.uid}}">
                           <div
 
                             data-ng-switch="field.type">

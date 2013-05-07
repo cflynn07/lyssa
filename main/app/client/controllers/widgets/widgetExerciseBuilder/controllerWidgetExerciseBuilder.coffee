@@ -1,4 +1,5 @@
 define [
+  'jquery'
   'angular'
   'angular-ui'
   'underscore'
@@ -10,6 +11,7 @@ define [
   'ejs'
   'async'
 ], (
+  $
   angular
   angularUi
   _
@@ -390,6 +392,23 @@ define [
             $scope.viewModel.currentTemplate = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
             #console.log $scope.viewModel.currentTemplate
 
+
+        $scope.groupsSorting = {}
+
+        $scope.fieldsSortableOptions =
+          update: () ->
+
+            $('div[data-group-uid]').each () ->
+              $(this).find('form.template-builder-form  div[data-field-uid]').each () ->
+                console.log $(this).attr('data-field-uid')
+
+
+            ###
+            console.log 'update'
+            console.log arguments
+            console.log $scope.groupsSorting
+            console.log $scope.viewModel.currentTemplateRevision.groups
+            ###
 
 
         hashChangeUpdate = () ->

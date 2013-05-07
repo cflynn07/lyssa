@@ -12,6 +12,7 @@ module.exports =
       validate:
         len: [5, 50]
     type: SEQ.ENUM config.fieldTypes
+    ordinal: SEQ.INTEGER
 
     clientUid:
       type: SEQ.STRING
