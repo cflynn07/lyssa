@@ -16,9 +16,10 @@ catch e
     output = Date.now() + ''
 
 GLOBAL.assetHash = crypto.createHash('md5').update(output).digest("hex")
+console.log 'GLOBAL.assetHash'
 console.log GLOBAL.assetHash
 
-localPath = __dirname + '/../client/assets/' + GLOBAL.assetHash
+localPath = __dirname + '../client/assets/' + GLOBAL.assetHash
 if fs.existsSync(localPath + '.css') and fs.existsSync(localPath + '.js')
   require './server'
 
@@ -41,6 +42,96 @@ else
             #console.log 'requirejs err'
             #console.log err
     (cb) ->
+
+      config =
+        baseUrl:                   __dirname + '/../client/'
+        name:                     'vendor/require'
+        include:                  './client'
+        preserveLicenseComments:  false
+        out:                      __dirname + '/../client/assets/' + GLOBAL.assetHash + '.js'
+        paths:
+          'angular':              'vendor/angular'
+          'angular-ui':           'vendor/angular-ui'
+          'angular-bootstrap':    'vendor/angular-bootstrap'
+          'text':                 'vendor/text'
+          'coffee-script':        'vendor/coffee-script'
+          'cs':                   'vendor/cs'
+          'hbs':                  'vendor/hbs'
+          'Handlebars':           'vendor/Handlebars'
+          'i18nprecompile':       'vendor/hbs/i18nprecompile'
+          'json2':                'vendor/hbs/json2'
+          'io':                   'vendor/socket.io'
+          'underscore':           'vendor/underscore'
+          'backbone':             'vendor/backbone'
+          'jquery':               'vendor/jquery'
+          'jquery-ui':            'vendor/jquery-ui'
+          'bootstrap':            'vendor/bootstrap'
+          'bootstrapFileUpload':      'vendor/bootstrap-fileupload'
+          'jqueryUniform':            'vendor/jquery.uniform'
+          'jqueryBrowser':            'vendor/jquery.browser'
+          'datatables':               'vendor/jquery-dataTables'
+          'datatables_bootstrap':     'vendor/DT_bootstrap'
+          'jqueryDateFormat':         'vendor/jquery-dateFormat'
+          'bootstrap-tree':           'vendor/bootstrap-tree'
+          'pubsub':                   'vendor/pubsub'
+          'fullCalendar':             'vendor/fullcalendar'
+          'bootstrap-toggle-buttons': 'vendor/bootstrap-toggle-buttons'
+          'uuid':                     'vendor/uuid'
+          'ejs':                      'vendor/ejs'
+          'async':                    'vendor/async'
+        uglify:
+          no_mangle: true
+        hbs:
+          disableI18n: true
+          helperDirectory: 'views/helpers/'
+          templateExtension: 'html'
+        shim:
+          angular:
+            deps: ['jquery-ui']
+            exports: 'angular'
+          'angular-ui':
+            deps:    ['angular', 'jquery', 'jquery-ui']
+            exports: 'angular'
+          'angular-bootstrap':
+            deps:    ['angular', 'jquery', 'jquery-ui', 'bootstrap']
+            exports: 'angular'
+          underscore:
+            exports: '_'
+          io:
+            exports: 'io'
+          cs:
+            deps:    ['coffee-script']
+          jquery:
+            exports: '$'
+          'jquery-ui':
+            deps:    ['jquery']
+          jqueryBrowser:
+            deps:    ['jquery']
+          jqueryUniform:
+            deps:    ['jqueryBrowser', 'jquery']
+          bootstrap:
+            deps:    ['jquery']
+          datatables:
+            deps:    ['jquery']
+          'bootstrap-tree':
+            deps:    ['jquery']
+          fullCalendar:
+            deps:    ['jquery']
+          pubsub:
+            exports: 'pubsub'
+          'bootstrap-toggle-buttons':
+            deps:     ['jquery', 'bootstrap']
+          ejs:
+            exports: 'EJS'
+          uuid:
+            exports: 'uuid'
+          async:
+            exports: 'async'
+
+
+
+
+      ###
 
       #OPTIMIZE JS
       config =
@@ -124,12 +215,16 @@ else
 
           jqueryAutoComplete:
             deps:    ['jquery']
-
+      ###
 
       requirejs.optimize config,
         (buildResponse) ->
+          console.log 'buildResponse'
+          console.log buildResponse
           cb()
         (err) ->
+          console.log 'error'
+          console.log err
           cb()
 
   ], (err, results) ->

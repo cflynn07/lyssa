@@ -51,6 +51,35 @@ define [], () ->
           'viewWidgetDictionaryManager'
         ]
 
+
+      #Delegate exercise submission
+      '/admin/themis/employees':
+        title:     'Employees'
+        root:      '/delegate/themis/employees'
+        subRoutes: [
+          '/:employeeUid':
+            title:       'Employees'
+            subMenuItem: false
+        ]
+        widgets:   [
+        ]
+
+
+
+      #Delegate exercise submission
+      '/admin/themis/exercises':
+        title:     'Exercises'
+        root:      '/admin/themis/exercises'
+        subRoutes: [
+          '/:exerciseUid':
+            title:       'Exercises'
+            subMenuItem: false
+        ]
+        widgets:   [
+        ]
+
+
+
       #Delegate dashboard
       '/delegate/themis':
         title:     'Dashboard'
@@ -59,6 +88,7 @@ define [], () ->
         ]
         widgets:   [
         ]
+
 
       #Delegate exercise submission
       '/delegate/themis/exercises':
@@ -71,6 +101,7 @@ define [], () ->
         ]
         widgets:   [
         ]
+
 
     simplifiedUserCategories:
       'clientSuperAdmin': 'admin'

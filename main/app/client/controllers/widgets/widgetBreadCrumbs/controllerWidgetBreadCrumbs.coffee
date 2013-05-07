@@ -7,9 +7,11 @@ define [
 ) ->
   (Module) ->
 
-    Module.run ($templateCache) ->
+    Module.run ['$templateCache', ($templateCache) ->
       $templateCache.put 'viewWidgetBreadCrumbs', viewWidgetBreadCrumbs
+    ]
 
-    Module.controller 'ControllerWidgetBreadCrumbs', ($scope, $templateCache, socket) ->
+    Module.controller 'ControllerWidgetBreadCrumbs', ['$scope', '$templateCache', 'socket', ($scope, $templateCache, socket) ->
       $scope.title    = 'Themis'
       $scope.subtitle = 'by Cobar Systems LLC'
+    ]

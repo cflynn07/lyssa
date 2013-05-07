@@ -7,9 +7,13 @@ define [
 ) ->
   (Module) ->
 
-    Module.run ($templateCache) ->
+    Module.run ['$templateCache',
+    ($templateCache) ->
       $templateCache.put 'viewWidgetCoreHeader', viewWidgetCoreHeader
+    ]
 
-    Module.controller 'ControllerWidgetCoreHeader', ($scope, authenticate) ->
+    Module.controller 'ControllerWidgetCoreHeader', ['$scope', 'authenticate',
+    ($scope, authenticate) ->
       $scope.logout = () ->
         authenticate.unauthenticate()
+    ]

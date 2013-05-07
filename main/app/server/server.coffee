@@ -4,8 +4,8 @@ path    = require 'path'
 config  = require './config/config'
 
 #If we didn't get to server.js from bootstrap.js
-if !GLOBAL.asset_hash?
-  GLOBAL.asset_hash = 'main'
+if !GLOBAL.assetHash
+  GLOBAL.assetHash = 'client'
 
 #Read dotCloud ENV file if exists
 try
@@ -18,7 +18,7 @@ require('./components/oRM').setup()
 
 ###
 if GLOBAL.env
-  require('nodetime').profile
+  require('nodetime').profil e
     accountKey: '3e685ab0740eddb9a958f950a66bd728df2f1cca'
     appName:    'Lyssa - Production'
 else

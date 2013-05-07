@@ -1,21 +1,35 @@
 <!-- HEADER GOES HERE -->
-<div class="header navbar navbar-inverse navbar-fixed-top" data-ng-controller="ControllerWidgetCoreHeader" data-ng-include="'viewWidgetCoreHeader'"></div>
+<div
+  style              = "z-index:1000;"
+  class              = "header navbar navbar-inverse navbar-fixed-top"
+  data-ng-controller = "ControllerWidgetCoreHeader"
+  data-ng-include    = "'viewWidgetCoreHeader'"></div>
 
 
 
 <div class="page-container row-fluid">
 
   <!-- LEFT MENU GOES HERE -->
-  <div class="page-sidebar nav-collapse collapse" data-ng-controller="ControllerWidgetCoreLeftMenu" data-ng-include="'viewWidgetCoreLeftMenu'"></div>
+  <div
+    style              = "z-index:1001;"
+    class              = "page-sidebar nav-collapse collapse"
+    data-ng-controller = "ControllerWidgetCoreLeftMenu"
+    data-ng-include    = "'viewWidgetCoreLeftMenu'"></div>
 
   <div class="page-content">
     <!-- PAGE CONTENT GOES HERE -->
-    <div class="container-fluid" data-ng-controller="ControllerCoreWidgets" data-ng-include="'viewCoreWidgets'"></div>
+    <div
+      class              = "container-fluid"
+      data-ng-controller = "ControllerCoreWidgets"
+      data-ng-include    = "'viewCoreWidgets'"></div>
   </div>
 
 
 </div>
 
 
-
-<div data-ng-show="false" data-ng-controller="ControllerWidgetCoreFooter" data-ng-include="'viewWidgetCoreFooter'" class="footer"></div>
+<div
+  data-ng-show       = "false"
+  data-ng-controller = "ControllerWidgetCoreFooter"
+  data-ng-include    = "'viewWidgetCoreFooter'"
+  class              = "footer"></div>

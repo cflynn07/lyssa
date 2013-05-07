@@ -8,10 +8,13 @@ define [
 
   (Module) ->
 
-    Module.run ($templateCache) ->
+    Module.run ['$templateCache',
+    ($templateCache) ->
       $templateCache.put 'viewWidgetScheduler', viewWidgetScheduler
+    ]
 
-    Module.controller 'ControllerWidgetScheduler', ($scope, $route) ->
+    Module.controller 'ControllerWidgetScheduler', ['$scope', '$route',
+    ($scope, $route) ->
 
       $scope.eventSources = []
       #  url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic"
@@ -34,3 +37,4 @@ define [
           targetDate: ''
           allowRescheduling: false
           dateRange: ''
+    ]

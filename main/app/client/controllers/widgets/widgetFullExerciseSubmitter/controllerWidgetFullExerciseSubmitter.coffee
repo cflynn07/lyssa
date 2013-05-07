@@ -8,9 +8,12 @@ define [
 
   (Module) ->
 
-    Module.run ($templateCache) ->
-      $templateCache.put 'viewWidgetFullExerciseSubmitter', viewWidgetFullExerciseSubmitter
+    Module.run ['$templateCache',
+      ($templateCache) ->
+        $templateCache.put 'viewWidgetFullExerciseSubmitter', viewWidgetFullExerciseSubmitter
+    ]
 
-    Module.controller 'ControllerWidgetFullExerciseSubmitter', ($scope, $route) ->
-
-      $scope.test = 'foo'
+    Module.controller 'ControllerWidgetFullExerciseSubmitter', ['$scope', '$route',
+      ($scope, $route) ->
+        $scope.test = 'foo'
+    ]

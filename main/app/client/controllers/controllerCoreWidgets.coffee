@@ -14,13 +14,16 @@ define [
 
   (Module) ->
 
-    Module.run ($templateCache, apiRequest, $routeParams, $route) ->
+    Module.run ['$templateCache', 'apiRequest', '$routeParams', '$route',
+    ($templateCache, apiRequest, $routeParams, $route) ->
       $templateCache.put 'viewCoreWidgets', viewCoreWidgets
+    ]
 
     ###
       Manages the dynamic insertion of widgets to the main content area of the application
     ###
-    Module.controller 'ControllerCoreWidgets', ($scope, $route, $rootScope) ->
+    Module.controller 'ControllerCoreWidgets', ['$scope', '$route', '$rootScope',
+    ($scope, $route, $rootScope) ->
 
 
       $scope.widgetRows   = [{widget: 'viewWidgetBreadCrumbs'}]
@@ -76,3 +79,4 @@ define [
         loadNewRoute()
 
       loadNewRoute()
+    ]

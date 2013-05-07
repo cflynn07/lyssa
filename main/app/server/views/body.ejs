@@ -24,6 +24,24 @@
      </div>
 
 
-     <script async type="text/javascript" data-main="/client" src="vendor/require.js"></script>
+
+
+
+     <% if(assetHash == 'client'){ %>
+
+      <script async type="text/javascript" data-main="/client" src="vendor/require.js"></script>
+
+    <% }else{ %>
+
+      <script async type="text/javascript" src="/assets/<%= assetHash %>.js"></script>
+
+    <% } %>
+
+
+
+
+
+
+
 
 </body>

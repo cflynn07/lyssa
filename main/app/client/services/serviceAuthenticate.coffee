@@ -3,7 +3,8 @@ define [
 ) ->
 
   (Module) ->
-    Module.factory 'authenticate', ($rootScope, socket) ->
+    Module.factory 'authenticate', ['$rootScope', 'socket',
+    ($rootScope, socket) ->
 
       factory =
         authenticate: (user) ->
@@ -15,3 +16,4 @@ define [
           socket.emit 'authenticate:unauthenticate', {}, () ->
             $rootScope.rootStatus = 'login'
             $rootScope.rootUser   = {}
+    ]

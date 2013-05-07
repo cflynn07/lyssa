@@ -31,7 +31,7 @@ requirejs.config
     'bootstrap-tree':           'vendor/bootstrap-tree'
     'pubsub':                   'vendor/pubsub'
     'fullCalendar':             'vendor/fullcalendar'
-    'bootstrap-toggle-buttons': '/vendor/bootstrap-toggle-buttons'
+    'bootstrap-toggle-buttons': 'vendor/bootstrap-toggle-buttons'
     'uuid':                     'vendor/uuid'
     'ejs':                      'vendor/ejs'
     'async':                    'vendor/async'

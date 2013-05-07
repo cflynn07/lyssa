@@ -9,42 +9,19 @@ define [
   (Module) ->
 
 
-    Module.run ($templateCache) ->
+    Module.run ['$templateCache', ($templateCache) ->
       $templateCache.put 'viewWidget4oh4', viewWidget4oh4
+    ]
 
-
-    Module.controller 'ControllerWidget4oh4', ($scope, $route) ->
-
+    Module.controller 'ControllerWidget4oh4', ['$scope', '$route', ($scope, $route) ->
 
       loadNewRoute = () ->
         return
 
-
-
-
       loadNewRoute()
-
-
-      console.log $scope.rootUser
-      console.log $route
-
 
       #once = false
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
-
-        console.log 'route change success'
-        console.log current
-        console.log $scope.rootUser
-
-
-
-        #if current && (current.redirectTo is not undefined)
-        #  console.log '$routeChangeSuccess'
-
-        #updateShit()
-
-
-
 
 
       updateShit = () ->
@@ -60,3 +37,5 @@ define [
           widget: 'viewWidgetExerciseBuilder'
         ]
       updateShit()
+
+    ]

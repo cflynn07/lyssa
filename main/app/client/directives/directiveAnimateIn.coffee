@@ -30,7 +30,7 @@ define [
           max = 4
           num = num + 1
           $el = element
-          init_opacity = 0.6 #parseFloat $el.css 'opacity'
+          init_opacity = 1 #0.6 #parseFloat $el.css 'opacity'
 
           if num > max
             #setTimeout(() ->

@@ -16,10 +16,13 @@ define [
 
   (Module) ->
 
-    Module.run ($templateCache) ->
+    Module.run ['$templateCache',
+    ($templateCache) ->
       $templateCache.put 'viewCore', viewCore
+    ]
 
-    Module.controller 'ControllerApp' , ($rootScope, $route, socket, authenticate) ->
+    Module.controller 'ControllerApp' , ['$rootScope', '$route', 'socket', 'authenticate',
+    ($rootScope, $route, socket, authenticate) ->
 
 
       #Global Helpers
@@ -76,3 +79,5 @@ define [
           authenticate.authenticate response.user
         else
           authenticate.unauthenticate()
+
+    ]

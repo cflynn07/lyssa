@@ -14,10 +14,14 @@ define [
 
   (Module) ->
 
-    Module.run ($templateCache) ->
+    Module.run ['$templateCache',
+    ($templateCache) ->
       $templateCache.put 'viewWidgetCoreLeftMenu', viewWidgetCoreLeftMenu
+    ]
 
-    Module.controller 'ControllerWidgetCoreLeftMenu', ($scope, $route, $templateCache) ->
+
+    Module.controller 'ControllerWidgetCoreLeftMenu', ['$scope', '$route', '$templateCache',
+    ($scope, $route, $templateCache) ->
 
       $scope.menuChoices = []
 
@@ -68,3 +72,4 @@ define [
       $scope.$on '$routeChangeSuccess', (scope, current, previous) ->
        $scope.updateActiveMenuItem()
       $scope.updateActiveMenuItem()
+    ]

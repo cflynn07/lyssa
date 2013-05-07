@@ -13,7 +13,8 @@ define [
   clientOrmShare = JSON.parse clientOrmShare
 
   (Module) ->
-    Module.factory 'apiRequest', (socket, $rootScope) ->
+    Module.factory 'apiRequest', ['socket', '$rootScope',
+    (socket, $rootScope) ->
 
       #Hash of all ORM resources
       resourcePool = {}
@@ -330,5 +331,5 @@ define [
 
               callback response
 
-
+    ]
 

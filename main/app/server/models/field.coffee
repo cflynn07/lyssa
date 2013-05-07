@@ -23,6 +23,10 @@ module.exports =
       validate:
         isUUID: 4
         notNull: true
+    #dictionaryUid:
+    #  type: SEQ.STRING
+    #    validate:
+    #    isUUID: 4
 
   relations: [
     relation: 'belongsTo'
@@ -30,6 +34,9 @@ module.exports =
   ,
     relation: 'belongsTo'
     model: 'group'
+  #,
+  #  relation: 'hasOne'
+  #  model: 'dictionary'
   ]
   options:
     paranoid: true

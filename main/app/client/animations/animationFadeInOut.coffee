@@ -8,15 +8,16 @@ define [
 
   (Module) ->
 
-    Module.animation 'fade-out', ($rootScope) ->
+    Module.animation 'fade-out', ['$rootScope', ($rootScope) ->
       animation =
         setup: (element) ->
           #element.css display: 'none'
         start: (element, done) ->
           element.fadeOut 'fast', () ->
             done()
+    ]
 
-    Module.animation 'fade-in', ($rootScope) ->
+    Module.animation 'fade-in', ['$rootScope', ($rootScope) ->
       #console.log 'animationInit'
       animation =
         setup: (element) ->
@@ -24,4 +25,5 @@ define [
         start: (element, done, memo) ->
           element.fadeIn 'fast', () ->
             done()
+    ]
 

@@ -7,7 +7,8 @@ define [
   apiVersion = 'v1'
 
   (Module) ->
-    Module.factory 'socket', ($rootScope) ->
+    Module.factory 'socket', ['$rootScope',
+    ($rootScope) ->
       socket = io.connect()
 
       factory =
@@ -35,3 +36,4 @@ define [
               args = arguments
               $rootScope.$apply () ->
                 callback.apply socket, args
+    ]
