@@ -33,7 +33,8 @@ define [
         #console.log 'resourcePut'
         #console.log data
         #console.log resourcePool[data['uid']]
-        $rootScope.$broadcast 'resourcePut'
+        $rootScope.$broadcast 'resourcePut', data['uid']
+
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
           updatePoolResource resourcePool[data['uid']], data
         #console.log resourcePool[data['uid']]
@@ -41,7 +42,8 @@ define [
       socket.on 'resourcePost', (data) ->
         #console.log 'resourcePost'
         #console.log data
-        $rootScope.$broadcast 'resourcePost'
+        $rootScope.$broadcast 'resourcePost', data['uid']
+
         if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])
           #resourcePoolCollections[data['resourceName']][data['resource']['uid']] = data['resource']
 
@@ -125,8 +127,9 @@ define [
 
 
       updatePoolResource = (poolResource, updatedResource) ->
-        _.extend poolResource, updatedResource
+        _.extend poolResource, updatedResource, true
         poolResource.isFresh = true
+
 
       addPoolResource = (resource) ->
         resourcePool[resource.uid] = resource

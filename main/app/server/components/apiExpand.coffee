@@ -274,7 +274,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
 
   resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
-    console.log topResult
+    #console.log topResult
 
     if !_.isArray topResult
       topResult = [topResult]

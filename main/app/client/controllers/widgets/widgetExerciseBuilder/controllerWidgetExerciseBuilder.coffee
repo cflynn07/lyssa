@@ -94,6 +94,7 @@ define [
             name:     $scope.form.name
             type:     'openResponse'
             groupUid: $scope.group.uid
+            ordinal:  0
           }, (response) ->
             console.log response
 
@@ -393,22 +394,71 @@ define [
             #console.log $scope.viewModel.currentTemplate
 
 
-        $scope.groupsSorting = {}
+
+
 
         $scope.fieldsSortableOptions =
+          connectWith: 'div[data-ui-sortable]'
           update: () ->
 
             $('div[data-group-uid]').each () ->
-              $(this).find('form.template-builder-form  div[data-field-uid]').each () ->
-                console.log $(this).attr('data-field-uid')
+
+              groupUid          = $(this).attr('data-group-uid')
+              groupFieldOrdinal = 0
+
+              $(this).find('div[data-field-uid]').each () ->
+
+                fieldUid = $(this).attr('data-field-uid')
+                field    = $scope.resourcePool[fieldUid]
+
+                if (field.ordinal == groupFieldOrdinal) and (field.groupUid == groupUid)
+                  #Nothing has changed here
+                  groupFieldOrdinal++
+                  return
+
+                if field.groupUid != groupUid
+                  $scope.resourcePool[groupUid].fields[field.uid] = field
+                  delete $scope.resourcePool[field.groupUid].fields[field.uid]
+                  field.groupUid = groupUid
+
+                apiRequest.put 'field', fieldUid, {
+                  ordinal:  groupFieldOrdinal
+                  groupUid: groupUid
+                }, (result) ->
+                  console.log result
+
+                #delete $scope.resourcePool[fieldUid]
+
+                groupFieldOrdinal++
 
 
-            ###
-            console.log 'update'
-            console.log arguments
-            console.log $scope.groupsSorting
-            console.log $scope.viewModel.currentTemplateRevision.groups
-            ###
+        #Hack to update children, with rate limiting for performance
+        rateLimit = null
+        $scope.$on 'resourcePut', (data, uid) ->
+
+          found = false
+          for templateUid, template of $scope.viewModel.templates
+            if found
+              break
+            for revisionUid, revision of template.revisions
+              if found
+                break
+              for groupUid, group of revision.groups
+                if found
+                  break
+                for fieldUid, field of group.fields
+                  if fieldUid == uid
+                    found = true
+                    break
+
+          if found
+            clearTimeout rateLimit
+            rateLimit = setTimeout () ->
+              apiRequest.get 'group', [], {expand: [{resource: 'fields'}]}, (response) ->
+                console.log 'GET groups.fields'
+                console.log response
+            , 100
+
 
 
         hashChangeUpdate = () ->

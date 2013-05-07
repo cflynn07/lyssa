@@ -55,6 +55,16 @@ module.exports = (app) ->
                       message:
                         type: 'required'
 
+                'ordinal': (val, objectKey, object, callback) ->
+                  if !_.isUndefined val
+                    callback null,
+                      success: true
+                  else
+                    callback null,
+                      success: false
+                      message:
+                        ordinal: 'required'
+
                 'clientUid': (val, objectKey, object, callback) ->
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
@@ -100,7 +110,7 @@ module.exports = (app) ->
                       callback null,
                         success: false
                         message:
-                          'resultGroup': 'unknown'
+                          'groupUid': 'unknown'
                       return
 
                     if !resultClient
@@ -114,7 +124,7 @@ module.exports = (app) ->
                       callback null,
                         success: false
                         message:
-                          'resultGroup': 'unknown'
+                          'groupUid': 'unknown'
                       return
 
                     mapObj = {}
@@ -154,6 +164,16 @@ module.exports = (app) ->
                       success: false
                       message:
                         type: 'required'
+
+                'ordinal': (val, objectKey, object, callback) ->
+                  if !_.isUndefined val
+                    callback null,
+                      success: true
+                  else
+                    callback null,
+                      success: false
+                      message:
+                        ordinal: 'required'
 
                 'clientUid': (val, objectKey, object, callback) ->
 
@@ -207,7 +227,7 @@ module.exports = (app) ->
                       callback null,
                         success: false
                         message:
-                          'resultGroup': 'unknown'
+                          'groupUid': 'unknown'
                       return
 
                     if !resultClient
@@ -221,7 +241,7 @@ module.exports = (app) ->
                       callback null,
                         success: false
                         message:
-                          'resultGroup': 'unknown'
+                          'groupUid': 'unknown'
                       return
 
                     mapObj = {}

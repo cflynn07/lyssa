@@ -391,7 +391,9 @@ form.template-builder-form .ui-sortable-placeholder {
 form.template-builder-form .ui-sortable-helper {
   opacity: 0.9;
 }
-
+div[data-ui-sortable] {
+  min-height: 40px;
+}
 
 
 

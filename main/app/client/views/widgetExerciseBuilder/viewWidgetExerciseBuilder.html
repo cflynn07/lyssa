@@ -677,7 +677,7 @@
                         data-ui-sortable = "fieldsSortableOptions">
 
                         <div
-                          data-ng-repeat = "field in group.fields"
+                          data-ng-repeat = "field in group.fields | toArray | orderBy:'ordinal'"
                           data-field-uid = "{{field.uid}}">
                           <div
 
