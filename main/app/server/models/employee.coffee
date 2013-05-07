@@ -60,7 +60,7 @@ module.exports =
     model: 'revision'
   ,
     relation: 'hasMany'
-    model: 'event'
+    model: 'eventParticipant'
   ,
     relation: 'hasMany'
     model: 'submission'
