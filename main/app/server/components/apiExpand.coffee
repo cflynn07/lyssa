@@ -274,6 +274,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
 
   resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
+    console.log topResult
 
     if !_.isArray topResult
       topResult = [topResult]
@@ -282,7 +283,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     #Verify no unknown resources specified
     if !verifyNoUnknownResource topResult, resourceQueryParams.find
       return
-
 
     if Object.getOwnPropertyNames(secondLevelIncludeObjects).length is 0
       #DONE, Nothing else to include

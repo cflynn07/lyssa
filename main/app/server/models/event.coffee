@@ -14,17 +14,18 @@ module.exports =
       validate:
         isUUID: 4
         notNull: true
-    employeeUid:
-      type: SEQ.STRING
-      validate:
-        isUUID: 4
-        notNull: true
+
+  #  employeeUid:
+  #    type: SEQ.STRING
+  #    validate:
+  #      isUUID: 4
+  #      notNull: true
 
   relations: [
     relation: 'belongsTo'
     model: 'client'
   ,
-    relation: 'belongsTo'
+    relation: 'hasMany'
     model: 'employee'
   ,
     relation: 'hasMany'

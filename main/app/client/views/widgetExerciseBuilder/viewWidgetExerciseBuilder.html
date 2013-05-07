@@ -515,7 +515,7 @@
                     <div
                       style = "margin-bottom:10px;"
                       data-ng-show = "viewModel.showAddNewField_OpenType == ''"
-                      data-ng-animate = "{show:'fadeIn', hide: 'fadeOut'}"
+                      data-ng-animate = "{show:'fadeIn'}"
                       class="inline-content">
                       <strong><i style="vertical-align:middle; margin-top:0;" class="m-icon-big-swapup"></i></strong><h3>Add Fields To Exercise Group</h3>
                     </div>
@@ -671,83 +671,90 @@
                     <!-- end field add forms -->
 
                     <form class="form-horizontal template-builder-form">
+
                       <div
-                        data-ng-repeat = "field in group.fields">
+                        data-ui-sortable
+                        data-ui-model = "group.fields">
+
                         <div
-                          data-ng-switch="field.type">
+                          data-ng-repeat = "field in group.fields">
+                          <div
+
+                            data-ng-switch="field.type">
 
 
 
-                          <div class="portlet box grey">
-                            <div class="portlet-title">
+                            <div class="portlet box grey">
+                              <div class="portlet-title">
 
-                              <div class="caption">
-                                <h4 style="margin-bottom:0 !important;" class="inline-content">
-                                  <i class="icon-reorder"></i>
+                                <div class="caption">
+                                  <h4 style="margin-bottom:0 !important;" class="inline-content">
+                                    <i class="icon-reorder"></i>
 
-                                  <div class="btn-group">
-                                    <a class="btn blue" href="#" data-toggle="dropdown">
-                                    Field Options
-                                    <i style="color:#FFF;" class="icon-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                       <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
-                                       <li ><a class="color-red" href="#"><i class="icon-trash"></i> Delete</a></li>
-                                    </ul>
-                                  </div><!-- btn-group -->
+                                    <div class="btn-group">
+                                      <a class="btn blue" href="#" data-toggle="dropdown">
+                                      Field Options
+                                      <i style="color:#FFF;" class="icon-angle-down"></i>
+                                      </a>
+                                      <ul class="dropdown-menu">
+                                         <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+                                         <li ><a class="color-red" href="#"><i class="icon-trash"></i> Delete</a></li>
+                                      </ul>
+                                    </div><!-- btn-group -->
 
-                                  <span style="color:#FFF !important;">{{field.name}}</span>
-                                </h4>
-                              </div>
-
-
-
-
-
-                            </div>
-                            <div style="background-color:#FFF; padding:10px 0 10px 0;" class="porlet-body">
-
-
-                              <div
-                                data-ng-switch-when="openResponse">
-
-                                <div class="control-group">
-                                   <label class="control-label">{{field.name}}</label>
-                                   <div class="controls">
-                                      <input data-ng-disabled="true" type="text" placeholder="" class="m-wrap medium">
-                                      <span class="help-inline"></span>
-                                   </div>
+                                    <span style="color:#FFF !important;">{{field.name}}</span>
+                                  </h4>
                                 </div>
 
-                              </div><!-- openResponse -->
-
-
-
-                              <div
-                                data-ng-switch-when="selectIndividual">
-                              </div><!-- selectIndividual -->
-
-                              <div
-                                data-ng-switch-when="selectMultiple">
-                              </div><!-- selectMultiple -->
-
-                              <div
-                                data-ng-switch-when="yesNo">
-                              </div><!-- yesNo -->
-
-                              <div
-                                data-ng-switch-when="percentageSlider">
-                              </div><!-- percentageSlider -->
-
-
-                            </div><!-- portlet-body -->
-                          </div><!-- portlet-box -->
 
 
 
 
-                        </div><!-- data-ng-switch="field.type" -->
-                      </div><!-- data-ng-repeat = "field in group.fields" -->
+                              </div>
+                              <div style="background-color:#FFF; padding:10px 0 10px 0;" class="porlet-body">
+
+
+                                <div
+                                  data-ng-switch-when="openResponse">
+
+                                  <div class="control-group">
+                                     <label class="control-label">{{field.name}}</label>
+                                     <div class="controls">
+                                        <input data-ng-disabled="true" type="text" placeholder="" class="m-wrap medium">
+                                        <span class="help-inline"></span>
+                                     </div>
+                                  </div>
+
+                                </div><!-- openResponse -->
+
+
+
+                                <div
+                                  data-ng-switch-when="selectIndividual">
+                                </div><!-- selectIndividual -->
+
+                                <div
+                                  data-ng-switch-when="selectMultiple">
+                                </div><!-- selectMultiple -->
+
+                                <div
+                                  data-ng-switch-when="yesNo">
+                                </div><!-- yesNo -->
+
+                                <div
+                                  data-ng-switch-when="percentageSlider">
+                                </div><!-- percentageSlider -->
+
+
+                              </div><!-- portlet-body -->
+                            </div><!-- portlet-box -->
+
+
+
+
+                          </div><!-- data-ng-switch="field.type" -->
+                        </div><!-- data-ng-repeat = "field in group.fields" -->
+                      </div>
                     </form>
 
 

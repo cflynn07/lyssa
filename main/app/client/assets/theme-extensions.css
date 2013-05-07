@@ -392,7 +392,9 @@ form.template-builder-form .portlet-title .btn-group {
   margin-bottom: 0 !important;
 }
 
-
+.icon-reorder {
+  cursor: move;
+}
 
 
 

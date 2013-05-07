@@ -51,7 +51,7 @@ module.exports = (app) ->
                     callback null,
                       success: false
                       message:
-                        name: 'required'
+                        dateTime: 'required'
 
                 'clientUid': (val, objectKey, object, callback) ->
 
@@ -64,11 +64,7 @@ module.exports = (app) ->
                 'employeeUid': (val, objectKey, object, callback) ->
 
                   if _.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        employeeUid: 'required'
-                    return
+                    val = employeeUid
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
@@ -121,6 +117,7 @@ module.exports = (app) ->
                     callback null,
                       success: true
                       uidMapping: mapObj
+                      transform: [objectKey, 'employeeUid', val]
 
 
             }, (objects) ->
@@ -153,7 +150,7 @@ module.exports = (app) ->
                     callback null,
                       success: false
                       message:
-                        name: 'required'
+                        dateTime: 'required'
 
                 'clientUid': (val, objectKey, object, callback) ->
 
@@ -173,11 +170,7 @@ module.exports = (app) ->
                 'employeeUid': (val, objectKey, object, callback) ->
 
                   if _.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        employeeUid: 'required'
-                    return
+                    val = employeeUid
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
@@ -230,6 +223,7 @@ module.exports = (app) ->
                     callback null,
                       success:    true
                       uidMapping: mapObj
+                      transform:  [objectKey, 'employeeUid', val]
 
 
             }, (objects) ->

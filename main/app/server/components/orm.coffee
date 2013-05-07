@@ -4,7 +4,7 @@ _         = require 'underscore'
 modelsPath    = __dirname + '/../models'
 config    = require '../config/config'
 
-module.exports =
+exportObj =
   setup: (mode = 'standard') ->
 
     if @instance
@@ -103,9 +103,12 @@ module.exports =
         relationships[modelName]          = object.relations
         exportModels[modelName].relations = object.relations
 
+      sequelize.sync()
+
+
+
     #Write to JSON
     fs.writeFileSync config.appRoot + 'client/config/clientOrmShare.json', JSON.stringify(exportModels)
-
 
     for modelName, relations of @relationships
       for relObject in relations
@@ -122,6 +125,9 @@ module.exports =
   SEQ:           Sequelize
   models:        []
   relationships: {}
-
   model: (name) ->
     @models[name]
+
+module.exports = exportObj
+
+#exportObj.setup()

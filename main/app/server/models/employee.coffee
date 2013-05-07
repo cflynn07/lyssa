@@ -55,7 +55,6 @@ module.exports =
   ,
     relation: 'hasMany'
     model: 'template'
-
   ,
     relation: 'hasMany'
     model: 'revision'
