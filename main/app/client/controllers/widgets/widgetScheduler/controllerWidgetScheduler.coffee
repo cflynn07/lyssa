@@ -18,7 +18,19 @@ define [
     Module.controller 'ControllerWidgetScheduler', ['$scope', '$route', 'apiRequest'
     ($scope, $route, apiRequest) ->
 
+      $scope.viewModel =
+        eventSources: []
+        events: []
+        updateEvents: () ->
+          $scope.viewModel.eventSources = [[]]
+          apiRequest.get 'event', [], {}, (response) ->
+            console.log 'events'
+            console.log response
 
+
+      $scope.viewModel.updateEvents()
+
+      ###
       $scope.events = [{
         title: 'first test event'
         start: '2013-05-05'
@@ -31,7 +43,7 @@ define [
 
 
       console.log $scope.eventSources
-
+      ###
 
 
 
