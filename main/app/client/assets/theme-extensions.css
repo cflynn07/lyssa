@@ -23,6 +23,7 @@ body {
 
 .header .navbar-inner {
   background-color: #555555 !important;
+  border-bottom: 2px solid #094AB2;
 //  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25),inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 /*
     background: rgb(85,85,85);
@@ -42,6 +43,7 @@ div.page-content {
 
 .page-sidebar ul {
   width: 185px;
+  margin-top: 2px;
 }
 .sidebar-toggler {
   margin-left: 145px;
