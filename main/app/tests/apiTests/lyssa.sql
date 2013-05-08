@@ -11,7 +11,7 @@
  Target Server Version : 50610
  File Encoding         : utf-8
 
- Date: 05/07/2013 18:19:12 PM
+ Date: 05/07/2013 20:25:14 PM
 */
 
 SET NAMES utf8;
@@ -151,7 +151,7 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `eventParticipants`;
 CREATE TABLE `eventParticipants` (
-  `uid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `uid` varchar(255) COLLATE utf8_bin NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `employeeUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -163,6 +163,8 @@ CREATE TABLE `eventParticipants` (
   `eventId` int(11) DEFAULT NULL,
   `clientId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
+  UNIQUE KEY `clientUid` (`clientUid`,`employeeUid`,`employeeId`,`eventId`),
   KEY `fk_eventParticipants_clients1` (`clientId`),
   KEY `fk_eventParticipants_events1` (`eventId`),
   KEY `fk_eventParticipants_employees1` (`employeeId`),
@@ -170,12 +172,19 @@ CREATE TABLE `eventParticipants` (
   KEY `fk_eventParticipants_employees2` (`employeeUid`),
   KEY `fk_eventParticipants_clients2` (`clientUid`),
   CONSTRAINT `fk_eventParticipants_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_eventParticipants_events1` FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_eventParticipants_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_eventParticipants_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_eventParticipants_events2` FOREIGN KEY (`eventUid`) REFERENCES `events` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_eventParticipants_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_eventParticipants_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  CONSTRAINT `fk_eventParticipants_events1` FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_eventParticipants_events2` FOREIGN KEY (`eventUid`) REFERENCES `events` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Records of `eventParticipants`
+-- ----------------------------
+BEGIN;
+INSERT INTO `eventParticipants` VALUES ('18b8102c-7fad-4e8a-aa21-37739392af7f', '10', '44cc27a5-af8b-412f-855a-57c8205d86f5', '04ad5b05-c9a5-430f-8d5c-8483d5d904e4', '24b7e8b6-f038-4382-89ae-ed3c84fb8834', '2013-05-08 00:24:30', '2013-05-08 00:24:30', null, '2', '1', '1');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `events`
@@ -203,7 +212,14 @@ CREATE TABLE `events` (
   CONSTRAINT `fk_events_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_events_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_events_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Records of `events`
+-- ----------------------------
+BEGIN;
+INSERT INTO `events` VALUES ('24b7e8b6-f038-4382-89ae-ed3c84fb8834', '1', 'Test Event', '2013-05-08 00:02:53', '44cc27a5-af8b-412f-855a-57c8205d86f5', null, '2013-05-08 00:03:00', '2013-05-08 00:03:00', null, '1', '1');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `fields`
@@ -238,7 +254,7 @@ CREATE TABLE `fields` (
 --  Records of `fields`
 -- ----------------------------
 BEGIN;
-INSERT INTO `fields` VALUES ('5c2160df-b51f-4d73-8dde-3a3bc69c145b', '1', 'test name', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', '2013-05-07 00:10:36', '2013-05-07 00:10:36', null, '1', '26'), ('9069caf7-1e5c-4343-a09c-fdcffd2085f5', '2', 'test new field', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', '2013-05-07 00:12:29', '2013-05-07 00:12:29', null, '1', '26'), ('fa540ec5-a0ce-4179-b080-8b2c5df6f28b', '3', 'open response question', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', '2013-05-07 00:21:58', '2013-05-07 00:21:58', null, '1', '26'), ('a7302ec0-8e47-478c-bb3a-3cd6f7cb83ec', '4', 'Question 1', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', '4e7540b5-a45f-4cd4-a08f-d691d871b33e', '2013-05-07 00:39:36', '2013-05-07 20:03:35', null, '1', '11'), ('6af7fc7f-736d-4396-891f-d4e8a93e1e28', '5', 'Second Open Response', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', '2013-05-07 00:58:46', '2013-05-07 19:50:20', null, '1', '7'), ('de5bb6c2-aa39-4bda-836d-dda758c87763', '6', 'NEIN NEIN NEIN', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', '4e7540b5-a45f-4cd4-a08f-d691d871b33e', '2013-05-07 01:02:27', '2013-05-07 20:03:33', null, '1', '11'), ('00892107-b0a8-4b62-8363-b8a4922736f1', '7', 'welcome 123', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', '2013-05-07 01:16:05', '2013-05-07 19:50:20', null, '1', '7'), ('144bc5b1-8d4b-4b16-8804-a73af9c56086', '8', 'New Question', 'openResponse', '2', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', '2013-05-07 01:22:20', '2013-05-07 19:59:09', null, '1', '7'), ('43bef3de-c48e-4dcd-a096-4ebed30e4154', '9', 'Open Response', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', '844e9167-323f-4295-8e5c-cf7c14d88849', '2013-05-07 18:05:50', '2013-05-07 19:34:33', null, '1', '28'), ('72e39d49-f4ae-4c92-b061-d7e9b8cc5588', '10', 'Renamed Field234', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', '844e9167-323f-4295-8e5c-cf7c14d88849', '2013-05-07 18:06:39', '2013-05-07 19:34:33', null, '1', '28');
+INSERT INTO `fields` VALUES ('5c2160df-b51f-4d73-8dde-3a3bc69c145b', '1', 'test name', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', '2013-05-07 00:10:36', '2013-05-07 00:10:36', null, '1', '26'), ('9069caf7-1e5c-4343-a09c-fdcffd2085f5', '2', 'test new field', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', '2013-05-07 00:12:29', '2013-05-07 00:12:29', null, '1', '26'), ('fa540ec5-a0ce-4179-b080-8b2c5df6f28b', '3', 'open response question', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', '2013-05-07 00:21:58', '2013-05-07 00:21:58', null, '1', '26'), ('a7302ec0-8e47-478c-bb3a-3cd6f7cb83ec', '4', 'Question 1', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', '4e7540b5-a45f-4cd4-a08f-d691d871b33e', '2013-05-07 00:39:36', '2013-05-08 00:01:07', null, '1', '11'), ('6af7fc7f-736d-4396-891f-d4e8a93e1e28', '5', 'Second Open Response', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', '2013-05-07 00:58:46', '2013-05-08 00:01:09', null, '1', '7'), ('de5bb6c2-aa39-4bda-836d-dda758c87763', '6', 'NEIN NEIN NEIN', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', '4e7540b5-a45f-4cd4-a08f-d691d871b33e', '2013-05-07 01:02:27', '2013-05-08 00:01:09', null, '1', '11'), ('00892107-b0a8-4b62-8363-b8a4922736f1', '7', 'welcome 123', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', '2013-05-07 01:16:05', '2013-05-07 19:50:20', null, '1', '7'), ('144bc5b1-8d4b-4b16-8804-a73af9c56086', '8', 'New Question', 'openResponse', '2', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', '2013-05-07 01:22:20', '2013-05-08 00:01:09', null, '1', '7'), ('43bef3de-c48e-4dcd-a096-4ebed30e4154', '9', 'Open Response', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', '844e9167-323f-4295-8e5c-cf7c14d88849', '2013-05-07 18:05:50', '2013-05-07 19:34:33', null, '1', '28'), ('72e39d49-f4ae-4c92-b061-d7e9b8cc5588', '10', 'Renamed Field234', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', '844e9167-323f-4295-8e5c-cf7c14d88849', '2013-05-07 18:06:39', '2013-05-07 19:34:33', null, '1', '28');
 COMMIT;
 
 -- ----------------------------

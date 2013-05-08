@@ -25,6 +25,7 @@ module.exports =
         isUUID: 4
         notNull: true
 
+
   relations: [
     relation: 'belongsTo'
     model: 'client'

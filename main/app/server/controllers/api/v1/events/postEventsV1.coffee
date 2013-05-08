@@ -13,6 +13,7 @@ module.exports = (app) ->
   employee  = ORM.model 'employee'
   client    = ORM.model 'client'
   event     = ORM.model 'event'
+  revision  = ORM.model 'revision'
 
 
   app.post config.apiSubDir + '/v1/events', (req, res) ->
@@ -52,6 +53,37 @@ module.exports = (app) ->
                       success: false
                       message:
                         dateTime: 'required'
+
+                'revisionUid': (val, objectKey, object, callback) ->
+
+                  if _.isUndefined val
+                    callback null,
+                      success: false
+                      message:
+                        revisionUid: 'required'
+                    return
+
+                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
+                  revision.find(
+                    where:
+                      uid: val
+                      clientUid: testClientUid
+                  ).success (resultRevision) ->
+                    if !resultRevision
+                      callback null,
+                        success: false
+                        message:
+                          revisionUid: 'unknown'
+                    else
+                      mapObj = {}
+                      mapObj[resultRevision.uid]  = resultRevision
+                      callback null,
+                        success: true
+                        uidMapping: mapObj
+                        transform: [objectKey, 'revisionUid', val]
+
+
 
                 'clientUid': (val, objectKey, object, callback) ->
 
@@ -151,6 +183,37 @@ module.exports = (app) ->
                       success: false
                       message:
                         dateTime: 'required'
+
+                'revisionUid': (val, objectKey, object, callback) ->
+
+                  if _.isUndefined val
+                    callback null,
+                      success: false
+                      message:
+                        revisionUid: 'required'
+                    return
+
+                  #testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
+                  testClientUid = clientUid
+
+                  revision.find(
+                    where:
+                      uid: val
+                      clientUid: testClientUid
+                  ).success (resultRevision) ->
+                    if !resultRevision
+                      callback null,
+                        success: false
+                        message:
+                          revisionUid: 'unknown'
+                    else
+                      mapObj = {}
+                      mapObj[resultRevision.uid]  = resultRevision
+                      callback null,
+                        success: true
+                        uidMapping: mapObj
+                        transform: [objectKey, 'revisionUid', val]
 
                 'clientUid': (val, objectKey, object, callback) ->
 

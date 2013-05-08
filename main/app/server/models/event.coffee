@@ -15,11 +15,17 @@ module.exports =
         isUUID: 4
         notNull: true
 
-  #  employeeUid:
-  #    type: SEQ.STRING
-  #    validate:
-  #      isUUID: 4
-  #      notNull: true
+    revisionUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: true
+
+    employeeUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: true
 
   relations: [
     relation: 'belongsTo'
@@ -28,11 +34,11 @@ module.exports =
     relation: 'belongsTo'
     model: 'employee'
   ,
-    relation: 'hasMany'
-    model: 'eventParticipant'
+    relation: 'belongsTo'
+    model: 'revision'
   ,
     relation: 'hasMany'
-    model: 'submission'
+    model: 'eventParticipant'
   ]
   options:
     paranoid: true
