@@ -36,6 +36,17 @@ body {
 */
 }
 
+div.page-content {
+  margin-left: 183px;
+}
+
+.page-sidebar ul {
+  width: 185px;
+}
+.sidebar-toggler {
+  margin-left: 145px;
+}
+
 .header .navbar-inner {
   background-color: #2672EC !important;
 }

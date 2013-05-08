@@ -68,14 +68,8 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
           link: function(scope, elm, attrs, $timeout) {
             var sources = scope.$eval(attrs.ngModel);
 
-
-
-            //console.log('sources');
-            //console.log(sources);
             if(typeof sources === 'undefined')
               sources = []
-
-
 
             var tracker = 0;
             /* returns the length of all source arrays plus the length of eventSource itself */
@@ -113,6 +107,11 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
                 expression = {};
               }
               angular.extend(options, uiConfig.uiCalendar, expression);
+
+              console.log(options);
+              console.log(uiConfig.uiCalendar);
+              console.log(expression);
+
               scope.calendar.fullCalendar(options);
             }
             update();

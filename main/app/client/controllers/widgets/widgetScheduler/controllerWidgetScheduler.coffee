@@ -13,20 +13,35 @@ define [
       $templateCache.put 'viewWidgetScheduler', viewWidgetScheduler
     ]
 
-    Module.controller 'ControllerWidgetScheduler', ['$scope', '$route',
-    ($scope, $route) ->
 
-      $scope.eventSources = []
-      #  url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic"
-      #  className: 'gcal-event'
-      #  currentTimezone: 'America/Chicago'
-      $scope.events = []
-      $scope.eventSource = {}
+
+    Module.controller 'ControllerWidgetScheduler', ['$scope', '$route', 'apiRequest'
+    ($scope, $route, apiRequest) ->
+
+
+      $scope.events = [{
+        title: 'first test event'
+        start: '2013-05-05'
+      }, {
+        title: 'first test event 2'
+        start: '2013-05-05'
+      }]
+
+      $scope.eventSources = [$scope.events]
+
+
+      console.log $scope.eventSources
+
+
+
+
+
 
 
       $scope.toggleShowNew = () ->
         $scope.showNew = !$scope.showNew
 
+      ###
       $scope.model =
         showNew: false
         buttons:
@@ -37,4 +52,7 @@ define [
           targetDate: ''
           allowRescheduling: false
           dateRange: ''
+
+      ###
+
     ]
