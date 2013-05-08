@@ -81,11 +81,13 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
                   tracker += value.length;
                 }
               });
-               if(angular.isNumber(equalsTracker)){
+
+              if(angular.isNumber(equalsTracker)){
                 return tracker + sources.length + equalsTracker;
-               }else{
+              }else{
                 return tracker + sources.length;
               }
+
             };
             /* update the calendar with the correct options */
             function update() {
@@ -108,9 +110,9 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
               }
               angular.extend(options, uiConfig.uiCalendar, expression);
 
-              console.log(options);
-              console.log(uiConfig.uiCalendar);
-              console.log(expression);
+              //console.log(options);
+              //console.log(uiConfig.uiCalendar);
+              //console.log(expression);
 
               scope.calendar.fullCalendar(options);
             }
@@ -118,6 +120,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
               /* watches all eventSources */
               scope.$watch(getSources, function( newVal, oldVal )
               {
+                console.log('p1');
                 update();
               });
          }

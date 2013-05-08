@@ -39,7 +39,6 @@ define [
         div.innerHTML
 
 
-
       helperSortHash = (hash, timeProp = 'createdAt') ->
         hashArray       = _.toArray hash
         sortedHashArray = _.sortBy hashArray, (obj) ->
