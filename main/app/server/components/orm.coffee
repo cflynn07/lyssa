@@ -103,7 +103,7 @@ exportObj =
         relationships[modelName]          = object.relations
         exportModels[modelName].relations = object.relations
 
-      sequelize.sync()
+      #sequelize.sync()
 
 
 

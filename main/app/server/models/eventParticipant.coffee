@@ -6,16 +6,8 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id:       SEQ.INTEGER
-    name:     SEQ.STRING
-    dateTime: SEQ.DATE
 
     clientUid:
-      type: SEQ.STRING
-      validate:
-        isUUID: 4
-        notNull: true
-
-    revisionUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
@@ -27,6 +19,13 @@ module.exports =
         isUUID: 4
         notNull: true
 
+    eventUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: true
+
+
   relations: [
     relation: 'belongsTo'
     model: 'client'
@@ -35,10 +34,7 @@ module.exports =
     model: 'employee'
   ,
     relation: 'belongsTo'
-    model: 'revision'
-  ,
-    relation: 'hasMany'
-    model: 'eventParticipant'
+    model: 'event'
   ]
   options:
     paranoid: true
