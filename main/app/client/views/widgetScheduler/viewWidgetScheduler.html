@@ -81,13 +81,17 @@
 
 
             <div class="form">
-              <form class="form-horizontal">
+              <form
+                name  = "addNewEventForm"
+                class = "form-horizontal">
 
 
                 <div class="control-group">
                   <label class="control-label">Type</label>
                   <div class="controls">
-                    <select>
+                    <select
+                      data-ng-model="viewModel.addNewEventForm.eventType"
+                      name="eventType">
                       <option value="mini">Quiz</option>
                       <option value="full">Full Exercise</option>
                     </select>
@@ -118,7 +122,7 @@
                       data-required
                       name            = "type"
                       data-ng-model   = "viewModel.newTemplateForm.type"
-                      data-ng-options = "value.name for (key, value) in viewModel.templates | deleted"
+                      data-ng-options = "value.name for (key, value) in viewModel.templates | deleted | filter:{type:viewModel.addNewEventForm.eventType}"
                       class           = "m-wrap span6"></select>
 
                     <span class="help-inline">multi-char placeholder</span>
@@ -254,6 +258,7 @@
             <h4><span>Exercise Detail</span></h4>
           </div>
           <div>
+
             <h3>Exercise Detail</h3>
 
 

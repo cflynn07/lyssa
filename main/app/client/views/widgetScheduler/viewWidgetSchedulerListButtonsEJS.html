@@ -1,19 +1,36 @@
-<div class="inline-content inline-content-responsive" style="text-align:center;">
-  <button
-    data-ng-hide  = "$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'"
-    data-ng-click = "$parent.viewModel.deleteConfirmDialogDictionaryItem('<%= full.uid %>')"
-    class         = "btn red"><i class="icon-trash m-icon-white"></i> Archive</button>
-  <button
-    data-ng-hide  = "$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'"
-    data-ng-click = "$parent.viewModel.editDictionaryItem('<%= full.uid %>')"
-    class         = "btn blue"><i class="icon-pencil m-icon-white"></i> Edit</button>
-  <button
-    data-ng-show     = "$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'"
-    data-ng-disabled = "<%= name %>.$invalid"
-    data-ng-click    = "$parent.viewModel.saveEditingDictionaryItem(<%= name %>.$invalid)"
-    class            = "btn green"><i class="icon-save m-icon-white"></i> Save</button>
-  <button
-    data-ng-show  = "$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'"
-    data-ng-click = "$parent.viewModel.cancelEditDictionaryItem()"
-    class         = "btn red"><i class="icon-remove m-icon-white"></i> Cancel</button>
+<div
+  class="inline-content inline-content-responsive"
+  style="text-align:center;">
+
+
+  <div
+    style = "margin-bottom:0px !important; text-align:left;"
+    class = "btn-group">
+
+    <a
+      data-ng-class = "{true:'black', false:'blue'}[viewModel.currentDictionaryUid == '<%= full.uid %>']"
+      href          = "#<%= viewRoot %>/<%= full.uid %>"
+      class         = "btn">Edit
+
+      <i data-ng-hide="viewModel.currentDictionaryUid == '<%= full.uid %>'" class="m-icon-swapright m-icon-white"></i>
+      <i data-ng-show="viewModel.currentDictionaryUid == '<%= full.uid %>'" class="m-icon-swapleft m-icon-white"></i>
+
+    </a>
+
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <!-- dropdown menu links -->
+      <li>
+        <a href="#"><i class="icon-pencil"></i> Rename</a>
+      </li>
+      <li>
+        <a data-ng-click="$parent.viewModel.deleteConfirmDialogDictionary('<%= full.uid %>')"><i class="icon-trash"></i> Archive</a>
+      </li>
+    </ul>
+  </div>
+
+
+
 </div>

@@ -23,6 +23,7 @@ define [
     ($scope, $route, $routeParams, apiRequest) ->
 
       viewModel =
+        addNewEventForm:       {}
         routeParams:           $routeParams
         events:                {}
         calendarEventsObjects: []
@@ -43,7 +44,10 @@ define [
             mData:      null
             aTargets:   [1]
             mRender: (data, type, full) ->
-              html = new EJS({text: viewWidgetSchedulerListButtonsEJS}).render({full: full})
+              html = new EJS({text: viewWidgetSchedulerListButtonsEJS}).render
+                full:     full
+                name:     full.name
+                viewRoot: $scope.viewRoot
               #uid = $scope.escapeHtml full.uid
               #html = ''
           ]
