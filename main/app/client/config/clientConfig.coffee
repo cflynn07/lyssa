@@ -34,6 +34,9 @@ define [], () ->
         title:     'Schedule'
         root:      '/admin/themis/schedule'
         subRoutes: [
+          '/:eventUid':
+            title: 'Schedule'
+            subMenuItem: false
         ]
         widgets:   [
           'viewWidgetScheduler'

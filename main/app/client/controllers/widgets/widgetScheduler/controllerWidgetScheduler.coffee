@@ -1,7 +1,9 @@
 define [
+  'jquery'
   'angular'
   'text!views/widgetScheduler/viewWidgetScheduler.html'
 ], (
+  $
   angular
   viewWidgetScheduler
 ) ->
@@ -13,66 +15,98 @@ define [
       $templateCache.put 'viewWidgetScheduler', viewWidgetScheduler
     ]
 
+    Module.controller 'ControllerWidgetScheduler', ['$scope', '$route', '$routeParams', 'apiRequest'
+    ($scope, $route, $routeParams, apiRequest) ->
+
+      viewModel =
+        routeParams:           $routeParams
+        events:                {}
+        calendarEventsObjects: []
+        exerciseListDT:
+          detailRow: (obj) ->
+            uid = $scope.escapeHtml obj.uid
+            return ''
+          columnDefs: [
+            mData:  null
+            aTargets:   [0]
+            mRender: (data, type, full) ->
+              resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
+              if full.name
+                resHtml += $scope.escapeHtml(full.name)
+              resHtml += '</a>'
+              return resHtml
+          ,
+            mData:      null
+            aTargets:   [1]
+            mRender: (data, type, full) ->
+              uid = $scope.escapeHtml full.uid
+              html = ''
+          ]
+          options:
+            bStateSave:      true
+            iCookieDuration: 2419200
+            bJQueryUI:       true
+            bPaginate:       true
+            bLengthChange:   true
+            bFilter:         false
+            bInfo:           true
+            bDestroy:        true
+        renderEvents: () ->
+
+          $('#primaryFullCalendar')
+            .fullCalendar('removeEvents')
+            .fullCalendar('removeEventSources')
+          $('#secondaryFullCalendar')
+            .fullCalendar('removeEvents')
+            .fullCalendar('removeEventSources')
+
+          eventsArray = []
+          for uid, eventObj of viewModel.events
+            eventObj =
+              title: eventObj.name
+              start: new Date(eventObj.dateTime)
+            eventsArray.push eventObj
+          viewModel.calendarEventsObjects = eventsArray
+
+          $('#primaryFullCalendar')
+            .fullCalendar('addEventSource', viewModel.calendarEventsObjects)
+          $('#secondaryFullCalendar')
+            .fullCalendar('addEventSource', viewModel.calendarEventsObjects)
+          $('#primaryFullCalendar')
+            .fullCalendar('refetchEvents')
+          $('#secondaryFullCalendar')
+            .fullCalendar('refetchEvents')
 
 
-    Module.controller 'ControllerWidgetScheduler', ['$scope', '$route', 'apiRequest'
-    ($scope, $route, apiRequest) ->
+      viewModel.calendarEventsObjects = [{
+        title: 'new event'
+        start: new Date()
+      }]
 
-      $scope.viewModel =
-        eventSources: []
-        events: []
-        updateEvents: () ->
-          $scope.viewModel.eventSources = [[]]
-          apiRequest.get 'event', [], {}, (response) ->
-            console.log 'events'
-            console.log response
+      calConfObj = {
+        events: viewModel.calendarEventsObjects
+      }
 
-
-
-
-      $scope.eventSources = []
-
-      getEm = () ->
-        apiRequest.get 'event', [], {}, (response) ->
-
-          $scope.eventSources = [{
-            title: 'first test event'
-            start: '2013-05-05'
-          }, {
-            title: 'first test event 2'
-            start: new Date('Wed May 08 2013 14:46:11 GMT-0400 (EDT)')
-          }]
-          for obj in $scope.eventSources
-            $scope.calendar.fullCalendar 'renderEvent', obj
-
-          setTimeout () ->
-            $scope.calendar.fullCalendar 'removeEvents'
-            setTimeout () ->
-              getEm()
-            , 1000
-          , 2000
-
-          console.log 'p2'
-
-      getEm()
+      $('#primaryFullCalendar')
+        .fullCalendar(calConfObj)
+      $('#secondaryFullCalendar')
+        .fullCalendar(calConfObj)
 
 
+      hashChangeUpdate = () ->
+        $scope.viewModel.routeParams = $routeParams
+      $scope.$on '$routeChangeSuccess', () ->
+        hashChangeUpdate()
 
-      $scope.toggleShowNew = () ->
-        $scope.showNew = !$scope.showNew
 
-      ###
-      $scope.model =
-        showNew: false
-        buttons:
-          'toggleShowNew': $scope.toggleShowNew
-        form:
-          type: 'full'
-          name: ''
-          targetDate: ''
-          allowRescheduling: false
-          dateRange: ''
+      $scope.$watch 'viewModel.events', (value) ->
+        viewModel.renderEvents()
+      , true
+      apiRequest.get 'event', [], {}, (response) ->
+        viewModel.events = response.response
 
-      ###
+
+      $scope.viewModel = viewModel
+
 
     ]

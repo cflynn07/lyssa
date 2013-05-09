@@ -68,6 +68,8 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
           link: function(scope, elm, attrs, $timeout) {
             var sources = scope.$eval(attrs.ngModel);
 
+
+
             if(typeof sources === 'undefined')
               sources = []
 
@@ -98,6 +100,7 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
                 view = view.name; //setting the default view to be whatever the current view is. This can be overwritten.
               }
               /* If the calendar has options added then render them */
+
               var expression,
                 options = {
                   defaultView : view,
@@ -118,11 +121,10 @@ angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', f
             }
             update();
               /* watches all eventSources */
-              scope.$watch(getSources, function( newVal, oldVal )
+              scope.$watch(sources, function( newVal, oldVal )
               {
-                console.log('p1');
                 update();
-              });
+              }, true);
          }
     };
 }]);

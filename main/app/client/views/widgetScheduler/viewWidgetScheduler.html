@@ -10,30 +10,231 @@
 
   <div class="portlet-body light-grey">
     <div class="row-fluid">
-      <div class="span3 responsive span8">
+      <div class="span5 responsive span8">
 
-        <div class="portlet box grey">
+
+        <div class = "portlet box grey">
           <div class="portlet-title">
             <h4><span>Upcoming Exercises</span></h4>
           </div>
           <div class="portlet-body light-grey">
 
             <button
-              data-ng-hide    = "showNew"
+              style           = "margin-bottom: 20px;"
+              data-ng-hide    = "viewModel.showNewExerciseForm"
               data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
-              data-ng-click   = "model.buttons.toggleShowNew()"
-              class           = "btn green btn-block">Schedule New <i class="m-icon-swapright m-icon-white"></i></button>
+              data-ng-click   = "viewModel.showNewExerciseForm = true"
+              class           = "btn green btn-block">Add Exercise <i class="m-icon-swapright m-icon-white"></i></button>
+
+            <table
+                  class                                  = "table table-striped table-hover table-bordered dataTable"
+                  data-data-table                        = "viewModel.exerciseListDT.options"
+                  data-aa-data                           = "viewModel.events"
+                  data-ao-column-defs                    = "viewModel.exerciseListDT.columnDefs"
+                  data-parent-data-table-view-model-prop = "exerciseListDT"
+                  data-fn-row-callback                   = "">
+              <thead>
+              <tr>
+                  <th class = "sorting">Name</th>
+                  <th class = "sorting_disabled"></th>
+              </tr>
+              </thead>
+            </table>
 
           </div>
         </div>
 
 
+
+        <div
+          data-ng-show    = "viewModel.routeParams.eventUid"
+          data-ng-animate = "{show:'fadeIn', hide:'fadeOut'}"
+          class           = "portlet box grey">
+          <div class="portlet-title">
+            <h4><span>Calendar</span></h4>
+          </div>
+          <div class="portlet-body light-grey">
+
+            <div id="secondaryFullCalendar"></div>
+
+          </div>
+        </div>
+
+
+
+
       </div><!-- /span3 -->
 
-      <div class="span9">
+      <div class="span7">
 
 
-        <div class="portlet box grey">
+
+
+
+
+
+        <div
+          style           = "display:none;"
+          class           = "portlet box grey"
+          data-ng-show    = "viewModel.showNewExerciseForm"
+          data-ng-animate = "{show:'slideDown', hide:'slideUp'}">
+
+          <div class="portlet-title">
+            <h4><span>Add Exercise</span></h4>
+          </div>
+          <div class="portlet-body light-grey">
+
+
+            <div class="form">
+              <form class="form-horizontal">
+
+
+                <div class="control-group">
+                  <label class="control-label">Type</label>
+                  <div class="controls">
+                    <select>
+                      <option value="mini">Quiz</option>
+                      <option value="full">Full Exercise</option>
+                    </select>
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                  <label class="control-label">Name</label>
+                  <div class="controls">
+                    <input type="text" class="span6 m-wrap" />
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                  <label class="control-label">Description</label>
+                  <div class="controls">
+                    <textarea class="large m-wrap" rows="3"></textarea>
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                  <label class="control-label">Exercise Template</label>
+                  <div class="controls">
+                    <select>
+                      <option value="1">Report Template 1</option>
+                      <option value="1">Report Template 2</option>
+                      <option value="1">Report Template 3</option>
+                      <option value="1">Report Template 4</option>
+                      <option value="1">Report Template 5</option>
+                    </select>
+                    <span class="help-inline">multi-char placeholder</span>
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                  <label class="control-label">Delegate</label>
+                  <div class="controls">
+
+
+                    <table class="table table-striped table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th style="width:8px;"></th>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Employee ID</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <tr class="odd gradeX">
+                          <td>
+                            <input type="radio" name="name"/>
+                          </td>
+                          <td>David Tavare</td>
+                          <td>david.tavare@gmail.com</td>
+                          <td>357843873</td>
+                        </tr>
+
+                        <tr class="odd gradeX">
+                          <td>
+                            <input type="radio" name="name"/>
+                          </td>
+                          <td>Sean Erricson</td>
+                          <td>sean.erricson@gmail.com</td>
+                          <td>242344346</td>
+                        </tr>
+
+                        <tr class="odd gradeX">
+                          <td>
+                            <input type="radio" name="name"/>
+                          </td>
+                          <td>Ben Johnson</td>
+                          <td>ben.johnson@gmail.com</td>
+                          <td>345345344</td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+
+
+
+
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                  <label class="control-label">Target Date</label>
+                  <div class="controls">
+                    <div data-datepicker data-months="1"></div>
+                  </div>
+                </div>
+
+
+                <div class="control-group">
+                  <label class="control-label">Allow Rescheduling</label>
+                  <div class="controls">
+                    <input class="toggle" data-ng-model="allowRescheduling" data-ng-init="allowRescheduling = false" type="checkbox" checked="checked"/>
+                  </div>
+                </div>
+
+
+                <div
+                    data-ng-show="allowRescheduling"
+                    data-ng-animate="{show: 'slide-down', hide: 'slide-up'}"
+                    class="control-group">
+
+                  <label class="control-label">Date Range</label>
+                  <div class="controls">
+                    <div
+                      data-datepicker
+                      data-months="2"></div>
+                  </div>
+                </div>
+
+
+              </form>
+            </div><!-- div.form -->
+
+            <button
+              data-ng-click = "viewModel.showNewExerciseForm = false"
+              class         = "btn red btn-block">close</button>
+
+          </div><!-- portlet-body -->
+
+        </div><!-- portlet-box add-exercise -->
+
+
+
+
+
+
+        <div
+          data-ng-hide    = "viewModel.routeParams.eventUid"
+          data-ng-animate = "{show:'fadeIn'}"
+          class           = "portlet box grey">
           <div class="portlet-title">
             <h4><span>Calendar</span></h4>
           </div>
@@ -41,166 +242,33 @@
 
 
 
-            <div
-                  style="display:none;"
-                  data-ng-show="showNew"
-                  data-ng-animate="{show:'slide-down', hide:'slide-up'}">
+            <div id="primaryFullCalendar"></div>
 
-
-              <div class="form">
-                <form class="form-horizontal">
-
-
-                  <div class="control-group">
-                    <label class="control-label">Type</label>
-                    <div class="controls">
-                      <select>
-                        <option value="mini">Quiz</option>
-                        <option value="full">Full Exercise</option>
-                      </select>
-                    </div>
-                  </div>
-
-
-                  <div class="control-group">
-                    <label class="control-label">Name</label>
-                    <div class="controls">
-                      <input type="text" class="span6 m-wrap" />
-                    </div>
-                  </div>
-
-
-                  <div class="control-group">
-                    <label class="control-label">Description</label>
-                    <div class="controls">
-                      <textarea class="large m-wrap" rows="3"></textarea>
-                    </div>
-                  </div>
-
-
-                  <div class="control-group">
-                    <label class="control-label">Exercise Template</label>
-                    <div class="controls">
-                      <select>
-                        <option value="1">Report Template 1</option>
-                        <option value="1">Report Template 2</option>
-                        <option value="1">Report Template 3</option>
-                        <option value="1">Report Template 4</option>
-                        <option value="1">Report Template 5</option>
-                      </select>
-                      <span class="help-inline">multi-char placeholder</span>
-                    </div>
-                  </div>
-
-
-                  <div class="control-group">
-                    <label class="control-label">Delegate</label>
-                    <div class="controls">
-
-
-                      <table class="table table-striped table-bordered table-hover">
-                        <thead>
-                          <tr>
-                            <th style="width:8px;"></th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Employee ID</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-
-                          <tr class="odd gradeX">
-                            <td>
-                              <input type="radio" name="name"/>
-                            </td>
-                            <td>David Tavare</td>
-                            <td>david.tavare@gmail.com</td>
-                            <td>357843873</td>
-                          </tr>
-
-                          <tr class="odd gradeX">
-                            <td>
-                              <input type="radio" name="name"/>
-                            </td>
-                            <td>Sean Erricson</td>
-                            <td>sean.erricson@gmail.com</td>
-                            <td>242344346</td>
-                          </tr>
-
-                          <tr class="odd gradeX">
-                            <td>
-                              <input type="radio" name="name"/>
-                            </td>
-                            <td>Ben Johnson</td>
-                            <td>ben.johnson@gmail.com</td>
-                            <td>345345344</td>
-                          </tr>
-
-                        </tbody>
-                      </table>
+          </div><!-- /portlet-body -->
+        </div><!-- /portlet-box -->
 
 
 
 
 
-                    </div>
-                  </div>
-
-
-                  <div class="control-group">
-                    <label class="control-label">Target Date</label>
-                    <div class="controls">
-                      <div data-datepicker data-months="1"></div>
-                    </div>
-                  </div>
-
-
-                  <div class="control-group">
-                    <label class="control-label">Allow Rescheduling</label>
-                    <div class="controls">
-                      <input class="toggle" data-ng-model="allowRescheduling" data-ng-init="allowRescheduling = false" type="checkbox" checked="checked"/>
-                    </div>
-                  </div>
-
-
-                  <div
-                      data-ng-show="allowRescheduling"
-                      data-ng-animate="{show: 'slide-down', hide: 'slide-up'}"
-                      class="control-group">
-
-                    <label class="control-label">Date Range</label>
-                    <div class="controls">
-                      <div
-                        data-datepicker
-                        data-months="2"></div>
-                    </div>
-                  </div>
-
-
-                </form>
-              </div>
-
-              <button  data-ng-click="model.buttons.toggleShowNew()"
-                       class="btn red btn-block">close</button>
-
-            </div><!-- /form div wrapper -->
-
-
-
-
-
-
-
-            <div  data-ui-calendar = "{width: '100%', editable: true}"
-                  data-ng-model    = "viewModel.eventSources"
-                  class            = "calendar"></div>
-
-
-
+        <div
+          data-ng-show    = "viewModel.routeParams.eventUid"
+          data-ng-animate = "{show:'fadeIn'}"
+          class           = "portlet box grey">
+          <div class="portlet-title">
+            <h4><span>Exercise Detail</span></h4>
+          </div>
+          <div>
+            <h3>Exercise Detail</h3>
 
 
           </div><!-- /portlet-body -->
         </div><!-- /portlet-box -->
+
+
+
+
+
 
 
       </div><!-- /span9 -->
