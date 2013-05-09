@@ -68,11 +68,6 @@
       <div class="span7">
 
 
-
-
-
-
-
         <div
           style           = "display:none;"
           class           = "portlet box grey"
@@ -119,13 +114,13 @@
                 <div class="control-group">
                   <label class="control-label">Exercise Template</label>
                   <div class="controls">
-                    <select>
-                      <option value="1">Report Template 1</option>
-                      <option value="1">Report Template 2</option>
-                      <option value="1">Report Template 3</option>
-                      <option value="1">Report Template 4</option>
-                      <option value="1">Report Template 5</option>
-                    </select>
+                    <select
+                      data-required
+                      name            = "type"
+                      data-ng-model   = "viewModel.newTemplateForm.type"
+                      data-ng-options = "value.name for (key, value) in viewModel.templates | deleted"
+                      class           = "m-wrap span6"></select>
+
                     <span class="help-inline">multi-char placeholder</span>
                   </div>
                 </div>

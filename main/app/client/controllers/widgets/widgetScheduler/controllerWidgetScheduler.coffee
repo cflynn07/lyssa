@@ -1,11 +1,15 @@
 define [
   'jquery'
   'angular'
+  'ejs'
   'text!views/widgetScheduler/viewWidgetScheduler.html'
+  'text!views/widgetScheduler/viewWidgetSchedulerListButtonsEJS.html'
 ], (
   $
   angular
+  EJS
   viewWidgetScheduler
+  viewWidgetSchedulerListButtonsEJS
 ) ->
 
   (Module) ->
@@ -39,8 +43,9 @@ define [
             mData:      null
             aTargets:   [1]
             mRender: (data, type, full) ->
-              uid = $scope.escapeHtml full.uid
-              html = ''
+              html = new EJS({text: viewWidgetSchedulerListButtonsEJS}).render({full: full})
+              #uid = $scope.escapeHtml full.uid
+              #html = ''
           ]
           options:
             bStateSave:      true
@@ -102,11 +107,17 @@ define [
       $scope.$watch 'viewModel.events', (value) ->
         viewModel.renderEvents()
       , true
+
+      #FETCH DATA!
       apiRequest.get 'event', [], {}, (response) ->
         viewModel.events = response.response
 
+      apiRequest.get 'template', [], {expand: [{resource:'revisions'}]}, (response) ->
+        viewModel.templates = response.response
+
+      apiRequest.get 'employee', [], {}, (response) ->
+        viewModel.employees = response.response
 
       $scope.viewModel = viewModel
-
 
     ]

@@ -79,6 +79,7 @@ div.page-content {
     background-image: url(../img/sidebar-toggler-light.jpg);
     background-color: silver !important;
   }
+
 }
 
 
@@ -222,6 +223,17 @@ div.header span.username {
 }
 .inline-content > *{
     display: inline-block;
+}
+
+@media (max-width: 979px) {
+
+  .inline-content-responsive {
+    white-space: normal !important;
+  }
+  .inline-content-responsive > * {
+    display: block !important;
+  }
+
 }
 
 
