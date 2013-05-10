@@ -16,12 +16,12 @@ module.exports =
       type: SEQ.STRING
       validate:
         isAlphanumeric: true
-        len: [5, 100]
+        len: [1, 100]
     lastName:
       type: SEQ.STRING
       validate:
         isAlphanumeric: true
-        len: [5, 100]
+        len: [1, 100]
     email:
       type: SEQ.STRING
       validate:

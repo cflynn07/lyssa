@@ -10,437 +10,6 @@
 
   <div class="portlet-body light-grey">
 
-    <div
-      style           = "display:none;"
-      data-ng-animate = "{show:'slideDown', hide:'slideUp'}"
-      data-ng-show    = "viewModel.showNewExerciseForm"
-      class           = "row-fluid">
-
-
-      <div class="span12">
-        <div
-          data-ng-class   = "{'green sub-portlet':newEventForm.$valid, 'grey':newEventForm.$invalid}"
-          class           = "portlet box">
-
-          <div class="portlet-title">
-            <h4><span>Add Exercise</span></h4>
-          </div>
-
-
-          <div class="portlet-body form">
-            <form
-              name  = "newEventForm"
-              class = "form-horizontal">
-               <div class="form-wizard">
-
-                  <div class="navbar steps">
-                     <div class="navbar-inner">
-                        <ul class="row-fluid nav nav-pills">
-                           <li
-                             class="span4 active">
-                              <a href="" data-toggle="tab" class="step active">
-                                <span class="number">1</span>
-                                <span class="desc"><i class="icon-ok"></i> Exercise Setup</span>
-                              </a>
-                           </li>
-                           <li class="span4">
-                              <a href="" data-toggle="tab" class="step">
-                                <span class="number">2</span>
-                                <span class="desc"><i class="icon-ok"></i> Template & Revision</span>
-                              </a>
-                           </li>
-                           <li class="span4">
-                              <a href="" data-toggle="tab" class="step">
-                                <span class="number">3</span>
-                                <span class="desc"><i class="icon-ok"></i> Delegates & Employees</span>
-                              </a>
-                           </li>
-                        </ul>
-                     </div>
-                  </div>
-
-                  <div id="bar" class="progress progress-success progress-striped">
-                     <div class="bar" style="width: 25%;"></div>
-                  </div>
-
-                  <div class="tab-content">
-
-                     <div class="tab-pane active">
-                        <h3 class="block">Basic Info</h3>
-
-                        <div
-                          data-ng-class = "{success:newEventForm.eventType.$valid, error:!newEventForm.eventType.$valid, 'ng-pristine':newEventForm.eventType.$pristine}"
-                          class         = "control-group">
-                           <label class="control-label">Type</label>
-                           <div class="controls">
-                              <select
-                                data-ng-model = "viewModel.newEventForm.eventType"
-                                name          = "eventType">
-                                <option value="mini">Mini Exercise</option>
-                                <option value="full">Full Exercise</option>
-                              </select>
-                           </div>
-                        </div>
-
-
-                        <div
-                          data-ng-class = "{success:newEventForm.name.$valid, error:!newEventForm.name.$valid, 'ng-pristine':newEventForm.name.$pristine}"
-                          class         = "control-group">
-                           <label class="control-label">Name</label>
-                           <div class="controls">
-                              <input
-                                data-required
-                                data-ng-minlength = "{{clientOrmShare.event.model.name.validate.len[0]}}"
-                                data-ng-maxlength = "{{clientOrmShare.event.model.name.validate.len[1]}}"
-                                data-ng-model     = "viewModel.newEventForm.name"
-                                type              = "text"
-                                name              = "name"
-                                class             = "large m-wrap">
-
-                                <div class="clear"></div>
-                                <span
-                                  data-ng-show = "newEventForm.name.$error.minlength"
-                                  class        = "help-inline">
-                                    Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters
-                                </span>
-                                <span
-                                  data-ng-show = "newEventForm.name.$error.maxlength"
-                                  class        = "help-inline">
-                                    Name must be shorter than {{clientOrmShare.event.model.name.validate.len[1]}} characters
-                                </span>
-
-                           </div>
-                        </div>
-
-
-                        <div
-                          data-ng-class = "{success:newEventForm.description.$valid, error:!newEventForm.description.$valid, 'ng-pristine':newEventForm.description.$pristine}"
-                          class="control-group">
-                           <label class="control-label">Description</label>
-                           <div class="controls">
-                              <textarea
-                                name          = "description"
-                                data-ng-model = "viewModel.newEventForm.description"
-                                class         = "large m-wrap"
-                                rows          = "3"></textarea>
-                           </div>
-                        </div>
-
-
-                        <div
-                          data-ng-class = "{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}"
-                          class="control-group">
-                           <label class="control-label">Date</label>
-                           <div class="controls">
-                              <div data-datepicker data-months="1"></div>
-                           </div>
-                        </div>
-
-
-                     </div>
-
-
-
-                     <div
-                       class="tab-pane" id="tab2">
-                        <h3 class="block">Provide your profile details</h3>
-                        <div class="control-group">
-                           <label class="control-label">Fullname</label>
-                           <div class="controls">
-                              <input type="text" class="span6 m-wrap">
-                              <span class="help-inline">Provide your fullname</span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">Email</label>
-                           <div class="controls">
-                              <input type="text" class="span6 m-wrap">
-                              <span class="help-inline">Provide your email address</span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">Phone Number</label>
-                           <div class="controls">
-                              <input type="text" class="span6 m-wrap">
-                              <span class="help-inline">Provide your phone number</span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">Gender</label>
-                           <div class="controls">
-                              <label class="radio">
-                              <div class="radio" id="uniform-optionsRadios1"><span class="checked"><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="" style="opacity: 0;"></span></div>
-                              Male
-                              </label>
-                              <div class="clearfix"></div>
-                              <label class="radio">
-                              <div class="radio" id="uniform-optionsRadios2"><span><input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" style="opacity: 0;"></span></div>
-                              Female
-                              </label>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">Address</label>
-                           <div class="controls">
-                              <input type="text" class="span6 m-wrap">
-                              <span class="help-inline">Provide your street address</span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">City/Town</label>
-                           <div class="controls">
-                              <input type="text" class="span6 m-wrap">
-                              <span class="help-inline">Provide your city or town</span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">Remarks</label>
-                           <div class="controls">
-                              <textarea class="span6 m-wrap" rows="3"></textarea>
-                           </div>
-                        </div>
-                     </div>
-
-
-
-                     <div class="tab-pane">
-                        <h3 class="block">Provide your billing and credit card details</h3>
-                        <div class="control-group">
-                           <label class="control-label">Card Holder Name</label>
-                           <div class="controls">
-                              <input type="text" class="span6 m-wrap">
-                              <span class="help-inline"></span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">Bank Name</label>
-                           <div class="controls">
-                              <input type="text" class="span6 m-wrap">
-                              <span class="help-inline"></span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">Debit/Credit Card Number</label>
-                           <div class="controls">
-                              <input type="text" class="span6 m-wrap">
-                              <span class="help-inline"></span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">CVC</label>
-                           <div class="controls">
-                              <input type="text" placeholder="" class="m-wrap">
-                              <span class="help-inline"></span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">Expiration Date(MM/YYYY)</label>
-                           <div class="controls">
-                              <input type="text" placeholder="MM" class="m-wrap small">
-                              <input type="text" placeholder="YYYY" class="m-wrap small">
-                              <span class="help-inline"></span>
-                           </div>
-                        </div>
-                        <div class="control-group">
-                           <label class="control-label">Payment Options</label>
-                           <div class="controls">
-                              <label class="checkbox line">
-                              <div class="checker" id="uniform-undefined"><span><input type="checkbox" value="" style="opacity: 0;"></span></div> Auto-Pay with this Credit Card
-                              </label>
-                              <label class="checkbox line">
-                              <div class="checker" id="uniform-undefined"><span><input type="checkbox" value="" style="opacity: 0;"></span></div> Email me monthly billing
-                              </label>
-                           </div>
-                        </div>
-                     </div>
-
-
-                  </div>
-
-                  <div class="form-actions clearfix">
-
-                     <a class="btn button-previous" style="display: inline-block;">
-                       <i class="m-icon-swapleft"></i> Back
-                     </a>
-
-                     <a href="javascript:;" class="btn blue button-next" style="display: none;">
-                       Continue <i class="m-icon-swapright m-icon-white"></i>
-                     </a>
-
-                     <a href="javascript:;" class="btn green button-submit" style="display: inline-block;">
-                       Submit <i class="m-icon-swapright m-icon-white"></i>
-                     </a>
-
-                  </div>
-
-               </div>
-            </form>
-         </div>
-
-
-
-
-
-
-
-
-          <div style="display:none;" class="portlet-body light-grey">
-
-            <div class="form">
-              <form
-                name  = "newEventForm_OLD"
-                class = "form-horizontal">
-
-
-                <div class="control-group">
-                  <label class="control-label">Type</label>
-                  <div class="controls">
-                    <select
-                      data-ng-model="viewModel.newEventForm.eventType"
-                      name="eventType">
-                      <option value="mini">Quiz</option>
-                      <option value="full">Full Exercise</option>
-                    </select>
-                  </div>
-                </div>
-
-
-                <div class="control-group">
-                  <label class="control-label">Name</label>
-                  <div class="controls">
-                    <input
-                      data-required
-                      data-ng-minlength = "{{clientOrmShare.event.model.name.validate.len[0]}}"
-                      data-ng-maxlength = "{{clientOrmShare.event.model.name.validate.len[1]}}"
-                      type              = "text"
-                      class             = "span6 m-wrap" />
-
-                    <div class="clear"></div>
-                    <span
-                      data-ng-show = "newEventForm.name.$error.minlength"
-                      class        = "help-inline">
-                        Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters
-                    </span>
-                    <span
-                      data-ng-show = "newEventForm.name.$error.maxlength"
-                      class        = "help-inline">
-                        Name must be longer than {{clientOrmShare.event.model.name.validate.len[1]}} characters
-                    </span>
-
-                  </div>
-                </div>
-
-
-                <div class="control-group">
-                  <label class="control-label">Description</label>
-                  <div class="controls">
-                    <textarea class="large m-wrap" rows="3"></textarea>
-                  </div>
-                </div>
-
-
-                <div class="control-group">
-                  <label class="control-label">Exercise Template</label>
-                  <div class="controls">
-                    <select
-                      data-required
-                      name             = "template"
-                      data-ng-disabled = "!viewModel.newEventForm.eventType"
-                      data-ng-model    = "viewModel.newTemplateForm.template"
-                      data-ng-options  = "value.uid as value.name for (key, value) in viewModel.templates | deleted | filter:{type:viewModel.newEventForm.eventType}"
-                      class            = "m-wrap span6"></select>
-
-                    <span class="help-inline">multi-char placeholder</span>
-                  </div>
-                </div>
-
-
-                <div class="control-group">
-                  <label class="control-label">Exercise Template Revision</label>
-                  <div class="controls">
-                    <select
-                      data-required
-                      name             = "type"
-                      data-ng-disabled = "!viewModel.newTemplateForm.template"
-                      data-ng-model    = "viewModel.newTemplateForm.revision"
-                      data-ng-options  = "value.createdAt for (key, value) in resourcePool[viewModel.newTemplateForm.template].revisions"
-                      class            = "m-wrap span6"></select>
-
-                    <span class="help-inline">multi-char placeholder</span>
-                  </div>
-                </div>
-
-
-                <div class="control-group">
-
-                  <label class="control-label">Delegate</label>
-                  <div class="controls">
-
-                    <table
-                      class                                  = "table table-striped table-hover table-bordered dataTable"
-                      data-data-table                        = "viewModel.newTemplateFormEmployeesDT.options"
-                      data-aa-data                           = "viewModel.employees"
-                      data-ao-column-defs                    = "viewModel.newTemplateFormEmployeesDT.columnDefs"
-                      data-parent-data-table-view-model-prop = "newTemplateFormEmployeesDT"
-                      data-fn-row-callback                   = "">
-                      <thead>
-                      <tr>
-                          <th class = "sorting">Name</th>
-                          <th class = "sorting">Email</th>
-                          <th class = "sorting_disabled"></th>
-                      </tr>
-                      </thead>
-                    </table>
-
-                  </div>
-                </div>
-
-
-                <div class="control-group">
-                  <label class="control-label">Target Date</label>
-                  <div class="controls">
-                    <div data-datepicker data-months="1"></div>
-                  </div>
-                </div>
-
-
-                <div class="control-group">
-                  <label class="control-label">Allow Rescheduling</label>
-                  <div class="controls">
-                    <input class="toggle" data-ng-model="allowRescheduling" data-ng-init="allowRescheduling = false" type="checkbox" checked="checked"/>
-                  </div>
-                </div>
-
-
-                <div
-                    data-ng-show="allowRescheduling"
-                    data-ng-animate="{show: 'slide-down', hide: 'slide-up'}"
-                    class="control-group">
-
-                  <label class="control-label">Date Range</label>
-                  <div class="controls">
-                    <div
-                      data-datepicker
-                      data-months="2"></div>
-                  </div>
-                </div>
-
-
-              </form>
-            </div><!-- div.form -->
-
-            <button
-              data-ng-click = "viewModel.showNewExerciseForm = false"
-              class         = "btn red btn-block">close</button>
-
-          </div><!-- portlet-body -->
-
-        </div><!-- portlet-box add-exercise -->
-      </div><!-- span12 -->
-    </div><!-- row-fluid -->
-
-
-
 
     <div class="row-fluid">
       <div class="span5 responsive span8">
@@ -481,8 +50,7 @@
         </div><!-- portlet box -->
 
         <div
-          data-ng-show    = "viewModel.routeParams.eventUid"
-          data-ng-animate = "{show:'fadeIn', hide:'fadeOut'}"
+          data-ng-show    = "viewModel.routeParams.eventUid || viewModel.showNewExerciseForm"
           class           = "portlet box grey">
           <div class="portlet-title">
             <h4><span>Calendar</span></h4>
@@ -499,9 +67,443 @@
       <div class="span7">
 
 
+
+
         <div
-          data-ng-hide    = "viewModel.routeParams.eventUid"
-          data-ng-animate = "{show:'fadeIn'}"
+          style           = "display:none;"
+          data-ng-animate = "{show:'slideDown', hide:'slideUp'}"
+          data-ng-show    = "viewModel.showNewExerciseForm"
+          class           = "row-fluid">
+
+
+          <div class="span12">
+            <div
+              data-ng-class   = "{'green sub-portlet':newEventForm.$valid, 'grey':newEventForm.$invalid}"
+              class           = "portlet box">
+
+              <div class="portlet-title">
+                <h4><span>Add Exercise</span></h4>
+              </div>
+
+
+              <div class="portlet-body form">
+                <form
+                  name  = "newEventForm"
+                  class = "form-horizontal">
+                   <div class="form-wizard">
+
+                      <div class="navbar steps">
+                         <div class="navbar-inner">
+                            <ul class="row-fluid nav nav-pills">
+                               <li
+                                 class="span4 active">
+                                  <a href="" data-toggle="tab" class="step active">
+                                    <span class="number">1</span>
+                                    <span class="desc"><i class="icon-ok"></i> Exercise Setup</span>
+                                  </a>
+                               </li>
+                               <li class="span4">
+                                  <a href="" data-toggle="tab" class="step">
+                                    <span class="number">2</span>
+                                    <span class="desc"><i class="icon-ok"></i> Template & Revision</span>
+                                  </a>
+                               </li>
+                               <li class="span4">
+                                  <a href="" data-toggle="tab" class="step">
+                                    <span class="number">3</span>
+                                    <span class="desc"><i class="icon-ok"></i> Delegates & Employees</span>
+                                  </a>
+                               </li>
+                            </ul>
+                         </div>
+                      </div>
+
+                      <div id="bar" class="progress progress-success progress-striped">
+                         <div class="bar" style="width: 25%;"></div>
+                      </div>
+
+                      <div class="tab-content">
+
+                         <div class="tab-pane active">
+                            <h3 class="block">Basic Info</h3>
+
+                            <div
+                              data-ng-class = "{success:newEventForm.eventType.$valid, error:!newEventForm.eventType.$valid, 'ng-pristine':newEventForm.eventType.$pristine}"
+                              class         = "control-group">
+                               <label class="control-label">Type</label>
+                               <div class="controls">
+                                  <select
+                                    data-ng-model = "viewModel.newEventForm.eventType"
+                                    name          = "eventType">
+                                    <option value="mini">Mini Exercise</option>
+                                    <option value="full">Full Exercise</option>
+                                  </select>
+                               </div>
+                            </div>
+
+
+                            <div
+                              data-ng-class = "{success:newEventForm.name.$valid, error:!newEventForm.name.$valid, 'ng-pristine':newEventForm.name.$pristine}"
+                              class         = "control-group">
+                               <label class="control-label">Name</label>
+                               <div class="controls">
+                                  <input
+                                    data-required
+                                    data-ng-minlength = "{{clientOrmShare.event.model.name.validate.len[0]}}"
+                                    data-ng-maxlength = "{{clientOrmShare.event.model.name.validate.len[1]}}"
+                                    data-ng-model     = "viewModel.newEventForm.name"
+                                    type              = "text"
+                                    name              = "name"
+                                    class             = "large m-wrap">
+
+                                    <div class="clear"></div>
+                                    <span
+                                      data-ng-show = "newEventForm.name.$error.minlength"
+                                      class        = "help-inline">
+                                        Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters
+                                    </span>
+                                    <span
+                                      data-ng-show = "newEventForm.name.$error.maxlength"
+                                      class        = "help-inline">
+                                        Name must be shorter than {{clientOrmShare.event.model.name.validate.len[1]}} characters
+                                    </span>
+
+                               </div>
+                            </div>
+
+
+                            <div
+                              data-ng-class = "{success:newEventForm.description.$valid, error:!newEventForm.description.$valid, 'ng-pristine':newEventForm.description.$pristine}"
+                              class="control-group">
+                               <label class="control-label">Description</label>
+                               <div class="controls">
+                                  <textarea
+                                    name          = "description"
+                                    data-ng-model = "viewModel.newEventForm.description"
+                                    class         = "large m-wrap"
+                                    rows          = "3"></textarea>
+                               </div>
+                            </div>
+
+
+                            <div
+                              data-ng-class = "{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}"
+                              class="control-group">
+                               <label class="control-label">Date</label>
+                               <div class="controls">
+                                  <div data-datepicker data-months="1"></div>
+                               </div>
+                            </div>
+
+
+                         </div>
+
+
+
+                         <div
+                           class="tab-pane" id="tab2">
+                            <h3 class="block">Provide your profile details</h3>
+                            <div class="control-group">
+                               <label class="control-label">Fullname</label>
+                               <div class="controls">
+                                  <input type="text" class="span6 m-wrap">
+                                  <span class="help-inline">Provide your fullname</span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">Email</label>
+                               <div class="controls">
+                                  <input type="text" class="span6 m-wrap">
+                                  <span class="help-inline">Provide your email address</span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">Phone Number</label>
+                               <div class="controls">
+                                  <input type="text" class="span6 m-wrap">
+                                  <span class="help-inline">Provide your phone number</span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">Gender</label>
+                               <div class="controls">
+                                  <label class="radio">
+                                  <div class="radio" id="uniform-optionsRadios1"><span class="checked"><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="" style="opacity: 0;"></span></div>
+                                  Male
+                                  </label>
+                                  <div class="clearfix"></div>
+                                  <label class="radio">
+                                  <div class="radio" id="uniform-optionsRadios2"><span><input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" style="opacity: 0;"></span></div>
+                                  Female
+                                  </label>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">Address</label>
+                               <div class="controls">
+                                  <input type="text" class="span6 m-wrap">
+                                  <span class="help-inline">Provide your street address</span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">City/Town</label>
+                               <div class="controls">
+                                  <input type="text" class="span6 m-wrap">
+                                  <span class="help-inline">Provide your city or town</span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">Remarks</label>
+                               <div class="controls">
+                                  <textarea class="span6 m-wrap" rows="3"></textarea>
+                               </div>
+                            </div>
+                         </div>
+
+
+
+                         <div class="tab-pane">
+                            <h3 class="block">Provide your billing and credit card details</h3>
+                            <div class="control-group">
+                               <label class="control-label">Card Holder Name</label>
+                               <div class="controls">
+                                  <input type="text" class="span6 m-wrap">
+                                  <span class="help-inline"></span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">Bank Name</label>
+                               <div class="controls">
+                                  <input type="text" class="span6 m-wrap">
+                                  <span class="help-inline"></span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">Debit/Credit Card Number</label>
+                               <div class="controls">
+                                  <input type="text" class="span6 m-wrap">
+                                  <span class="help-inline"></span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">CVC</label>
+                               <div class="controls">
+                                  <input type="text" placeholder="" class="m-wrap">
+                                  <span class="help-inline"></span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">Expiration Date(MM/YYYY)</label>
+                               <div class="controls">
+                                  <input type="text" placeholder="MM" class="m-wrap small">
+                                  <input type="text" placeholder="YYYY" class="m-wrap small">
+                                  <span class="help-inline"></span>
+                               </div>
+                            </div>
+                            <div class="control-group">
+                               <label class="control-label">Payment Options</label>
+                               <div class="controls">
+                                  <label class="checkbox line">
+                                  <div class="checker" id="uniform-undefined"><span><input type="checkbox" value="" style="opacity: 0;"></span></div> Auto-Pay with this Credit Card
+                                  </label>
+                                  <label class="checkbox line">
+                                  <div class="checker" id="uniform-undefined"><span><input type="checkbox" value="" style="opacity: 0;"></span></div> Email me monthly billing
+                                  </label>
+                               </div>
+                            </div>
+                         </div>
+
+
+                      </div>
+
+                      <div class="form-actions clearfix">
+
+                         <a class="btn button-previous" style="display: inline-block;">
+                           <i class="m-icon-swapleft"></i> Back
+                         </a>
+
+                         <a href="javascript:;" class="btn blue button-next" style="display: none;">
+                           Continue <i class="m-icon-swapright m-icon-white"></i>
+                         </a>
+
+                         <a href="javascript:;" class="btn green button-submit" style="display: inline-block;">
+                           Submit <i class="m-icon-swapright m-icon-white"></i>
+                         </a>
+
+                      </div>
+
+                   </div>
+                </form>
+             </div>
+
+
+
+
+
+
+
+
+              <div style="display:none;" class="portlet-body light-grey">
+
+                <div class="form">
+                  <form
+                    name  = "newEventForm_OLD"
+                    class = "form-horizontal">
+
+
+                    <div class="control-group">
+                      <label class="control-label">Type</label>
+                      <div class="controls">
+                        <select
+                          data-ng-model="viewModel.newEventForm.eventType"
+                          name="eventType">
+                          <option value="mini">Quiz</option>
+                          <option value="full">Full Exercise</option>
+                        </select>
+                      </div>
+                    </div>
+
+
+                    <div class="control-group">
+                      <label class="control-label">Name</label>
+                      <div class="controls">
+                        <input
+                          data-required
+                          data-ng-minlength = "{{clientOrmShare.event.model.name.validate.len[0]}}"
+                          data-ng-maxlength = "{{clientOrmShare.event.model.name.validate.len[1]}}"
+                          type              = "text"
+                          class             = "span6 m-wrap" />
+
+                        <div class="clear"></div>
+                        <span
+                          data-ng-show = "newEventForm.name.$error.minlength"
+                          class        = "help-inline">
+                            Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters
+                        </span>
+                        <span
+                          data-ng-show = "newEventForm.name.$error.maxlength"
+                          class        = "help-inline">
+                            Name must be longer than {{clientOrmShare.event.model.name.validate.len[1]}} characters
+                        </span>
+
+                      </div>
+                    </div>
+
+
+                    <div class="control-group">
+                      <label class="control-label">Description</label>
+                      <div class="controls">
+                        <textarea class="large m-wrap" rows="3"></textarea>
+                      </div>
+                    </div>
+
+
+                    <div class="control-group">
+                      <label class="control-label">Exercise Template</label>
+                      <div class="controls">
+                        <select
+                          data-required
+                          name             = "template"
+                          data-ng-disabled = "!viewModel.newEventForm.eventType"
+                          data-ng-model    = "viewModel.newTemplateForm.template"
+                          data-ng-options  = "value.uid as value.name for (key, value) in viewModel.templates | deleted | filter:{type:viewModel.newEventForm.eventType}"
+                          class            = "m-wrap span6"></select>
+
+                        <span class="help-inline">multi-char placeholder</span>
+                      </div>
+                    </div>
+
+
+                    <div class="control-group">
+                      <label class="control-label">Exercise Template Revision</label>
+                      <div class="controls">
+                        <select
+                          data-required
+                          name             = "type"
+                          data-ng-disabled = "!viewModel.newTemplateForm.template"
+                          data-ng-model    = "viewModel.newTemplateForm.revision"
+                          data-ng-options  = "value.createdAt for (key, value) in resourcePool[viewModel.newTemplateForm.template].revisions"
+                          class            = "m-wrap span6"></select>
+
+                        <span class="help-inline">multi-char placeholder</span>
+                      </div>
+                    </div>
+
+
+                    <div class="control-group">
+
+                      <label class="control-label">Delegate</label>
+                      <div class="controls">
+
+                        <table
+                          class                                  = "table table-striped table-hover table-bordered dataTable"
+                          data-data-table                        = "viewModel.newTemplateFormEmployeesDT.options"
+                          data-aa-data                           = "viewModel.employees"
+                          data-ao-column-defs                    = "viewModel.newTemplateFormEmployeesDT.columnDefs"
+                          data-parent-data-table-view-model-prop = "newTemplateFormEmployeesDT"
+                          data-fn-row-callback                   = "">
+                          <thead>
+                          <tr>
+                              <th class = "sorting">Name</th>
+                              <th class = "sorting">Email</th>
+                              <th class = "sorting_disabled"></th>
+                          </tr>
+                          </thead>
+                        </table>
+
+                      </div>
+                    </div>
+
+
+                    <div class="control-group">
+                      <label class="control-label">Target Date</label>
+                      <div class="controls">
+                        <div data-datepicker data-months="1"></div>
+                      </div>
+                    </div>
+
+
+                    <div class="control-group">
+                      <label class="control-label">Allow Rescheduling</label>
+                      <div class="controls">
+                        <input class="toggle" data-ng-model="allowRescheduling" data-ng-init="allowRescheduling = false" type="checkbox" checked="checked"/>
+                      </div>
+                    </div>
+
+
+                    <div
+                        data-ng-show="allowRescheduling"
+                        data-ng-animate="{show: 'slide-down', hide: 'slide-up'}"
+                        class="control-group">
+
+                      <label class="control-label">Date Range</label>
+                      <div class="controls">
+                        <div
+                          data-datepicker
+                          data-months="2"></div>
+                      </div>
+                    </div>
+
+
+                  </form>
+                </div><!-- div.form -->
+
+                <button
+                  data-ng-click = "viewModel.showNewExerciseForm = false"
+                  class         = "btn red btn-block">close</button>
+
+              </div><!-- portlet-body -->
+
+            </div><!-- portlet-box add-exercise -->
+          </div><!-- span12 -->
+        </div><!-- row-fluid -->
+
+
+
+
+
+        <div
+          data-ng-hide    = "viewModel.routeParams.eventUid || viewModel.showNewExerciseForm"
           class           = "portlet box grey">
           <div class="portlet-title">
             <h4><span>Calendar</span></h4>

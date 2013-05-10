@@ -168,7 +168,15 @@ ul.breadcrumb {
 td.details {
     background: lightgray !important;
 }
-
+.dataTables_wrapper {
+  overflow-x: scroll;
+  width: 100%;
+}
+@media (max-width: 480px) {
+  .dataTables_wrapper td {
+    padding: 2px;
+  }
+}
 /*
     Customize look and feel of menu
     -------------------------------
