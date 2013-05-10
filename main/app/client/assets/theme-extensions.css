@@ -42,11 +42,9 @@ body {
   .page-sidebar ul {
     width: 100% !important;
   }
-
   .sidebar-closed .page-content {
     margin-left: 0 !important;
   }
-
 }
 
 
@@ -168,11 +166,12 @@ ul.breadcrumb {
 td.details {
     background: lightgray !important;
 }
-.dataTables_wrapper {
-  overflow-x: scroll;
-  width: 100%;
-}
+
 @media (max-width: 480px) {
+  .dataTables_wrapper {
+    overflow-x: scroll;
+    width: 100%;
+  }
   .dataTables_wrapper td {
     padding: 2px;
   }
