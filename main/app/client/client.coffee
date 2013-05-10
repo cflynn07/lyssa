@@ -23,7 +23,16 @@ requirejs.config
     'jquery':               'vendor/jquery'
     'jquery-ui':            'vendor/jquery-ui'
     'bootstrap':            'vendor/bootstrap'
+
+
     'bootstrapFileUpload':      'vendor/bootstrap-fileupload'
+    'jqueryFileUpload':         'vendor/file-upload/jquery.fileupload'
+    'jqueryFileUploadFp':       'vendor/file-upload/jquery.fileupload-fp'
+    'jqueryFileUploadUi':       'vendor/file-upload/jquery.fileupload-ui'
+    'jqueryIframeTransport':    'vendor/file-upload/jquery.iframe-transport'
+    'jquery.ui.widget':         'vendor/file-upload/jquery.ui.widget'
+
+
     'jqueryUniform':            'vendor/jquery.uniform'
     'jqueryBrowser':            'vendor/jquery.browser'
     'jqueryMaskedInput':        'vendor/jquery.maskedinput'
@@ -88,6 +97,23 @@ requirejs.config
     jqueryMaskedInput:
       deps:    ['jquery', 'jqueryBrowser']
 
+
+    #File-upload assets
+    jqueryFileUpload:
+      deps:    ['jquery']
+    jqueryFileUploadFp:
+      deps:    ['jquery']
+    jqueryFileUploadUi:
+      deps:    ['jquery']
+    jqueryIframeTransport:
+      deps:    ['jquery']
+    'jquery.ui.widget':
+      deps:    ['jquery']
+    tmplMin:
+      deps:    ['jquery']
+
+
+
 require [
   'jquery'
   'jquery-ui'
@@ -108,6 +134,7 @@ require [
   'cs!directives/directiveInlineEdit'
   'cs!directives/directiveUniqueField'
   'cs!directives/directiveDataTable'
+  'cs!directives/directiveFileUpload'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
@@ -147,6 +174,7 @@ require [
   DirectiveInlineEdit
   DirectiveUniqueField
   DirectiveDataTable
+  DirectiveFileUpload
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
@@ -184,6 +212,7 @@ require [
   DirectiveInlineEdit         CS
   DirectiveUniqueField        CS
   DirectiveDataTable          CS
+  DirectiveFileUpload         CS
 
   #Services
   ServiceSocket       CS

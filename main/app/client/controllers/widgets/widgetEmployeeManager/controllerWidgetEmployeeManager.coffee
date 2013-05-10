@@ -2,6 +2,7 @@ define [
   'jquery'
   'angular'
   'angular-ui'
+  'bootstrapFileUpload'
   'bootstrap'
   'underscore'
   'text!views/widgetEmployeeManager/viewWidgetEmployeeManager.html'
@@ -9,6 +10,7 @@ define [
   $
   angular
   angularUi
+  bootstrapFileUpload
   bootstrap
   _
   viewWidgetEmployeeManager
@@ -18,6 +20,22 @@ define [
     Module.run ['$templateCache', ($templateCache) ->
       $templateCache.put 'viewWidgetEmployeeManager', viewWidgetEmployeeManager
     ]
+
+
+    Module.controller 'ControllerWidgetEmployeeManagerUpload', ['$scope',
+    ($scope) ->
+
+      $scope.csvUsersResult = []
+
+      $scope.uploadComplete = (e, response) ->
+        console.log 'done callback'
+        console.log arguments
+        if response == 'success'
+          console.log JSON.parse e.responseText
+          $scope.csvUsersResult = JSON.parse e.responseText
+
+    ]
+
 
     Module.controller 'ControllerWidgetEmployeeManager',
       ['$scope', '$route', '$routeParams', 'socket', 'apiRequest', '$filter', '$dialog',

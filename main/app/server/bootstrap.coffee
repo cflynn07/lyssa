@@ -67,7 +67,16 @@ else
           'jquery':               'vendor/jquery'
           'jquery-ui':            'vendor/jquery-ui'
           'bootstrap':            'vendor/bootstrap'
+
+
           'bootstrapFileUpload':      'vendor/bootstrap-fileupload'
+          'jqueryFileUpload':         'vendor/file-upload/jquery.fileupload'
+          'jqueryFileUploadFp':       'vendor/file-upload/jquery.fileupload-fp'
+          'jqueryFileUploadUi':       'vendor/file-upload/jquery.fileupload-ui'
+          'jqueryIframeTransport':    'vendor/file-upload/jquery.iframe-transport'
+          'jquery.ui.widget':         'vendor/file-upload/jquery.ui.widget'
+
+
           'jqueryUniform':            'vendor/jquery.uniform'
           'jqueryBrowser':            'vendor/jquery.browser'
           'jqueryMaskedInput':        'vendor/jquery.maskedinput'
@@ -133,6 +142,21 @@ else
             deps:    ['underscore']
           jqueryMaskedInput:
             deps:    ['jquery', 'jqueryBrowser']
+
+
+          #File-upload assets
+          jqueryFileUpload:
+            deps:    ['jquery']
+          jqueryFileUploadFp:
+            deps:    ['jquery']
+          jqueryFileUploadUi:
+            deps:    ['jquery']
+          jqueryIframeTransport:
+            deps:    ['jquery']
+          'jquery.ui.widget':
+            deps:    ['jquery']
+          tmplMin:
+            deps:    ['jquery']
 
       ###
 

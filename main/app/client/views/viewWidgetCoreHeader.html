@@ -6,7 +6,11 @@
 
 
     <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-    <a href="javascript:;" data-action="expand-main-menu" class="btn-navbar collapsed" >
+    <a
+      data-ng-click = "toggleTopBarOpen()"
+      href
+      data-action="expand-main-menu"
+      class="btn-navbar collapsed" >
       <img src="assets/img/menu-toggler.png" alt="" />
     </a>
 
@@ -180,7 +184,11 @@
 
       <!-- BEGIN USER LOGIN DROPDOWN -->
       <li style="min-height:42px;" class="dropdown user">
-        <a data-action="toggle-user-menu" href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <a
+          data-action="toggle-user-menu"
+          href
+          class="dropdown-toggle"
+          data-toggle="dropdown">
 
 
 

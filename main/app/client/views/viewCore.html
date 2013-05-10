@@ -7,10 +7,13 @@
 
 
 
-<div class="page-container row-fluid">
+<div
+  data-ng-class      = "{'sidebar-closed':sidebarClosed}"
+  class              = "page-container row-fluid">
 
   <!-- LEFT MENU GOES HERE -->
   <div
+    data-ng-class      = "{'in':topBarOpen}"
     style              = "z-index:1000;"
     class              = "page-sidebar nav-collapse collapse"
     data-ng-controller = "ControllerWidgetCoreLeftMenu"

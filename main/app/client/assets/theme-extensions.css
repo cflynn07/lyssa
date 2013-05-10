@@ -9,6 +9,7 @@
 */
 body {
     background-color: #F1F1F1 !important;
+    overflow-y: scroll;
 }
 .page-content {
     background-color: #FAFAFA;
@@ -16,31 +17,42 @@ body {
     border-left: 2px solid #EEE !important;
 
 }
-
+.sidebar-closed ul > li > a .selected {
+  right: -7px !important;
+}
+.sidebar-closed .sidebar-toggler {
+  margin-left: 4px !important;
+}
 .page-title small {
     color: #434343;
 }
-
 .header .navbar-inner {
   background-color: #555555 !important;
   border-bottom: 2px solid #094AB2;
-//  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25),inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-/*
-    background: rgb(85,85,85);
-    background: -moz-linear-gradient(top, rgba(85,85,85,1) 0%, rgba(64,64,64,1) 100%) !important;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(85,85,85,1)), color-stop(100%,rgba(64,64,64,1))) !important;
-    background: -webkit-linear-gradient(top, rgba(85,85,85,1) 0%,rgba(64,64,64,1) 100%) !important;
-    background: -o-linear-gradient(top, rgba(85,85,85,1) 0%,rgba(64,64,64,1) 100%) !important;
-    background: -ms-linear-gradient(top, rgba(85,85,85,1) 0%,rgba(64,64,64,1) 100%) !important;
-    background: linear-gradient(to bottom, rgba(85,85,85,1) 0%,rgba(64,64,64,1) 100%) !important;
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#555555', endColorstr='#404040',GradientType=0 ) !important;
-*/
 }
+
+
+@media (max-width: 979px) {
+  .page-content {
+    margin-left: 0 !important;
+  }
+  .page-sidebar.in {
+    height: auto;
+  }
+  .page-sidebar ul {
+    width: 100% !important;
+  }
+
+  .sidebar-closed .page-content {
+    margin-left: 0 !important;
+  }
+
+}
+
 
 div.page-content {
   margin-left: 183px;
 }
-
 .page-sidebar ul {
   width: 185px;
   margin-top: 2px;
@@ -48,15 +60,12 @@ div.page-content {
 .sidebar-toggler {
   margin-left: 145px;
 }
-
 .header .navbar-inner {
   background-color: #2672EC !important;
 }
-
 .header .nav .dropdown-toggle:hover, .header .nav .dropdown.open .dropdown-toggle {
   background-color: #094AB2 !important;
 }
-
 @media (max-width: 480px) {
 
   .header .nav > li.dropdown .dropdown-toggle {
@@ -232,9 +241,34 @@ div.header span.username {
   }
   .inline-content-responsive > * {
     display: block !important;
+    margin-bottom: 5px;
+  }
+
+  .sidebar-closed .page-sidebar {
+    width: auto !important;
+  }
+
+  .sidebar-closed > .page-sidebar > ul {
+    width: auto !important;
+  }
+
+  .sidebar-closed ul > li > a .title, .sidebar-closed ul > li > a .arrow {
+    display: inline !important;
+  }
+
+  .sidebar-closed .page-sidebar > ul > li:hover {
+    width: 100% !important;
   }
 
 }
+
+@media (max-width: 480px) {
+  .page-sidebar.in {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
 
 
 /*

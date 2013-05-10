@@ -20,8 +20,11 @@ define [
     ]
 
 
-    Module.controller 'ControllerWidgetCoreLeftMenu', ['$scope', '$route', '$templateCache',
-    ($scope, $route, $templateCache) ->
+    Module.controller 'ControllerWidgetCoreLeftMenu', ['$scope', '$rootScope', '$route', '$templateCache',
+    ($scope, $rootScope, $route, $templateCache) ->
+
+      $rootScope.sidebarClosedToggle = () ->
+        $rootScope.sidebarClosed = !$rootScope.sidebarClosed
 
       $scope.menuChoices = []
 
