@@ -18,6 +18,7 @@ requirejs.config
     'json2':                'vendor/hbs/json2'
     'io':                   'vendor/socket.io'
     'underscore':           'vendor/underscore'
+    'underscore_string':    'vendor/underscore.string'
     'backbone':             'vendor/backbone'
     'jquery':               'vendor/jquery'
     'jquery-ui':            'vendor/jquery-ui'
@@ -25,6 +26,7 @@ requirejs.config
     'bootstrapFileUpload':      'vendor/bootstrap-fileupload'
     'jqueryUniform':            'vendor/jquery.uniform'
     'jqueryBrowser':            'vendor/jquery.browser'
+    'jqueryMaskedInput':        'vendor/jquery.maskedinput'
     'datatables':               'vendor/jquery-dataTables'
     'datatables_bootstrap':     'vendor/DT_bootstrap'
     'jqueryDateFormat':         'vendor/jquery-dateFormat'
@@ -41,10 +43,10 @@ requirejs.config
     templateExtension: 'html'
   shim:
     angular:
-      deps: ['jquery-ui']
+      deps: ['jquery-ui', 'jqueryUniform', 'bootstrap-toggle-buttons']
       exports: 'angular'
     'angular-ui':
-      deps:    ['angular', 'jquery', 'jquery-ui']
+      deps:    ['angular', 'jquery', 'jquery-ui', 'jqueryMaskedInput']
       exports: 'angular'
     'angular-bootstrap':
       deps:    ['angular', 'jquery', 'jquery-ui', 'bootstrap']
@@ -81,7 +83,10 @@ requirejs.config
       exports: 'uuid'
     async:
       exports: 'async'
-
+    underscore_string:
+      deps:    ['underscore']
+    jqueryMaskedInput:
+      deps:    ['jquery', 'jqueryBrowser']
 
 require [
   'jquery'
@@ -121,6 +126,7 @@ require [
   'cs!controllers/widgets/widgetScheduler/controllerWidgetScheduler'
   'cs!controllers/widgets/widgetFullExerciseSubmitter/controllerWidgetFullExerciseSubmitter'
   'cs!controllers/widgets/widget4oh4/controllerWidget4oh4'
+  'cs!controllers/widgets/widgetEmployeeManager/controllerWidgetEmployeeManager'
 ], (
   $
   jqueryUi
@@ -159,6 +165,7 @@ require [
   ControllerWidgetScheduler
   ControllerWidgetFullExerciseSubmitter
   ControllerWidget4oh4
+  ControllerWidgetEmployeeManager
 ) ->
 
   #Modules
@@ -216,5 +223,6 @@ require [
   ControllerWidgetFullExerciseSubmitter CS
   ControllerWidget4oh4                  CS
   ControllerWidgetCoreFooter            CS
+  ControllerWidgetEmployeeManager       CS
 
   angular.bootstrap document, ['CS']

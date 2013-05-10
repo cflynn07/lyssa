@@ -3,6 +3,7 @@ define [
   'angular'
   'angular-ui'
   'underscore'
+  'underscore_string'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilder.html'
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldOpenResponse.html'
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldButtons.html'
@@ -15,6 +16,8 @@ define [
   angular
   angularUi
   _
+  _string
+
   viewWidgetExerciseBuilder
   viewWidgetExerciseBuilderFieldOpenResponse
   viewWidgetExerciseBuilderFieldButtons
@@ -243,8 +246,8 @@ define [
               uid = $scope.escapeHtml obj.uid
               return new EJS(text: viewWidgetExerciseBuilderDetailsEJS).render({templateUid: uid})
             columnDefs: [
-              mData:  null
-              aTargets:   [0]
+              mData:    null
+              aTargets: [0]
               mRender: (data, type, full) ->
                 resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
 
@@ -254,10 +257,14 @@ define [
                 resHtml += '</a>'
                 #resHtml += '<span>{{resourcePool[\'' + $scope.escapeHtml(full.uid) + '\'].revisions}} Revisions</span>'
                 return resHtml
-
+            ,
+              mData:    null
+              aTargets: [1]
+              mRender: (data, type, full) ->
+                resHtml = _.str.capitalize(full.type)
             ,
               mData:      null
-              aTargets:   [1]
+              aTargets:   [2]
               mRender: (data, type, full) ->
                 uid = $scope.escapeHtml full.uid
                 html = new EJS({text: viewWidgetExerciseBuilderTemplateListButtonsEJS}).render({templateUid: uid})

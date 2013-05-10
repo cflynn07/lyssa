@@ -5,9 +5,9 @@ SEQ = orm.SEQ
 
 module.exports =
   model:
-    id:   SEQ.INTEGER
+    id:       SEQ.INTEGER
     name:
-      type: SEQ.STRING
+      type:   SEQ.STRING
       validate:
         isAlphanumeric: true
         len: [5, 100]

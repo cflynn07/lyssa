@@ -62,6 +62,7 @@ else
           'json2':                'vendor/hbs/json2'
           'io':                   'vendor/socket.io'
           'underscore':           'vendor/underscore'
+          'underscore_string':    'vendor/underscore.string'
           'backbone':             'vendor/backbone'
           'jquery':               'vendor/jquery'
           'jquery-ui':            'vendor/jquery-ui'
@@ -69,6 +70,7 @@ else
           'bootstrapFileUpload':      'vendor/bootstrap-fileupload'
           'jqueryUniform':            'vendor/jquery.uniform'
           'jqueryBrowser':            'vendor/jquery.browser'
+          'jqueryMaskedInput':        'vendor/jquery.maskedinput'
           'datatables':               'vendor/jquery-dataTables'
           'datatables_bootstrap':     'vendor/DT_bootstrap'
           'jqueryDateFormat':         'vendor/jquery-dateFormat'
@@ -87,10 +89,10 @@ else
           templateExtension: 'html'
         shim:
           angular:
-            deps: ['jquery-ui']
+            deps: ['jquery-ui', 'jqueryUniform']
             exports: 'angular'
           'angular-ui':
-            deps:    ['angular', 'jquery', 'jquery-ui']
+            deps:    ['angular', 'jquery', 'jquery-ui', 'jqueryMaskedInput']
             exports: 'angular'
           'angular-bootstrap':
             deps:    ['angular', 'jquery', 'jquery-ui', 'bootstrap']
@@ -127,9 +129,10 @@ else
             exports: 'uuid'
           async:
             exports: 'async'
-
-
-
+          underscore_string:
+            deps:    ['underscore']
+          jqueryMaskedInput:
+            deps:    ['jquery', 'jqueryBrowser']
 
       ###
 

@@ -254,9 +254,12 @@ div.header span.username {
     the individual input elements
     ----------------------------------------------
 */
-.ng-pristine span, .ng-pristine input, .ng-pristine label {
-    color: #000 !important;
-    border-color: #000 !important;
+.ng-pristine span, .ng-pristine label  {
+  color: #000 !important;
+}
+.ng-pristine input, .ng-pristine textarea{
+    color: #CCC !important;
+    border-color: #CCC !important;
 }
 .ng-pristine span > i, .ng-pristine .help-inline {
     display: none !important;

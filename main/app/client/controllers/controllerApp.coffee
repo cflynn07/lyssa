@@ -59,11 +59,8 @@ define [
         #Sorting?
         return resArray
 
-
-
       #quick hack
       $('body').removeClass 'login'
-
 
       $rootScope.clientOrmShare = clientOrmShare
 

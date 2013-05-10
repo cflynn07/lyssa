@@ -65,6 +65,7 @@ define [], () ->
             subMenuItem: false
         ]
         widgets:   [
+          'viewWidgetEmployeeManager'
         ]
 
 

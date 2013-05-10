@@ -6,7 +6,11 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id:       SEQ.INTEGER
-    name:     SEQ.STRING
+    name:
+      type:   SEQ.STRING
+      validate:
+        isAlphanumeric: true
+        len: [5, 50]
     dateTime: SEQ.DATE
 
     clientUid:

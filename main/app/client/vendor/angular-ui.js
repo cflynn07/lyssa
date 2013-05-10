@@ -753,6 +753,13 @@ angular.module('ui.directives').directive('uiMask', [
         controller.$parsers.push(function (value) {
           //the second check (or) is only needed due to the fact that element.isMaskValid() will keep returning undefined
           //until there was at least one key event
+
+          //isMaskValid doesn't exist
+          if(!element.isMaskValid){
+            //console.log(element);
+            return true
+          }
+
           var isValid = element.isMaskValid() || angular.isUndefined(element.isMaskValid()) && element.val().length>0;
           controller.$setValidity('mask', isValid);
           return isValid ? value : undefined;

@@ -30,6 +30,10 @@ module.exports = (app) ->
 
                 'identifier': (val, objectKey, object, callback) ->
 
+                  callback null,
+                    success: true
+                  return
+
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
                   employee.find(
@@ -70,6 +74,10 @@ module.exports = (app) ->
 
                 'username': (val, objectKey, object, callback) ->
 
+                  callback null,
+                    success: true
+                  return
+
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
                   employee.find(
@@ -89,6 +97,11 @@ module.exports = (app) ->
                         success: true
 
                 'password': (val, objectKey, object, callback) ->
+
+
+                  callback null,
+                    success: true
+                  return
 
                   if _.isUndefined(val) || val.length > 100
                     callback null,
@@ -164,6 +177,10 @@ module.exports = (app) ->
 
                 'identifier': (val, objectKey, object, callback) ->
 
+                  callback null,
+                    success: true
+                  return
+
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
                   if _.isUndefined object['uid']
@@ -208,6 +225,11 @@ module.exports = (app) ->
                     success: true
 
                 'username': (val, objectKey, object, callback) ->
+
+
+                  callback null,
+                    success: true
+                  return
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
@@ -264,10 +286,6 @@ module.exports = (app) ->
 
 
 
-
-
-
-
                   if _.isUndefined object['uid']
                     callback null,
                       success: false
@@ -290,6 +308,12 @@ module.exports = (app) ->
                         success: true
 
                 'password': (val, objectKey, object, callback) ->
+
+
+                  callback null,
+                    success: true
+                  return
+
 
                   if _.isUndefined(val) || val.length > 100
                     callback null,
@@ -315,6 +339,48 @@ module.exports = (app) ->
                   callback null,
                     success: false
 
+                'clientUid': (val, objectKey, object, callback) ->
+
+                  if _.isUndefined val
+
+                    client.find(
+                      where:
+                        uid: clientUid
+                    ).success (resultClient) ->
+
+                      if resultClient
+                        mapObj = {}
+                        mapObj[resultClient.uid]   = resultClient
+                        callback null,
+                          success: true
+                          uidMapping: mapObj
+                          transform: [objectKey, 'clientUid', resultClient.uid]
+                      else
+                        callback null,
+                          success: false
+                          message:
+                            clientUid: 'unknown'
+
+                  else
+
+                    client.find(
+                      where:
+                        uid: val
+                    ).success (resultClient) ->
+
+                      if resultClient
+                        mapObj = {}
+                        mapObj[resultClient.uid]   = resultClient
+                        callback null,
+                          success: true
+                          uidMapping: mapObj
+                          transform: [objectKey, 'clientUid', resultClient.uid]
+                      else
+                        callback null,
+                          success: false
+                          message:
+                            clientUid: 'unknown'
+
             }, (objects) ->
               #insertHelper objects, res
               insertHelper 'employees', clientUid, employee, objects, req, res, app
@@ -325,13 +391,17 @@ module.exports = (app) ->
           when 'clientAdmin'
 
 
-
-
             #CSA Can make other CSA
             apiVerifyObjectProperties this, employee, req.body, req, res, {
               requiredProperties:
 
                 'identifier': (val, objectKey, object, callback) ->
+
+
+                  callback null,
+                    success: true
+                  return
+
 
                   if _.isUndefined object['uid']
                     callback null,
@@ -376,6 +446,12 @@ module.exports = (app) ->
 
                 'username': (val, objectKey, object, callback) ->
 
+
+                  callback null,
+                    success: true
+                  return
+
+
                   if _.isUndefined object['uid']
                     callback null,
                       success: false
@@ -398,6 +474,11 @@ module.exports = (app) ->
                         success: true
 
                 'password': (val, objectKey, object, callback) ->
+
+
+                  callback null,
+                    success: true
+                  return
 
                   if _.isUndefined(val) || val.length > 100
                     callback null,
@@ -422,6 +503,48 @@ module.exports = (app) ->
 
                   callback null,
                     success: false
+
+                'clientUid': (val, objectKey, object, callback) ->
+
+                  if _.isUndefined val
+
+                    client.find(
+                      where:
+                        uid: clientUid
+                    ).success (resultClient) ->
+
+                      if resultClient
+                        mapObj = {}
+                        mapObj[resultClient.uid]   = resultClient
+                        callback null,
+                          success: true
+                          uidMapping: mapObj
+                          transform: [objectKey, 'clientUid', resultClient.uid]
+                      else
+                        callback null,
+                          success: false
+                          message:
+                            clientUid: 'unknown'
+
+                  else
+
+                    client.find(
+                      where:
+                        uid: val
+                    ).success (resultClient) ->
+
+                      if resultClient
+                        mapObj = {}
+                        mapObj[resultClient.uid]   = resultClient
+                        callback null,
+                          success: true
+                          uidMapping: mapObj
+                          transform: [objectKey, 'clientUid', resultClient.uid]
+                      else
+                        callback null,
+                          success: false
+                          message:
+                            clientUid: 'unknown'
 
             }, (objects) ->
               #insertHelper objects, res

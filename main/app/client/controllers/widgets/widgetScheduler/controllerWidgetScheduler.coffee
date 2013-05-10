@@ -27,6 +27,37 @@ define [
         routeParams:           $routeParams
         events:                {}
         calendarEventsObjects: []
+
+        employees :            {}
+        newTemplateFormEmployeesDT:
+          options:
+            bStateSave:      true
+            iCookieDuration: 2419200
+            bJQueryUI:       true
+            bPaginate:       true
+            bLengthChange:   true
+            bFilter:         false
+            bInfo:           true
+            bDestroy:        true
+          columnDefs: [
+            mData:    null
+            aTargets: [0]
+            mRender: (data, type, full) ->
+              return full.firstName
+          ,
+            mData:    null
+            aTargets: [1]
+            mRender: (data, type, full) ->
+              return full.email
+
+          ,
+            mData:    null
+            aTargets: [2]
+            mRender: (data, type, full) ->
+              return 'test'
+          ]
+
+
         exerciseListDT:
           detailRow: (obj) ->
             uid = $scope.escapeHtml obj.uid
