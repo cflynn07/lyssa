@@ -166,11 +166,13 @@ ul.breadcrumb {
 td.details {
     background: lightgray !important;
 }
-
+.dataTables_wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
 @media (max-width: 480px) {
   .dataTables_wrapper {
     overflow-x: scroll;
-    width: 100%;
   }
   .dataTables_wrapper td {
     padding: 2px;
