@@ -1,5 +1,6 @@
 define [
   'jquery'
+  'async'
   'ejs'
   'angular'
   'angular-ui'
@@ -13,6 +14,7 @@ define [
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerEditEmployeeEJS.html'
 ], (
   $
+  async
   EJS
   angular
   angularUi
@@ -45,31 +47,79 @@ define [
 
       $scope.editEmployee = $scope.resourcePool[$scope.editingEmployeeUid]
       $scope.viewModel.editEmployeeForm = _.extend {}, $scope.editEmployee
+
+      $scope.updateInProgress     = false
+      $scope.updateActionComplete = false
+
+      #Make savable again if changes after save
+      $scope.$watch('viewModel.editEmployeeForm', (() ->
+        $scope.updateActionComplete = false
+      ), true)
+
       $scope.viewModel.updateEmployee = () ->
-        apiRequest.put 'employee', [$scope.editEmployee.uid], {
+        $scope.updateInProgress = true
+
+        apiRequest.put 'employee', $scope.editEmployee.uid, {
           firstName: $scope.viewModel.editEmployeeForm.firstName
           lastName:  $scope.viewModel.editEmployeeForm.lastName
           email:     $scope.viewModel.editEmployeeForm.email
           phone:     $scope.viewModel.editEmployeeForm.phone
         }, (response) ->
           console.log response
+          $scope.updateInProgress     = false
+          $scope.updateActionComplete = true
 
     ]
 
 
 
 
-    Module.controller 'ControllerWidgetEmployeeManagerUpload', ['$scope',
-    ($scope) ->
+    Module.controller 'ControllerWidgetEmployeeManagerCSVUpload', ['$scope', 'apiRequest',
+    ($scope, apiRequest) ->
 
-      $scope.csvUsersResult = []
+
+      $scope.viewModel =
+        uploadComplete:            false
+        csvUsersResult:            []
+        currentProcessingIterator: 0
+        currentProgressPercent:    0
+
+        validCSV:        false
+        processingUsers: false
+        processNewUsers: () ->
+          $scope.viewModel.processingUsers = true
+
+          async.mapLimit $scope.viewModel.csvUsersResult, 1, (item, callback) ->
+            d1 = Date.now()
+            apiRequest.post 'employee', {
+              firstName: item[0]
+              lastName:  item[1]
+              email:     item[2]
+              phone:     item[3]
+            }, (response) ->
+
+              $scope.viewModel.currentProcessingIterator++
+              $scope.viewModel.currentProgressPercent = Math.floor(($scope.viewModel.currentProcessingIterator / $scope.viewModel.csvUsersResult.length) * 100)
+
+              if !$scope.$$phase
+                $scope.$apply()
+              console.log Date.now() - d1
+              callback()
+
+          , (err, result) ->
+            cosole.log 'done with all!'
+
+
+
+      $scope.uploadStart = (e, response) ->
+        console.log 'start'
 
       $scope.uploadComplete = (e, response) ->
-        console.log 'done callback'
-        console.log arguments
+        console.log 'complete'
         if response == 'success'
-          console.log JSON.parse e.responseText
-          $scope.csvUsersResult = JSON.parse e.responseText
+          $scope.viewModel.csvUsersResult = JSON.parse e.responseText
+          $scope.viewModel.validCSV       = _.isArray $scope.viewModel.csvUsersResult
+          $scope.viewModel.uploadComplete = true
 
     ]
 

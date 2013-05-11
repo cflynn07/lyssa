@@ -24,6 +24,7 @@
                   <div class="controls input-icon">
 
                     <input
+                      data-ng-disabled  = "updateInProgress"
                       data-required
                       data-ng-model     = "viewModel.editEmployeeForm.firstName"
                       data-ng-minlength = "{{clientOrmShare.employee.model.firstName.validate.len[0]}}"
@@ -69,6 +70,7 @@
                     class="controls input-icon">
 
                     <input
+                      data-ng-disabled  = "updateInProgress"
                       data-required
                       data-ng-model     = "viewModel.editEmployeeForm.lastName"
                       data-ng-minlength = "{{clientOrmShare.employee.model.lastName.validate.len[0]}}"
@@ -118,6 +120,7 @@
                     class="controls input-icon">
 
                     <input
+                      data-ng-disabled  = "updateInProgress"
                       data-required
                       data-ng-model     = "viewModel.editEmployeeForm.email"
                       data-unique-field = '{"resource": "employee", "property": "email"}'
@@ -159,6 +162,7 @@
                   <div class="controls input-icon">
 
                     <input
+                      data-ng-disabled  = "updateInProgress"
                       data-required
                       data-unique-field = '{"resource": "employee", "property": "phone"}'
                       data-ui-mask  = "'999-999-9999'"
@@ -234,10 +238,13 @@
 
           <div class="form-actions">
             <button
-              data-ng-disabled = "editEmployeeForm.$invalid"
+              data-ng-disabled = "editEmployeeForm.$invalid || updateInProgress || updateActionComplete"
               data-ng-click    = "viewModel.updateEmployee()"
               type             = "submit"
-              class            = "btn green pull-right"><i class="icon-pencil m-icon-white"></i> Update Employee</button>
+              class            = "btn green pull-right"><i class="icon-pencil m-icon-white"></i>
+                <span style="color:#FFF !important;" data-ng-hide="updateActionComplete">Update Employee</span>
+                <span style="color:#FFF !important;" data-ng-show="updateActionComplete">Update Complete</span>
+              </button>
           </div>
         </form>
 

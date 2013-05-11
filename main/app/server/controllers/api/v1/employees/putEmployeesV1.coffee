@@ -57,6 +57,11 @@ module.exports = (app) ->
 
                 'identifier': (val, objectKey, object, callback) ->
 
+                  if _.isUndefined val
+                    callback null,
+                      success: true
+                    return
+
                   if _.isUndefined object['uid']
                     callback null,
                       success: false
@@ -103,6 +108,11 @@ module.exports = (app) ->
                     success: true
 
                 'username': (val, objectKey, object, callback) ->
+
+                  if _.isUndefined val
+                    callback null,
+                      success: true
+                    return
 
                   if _.isUndefined object['uid']
                     callback null,
@@ -186,6 +196,11 @@ module.exports = (app) ->
 
                 'identifier': (val, objectKey, object, callback) ->
 
+                  if _.isUndefined val
+                    callback null,
+                      success: true
+                    return
+
                   if _.isUndefined object['uid']
                     callback null,
                       success: false
@@ -228,6 +243,11 @@ module.exports = (app) ->
                     success: true
 
                 'username': (val, objectKey, object, callback) ->
+
+                  if _.isUndefined val
+                    callback null,
+                      success: true
+                    return
 
                   if _.isUndefined object['uid']
                     callback null,
@@ -313,6 +333,11 @@ module.exports = (app) ->
 
                 'identifier': (val, objectKey, object, callback) ->
 
+                  if _.isUndefined username
+                    callback null,
+                      success: true
+                    return
+
                   if _.isUndefined object['uid']
                     callback null,
                       success: false
@@ -355,6 +380,11 @@ module.exports = (app) ->
                     success: true
 
                 'username': (val, objectKey, object, callback) ->
+
+                  if _.isUndefined username
+                    callback null,
+                      success: true
+                    return
 
                   if _.isUndefined object['uid']
                     callback null,
@@ -401,7 +431,7 @@ module.exports = (app) ->
                     return
 
                   callback null,
-                    success: false
+                    success: true
 
             }, (objects) ->
               updateHelper employee, objects, res, app

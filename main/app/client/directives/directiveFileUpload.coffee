@@ -16,10 +16,12 @@ define [
         scope:
           filename: '=ngModel'
           done:     '=done'
+          start:    '=start'
           url:      '@url'
         link: (scope, elm, attrs) ->
 
           doneCallback = $parse(attrs.done)
+          startCallback = $parse(attrs.start)
 
           $(elm).fileupload
             url:       attrs.url
@@ -29,6 +31,11 @@ define [
             error: () ->
               console.log 'error'
               console.log arguments
+
+            start: (e, status) ->
+              scope.$apply () ->
+                scope.start(e, status)
+
             complete: (e, status) ->
               scope.$apply () ->
                 #doneCallback(e, status)
@@ -36,7 +43,7 @@ define [
 
             progressall: (e, data) ->
               progress = parseInt(data.loaded / data.total * 100, 10)
-              console.log 'progress ' + progress
+              #console.log 'progress ' + progress
 
               scope.$apply () ->
                 scope.progress = progress

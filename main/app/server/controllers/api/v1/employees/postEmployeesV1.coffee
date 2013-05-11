@@ -117,6 +117,9 @@ module.exports = (app) ->
 
                 'type': (val, objectKey, object, callback) ->
 
+                  if _.isUndefined val
+                    object[objectKey] = 'clientDelegate'
+
                   callback null,
                     success: false
 
@@ -335,6 +338,9 @@ module.exports = (app) ->
                       message:
                         type: 'invalid'
                     return
+
+                  if _.isUndefined val
+                    object[objectKey] = 'clientDelegate'
 
                   callback null,
                     success: false

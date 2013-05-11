@@ -9,13 +9,18 @@ module.exports = (resource, objects, res, app) ->
         uid: item.uid
     ).success (resultResource) ->
       if resultResource
-        resultResource.updateAttributes(item).success () ->
 
-          console.log resultResource.uid
-          if !_.isUndefined(app.io) and _.isFunction(app.io.room)
-            app.io.room(resultResource.uid).broadcast 'resourcePut', JSON.parse(JSON.stringify(resultResource))
+        try
+          resultResource.updateAttributes(item).success () ->
 
+            console.log resultResource.uid
+            if !_.isUndefined(app.io) and _.isFunction(app.io.room)
+              app.io.room(resultResource.uid).broadcast 'resourcePut', JSON.parse(JSON.stringify(resultResource))
+
+            callback()
+        catch err
           callback()
+
       else
         callback()
   , () ->

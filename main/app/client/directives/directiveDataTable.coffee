@@ -112,8 +112,16 @@ define [
           # apply the plugin
           dataTable = element.dataTable(options)
 
+          keysLength = scope.getKeysLength(attrs.aaData)
+
+
           # watch for any changes to our data, rebuild the DataTable
-          scope.$watch attrs.aaData, (value) ->
+          scope.$watch attrs.aaData, (value, oldValue) ->
+            #return
+            if keysLength == scope.getKeysLength(value)
+              return
+            keysLength = scope.getKeysLength(value)
+
             val = value or null
             if val
 
