@@ -22,7 +22,7 @@
               data-ng-maxlength = "{{clientOrmShare.employee.model.firstName.validate.len[1]}}"
               name              = "firstName"
               type              = "text"
-              class             = "m-wrap span11"
+              class             = "m-wrap span10"
               placeholder       = "Jane">
 
             <span
@@ -67,7 +67,7 @@
               data-ng-maxlength = "{{clientOrmShare.employee.model.lastName.validate.len[1]}}"
               name              = "lastName"
               type              = "text"
-              class             = "m-wrap span11"
+              class             = "m-wrap span10"
               placeholder       = "Doe">
 
             <span
@@ -110,12 +110,12 @@
             class="controls input-icon">
 
             <input
-              data-ng-required
+              data-required
               data-ng-model     = "viewModel.newEmployeeManualAddForm.email"
               data-unique-field = '{"resource": "employee", "property": "email"}'
               name          = "email"
               type          = "email"
-              class         = "m-wrap span11"
+              class         = "m-wrap span10"
               placeholder   = "jane@company.com">
 
             <span
@@ -151,13 +151,13 @@
           <div class="controls input-icon">
 
             <input
-              data-ng-required
+              data-required
               data-unique-field = '{"resource": "employee", "property": "phone"}'
               data-ui-mask  = "'999-999-9999'"
               data-ng-model = "viewModel.newEmployeeManualAddForm.phone"
               name          = "phone"
               type          = "text"
-              class         = "m-wrap span11"
+              class         = "m-wrap span10"
               placeholder   = "999-999-9999">
 
             <span

@@ -10,6 +10,7 @@ define [
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerAddManualForm.html'
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerAddCSVForm.html'
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerListButtonsEJS.html'
+  'text!views/widgetEmployeeManager/viewPartialEmployeeManagerEditEmployeeEJS.html'
 ], (
   $
   EJS
@@ -22,6 +23,7 @@ define [
   viewPartialEmployeeManagerAddManualForm
   viewPartialEmployeeManagerAddCSVForm
   viewPartialEmployeeManagerListButtonsEJS
+  viewPartialEmployeeManagerEditEmployeeEJS
 ) ->
   (Module) ->
 
@@ -38,6 +40,25 @@ define [
     ]
 
 
+    Module.controller 'ControllerWidgetEmployeeManagerEditEmployee', ['$scope', 'apiRequest',
+    ($scope, apiRequest) ->
+
+      $scope.editEmployee = $scope.resourcePool[$scope.editingEmployeeUid]
+      $scope.viewModel.editEmployeeForm = _.extend {}, $scope.editEmployee
+      $scope.viewModel.updateEmployee = () ->
+        apiRequest.put 'employee', [$scope.editEmployee.uid], {
+          firstName: $scope.viewModel.editEmployeeForm.firstName
+          lastName:  $scope.viewModel.editEmployeeForm.lastName
+          email:     $scope.viewModel.editEmployeeForm.email
+          phone:     $scope.viewModel.editEmployeeForm.phone
+        }, (response) ->
+          console.log response
+
+    ]
+
+
+
+
     Module.controller 'ControllerWidgetEmployeeManagerUpload', ['$scope',
     ($scope) ->
 
@@ -51,6 +72,8 @@ define [
           $scope.csvUsersResult = JSON.parse e.responseText
 
     ]
+
+
 
 
     Module.controller 'ControllerWidgetEmployeeManager',
@@ -84,6 +107,8 @@ define [
 
             employees: {}
             employeeListDT:
+              detailRow: (obj) ->
+                return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
               options:
                 bStateSave:      true
                 iCookieDuration: 2419200 # 1 month

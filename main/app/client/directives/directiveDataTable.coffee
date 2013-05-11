@@ -18,15 +18,17 @@ define [
         scope: 'isolate'
         link: (scope, element, attrs) ->
 
-
           bindDetailCallbacks = () ->
             element.find('.detail').unbind('click').bind 'click', () ->
+
 
               $el   = $(this).parents('tr')
               el    = $el.get(0)
               _this = this
 
+
               if dataTable.fnIsOpen el
+
                 detailRow = $el.find('+ tr:first')
                 detailRow.find('> td > div').slideUp () ->
 
@@ -38,6 +40,7 @@ define [
                   $el.find('.m-icon-swapdown').fadeIn()
 
               else
+
                 $el.find('.m-icon-swapdown').hide()
                 $el.find('.m-icon-swapup').fadeIn()
 

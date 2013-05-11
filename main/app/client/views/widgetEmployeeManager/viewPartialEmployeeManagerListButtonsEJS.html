@@ -5,13 +5,19 @@
     style = "margin-bottom:0px !important; text-align:left;"
     class = "btn-group">
 
-    <a
-      data-ng-class = "{true:'black', false:'blue'}[viewModel.currentTemplate.uid == '<%= uid %>']"
-      href          = "#{{viewRoot}}/<%= uid %>"
-      class         = "btn">View
+    <button class="btn green detail">
+      <i style="display:none;" class="m-icon-swapup m-icon-white"></i>
+      <i class="m-icon-swapdown m-icon-white"></i> Edit
+    </button>
 
-      <i data-ng-hide="viewModel.currentTemplate.uid == '<%= uid %>'" class="m-icon-swapright m-icon-white"></i>
-      <i data-ng-show="viewModel.currentTemplate.uid == '<%= uid %>'" class="m-icon-swapleft m-icon-white"></i>
+    <a
+      style="display:none;"
+      data-ng-click = "$parent.viewModel.editEmployee('<%= uid%>')"
+      data-ng-class = "{true:'black', false:'blue'}[viewModel.currentTemplate.uid == '<%= uid %>']"
+      class         = "btn detail">Edit
+
+      <i data-ng-hide="viewModel.currentEmployee.uid == '<%= uid %>'" class="m-icon-swapright m-icon-white"></i>
+      <i data-ng-show="viewModel.currentEmployee.uid == '<%= uid %>'" class="m-icon-swapleft m-icon-white"></i>
 
     </a>
 
@@ -20,11 +26,8 @@
     </button>
     <ul class="dropdown-menu pull-right">
       <!-- dropdown menu links -->
-      <li>
-        <a data-ng-click=""><i class="icon-plus"></i> New Revision</a>
-      </li>
       <li >
-        <a class="color-red" data-ng-click="$parent.viewModel.deleteConfirmDialogTemplate('<%= uid %>')"><i class="icon-trash"></i> Archive Template</a>
+        <a class="color-red" data-ng-click="$parent.viewModel.deleteConfirmDialogEmployee('<%= uid %>')"><i class="icon-trash"></i> Archive Employee</a>
       </li>
     </ul>
   </div>
