@@ -193,7 +193,7 @@ define [
       factory =
 
         get: (resourceName, uids = [], expand = {}, callback = null, cacheSyncRequest = false) ->
-
+          console.log 'get'
           if !validateResource resourceName
             return
 
@@ -224,30 +224,30 @@ define [
               if _.isFunction callback
                 callback({code: 200, response: resourcePoolCollections[apiCollectionName]})
 
+          if !allUids and !collectionHashSaved
+            socket.apiRequest 'GET',
+              '/' + apiCollectionName + '/' + uids.join(','),
+              expand, #query
+              {},     #data
+              (response) ->
+                console.log response
+                if response.code == 200
 
-          socket.apiRequest 'GET',
-            '/' + apiCollectionName + '/' + uids.join(','),
-            expand, #query
-            {},     #data
-            (response) ->
+                  #HERE we turn array into hash indexed by uids
+                  response.response = reconcileResultsWithPool (response.response)
 
-              if response.code == 200
+                  if uids.length == 0
+                    #This was open-ended GET request. Store it.
+                    #resourcePoolCollections[apiCollectionName] = response.response
+                    addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response, expand, cacheSyncRequest
 
-                #HERE we turn array into hash indexed by uids
-                response.response = reconcileResultsWithPool (response.response)
-
-                if uids.length == 0
-                  #This was open-ended GET request. Store it.
-                  #resourcePoolCollections[apiCollectionName] = response.response
-                  addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response, expand, cacheSyncRequest
-
-                if !allUids and !collectionHashSaved
-                  if _.isFunction callback
-                    callback response
-              else
-                if !allUids and !collectionHashSaved
-                  if _.isFunction callback
-                    callback response
+                  if !allUids and !collectionHashSaved
+                    if _.isFunction callback
+                      callback response
+                else
+                  if !allUids and !collectionHashSaved
+                    if _.isFunction callback
+                      callback response
 
 
 

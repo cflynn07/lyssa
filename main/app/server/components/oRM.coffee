@@ -11,6 +11,7 @@ exportObj =
       return @instance
 
     globalOptions =
+      maxConcurrentQueries: 100
       pool:
         maxConnections: 5
         maxIdleTime: 30
@@ -18,7 +19,7 @@ exportObj =
         underscored: false
       syncOnAssociation: false
       paranoid: true
-      logging: false
+      logging: console.log
 
 
     if process.env.CIRCLECI

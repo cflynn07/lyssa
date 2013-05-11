@@ -261,6 +261,12 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     resourceQueryParams.find.include = firstLevelIncludeModels
 
 
+
+  #resourceQueryParams.find.offset = req.query.offset
+  #resourceQueryParams.find.limit  = 100 #req.query.limit
+
+
+
   #console.log 'secondLevelIncludeObjects'
   #console.log secondLevelIncludeObjects
   #client ->
@@ -272,9 +278,22 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     if !_.isArray resourceQueryParams.find.where.uid
       resourceQueryParams.find.where.uid = [resourceQueryParams.find.where.uid]
 
+  ###
+  d2 = Date.now()
+  console.log 'count start'
+  resource.count(resourceQueryParams.find).success (count) ->
+    console.log 'count finish'
+    console.log Date.now() - d2
+  ###
 
-  resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
-    #console.log topResult
+
+
+
+  d1 = Date.now()
+  console.log 'Start'
+  resource[resourceQueryParams.method](resourceQueryParams.find, {raw: true}).success (topResult) ->
+    console.log 'Finish'
+    console.log Date.now() - d1
 
     if !_.isArray topResult
       topResult = [topResult]
