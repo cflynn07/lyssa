@@ -1,24 +1,40 @@
 define [
   'jquery'
+  'ejs'
   'angular'
   'angular-ui'
   'bootstrapFileUpload'
   'bootstrap'
   'underscore'
   'text!views/widgetEmployeeManager/viewWidgetEmployeeManager.html'
+  'text!views/widgetEmployeeManager/viewPartialEmployeeManagerAddManualForm.html'
+  'text!views/widgetEmployeeManager/viewPartialEmployeeManagerAddCSVForm.html'
+  'text!views/widgetEmployeeManager/viewPartialEmployeeManagerListButtonsEJS.html'
 ], (
   $
+  EJS
   angular
   angularUi
   bootstrapFileUpload
   bootstrap
   _
   viewWidgetEmployeeManager
+  viewPartialEmployeeManagerAddManualForm
+  viewPartialEmployeeManagerAddCSVForm
+  viewPartialEmployeeManagerListButtonsEJS
 ) ->
   (Module) ->
 
     Module.run ['$templateCache', ($templateCache) ->
-      $templateCache.put 'viewWidgetEmployeeManager', viewWidgetEmployeeManager
+      $templateCache.put 'viewWidgetEmployeeManager',
+        viewWidgetEmployeeManager
+
+      $templateCache.put 'viewPartialEmployeeManagerAddManualForm',
+        viewPartialEmployeeManagerAddManualForm
+
+      $templateCache.put 'viewPartialEmployeeManagerAddCSVForm',
+        viewPartialEmployeeManagerAddCSVForm
+
     ]
 
 
@@ -101,17 +117,12 @@ define [
                 mData: null
                 aTargets: [4]
                 mRender: (data, type, full) ->
-                  return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].username">' + full.username + '</span>'
+                  return '' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
               ,
                 mData: null
                 aTargets: [5]
                 mRender: (data, type, full) ->
-                  return '<span>***</span>'
-              ,
-                mData: null
-                aTargets: [6]
-                mRender: (data, type, full) ->
-                  return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
+                  return new EJS({text: viewPartialEmployeeManagerListButtonsEJS}).render(full)
               ]
 
 

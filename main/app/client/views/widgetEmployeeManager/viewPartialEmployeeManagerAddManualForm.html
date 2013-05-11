@@ -1,0 +1,234 @@
+<form
+  name  = "newEmployeeManualAddForm"
+  class = "horizontal-form"
+  novalidate>
+
+  <h3 class="form-section">Employee Info</h3>
+
+  <div class="row-fluid">
+
+    <div class="span6">
+      <div
+        data-ng-class = "{success:newEmployeeManualAddForm.firstName.$valid, error:!newEmployeeManualAddForm.firstName.$valid, 'ng-pristine':newEmployeeManualAddForm.firstName.$pristine}"
+        class         = "control-group">
+
+          <label class="control-label" for="firstName">First Name</label>
+          <div class="controls input-icon">
+
+            <input
+              data-required
+              data-ng-model     = "viewModel.newEmployeeManualAddForm.firstName"
+              data-ng-minlength = "{{clientOrmShare.employee.model.firstName.validate.len[0]}}"
+              data-ng-maxlength = "{{clientOrmShare.employee.model.firstName.validate.len[1]}}"
+              name              = "firstName"
+              type              = "text"
+              class             = "m-wrap span11"
+              placeholder       = "Jane">
+
+            <span
+              data-ng-show = "newEmployeeManualAddForm.firstName.$dirty && newEmployeeManualAddForm.firstName.$valid"
+              class        = "input-success">
+              <i class="icon-ok"></i>
+            </span>
+
+            <span
+              data-ng-show = "newEmployeeManualAddForm.firstName.$dirty && newEmployeeManualAddForm.firstName.$invalid"
+              class        = "input-error">
+              <i class="icon-exclamation-sign"></i>
+            </span>
+
+            <span
+              data-ng-show="newEmployeeManualAddForm.firstName.$error.minlength"
+              class="help-inline">First name must be longer than {{clientOrmShare.employee.model.firstName.validate.len[0]}} characters</span>
+
+            <span
+              data-ng-show="newEmployeeManualAddForm.firstName.$error.maxlength"
+              class="help-inline">First name must be shorter than {{clientOrmShare.employee.model.firstName.validate.len[1]}} characters</span>
+
+          </div>
+      </div>
+    </div>
+
+    <div class="span6">
+      <div
+        data-ng-class = "{success:newEmployeeManualAddForm.lastName.$valid, error:!newEmployeeManualAddForm.lastName.$valid, 'ng-pristine':newEmployeeManualAddForm.lastName.$pristine}"
+        class         = "control-group">
+
+          <label
+            class="control-label"
+            for="lastName">Last Name</label>
+          <div
+            class="controls input-icon">
+
+            <input
+              data-required
+              data-ng-model     = "viewModel.newEmployeeManualAddForm.lastName"
+              data-ng-minlength = "{{clientOrmShare.employee.model.lastName.validate.len[0]}}"
+              data-ng-maxlength = "{{clientOrmShare.employee.model.lastName.validate.len[1]}}"
+              name              = "lastName"
+              type              = "text"
+              class             = "m-wrap span11"
+              placeholder       = "Doe">
+
+            <span
+              data-ng-show = "newEmployeeManualAddForm.lastName.$dirty && newEmployeeManualAddForm.lastName.$valid"
+              class        = "input-success">
+              <i class="icon-ok"></i>
+            </span>
+
+            <span
+              data-ng-show = "newEmployeeManualAddForm.lastName.$dirty && newEmployeeManualAddForm.lastName.$invalid"
+              class        = "input-error">
+              <i class="icon-exclamation-sign"></i>
+            </span>
+
+
+            <span
+              data-ng-show="newEmployeeManualAddForm.lastName.$error.minlength"
+              class="help-inline">Last name must be longer than {{clientOrmShare.employee.model.lastName.validate.len[0]}} characters</span>
+
+            <span
+              data-ng-show="newEmployeeManualAddForm.lastName.$error.maxlength"
+              class="help-inline">Last name must be shorter than {{clientOrmShare.employee.model.lastName.validate.len[1]}} characters</span>
+
+          </div>
+       </div>
+    </div>
+
+ </div><!-- row-fluid -->
+ <div class="row-fluid">
+
+    <div class="span6">
+      <div
+        data-ng-class = "{success:newEmployeeManualAddForm.email.$valid, error:!newEmployeeManualAddForm.email.$valid, 'ng-pristine':newEmployeeManualAddForm.email.$pristine}"
+        class         = "control-group">
+
+          <label
+            class="control-label"
+            for="email">Email</label>
+          <div
+            class="controls input-icon">
+
+            <input
+              data-ng-required
+              data-ng-model     = "viewModel.newEmployeeManualAddForm.email"
+              data-unique-field = '{"resource": "employee", "property": "email"}'
+              name          = "email"
+              type          = "email"
+              class         = "m-wrap span11"
+              placeholder   = "jane@company.com">
+
+            <span
+              data-ng-show = "newEmployeeManualAddForm.email.$dirty && newEmployeeManualAddForm.email.$valid"
+              class        = "input-success">
+              <i class="icon-ok"></i>
+            </span>
+
+            <span
+              data-ng-show = "newEmployeeManualAddForm.email.$dirty && newEmployeeManualAddForm.email.$invalid"
+              class        = "input-error">
+              <i class="icon-exclamation-sign"></i>
+            </span>
+
+            <span
+              data-ng-show="newEmployeeManualAddForm.email.$error.email"
+              class="help-inline">Enter a valid email address</span>
+
+            <span
+              data-ng-show="newEmployeeManualAddForm.email.$error.uniqueField"
+              class="help-inline">Another employee with the email address <strong>{{viewModel.newEmployeeManualAddForm.email}}</strong> already exists</span>
+
+          </div>
+       </div>
+    </div>
+
+    <div class="span6">
+      <div
+        data-ng-class = "{success:newEmployeeManualAddForm.phone.$valid, error:!newEmployeeManualAddForm.phone.$valid, 'ng-pristine':newEmployeeManualAddForm.phone.$pristine}"
+        class         = "control-group">
+
+          <label class="control-label" for="phone">Phone Number</label>
+          <div class="controls input-icon">
+
+            <input
+              data-ng-required
+              data-unique-field = '{"resource": "employee", "property": "phone"}'
+              data-ui-mask  = "'999-999-9999'"
+              data-ng-model = "viewModel.newEmployeeManualAddForm.phone"
+              name          = "phone"
+              type          = "text"
+              class         = "m-wrap span11"
+              placeholder   = "999-999-9999">
+
+            <span
+              data-ng-show = "newEmployeeManualAddForm.phone.$dirty && newEmployeeManualAddForm.phone.$valid"
+              class        = "input-success">
+              <i class="icon-ok"></i>
+            </span>
+
+            <span
+              data-ng-show = "newEmployeeManualAddForm.phone.$dirty && newEmployeeManualAddForm.phone.$invalid"
+              class        = "input-error">
+              <i class="icon-exclamation-sign"></i>
+            </span>
+
+            <span
+              data-ng-show="newEmployeeManualAddForm.phone.$error"
+              class="help-inline">Enter a valid phone number</span>
+
+            <span
+              data-ng-show="newEmployeeManualAddForm.phone.$error.uniqueField"
+              class="help-inline">Another employee with the phone number <strong>{{viewModel.newEmployeeManualAddForm.phone}}</strong> already exists</span>
+
+          </div>
+       </div>
+    </div>
+
+ </div><!-- row-fluid -->
+
+
+
+
+ <div style="display:none;" class="row-fluid">
+
+    <div class="span6">
+       <div class="control-group">
+
+          <label class="control-label" for="delegate">Delegate</label>
+          <div class="controls">
+
+            <div class="controls">
+
+              <label class="checkbox line">
+                <div class="checker">
+                  <span
+                    data-ng-class = "{checked: viewModel.newEmployeeManualAddForm.delegate}"
+                    data-ng-click = "viewModel.newEmployeeManualAddForm.delegate = !viewModel.newEmployeeManualAddForm.delegate"
+                    class="">
+                    <input
+                      data-ng-model = "viewModel.newEmployeeManualAddForm.delegate"
+                      name          = "delegate"
+                      type          = "checkbox">
+                  </span>
+                </div> This employee is a delegate
+              </label>
+
+              <span class="help-inline">This will create an account for your delegate to log-in and submit exercises</span>
+
+            </div>
+
+          </div>
+       </div>
+    </div>
+
+ </div><!-- row-fluid -->
+
+
+  <div class="form-actions">
+    <button
+      data-ng-disabled = "newEmployeeManualAddForm.$invalid"
+      data-ng-click    = "viewModel.showAddNewEmployeeSubmit()"
+      type             = "submit"
+      class            = "btn green pull-right"><i class="icon-ok m-icon-white"></i> Add Employee</button>
+  </div>
+</form>

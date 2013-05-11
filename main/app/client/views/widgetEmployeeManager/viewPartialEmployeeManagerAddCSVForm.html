@@ -1,0 +1,35 @@
+<div data-ng-controller = "ControllerWidgetEmployeeManagerUpload">
+
+  <div
+    data-file-upload
+    data-done     = "uploadComplete"
+    data-url      = "/csv-upload"
+    data-ng-model = "filename">
+    <div>
+      <input type="file" />
+      <input type="hidden" ng-model="filename" />
+      <span ng-show="filename">{{filename}}</span>
+      <span ng-show="progress" ng-hide="filename">{{progress}}%</span>
+    </div>
+  </div>
+
+  <table class="table table-striped table-hover table-bordered dataTable">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-ng-repeat = "row in csvUsersResult">
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}}</td>
+        <td>{{row[2]}}</td>
+        <td>{{row[3]}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

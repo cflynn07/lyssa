@@ -30,7 +30,10 @@ body {
   background-color: #555555 !important;
   border-bottom: 2px solid #094AB2;
 }
-
+.header .navbar-inner .dropdown-menu{
+  border: 2px solid #094AB2;
+  margin-top: 0;
+}
 
 @media (max-width: 979px) {
   .page-content {
@@ -310,7 +313,7 @@ div.header span.username {
 
 
 
-.error i.icon-ok {
+.error .input-success i.icon-ok {
     display: none !important;
 }
 

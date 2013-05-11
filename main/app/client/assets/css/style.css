@@ -959,7 +959,7 @@ Input icons
 .input-icon .input-error,
 .input-icon .input-warning,
 .input-icon .input-success {
-  display: inline-block !important;
+  display: inline-block; /* !important; */
   position: relative !important;
   top: 7px;
   right: 25px !important;

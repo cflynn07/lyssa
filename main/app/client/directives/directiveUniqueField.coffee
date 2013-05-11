@@ -47,9 +47,13 @@ define [], () ->
                             break
 
                     else
-                      if obj[attrData.property].toLowerCase() == viewValue.toLowerCase() and !obj.deletedAt
-                        isValid = false
-                        break
+                      if _.isString(obj[attrData.property]) && _.isString(viewValue)
+                        if obj[attrData.property].toLowerCase() == viewValue.toLowerCase() and !obj.deletedAt
+                          isValid = false
+                          break
+                      #else
+                      #  isValid = true
+                      #    break
 
 
 
