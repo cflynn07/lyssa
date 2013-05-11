@@ -263,6 +263,12 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     resourceQueryParams.find.include = firstLevelIncludeModels
 
 
+
+  #resourceQueryParams.find.offset = req.query.offset
+  #resourceQueryParams.find.limit  = 100 #req.query.limit
+
+
+
   #console.log 'secondLevelIncludeObjects'
   #console.log secondLevelIncludeObjects
   #client ->
@@ -274,11 +280,8 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     if !_.isArray resourceQueryParams.find.where.uid
       resourceQueryParams.find.where.uid = [resourceQueryParams.find.where.uid]
 
-  console.log 'ABOUT TO QUERY'
-  resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
-    #console.log topResult
 
-    console.log 'TOP RESULT FOUND IN DATABASE!!'
+  resource[resourceQueryParams.method](resourceQueryParams.find, {raw: true}).success (topResult) ->
 
     if !_.isArray topResult
       topResult = [topResult]
