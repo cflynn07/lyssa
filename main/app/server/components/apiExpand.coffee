@@ -114,18 +114,20 @@ module.exports = (req, res, resource, resourceQueryParams) ->
   #Now we must clear out "id" and "password" props
   #NOTE: topResult should still be an array
   recursiveCleanProps = (arr) ->
+    return
     for subResult in arr
+
       for subResultPropertyKey, subResultPropertyValue of subResult
         if _.isArray(subResultPropertyValue)
           recursiveCleanProps(subResultPropertyValue)
 
         else
+          continue
+          #if (subResultPropertyKey is 'id') or (subResultPropertyKey is 'password')
+          #  delete subResult[subResultPropertyKey]
 
-          if (subResultPropertyKey is 'id') or (subResultPropertyKey is 'password')
-            delete subResult[subResultPropertyKey]
-
-          if (subResultPropertyKey.indexOf('Id') > -1)
-            delete subResult[subResultPropertyKey]
+          #if (subResultPropertyKey.indexOf('Id') > -1)
+          #  delete subResult[subResultPropertyKey]
 
 
 
@@ -272,9 +274,11 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     if !_.isArray resourceQueryParams.find.where.uid
       resourceQueryParams.find.where.uid = [resourceQueryParams.find.where.uid]
 
-
+  console.log 'ABOUT TO QUERY'
   resource[resourceQueryParams.method](resourceQueryParams.find).success (topResult) ->
     #console.log topResult
+
+    console.log 'TOP RESULT FOUND IN DATABASE!!'
 
     if !_.isArray topResult
       topResult = [topResult]

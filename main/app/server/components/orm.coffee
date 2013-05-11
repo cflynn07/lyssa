@@ -18,7 +18,7 @@ exportObj =
         underscored: false
       syncOnAssociation: false
       paranoid: true
-      logging: false
+      logging: true
 
 
     if process.env.CIRCLECI
