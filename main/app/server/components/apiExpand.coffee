@@ -114,7 +114,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
   #Now we must clear out "id" and "password" props
   #NOTE: topResult should still be an array
   recursiveCleanProps = (arr) ->
-    return
     for subResult in arr
 
       for subResultPropertyKey, subResultPropertyValue of subResult
@@ -122,7 +121,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
           recursiveCleanProps(subResultPropertyValue)
 
         else
-          continue
+
           if (subResultPropertyKey is 'id') or (subResultPropertyKey is 'password')
             delete subResult[subResultPropertyKey]
 
@@ -301,6 +300,54 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
   # {raw:true}
 
+  checkOrderQueryProperty = (order) ->
+    if !_.isArray order
+      return false
+
+    for val in order
+      if !_.isArray(val) or val.length != 2
+        return false
+      for subVal in val
+        if !_.isString subVal
+          return false
+
+    for val in order
+      if !checkPropertiesAgainstResource(val[0])
+        return false
+      if (val[1].toLowerCase() != 'asc') and (val[1].toLowerCase() != 'desc')
+        return false
+    return true
+
+  checkFilterQueryProperty = (filter) ->
+    if !_.isArray filter
+      return false
+
+    for val in filter
+      if !_.isArray(val) or val.length != 3
+        return false
+      for subVal in val
+        if !_.isString subVal
+          return false
+
+    for val in filter
+      if !checkPropertiesAgainstResource(val[0])
+        return false
+      if (val[1] != '=') and (val[1] != '!=') and (val[1].toLowerCase() != 'like')
+        return false
+      if val[2].length > 200
+        return false
+    return true
+
+  checkPropertiesAgainstResource = (property) ->
+    if _.isUndefined(resource.rawAttributes[property])
+      return false
+    if property == 'uid'
+      return false
+    if property == 'id'
+      return false
+    if property == 'clientUid'
+      return false
+    return true
 
 
   #IF (offset || limit) && include
@@ -317,16 +364,66 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     totalSetLen    = filterIds.length
     offsetLimitSet = filterIds.splice resourceQueryParams.find.offset, resourceQueryParams.find.limit
 
-
     filterIdsArr = []
     for obj in offsetLimitSet
       filterIdsArr.push obj.id
     resourceQueryParams.find.where.id = filterIdsArr
 
-
     findRealCopy = _.extend {}, resourceQueryParams.find
     delete findRealCopy.limit
     delete findRealCopy.offset
+
+    whereString = ''
+    for prop, val of findRealCopy.where
+      if _.isArray(val) and val.length > 0
+        whereString += '`' + resource.tableName + '`.`' + prop + '` IN (' + val.join() + ') and '
+      else
+        whereString += '`' + resource.tableName + '`.`' + prop + '` = \'' + val + '\' and '
+
+
+
+
+    #User supplied stuff begins here... danger zone
+    if !_.isUndefined(req.query.filter)
+      try
+        filters = JSON.parse req.query.filter
+      catch e
+        res.jsonAPIRespond config.apiErrorResponse 'invalidFilterQuery'
+        return
+
+      if !checkFilterQueryProperty(filters)
+        res.jsonAPIRespond config.apiErrorResponse 'invalidFilterQuery'
+        return
+
+      #filters = JSON.parse req.query.filter
+      for filterArr in filters
+        if filterArr[1].toLowerCase() == 'like'
+          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1].toUpperCase() + ' \'%' + filterArr[2] + '%\' and '
+        else
+          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\' and '
+
+    whereString = whereString.substring(0, whereString.length - 5)
+    findRealCopy.where = whereString
+
+    if !_.isUndefined(req.query.order)
+      try
+        orders = JSON.parse req.query.order
+      catch e
+        res.jsonAPIRespond config.apiErrorResponse 'invalidOrderQuery'
+        return
+
+      if !checkOrderQueryProperty(orders)
+        res.jsonAPIRespond config.apiErrorResponse 'invalidOrderQuery'
+        return
+
+      orderArray = []
+      for order in orders
+        orderArray.push '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
+
+      findRealCopy.order = orderArray
+
+
+
 
     #Find actualy query based on ids
     resource[resourceQueryParams.method](findRealCopy).success (topResult) ->

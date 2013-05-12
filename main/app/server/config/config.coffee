@@ -41,6 +41,12 @@ module.exports =
     'unknownRootResourceId':
       code: 404
       message: 'unknown resource uid specified'
+    'invalidFilterQuery':
+      code: 400
+      message: 'invalid filter query parameter'
+    'invalidOrderQuery':
+      code: 400
+      message: 'invalid order query parameter'
 
   apiResponseCodes:
 
