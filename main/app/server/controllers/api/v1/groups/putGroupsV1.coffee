@@ -67,7 +67,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper group, objects, res, app
+              updateHelper group, objects, req, res, app
 
 
           when 'clientSuperAdmin', 'clientAdmin'
@@ -114,7 +114,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper group, objects, res, app
+              updateHelper group, objects, req, res, app
 
 
           when 'clientDelegate', 'clientAuditor'

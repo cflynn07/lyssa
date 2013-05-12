@@ -20,10 +20,25 @@ module.exports = (apiCollectionName, clientUid, resource, objects, req, res, app
         roomName = clientUid + '-postResources'
         #console.log 'broadcast to: ' + roomName
 
-        app.io.room(roomName).broadcast 'resourcePost',
-          apiCollectionName: apiCollectionName
-          resourceName:      resource.name
-          resource:          JSON.parse(JSON.stringify(createdItem))
+        if !_.isUndefined req.query.silent
+          if req.query.silent == 'true'
+            silent = true
+          else
+            silent = false
+        else
+          if req.requestType == 'http'
+            silent = true
+          else
+            silent = false
+
+        #broadcast update if silent == false
+        #SIO DEFAULT == false
+        #HTTP DEFAULT == true
+        if !silent
+          app.io.room(roomName).broadcast 'resourcePost',
+            apiCollectionName: apiCollectionName
+            resourceName:      resource.name
+            resource:          JSON.parse(JSON.stringify(createdItem))
 
 
         if !_.isUndefined(req.io) and _.isFunction(req.io.join)

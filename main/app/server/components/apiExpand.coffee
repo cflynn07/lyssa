@@ -123,11 +123,11 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
         else
           continue
-          #if (subResultPropertyKey is 'id') or (subResultPropertyKey is 'password')
-          #  delete subResult[subResultPropertyKey]
+          if (subResultPropertyKey is 'id') or (subResultPropertyKey is 'password')
+            delete subResult[subResultPropertyKey]
 
-          #if (subResultPropertyKey.indexOf('Id') > -1)
-          #  delete subResult[subResultPropertyKey]
+          if (subResultPropertyKey.indexOf('Id') > -1)
+            delete subResult[subResultPropertyKey]
 
 
 
@@ -164,7 +164,8 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
 
   #DRY - this optionally gets invoked from two places
-  sendFinalResult = (topResult) ->
+  sendFinalResult = (topResult, topSetLen) ->
+
     topResultJSON = JSON.parse JSON.stringify topResult
     recursiveCleanProps topResultJSON
 
@@ -176,10 +177,15 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     if !_.isArray(topResultJSON) and resourceQueryParams.searchExpectsMultiple
       topResultJSON = [topResultJSON]
 
+    returnResult =
+      data:   topResultJSON
+      length: topSetLen
+      offset: resourceQueryParams.find.offset
+      limit:  resourceQueryParams.find.limit
+
     res.jsonAPIRespond
       code: 200
-      response: topResultJSON
-
+      response: returnResult
 
     #Join rooms here for all requested resources
     if !_.isUndefined(req.io) and _.isFunction(req.io.join)
@@ -263,10 +269,24 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     resourceQueryParams.find.include = firstLevelIncludeModels
 
 
+  maxLimit = 500
 
-  #resourceQueryParams.find.offset = req.query.offset
-  #resourceQueryParams.find.limit  = 100 #req.query.limit
+  #Default offset & limit
+  resourceQueryParams.find.offset = 0        #req.query.offset
+  resourceQueryParams.find.limit  = maxLimit #req.query.limit
 
+  #check supplied limit & offset
+  if !_.isUndefined(req.query.limit)
+    limit = Math.floor(parseInt(req.query.limit, 10))
+    if !_.isNaN(limit) and _.isNumber(limit)
+      if limit <= maxLimit
+        resourceQueryParams.find.limit = limit
+
+  if !_.isUndefined(req.query.offset)
+    offset = Math.floor(parseInt(req.query.offset, 10))
+    console.log 'offset: ' + offset
+    if !_.isNaN(offset) and _.isNumber(offset)
+      resourceQueryParams.find.offset = offset
 
 
   #console.log 'secondLevelIncludeObjects'
@@ -275,95 +295,122 @@ module.exports = (req, res, resource, resourceQueryParams) ->
   #  employees -> expand to
   #    { employees: [ { resource: 'templates' }, { resource: 'revisions' } ] }
 
-
-  if resourceQueryParams.find and resourceQueryParams.find.where and resourceQueryParams.find.where.uid
+  if !_.isUndefined(resourceQueryParams.find) and !_.isUndefined(resourceQueryParams.find.where) and !_.isUndefined(resourceQueryParams.find.where.uid)
     if !_.isArray resourceQueryParams.find.where.uid
       resourceQueryParams.find.where.uid = [resourceQueryParams.find.where.uid]
 
-
-  resource[resourceQueryParams.method](resourceQueryParams.find, {raw: true}).success (topResult) ->
-
-    if !_.isArray topResult
-      topResult = [topResult]
+  # {raw:true}
 
 
-    #Verify no unknown resources specified
-    if !verifyNoUnknownResource topResult, resourceQueryParams.find
-      return
 
-    if Object.getOwnPropertyNames(secondLevelIncludeObjects).length is 0
-      #DONE, Nothing else to include
-      sendFinalResult topResult
-    else
+  #IF (offset || limit) && include
+    #We must look up the 'ids' of the parent resource and filter by those
+  findCopy = _.extend {}, resourceQueryParams.find
+  delete findCopy.include
+  delete findCopy.offset
+  delete findCopy.limit
+  findCopy.attributes = ['id']
 
-      topResult = JSON.parse JSON.stringify topResult
+  #Hunt down ID's to grab, & total result set length...
+  resource[resourceQueryParams.method](findCopy).success (filterIds) ->
 
-      #console.log topResult
+    totalSetLen    = filterIds.length
+    offsetLimitSet = filterIds.splice resourceQueryParams.find.offset, resourceQueryParams.find.limit
 
-      asyncMethods = []
 
-      for subResult in topResult
+    filterIdsArr = []
+    for obj in offsetLimitSet
+      filterIdsArr.push obj.id
+    resourceQueryParams.find.where.id = filterIdsArr
 
-        #topResult == all clients []
-          #subResult == each client {}
 
-        #console.log secondLevelIncludeObjects
-        #continue
+    findRealCopy = _.extend {}, resourceQueryParams.find
+    delete findRealCopy.limit
+    delete findRealCopy.offset
 
-        for subResultPropertyToExpandKey, expandResourceObjectArrayValue of secondLevelIncludeObjects
+    #Find actualy query based on ids
+    resource[resourceQueryParams.method](findRealCopy).success (topResult) ->
 
-          #console.log subResultPropertyToExpandKey
-          #console.log expandResourceObjectArrayValue
+      if !_.isArray topResult
+        topResult = [topResult]
+
+      #Verify no unknown resources specified
+      if !verifyNoUnknownResource topResult, resourceQueryParams.find
+        return
+
+      if Object.getOwnPropertyNames(secondLevelIncludeObjects).length is 0
+        #DONE, Nothing else to include
+        sendFinalResult topResult, totalSetLen
+
+      else
+
+        topResult = JSON.parse JSON.stringify topResult
+
+        #console.log topResult
+
+        asyncMethods = []
+
+        for subResult in topResult
+
+          #topResult == all clients []
+            #subResult == each client {}
+
+          #console.log secondLevelIncludeObjects
           #continue
 
-          #client
-          # -> employees... == subResultPropertyToExpandKey
-          # -> templates... == subResultPropertyToExpandKey
+          for subResultPropertyToExpandKey, expandResourceObjectArrayValue of secondLevelIncludeObjects
 
-          subResourceToExpandModel = ORM.model subResultPropertyToExpandKey.replace(/s+$/, '')
+            #console.log subResultPropertyToExpandKey
+            #console.log expandResourceObjectArrayValue
+            #continue
 
-          #console.log '======================='
-          #console.log subResult
-          #console.log subResultPropertyToExpandKey
-          #console.log '======================='
+            #client
+            # -> employees... == subResultPropertyToExpandKey
+            # -> templates... == subResultPropertyToExpandKey
 
-          subResourceIds = []
-          for subResource in subResult[subResultPropertyToExpandKey]
-            subResourceIds.push subResource.id
+            subResourceToExpandModel = ORM.model subResultPropertyToExpandKey.replace(/s+$/, '')
 
-          subResourceExpandModels = []
+            #console.log '======================='
+            #console.log subResult
+            #console.log subResultPropertyToExpandKey
+            #console.log '======================='
 
+            subResourceIds = []
+            for subResource in subResult[subResultPropertyToExpandKey]
+              subResourceIds.push subResource.id
 
-          #console.log 'expandResourceObjectArrayValue'
-          #console.log expandResourceObjectArrayValue
-          #console.log '-------'
-
-
-          for resourceObject in expandResourceObjectArrayValue
-            ##resourceObject == { resource: 'modelname' }
-            #build array of models to use w/ expansion of
-            model = ORM.model resourceObject.resource.replace(/s+$/, '')
-            if model
-              subResourceExpandModels.push model
-
-          ((asyncMethods, subResourceToExpandModel, subResourceIds, subResourceExpandModels, subResult, subResultPropertyToExpandKey) ->
-
-            asyncMethods.push (callback) ->
-
-              subResourceToExpandModel.findAll(
-                where:
-                  id: subResourceIds
-                include: subResourceExpandModels
-              ).success (resultNewSubResource) ->
-                subResult[subResultPropertyToExpandKey] = resultNewSubResource
-                callback()
-
-          )(asyncMethods, subResourceToExpandModel, subResourceIds, subResourceExpandModels, subResult, subResultPropertyToExpandKey)
+            subResourceExpandModels = []
 
 
-      async.parallel asyncMethods, () ->
-        sendFinalResult topResult
-        return
+            #console.log 'expandResourceObjectArrayValue'
+            #console.log expandResourceObjectArrayValue
+            #console.log '-------'
+
+
+            for resourceObject in expandResourceObjectArrayValue
+              ##resourceObject == { resource: 'modelname' }
+              #build array of models to use w/ expansion of
+              model = ORM.model resourceObject.resource.replace(/s+$/, '')
+              if model
+                subResourceExpandModels.push model
+
+            ((asyncMethods, subResourceToExpandModel, subResourceIds, subResourceExpandModels, subResult, subResultPropertyToExpandKey) ->
+
+              asyncMethods.push (callback) ->
+
+                subResourceToExpandModel.findAll(
+                  where:
+                    id: subResourceIds
+                  include: subResourceExpandModels
+                ).success (resultNewSubResource) ->
+                  subResult[subResultPropertyToExpandKey] = resultNewSubResource
+                  callback()
+
+            )(asyncMethods, subResourceToExpandModel, subResourceIds, subResourceExpandModels, subResult, subResultPropertyToExpandKey)
+
+        async.parallel asyncMethods, () ->
+          sendFinalResult topResult, totalSetLen
+
 
 
 

@@ -252,7 +252,7 @@ define [
                 resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
 
                 if full.name
-                  resHtml += $scope.escapeHtml(full.name)
+                  resHtml += '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + $scope.escapeHtml(full.name) + '</span>'
 
                 resHtml += '</a>'
                 #resHtml += '<span>{{resourcePool[\'' + $scope.escapeHtml(full.uid) + '\'].revisions}} Revisions</span>'

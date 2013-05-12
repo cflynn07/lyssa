@@ -13,8 +13,7 @@ module.exports.http = (req, res, next) ->
     if req.query and req.query.expand
       req.apiExpand = req.query.expand
 
-
-    req.requestType = 'http'
+    req.requestType    = 'http'
     res.jsonAPIRespond = (json) ->
       if !json.code?
         json.code = defaultCode

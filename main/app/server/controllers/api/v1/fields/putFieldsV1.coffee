@@ -136,7 +136,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper field, objects, res, app
+              updateHelper field, objects, req, res, app
 
 
           when 'clientSuperAdmin', 'clientAdmin'
@@ -250,7 +250,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper field, objects, res, app
+              updateHelper field, objects, req, res, app
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

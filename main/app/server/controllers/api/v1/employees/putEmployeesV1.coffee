@@ -160,7 +160,7 @@ module.exports = (app) ->
                     success: false
 
             }, (objects) ->
-              updateHelper employee, objects, res, app
+              updateHelper employee, objects, req, res, app
 
 
           when 'clientSuperAdmin'
@@ -297,7 +297,7 @@ module.exports = (app) ->
                     success: false
 
             }, (objects) ->
-              updateHelper employee, objects, res, app
+              updateHelper employee, objects, req, res, app
 
 
           when 'clientAdmin'
@@ -434,7 +434,7 @@ module.exports = (app) ->
                     success: true
 
             }, (objects) ->
-              updateHelper employee, objects, res, app
+              updateHelper employee, objects, req, res, app
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

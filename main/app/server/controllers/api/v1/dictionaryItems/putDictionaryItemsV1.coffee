@@ -74,7 +74,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper dictionaryItem, objects, res, app
+              updateHelper dictionaryItem, objects, req, res, app
 
 
 
@@ -128,7 +128,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper dictionaryItem, objects, res, app
+              updateHelper dictionaryItem, objects, req, res, app
 
 
           when 'clientDelegate', 'clientAuditor'

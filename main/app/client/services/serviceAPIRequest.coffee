@@ -8,8 +8,6 @@ define [
   clientOrmShare
 ) ->
 
-
-
   clientOrmShare = JSON.parse clientOrmShare
 
   (Module) ->
@@ -30,10 +28,10 @@ define [
 
       #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
-        #console.log 'resourcePut'
-        #console.log data
-        #console.log resourcePool[data['uid']]
-        $rootScope.$broadcast 'resourcePut', data['uid']
+        console.log 'resourcePut'
+        console.log data
+        console.log resourcePool[data['uid']]
+        $rootScope.$broadcast 'resourcePut', data #['uid']
 
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
           updatePoolResource resourcePool[data['uid']], data
@@ -42,7 +40,7 @@ define [
       socket.on 'resourcePost', (data) ->
         #console.log 'resourcePost'
         #console.log data
-        $rootScope.$broadcast 'resourcePost', data['uid']
+        $rootScope.$broadcast 'resourcePost', data #['uid']
 
         if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])
           #resourcePoolCollections[data['resourceName']][data['resource']['uid']] = data['resource']
@@ -85,8 +83,6 @@ define [
                 if !_.isUndefined resourcePool[propValue2]
                   if !_.isUndefined resourcePool[propValue2][apiCollectionName]
                     _.extend resourcePool[propValue2][apiCollectionName], obj
-
-
 
 
 
@@ -136,7 +132,6 @@ define [
         resourcePool[resource.uid].isFresh = true
 
 
-
       #Merge each result with resourcePool hash
       reconcileResultsWithPool = (results) ->
 
@@ -172,8 +167,6 @@ define [
         return responseHash
 
 
-
-
       validateResource = (resourceName) ->
         if _.isUndefined clientOrmShare[resourceName]
           throw new Error resourceName + ' unknown'
@@ -193,12 +186,11 @@ define [
       factory =
 
         get: (resourceName, uids = [], expand = {}, callback = null, cacheSyncRequest = false) ->
-          console.log 'get'
+
           if !validateResource resourceName
             return
 
           apiCollectionName = getCollectionName resourceName
-
 
           #Opportunity to return from cache, then update cache if
           #we have all of the specified uids in the resourcePool
@@ -250,8 +242,6 @@ define [
                       callback response
 
 
-
-
         post: (resourceName, objects, callback) ->
           if !validateResource resourceName
             return
@@ -288,7 +278,6 @@ define [
           ###
 
           #helper
-
 
 
         put: (resourceName, uid, properties, callback) ->

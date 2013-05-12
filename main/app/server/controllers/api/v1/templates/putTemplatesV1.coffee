@@ -129,7 +129,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper template, objects, res, app
+              updateHelper template, objects, req, res, app
 
 
           when 'clientSuperAdmin', 'clientAdmin'
@@ -238,7 +238,7 @@ module.exports = (app) ->
 
             }, (objects) ->
 
-              updateHelper template, objects, res, app
+              updateHelper template, objects, req, res, app
 
 
           when 'clientDelegate', 'clientAuditor'

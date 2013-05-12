@@ -2,7 +2,7 @@ async  = require 'async'
 config = require '../config/config'
 _      = require 'underscore'
 
-module.exports = (resource, objects, res, app) ->
+module.exports = (resource, objects, req, res, app) ->
   async.map objects, (item, callback) ->
     resource.find(
       where:
@@ -13,9 +13,24 @@ module.exports = (resource, objects, res, app) ->
         try
           resultResource.updateAttributes(item).success () ->
 
-            console.log resultResource.uid
-            if !_.isUndefined(app.io) and _.isFunction(app.io.room)
-              app.io.room(resultResource.uid).broadcast 'resourcePut', JSON.parse(JSON.stringify(resultResource))
+            if !_.isUndefined req.query.silent
+              if req.query.silent == 'true'
+                silent = true
+              else
+                silent = false
+            else
+              if req.requestType == 'http'
+                silent = true
+              else
+                silent = false
+
+            #broadcast update if silent == false
+            #SIO DEFAULT == false
+            #HTTP DEFAULT == true
+            if !silent
+              if !_.isUndefined(app.io) and _.isFunction(app.io.room)
+                app.io.room(resultResource.uid).broadcast 'resourcePut', JSON.parse(JSON.stringify(resultResource))
+
 
             callback()
         catch err
