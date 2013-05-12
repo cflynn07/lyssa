@@ -200,7 +200,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       #    console.log 'joined room ' + req.session.user.clientUid + '-postResources'
 
 
-
       recursiveBindToRooms = (collection) ->
 
         if !_.isArray collection
@@ -268,7 +267,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     resourceQueryParams.find.include = firstLevelIncludeModels
 
 
-  maxLimit = 500
+  maxLimit = 300
 
   #Default offset & limit
   resourceQueryParams.find.offset = 0        #req.query.offset
@@ -358,8 +357,49 @@ module.exports = (req, res, resource, resourceQueryParams) ->
   delete findCopy.limit
   findCopy.attributes = ['id']
 
+
+  whereString = ''
+  for prop, val of findCopy.where
+    if _.isArray(val) and val.length > 0
+
+      for item, key in val
+        val[key] = '\'' + item + '\''
+
+      whereString += '`' + resource.tableName + '`.`' + prop + '` IN (' + val.join() + ') and '
+    else
+      whereString += '`' + resource.tableName + '`.`' + prop + '` = \'' + val + '\' and '
+
+
+
+  #User supplied stuff begins here... danger zone
+  if !_.isUndefined(req.query.filter)
+    try
+      filters = JSON.parse req.query.filter
+    catch e
+      res.jsonAPIRespond config.apiErrorResponse 'invalidFilterQuery'
+      return
+
+    if !checkFilterQueryProperty(filters)
+      res.jsonAPIRespond config.apiErrorResponse 'invalidFilterQuery'
+      return
+
+    #filters = JSON.parse req.query.filter
+    for filterArr in filters
+      if filterArr[1].toLowerCase() == 'like'
+        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1].toUpperCase() + ' \'%' + filterArr[2] + '%\' and '
+      else
+        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\' and '
+
+
+  whereString = whereString.substring(0, whereString.length - 5)
+  findCopy.where = whereString
+
+  sequelize.query("SELECT `" + resource.tableName + "`.`id` FROM `" + resource.tableName + "` WHERE " + whereString,
+  null,
+  {raw: true}).done (err, filterIds) ->
+
   #Hunt down ID's to grab, & total result set length...
-  resource[resourceQueryParams.method](findCopy).success (filterIds) ->
+  #resource[resourceQueryParams.method](findCopy).success (filterIds) ->
 
     totalSetLen    = filterIds.length
     offsetLimitSet = filterIds.splice resourceQueryParams.find.offset, resourceQueryParams.find.limit
@@ -369,41 +409,12 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       filterIdsArr.push obj.id
     resourceQueryParams.find.where.id = filterIdsArr
 
+
     findRealCopy = _.extend {}, resourceQueryParams.find
     delete findRealCopy.limit
     delete findRealCopy.offset
 
-    whereString = ''
-    for prop, val of findRealCopy.where
-      if _.isArray(val) and val.length > 0
-        whereString += '`' + resource.tableName + '`.`' + prop + '` IN (' + val.join() + ') and '
-      else
-        whereString += '`' + resource.tableName + '`.`' + prop + '` = \'' + val + '\' and '
 
-
-
-
-    #User supplied stuff begins here... danger zone
-    if !_.isUndefined(req.query.filter)
-      try
-        filters = JSON.parse req.query.filter
-      catch e
-        res.jsonAPIRespond config.apiErrorResponse 'invalidFilterQuery'
-        return
-
-      if !checkFilterQueryProperty(filters)
-        res.jsonAPIRespond config.apiErrorResponse 'invalidFilterQuery'
-        return
-
-      #filters = JSON.parse req.query.filter
-      for filterArr in filters
-        if filterArr[1].toLowerCase() == 'like'
-          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1].toUpperCase() + ' \'%' + filterArr[2] + '%\' and '
-        else
-          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\' and '
-
-    whereString = whereString.substring(0, whereString.length - 5)
-    findRealCopy.where = whereString
 
     if !_.isUndefined(req.query.order)
       try
