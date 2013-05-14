@@ -1,10 +1,12 @@
 define [
   'underscore'
   'uuid'
+  'cs!utils/utilSortHash'
   'text!config/clientOrmShare.json'
 ], (
   _
   uuid
+  utilSortHash
   clientOrmShare
 ) ->
 
@@ -28,19 +30,16 @@ define [
 
       #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
-
-        #console.log 'resourcePut'
-        #console.log data
-        #console.log resourcePool[data['uid']]
+        console.log 'resourcePut'
+        console.log data
         $rootScope.$broadcast 'resourcePut', data #['uid']
 
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
           updatePoolResource resourcePool[data['uid']], data
-        #console.log resourcePool[data['uid']]
 
       socket.on 'resourcePost', (data) ->
-        #console.log 'resourcePost'
-        #console.log data
+        console.log 'resourcePost'
+        console.log data
         $rootScope.$broadcast 'resourcePost', data #['uid']
 
         if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])
@@ -56,17 +55,23 @@ define [
           #attach to parent resources if exist
           attachResourcesToParentsInPool data['apiCollectionName'], data['resource']
 
+          ###
           addResourcesToOpenEndedGet data['apiCollectionName'],
             data['resourceName'],
             data['resource'],
             {},
             false
+          ###
+
 
 
       #
       # MSC Helpers
       #
+      # TODO: FIX
       attachResourcesToParentsInPool = (apiCollectionName, resources) ->
+        return
+
         if !_.isArray resources
           resources = [resources]
 
@@ -122,16 +127,13 @@ define [
 
             , true #Don't run again
 
-
       updatePoolResource = (poolResource, updatedResource) ->
         _.extend poolResource, updatedResource, true
         poolResource.isFresh = true
 
-
       addPoolResource = (resource) ->
         resourcePool[resource.uid] = resource
         resourcePool[resource.uid].isFresh = true
-
 
       #Merge each result with resourcePool hash
       reconcileResultsWithPool = (results) ->
@@ -167,7 +169,6 @@ define [
         responseHash = recursiveCallback results
         return responseHash
 
-
       validateResource = (resourceName) ->
         if _.isUndefined clientOrmShare[resourceName]
           throw new Error resourceName + ' unknown'
@@ -181,6 +182,35 @@ define [
           apiCollectionName = 'dictionaries'
         return apiCollectionName
 
+
+
+      #To assist with caching API results by 4 params (offset, limit, filter, order)
+      cacheHashIdentifier = (resourceName, options) ->
+
+        defaultOptions =
+          offset: 0
+          limit:  300 #API DEF
+          filter: []
+          order:  []
+
+        _.extend defaultOptions, options
+
+        #Flatten arrays to aid in creating simple hash string
+        #Must sort by propName
+        filter = []
+        filter = _.sortBy defaultOptions.filter, (arr) ->
+          return arr[0] + arr[1] + [2]
+
+        order = []
+        order = _.sortBy defaultOptions.order, (arr) ->
+          return arr[0] + arr[1]
+
+        hashString = resourceName + defaultOptions.offset + defaultOptions.limit + JSON.stringify(filter) + JSON.stringify(order)
+        return hashString
+
+
+
+
       #
       # Response Object
       #
@@ -192,6 +222,14 @@ define [
             return
 
           apiCollectionName = getCollectionName resourceName
+
+          hashString = cacheHashIdentifier apiCollectionName,
+            offset: if expand.offset then expand.offset else 0
+            limit:  if expand.limit  then expand.limit  else 300
+            filter: if expand.filter then expand.filter else []
+            order:  if expand.order  then expand.order  else []
+
+          #console.log hashString
 
           #Opportunity to return from cache, then update cache if
           #we have all of the specified uids in the resourcePool
@@ -209,14 +247,15 @@ define [
           else
             allUids = false
 
-          ###
+
           if uids.length == 0
             collectionHashSaved = false
-            if !_.isUndefined resourcePoolCollections[apiCollectionName]
+            #if !_.isUndefined resourcePoolCollections[apiCollectionName]
+            if !_.isUndefined resourcePoolCollections[hashString]
               collectionHashSaved = true
               if _.isFunction callback
-                callback({code: 200, response: resourcePoolCollections[apiCollectionName]})
-          ###
+                callback({code: 200, response: resourcePoolCollections[hashString]})
+
 
           #if !allUids and !collectionHashSaved
           socket.apiRequest 'GET',
@@ -228,22 +267,31 @@ define [
               if response.code == 200
 
                 #HERE we turn array into hash indexed by uids
-                response.response.data = reconcileResultsWithPool (response.response.data)
+                response.response.data = reconcileResultsWithPool response.response.data
                 collectionHashSaved    = false
 
-                #if uids.length == 0
-                #  This was open-ended GET request. Store it.
-                #  resourcePoolCollections[apiCollectionName] = response.response
-                #  addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response, expand, cacheSyncRequest
+                if uids.length == 0
+                  #This was open-ended GET request. Store it.
+                  resourcePoolCollections[hashString] = response.response
+                  #addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response.data, expand, cacheSyncRequest
 
                 if !allUids and !collectionHashSaved
                   if _.isFunction callback
                     callback response
+
               else
                 if !allUids and !collectionHashSaved
                   if _.isFunction callback
                     callback response
-
+              ###
+              console.log '----'
+              console.log 'resourcePool'
+              console.log resourcePool
+              console.log '----'
+              console.log 'resourcePoolCollections'
+              console.log resourcePoolCollections
+              console.log '----'
+              ###
 
         post: (resourceName, objects, callback) ->
           if !validateResource resourceName
@@ -275,7 +323,6 @@ define [
           #attachResourcesToParentsInPool apiCollectionName, objects
           addResourcesToOpenEndedGet apiCollectionName, resourceName, objects, {}, false
 
-
           if !$rootScope.$$phase
             $rootScope.$apply()
           ###
@@ -293,7 +340,6 @@ define [
           if !_.isUndefined resourcePool[uid]
             resourcePool[uid].isFresh = false
             _.extend resourcePool[uid], properties
-
 
           socket.apiRequest 'PUT',
             '/' + apiCollectionName,
