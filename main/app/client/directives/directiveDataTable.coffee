@@ -104,7 +104,6 @@ define [
               #$(data.nTable).find('tbody').html($compile(html)(scope))
               clearTimeout drawCallbackRender
               drawCallbackRender = setTimeout () ->
-                console.log 'hi'
                 bindDetailCallbacks()
                 $compile($(data.nTable).find('tbody'))(scope)
                 if !scope.$$phase

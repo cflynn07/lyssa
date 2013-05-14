@@ -181,10 +181,15 @@ define [
                     ]
                     query.filter = filter
 
-                  oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
 
+                  cacheResponse = ''
+                  oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
                     if response.code == 200
 
+                      responseDataString = JSON.stringify(response.response)
+                      if cacheResponse == responseDataString
+                        return
+                      cacheResponse = responseDataString
                       empArr = _.toArray response.response.data
 
                       fnCallback {
