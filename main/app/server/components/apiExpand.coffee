@@ -9,6 +9,7 @@ _         = require 'underscore'
 ORM       = require config.appRoot + 'server/components/oRM'
 sequelize = ORM.setup()
 async     = require 'async'
+sanitize  = require('validator').sanitize
 
 
 module.exports = (req, res, resource, resourceQueryParams) ->
@@ -367,15 +368,21 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
   whereString = ''
   for prop, val of findCopy.where
+    prop = sanitize(prop).trim()
+
     if !_.isString(val) and _.isArray(val) and val.length > 0
 
       newValString = ''
       for item in val
+        item = sanitize(item).trim()
+
         newValString += '"' + item + '", '
       newValString = newValString.substring(0, newValString.length - 2)
 
       whereString += '`' + resource.tableName + '`.`' + prop + '` IN (' + newValString + ') and '
     else
+      val = sanitize(val).trim()
+
       val = '"' + val + '"'
       whereString += '`' + resource.tableName + '`.`' + prop + '` = ' + val + ' and '
 
@@ -398,15 +405,25 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
     #filters = JSON.parse req.query.filter
     for filterArr in filters
+
+      filterArr[0] = sanitize(filterArr[0]).trim()
+      filterArr[1] = sanitize(filterArr[1]).trim()
+      filterArr[2] = sanitize(filterArr[2]).trim()
+
       if filterArr[1].toLowerCase() == 'like'
         whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1].toUpperCase() + ' \'%' + filterArr[2] + '%\' or '
       else
-        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\' or '
+
+        if (filterArr[2] == 'null') && (filterArr[1].toLowerCase() != 'like')
+          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` ' + (if filterArr[1] == '=' then 'IS' else 'IS NOT') + ' NULL or '
+        else
+          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\' or '
 
 
   whereString = whereString.substring(0, whereString.length - 4)
   findCopy.where = whereString
 
+  console.log whereString
 
   sequelize.query("SELECT `" + resource.tableName + "`.`id` FROM `" + resource.tableName + "` WHERE " + whereString,
   null,

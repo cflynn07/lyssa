@@ -213,7 +213,7 @@ define [
                 mRender: (data, type, full) ->
                   #console.log 'colrender1'
                   #console.log arguments
-                  return full.firstName
+                  #return full.firstName
                   return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].firstName">' + full.firstName + '</span>'
               ,
                 mData: null

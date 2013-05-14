@@ -41,7 +41,8 @@
     "csv":           "*",
     "formidable":    "*",
     "nodetime":      "*",
-    "node-uuid":     "*"
+    "node-uuid":     "*",
+    "validator":     "*"
   },
   "devDependencies": {
     "mocha": 					        "1.8.2",
