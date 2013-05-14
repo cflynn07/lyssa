@@ -28,9 +28,10 @@ define [
 
       #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
-        console.log 'resourcePut'
-        console.log data
-        console.log resourcePool[data['uid']]
+
+        #console.log 'resourcePut'
+        #console.log data
+        #console.log resourcePool[data['uid']]
         $rootScope.$broadcast 'resourcePut', data #['uid']
 
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
@@ -208,38 +209,40 @@ define [
           else
             allUids = false
 
-
+          ###
           if uids.length == 0
             collectionHashSaved = false
             if !_.isUndefined resourcePoolCollections[apiCollectionName]
               collectionHashSaved = true
               if _.isFunction callback
                 callback({code: 200, response: resourcePoolCollections[apiCollectionName]})
+          ###
 
-          if !allUids and !collectionHashSaved
-            socket.apiRequest 'GET',
-              '/' + apiCollectionName + '/' + uids.join(','),
-              expand, #query
-              {},     #data
-              (response) ->
-                console.log response
-                if response.code == 200
+          #if !allUids and !collectionHashSaved
+          socket.apiRequest 'GET',
+            '/' + apiCollectionName + '/' + uids.join(','),
+            expand, #query
+            {},     #data
+            (response) ->
 
-                  #HERE we turn array into hash indexed by uids
-                  response.response = reconcileResultsWithPool (response.response)
+              if response.code == 200
 
-                  if uids.length == 0
-                    #This was open-ended GET request. Store it.
-                    #resourcePoolCollections[apiCollectionName] = response.response
-                    addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response, expand, cacheSyncRequest
+                #HERE we turn array into hash indexed by uids
+                response.response.data = reconcileResultsWithPool (response.response.data)
+                collectionHashSaved    = false
 
-                  if !allUids and !collectionHashSaved
-                    if _.isFunction callback
-                      callback response
-                else
-                  if !allUids and !collectionHashSaved
-                    if _.isFunction callback
-                      callback response
+                #if uids.length == 0
+                #  This was open-ended GET request. Store it.
+                #  resourcePoolCollections[apiCollectionName] = response.response
+                #  addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response, expand, cacheSyncRequest
+
+                if !allUids and !collectionHashSaved
+                  if _.isFunction callback
+                    callback response
+              else
+                if !allUids and !collectionHashSaved
+                  if _.isFunction callback
+                    callback response
 
 
         post: (resourceName, objects, callback) ->

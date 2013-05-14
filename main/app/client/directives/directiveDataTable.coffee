@@ -97,32 +97,38 @@ define [
             options['fnCreatedRow'] = (nRow, aData, iDataIndex) ->
               return
 
+
+            drawCallbackRender = null
             options['fnDrawCallback'] = (data) ->
               #html = $(data.nTable).find('tbody').html()
               #$(data.nTable).find('tbody').html($compile(html)(scope))
-              $compile($(data.nTable).find('tbody'))(scope)
-              if !scope.$$phase
-                scope.$apply()
+              clearTimeout drawCallbackRender
+              drawCallbackRender = setTimeout () ->
+                console.log 'hi'
+                bindDetailCallbacks()
+                $compile($(data.nTable).find('tbody'))(scope)
+                if !scope.$$phase
+                  scope.$apply()
+              , 0
 
-              bindDetailCallbacks()
             options['fnRowCallback'] = () ->
               return
               #console.log 'fnRowCallback'
 
           # apply the plugin
-          dataTable = element.dataTable(options)
-
+          dataTable  = element.dataTable(options)
           keysLength = scope.getKeysLength(attrs.aaData)
 
           # watch for any changes to our data, rebuild the DataTable
           scope.$watch attrs.aaData, (value, oldValue) ->
-            #return
 
             if keysLength == scope.getKeysLength(value)
               return
+
             keysLength = scope.getKeysLength(value)
 
             val = value or null
+
             if val
 
               convertedVal = []

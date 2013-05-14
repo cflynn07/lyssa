@@ -23,7 +23,6 @@ define [
       #once = false
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
 
-
       updateShit = () ->
         $scope.widgetRows = [
           widget: 'viewWidgetBreadCrumbs'

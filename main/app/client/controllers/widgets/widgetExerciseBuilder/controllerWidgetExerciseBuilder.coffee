@@ -151,7 +151,7 @@ define [
               newOrdinal,
               $scope.group.uid,
               () ->
-                apiRequest.put 'group', [_$scope.group.uid], {
+                apiRequest.put 'group', [$scope.group.uid], {
                   ordinal: newOrdinal
                 }, (response) ->
                   console.log response
@@ -313,7 +313,7 @@ define [
             $scope.viewModel.newTemplateForm = {}
 
           postNewTemplateGroup: () ->
-            $groupsObj   = $scope.viewModel.currentTemplateRevision.groups
+            $groupsObj = $scope.viewModel.currentTemplateRevision.groups
 
             helperReorderGroupOrdinals $scope,
               apiRequest,
@@ -336,7 +336,7 @@ define [
               name: $scope.viewModel.formEditTemplateName.name
             }, (response) ->
               console.log response
-              $scope.viewModel.showEditTemplateName = false
+              $scope.viewModel.showEditTemplateName      = false
               $scope.viewModel.formEditTemplateName.name = $scope.viewModel.currentTemplate.name
 
           postNewTemplate: () ->
@@ -369,8 +369,9 @@ define [
                 apiRequest.get 'employee', [], {expand: [{resource: 'revisions'}]}, (response) ->
                   callback(null, response)
             ], (err, results) ->
+
               if results[0] and results[0].response
-                $scope.viewModel.templates = results[0].response
+                $scope.viewModel.templates = results[0].response.data
                 hashChangeUpdate()
 
 

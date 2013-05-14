@@ -318,22 +318,29 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     return true
 
   checkFilterQueryProperty = (filter) ->
+    console.log filter
     if !_.isArray filter
+      console.log 'f1'
       return false
 
     for val in filter
       if !_.isArray(val) or val.length != 3
+        console.log 'f2'
         return false
       for subVal in val
         if !_.isString subVal
+          console.log 'f3'
           return false
 
     for val in filter
       if !checkPropertiesAgainstResource(val[0])
+        console.log 'f4'
         return false
       if (val[1] != '=') and (val[1] != '!=') and (val[1].toLowerCase() != 'like')
+        console.log 'f5'
         return false
       if val[2].length > 200
+        console.log 'f6'
         return false
     return true
 
@@ -360,24 +367,30 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
   whereString = ''
   for prop, val of findCopy.where
-    if _.isArray(val) and val.length > 0
+    if !_.isString(val) and _.isArray(val) and val.length > 0
 
-      for item, key in val
-        val[key] = '\'' + item + '\''
+      newValString = ''
+      for item in val
+        newValString += '"' + item + '", '
+      newValString = newValString.substring(0, newValString.length - 2)
 
-      whereString += '`' + resource.tableName + '`.`' + prop + '` IN (' + val.join() + ') and '
+      whereString += '`' + resource.tableName + '`.`' + prop + '` IN (' + newValString + ') and '
     else
-      whereString += '`' + resource.tableName + '`.`' + prop + '` = \'' + val + '\' and '
+      val = '"' + val + '"'
+      whereString += '`' + resource.tableName + '`.`' + prop + '` = ' + val + ' and '
 
 
 
   #User supplied stuff begins here... danger zone
   if !_.isUndefined(req.query.filter)
-    try
-      filters = JSON.parse req.query.filter
-    catch e
-      res.jsonAPIRespond config.apiErrorResponse 'invalidFilterQuery'
-      return
+    if !_.isArray(req.query.filter) and _.isString(req.query.filter)
+      try
+        filters = JSON.parse req.query.filter
+      catch e
+        res.jsonAPIRespond config.apiErrorResponse 'invalidFilterQuery'
+        return
+    else
+      filters = req.query.filter
 
     if !checkFilterQueryProperty(filters)
       res.jsonAPIRespond config.apiErrorResponse 'invalidFilterQuery'
@@ -386,13 +399,14 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     #filters = JSON.parse req.query.filter
     for filterArr in filters
       if filterArr[1].toLowerCase() == 'like'
-        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1].toUpperCase() + ' \'%' + filterArr[2] + '%\' and '
+        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1].toUpperCase() + ' \'%' + filterArr[2] + '%\' or '
       else
-        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\' and '
+        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\' or '
 
 
-  whereString = whereString.substring(0, whereString.length - 5)
+  whereString = whereString.substring(0, whereString.length - 4)
   findCopy.where = whereString
+
 
   sequelize.query("SELECT `" + resource.tableName + "`.`id` FROM `" + resource.tableName + "` WHERE " + whereString,
   null,
@@ -409,19 +423,19 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       filterIdsArr.push obj.id
     resourceQueryParams.find.where.id = filterIdsArr
 
-
     findRealCopy = _.extend {}, resourceQueryParams.find
     delete findRealCopy.limit
     delete findRealCopy.offset
 
-
-
     if !_.isUndefined(req.query.order)
-      try
-        orders = JSON.parse req.query.order
-      catch e
-        res.jsonAPIRespond config.apiErrorResponse 'invalidOrderQuery'
-        return
+      if !_.isArray(req.query.order) and _.isString(req.query.order)
+        try
+          orders = JSON.parse req.query.order
+        catch e
+          res.jsonAPIRespond config.apiErrorResponse 'invalidOrderQuery'
+          return
+      else
+        orders = req.query.order
 
       if !checkOrderQueryProperty(orders)
         res.jsonAPIRespond config.apiErrorResponse 'invalidOrderQuery'
@@ -432,8 +446,6 @@ module.exports = (req, res, resource, resourceQueryParams) ->
         orderArray.push '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
 
       findRealCopy.order = orderArray
-
-
 
 
     #Find actualy query based on ids

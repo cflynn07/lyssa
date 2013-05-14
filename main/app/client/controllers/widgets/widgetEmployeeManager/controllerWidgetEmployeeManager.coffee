@@ -160,6 +160,40 @@ define [
               detailRow: (obj) ->
                 return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
               options:
+                bProcessing:  true
+                bServerSide:  true
+                sAjaxSource:  '/'
+                fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+
+                  sSearch = ''
+                  if oSettings and oSettings.oPreviousSearch and oSettings.oPreviousSearch.sSearch
+                    sSearch = oSettings.oPreviousSearch.sSearch
+
+                  query =
+                    offset: oSettings._iDisplayStart
+                    limit:  oSettings._iDisplayLength
+                  if sSearch.length > 0
+                    filter = [
+                      ['firstName', 'like', sSearch]
+                      ['lastName',  'like', sSearch]
+                      ['email',     'like', sSearch]
+                      ['phone',     'like', sSearch]
+                    ]
+                    query.filter = filter
+
+                  oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
+
+                    if response.code == 200
+
+                      empArr = _.toArray response.response.data
+
+                      fnCallback {
+                        iTotalRecords:        response.response.length
+                        iTotalDisplayRecords: response.response.length
+                        aaData:               empArr  #response.response.data
+                      }
+
+
                 bStateSave:      true
                 iCookieDuration: 2419200 # 1 month
                 bJQueryUI:       true
@@ -172,6 +206,9 @@ define [
                 mData: null
                 aTargets: [0]
                 mRender: (data, type, full) ->
+                  #console.log 'colrender1'
+                  #console.log arguments
+                  return full.firstName
                   return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].firstName">' + full.firstName + '</span>'
               ,
                 mData: null
@@ -201,8 +238,8 @@ define [
               ]
 
 
-          apiRequest.get 'employee', [], {}, (response) ->
-            viewModel.employees = response.response
+          #apiRequest.get 'employee', [], {}, (response) ->
+          #  viewModel.employees = response.response
 
           $scope.viewModel = viewModel
 

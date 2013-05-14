@@ -63,12 +63,10 @@ define [
               bDestroy:        true
 
 
-
-
             columnDefsCurrentDictionaryItems: [
-              mDataProp: "name"
-              aTargets: [0]
-              sWidth: '50%'
+              mDataProp:  "name"
+              aTargets:   [0]
+              sWidth:     '50%'
               mRender: (data, type, full) ->
 
                 name = 'editDictionaryItemForm' + full.uid.replace /-/g, '_'
@@ -172,23 +170,25 @@ define [
 
             apiRequest.get 'dictionary', [dictionaryUid], {}, (response) ->
 
-              title = 'Delete Dialog'
-              msg   = 'Dire Consequences...'
-              btns  = [
-                result:   false
-                label:    'Cancel'
-                cssClass: 'red'
-              ,
-                result:   true
-                label:    'Confirm'
-                cssClass: 'green'
-              ]
+              if response.code == 200
 
-              $dialog.messageBox(title, msg, btns).open()
-                .then (result) ->
-                  if result
-                    apiRequest.delete 'dictionary', dictionaryUid, (result) ->
-                      #console.log result
+                title = 'Delete Dialog'
+                msg   = 'Dire Consequences...'
+                btns  = [
+                  result:   false
+                  label:    'Cancel'
+                  cssClass: 'red'
+                ,
+                  result:   true
+                  label:    'Confirm'
+                  cssClass: 'green'
+                ]
+
+                $dialog.messageBox(title, msg, btns).open()
+                  .then (result) ->
+                    if result
+                      apiRequest.delete 'dictionary', dictionaryUid, (result) ->
+                        #console.log result
 
 
 
@@ -196,7 +196,6 @@ define [
 
             apiRequest.get 'dictionaryItem', [dictionaryItemUid], {}, (response) ->
               #console.log response
-
 
               title = 'Delete Dialog'
               msg   = 'Dire Consequences...'
@@ -234,8 +233,7 @@ define [
               #console.log response
             $scope.viewModel.cancelEditDictionaryItem()
 
-
-          $scope.viewModel.editingDictionaryItemUid = ''
+          $scope.viewModel.editingDictionaryItemUid       = ''
           $scope.viewModel.editingDictionaryItemTempValue = ''
 
 
@@ -257,8 +255,16 @@ define [
 
 
           apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
-            window.responsePlay           = response
-            $scope.viewModel.dictionaries = response.response
+
+            #dictArr = []
+            #for key, value of response.response.data
+            #  dictArr.push value
+
+            dictArr = response.response.data
+
+
+          #  window.responsePlay           = response
+            $scope.viewModel.dictionaries = dictArr
 
       ]
 

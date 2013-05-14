@@ -1,7 +1,7 @@
 <form name="<%= name %>" novalidate>
   <span
-    data-ng-model = "$parent.viewModel.dictionaries[$parent.viewModel.activeDictionaryUid].dictionaryItems[$parent.viewModel.editingDictionaryItemUid].name"
-    data-ng-hide  = "$parent.viewModel.editingDictionaryItemUid == '<%= uid %>'" ><%= data %></span>
+    data-ng-bind = "resourcePool['<%= uid %>'].name"
+    data-ng-hide = "$parent.viewModel.editingDictionaryItemUid == '<%= uid %>'" ><%= data %></span>
   <input
     name = "name"
     data-required
