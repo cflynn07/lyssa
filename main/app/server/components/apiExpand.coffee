@@ -421,9 +421,28 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
 
   whereString = whereString.substring(0, whereString.length - 4)
-  findCopy.where = whereString
 
-  console.log whereString
+  if !_.isUndefined(req.query.order)
+    if !_.isArray(req.query.order) and _.isString(req.query.order)
+      try
+        orders = JSON.parse req.query.order
+      catch e
+        res.jsonAPIRespond config.apiErrorResponse 'invalidOrderQuery'
+        return
+    else
+      orders = req.query.order
+
+    if !checkOrderQueryProperty(orders)
+      res.jsonAPIRespond config.apiErrorResponse 'invalidOrderQuery'
+      return
+
+    orderArray = []
+    if orders.length > 0
+      whereString += 'ORDER BY '
+      for order in orders
+        orderArray.push '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
+        whereString += '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
+
 
   sequelize.query("SELECT `" + resource.tableName + "`.`id` FROM `" + resource.tableName + "` WHERE " + whereString,
   null,
@@ -444,29 +463,8 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     delete findRealCopy.limit
     delete findRealCopy.offset
 
-    if !_.isUndefined(req.query.order)
-      if !_.isArray(req.query.order) and _.isString(req.query.order)
-        try
-          orders = JSON.parse req.query.order
-        catch e
-          res.jsonAPIRespond config.apiErrorResponse 'invalidOrderQuery'
-          return
-      else
-        orders = req.query.order
-
-      if !checkOrderQueryProperty(orders)
-        res.jsonAPIRespond config.apiErrorResponse 'invalidOrderQuery'
-        return
-
-      orderArray = []
-      for order in orders
-        orderArray.push '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
-
-
-      if orderArray.length > 0
-        findRealCopy.order = orderArray
-      #console.log 'findRealCopy'
-      #console.log findRealCopy
+    if !_.isUndefined(orderArray) && orderArray.length > 0
+      findRealCopy.order = orderArray
 
     #Find actualy query based on ids
     resource[resourceQueryParams.method](findRealCopy).success (topResult) ->

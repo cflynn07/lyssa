@@ -7,6 +7,7 @@ define [
   'bootstrapFileUpload'
   'bootstrap'
   'underscore'
+  'cs!utils/utilBuildDTQuery'
   'text!views/widgetEmployeeManager/viewWidgetEmployeeManager.html'
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerAddManualForm.html'
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerAddCSVForm.html'
@@ -21,6 +22,7 @@ define [
   bootstrapFileUpload
   bootstrap
   _
+  utilBuildDTQuery
   viewWidgetEmployeeManager
   viewPartialEmployeeManagerAddManualForm
   viewPartialEmployeeManagerAddCSVForm
@@ -161,14 +163,21 @@ define [
                 return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
               options:
                 bProcessing:  true
-                bServerSide:  true
-                sAjaxSource:  '/'
+                bStateSave:      true
+                iCookieDuration: 2419200 # 1 month
+                bPaginate:       true
+                bLengthChange:   true
+                bFilter:         true
+                bInfo:           true
+                bDestroy:        true
+                bServerSide:     true
+                sAjaxSource:     '/'
                 fnServerData: (sSource, aoData, fnCallback, oSettings) ->
                   #console.log 'fnServerData'
-
                   #console.log aoData
-                  console.log oSettings
+                  #console.log oSettings
 
+                  ###
                   sSearch = ''
                   if oSettings and oSettings.oPreviousSearch and oSettings.oPreviousSearch.sSearch
                     sSearch = oSettings.oPreviousSearch.sSearch
@@ -204,6 +213,11 @@ define [
                         continue
                       order.push [sortKeyName, sortArr[1]]
                     query.order = order
+                    ###
+
+                  query = utilBuildDTQuery ['firstName', 'lastName', 'email', 'phone'],
+                    ['firstName', 'lastName', 'email', 'phone'],
+                    oSettings
 
                   cacheResponse   = ''
                   oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
@@ -221,13 +235,6 @@ define [
                         aaData:               empArr  #response.response.data
                       }
 
-                bStateSave:      true
-                iCookieDuration: 2419200 # 1 month
-                bPaginate:       true
-                bLengthChange:   true
-                bFilter:         true
-                bInfo:           true
-                bDestroy:        true
 
               columnDefs: [
                 mData:     null

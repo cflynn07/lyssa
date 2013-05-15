@@ -4,6 +4,7 @@ define [
   'angular-ui'
   'bootstrap'
   'underscore'
+  'cs!utils/utilBuildDTQuery'
   'text!views/widgetDictionaryManager/viewWidgetDictionaryManager.html'
   'text!views/widgetDictionaryManager/viewWidgetDictionaryManagerDictionaryItemsButtonsEJS.html'
   'text!views/widgetDictionaryManager/viewWidgetDictionaryManagerListButtonsEJS.html'
@@ -14,6 +15,7 @@ define [
   angularUi
   bootstrap
   _
+  utilBuildDTQuery
   viewWidgetDictionaryManager
   viewWidgetDictionaryManagerDictionaryItemsButtonsEJS
   viewWidgetDictionaryManagerListButtonsEJS
@@ -41,27 +43,32 @@ define [
             newDictionaryForm:          {}
             newDictionaryItemForm:      {}
 
+
             dictionaryItemsOptions:
-              bStateSave: true
+              bStateSave:      true
               iCookieDuration: 2419200 # 1 month
-              bJQueryUI: true
-              bPaginate: true
-              bLengthChange: true
-              bFilter: true
-              bInfo: true
-              bDestroy: true
-              #sPaginationType: 'two_button'
+              bJQueryUI:       false
+              bPaginate:       true
+              bLengthChange:   true
+              bFilter:         true
+              bInfo:           true
+              bDestroy:        true
+              bServerSide:     true
+              bProcessing:     true
+              fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+
+
+
 
             dictionaryListOptions:
               bStateSave:      true
               iCookieDuration: 2419200 # 1 month
-              bJQueryUI:       true
+              bJQueryUI:       false
               bPaginate:       true
               bLengthChange:   true
               bFilter:         false
               bInfo:           true
               bDestroy:        true
-
 
             columnDefsCurrentDictionaryItems: [
               mDataProp:  "name"
@@ -71,29 +78,22 @@ define [
 
                 name = 'editDictionaryItemForm' + full.uid.replace /-/g, '_'
                 name = $scope.escapeHtml name
-                uid  = $scope.escapeHtml full.uid #.replace /-/g, ''
+                uid  = $scope.escapeHtml full.uid
 
                 html = new EJS(text: viewWidgetDictionaryManagerDictionaryItemEditEJS).render
                   name: name
                   uid:  uid
                   data: data
-
-              #  html = '<form name="' + name + '" novalidate>'
-              #  html += '<span data-ng-model="$parent.viewModel.dictionaries[$parent.viewModel.currentDictionaryUid].dictionaryItems[$parent.viewModel.editingDictionaryItemUid].name" data-ng-hide="$parent.viewModel.editingDictionaryItemUid == \'' + uid + '\'" >' + data + '</span>'
-              #  html += '<input name="name" data-required data-ng-minlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[0]}}" data-ng-maxlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[1]}}" data-ng-show="$parent.viewModel.editingDictionaryItemUid == \'' + uid + '\'" type="text" data-ng-model="$parent.viewModel.editingDictionaryItemTempValue">'
-              #  html += '<span data-ng-show="' + name + '.name.$error.minlength" style="color:red;" class="help-inline">Name must be longer than {{clientOrmShare.dictionaryItem.model.name.validate.len[0]}} characters</span>'
-              #  html += '<span data-ng-show="' + name + '.name.$error.maxlength" style="color:red;" class="help-inline">Name must be shorter than {{clientOrmShare.dictionaryItem.model.name.validate.len[1]}} characters</span>'
-              #  html += '</form>'
-
             ,
-              mData: null
+              mData:    null
               aTargets: [1]
               mRender: (data, type, full) ->
                 return '0 templates'
             ,
-              mData: null
-              sWidth: '30%'
-              aTargets: [2]
+              mData:     null
+              bSortable: false
+              sWidth:    '30%'
+              aTargets:  [2]
               mRender: (data, type, full) ->
 
                 name = 'editDictionaryItemForm' + full.uid.replace /-/g, '_'
@@ -105,12 +105,6 @@ define [
                   uid:  uid
                   full: full
 
-                #html = '<div class="inline-content" style="text-align:center;">'
-                #html += '<button data-ng-hide="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" data-ng-click="$parent.viewModel.deleteConfirmDialogDictionaryItem(\'' + full.uid + '\')" class="btn red">Delete</button>'
-                #html += ' <button data-ng-hide="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" data-ng-click="$parent.viewModel.editDictionaryItem(\'' + full.uid + '\')" class="btn blue">Edit</button>'
-                #html += ' <button data-ng-show="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" data-ng-disabled="' + name + '.$invalid" data-ng-click="$parent.viewModel.saveEditingDictionaryItem(' + name + '.$invalid' + ')" class="btn green">Save</button>'
-                #html += ' <button data-ng-show="$parent.viewModel.editingDictionaryItemUid == \'' + full.uid + '\'" data-ng-click="$parent.viewModel.cancelEditDictionaryItem()" class="btn red">Cancel</button></div>'
-
                 return html
             ]
 
@@ -118,23 +112,24 @@ define [
 
 
             columnDefsDictionaryList: [
-              mDataProp: "name"
+              mDataProp: 'name'
+              aTargets: [0]
               mRender: (data, type, full) ->
                 resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
                 resHtml += data #+ ' (' + $scope.getKeysLength(full.dictionaryItems) + ')'
                 resHtml += '</a>'
                 return resHtml
-              aTargets: [0]
             ,
-              mData: null
+              mData:  null
               sWidth: '20%'
+              aTargets: [1]
               mRender: (data, type, full) ->
                 return $scope.getKeysLength(full.dictionaryItems)
-              aTargets: [1]
             ,
-              mData: null
+              mData:     null
               bSortable: false
-              sWidth: '20%'
+              sWidth:    '20%'
+              aTargets: [2]
               mRender: (data, type, full) ->
 
                 uid      = $scope.escapeHtml(full.uid)
@@ -144,8 +139,6 @@ define [
                   uid:      uid
                   viewRoot: viewRoot
 
-                #return '<div class="inline-content" style="text-align:center;"><button data-ng-click="$parent.viewModel.deleteConfirmDialogDictionary(\'' + uid + '\')" class="btn red">Delete</button> <a href="#' + $scope.viewRoot + '/' + uid + '" class="btn blue">Edit</a></div>'
-              aTargets: [2]
             ]
 
             postNewDictionary: () ->
