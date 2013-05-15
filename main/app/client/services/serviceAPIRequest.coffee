@@ -30,16 +30,16 @@ define [
 
       #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
-        console.log 'resourcePut'
-        console.log data
+        #console.log 'resourcePut'
+        #console.log data
         $rootScope.$broadcast 'resourcePut', data #['uid']
 
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
           updatePoolResource resourcePool[data['uid']], data
 
       socket.on 'resourcePost', (data) ->
-        console.log 'resourcePost'
-        console.log data
+        #console.log 'resourcePost'
+        #console.log data
         $rootScope.$broadcast 'resourcePost', data #['uid']
 
         if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])

@@ -65,14 +65,14 @@ define [
             options = scope.$eval(attrs.dataTable)
           else
             options =
-              bStateSave: true
+              bStateSave:      true
               iCookieDuration: 2419200 # 1 month
-              bJQueryUI: true
-              bPaginate: false
-              bLengthChange: false
-              bFilter: false
-              bInfo: false
-              bDestroy: true
+              bJQueryUI:       false
+              bPaginate:       false
+              bLengthChange:   false
+              bFilter:         false
+              bInfo:           false
+              bDestroy:        true
 
           # Tell the dataTables plugin what columns to use
           # We can either derive them from the dom, or use setup from the controller
@@ -117,6 +117,16 @@ define [
           # apply the plugin
           dataTable  = element.dataTable(options)
           keysLength = scope.getKeysLength(attrs.aaData)
+
+
+
+          # This method of updating is used for server-side data tables
+          if options.bServerSide && attrs.updateOnResourcePost
+            scope.$on 'resourcePost', (e, data) ->
+              if data['resourceName'] == attrs.updateOnResourcePost
+                dataTable.fnDraw() #Will call fnServerData()
+
+
 
           # watch for any changes to our data, rebuild the DataTable
           scope.$watch attrs.aaData, (value, oldValue) ->

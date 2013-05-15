@@ -164,6 +164,10 @@ define [
                 bServerSide:  true
                 sAjaxSource:  '/'
                 fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                  #console.log 'fnServerData'
+
+                  #console.log aoData
+                  console.log oSettings
 
                   sSearch = ''
                   if oSettings and oSettings.oPreviousSearch and oSettings.oPreviousSearch.sSearch
@@ -173,16 +177,35 @@ define [
                     offset: oSettings._iDisplayStart
                     limit:  oSettings._iDisplayLength
                   if sSearch.length > 0
-                    filter = [
-                      ['firstName', 'like', sSearch]
-                      ['lastName',  'like', sSearch]
-                      ['email',     'like', sSearch]
-                      ['phone',     'like', sSearch]
-                    ]
+                    filter = []
+                    sSearchArr = sSearch.split ' '
+                    for word in sSearchArr
+                      filter.push ['firstName', 'like', word]
+                      filter.push ['lastName',  'like', word]
+                      filter.push ['email',     'like', word]
+                      filter.push ['phone',     'like', word]
                     query.filter = filter
 
 
-                  cacheResponse = ''
+                  order = []
+                  aaSorting = oSettings.aaSorting
+                  if _.isArray(aaSorting)
+                    for sortArr in aaSorting
+                      sortKeyName = ''
+                      if sortArr[0] is 0
+                        sortKeyName = 'firstName'
+                      else if sortArr[0] is 1
+                        sortKeyName = 'lastName'
+                      else if sortArr[0] is 2
+                        sortKeyName = 'email'
+                      else if sortArr[0] is 3
+                        sortKeyName = 'phone'
+                      else
+                        continue
+                      order.push [sortKeyName, sortArr[1]]
+                    query.order = order
+
+                  cacheResponse   = ''
                   oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
                     if response.code == 200
 
@@ -198,46 +221,50 @@ define [
                         aaData:               empArr  #response.response.data
                       }
 
-
                 bStateSave:      true
                 iCookieDuration: 2419200 # 1 month
-                bJQueryUI:       true
                 bPaginate:       true
                 bLengthChange:   true
                 bFilter:         true
                 bInfo:           true
                 bDestroy:        true
               columnDefs: [
-                mData: null
-                aTargets: [0]
+                mData:     null
+                bSortable: true
+                aTargets:  [0]
                 mRender: (data, type, full) ->
                   #console.log 'colrender1'
                   #console.log arguments
                   #return full.firstName
                   return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].firstName">' + full.firstName + '</span>'
               ,
-                mData: null
-                aTargets: [1]
+                mData:     null
+                bSortable: true
+                aTargets:  [1]
                 mRender: (data, type, full) ->
                   return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].lastName">' + full.lastName + '</span>'
               ,
-                mData: null
-                aTargets: [2]
+                mData:     null
+                bSortable: true
+                aTargets:  [2]
                 mRender: (data, type, full) ->
                   return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].email">' + full.email + '</span>'
               ,
-                mData: null
-                aTargets: [3]
+                mData:     null
+                bSortable: true
+                aTargets:  [3]
                 mRender: (data, type, full) ->
                   return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].phone">' + full.phone + '</span>'
               ,
-                mData: null
-                aTargets: [4]
+                mData:     null
+                bSortable: false
+                aTargets:  [4]
                 mRender: (data, type, full) ->
                   return '' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
               ,
-                mData: null
-                aTargets: [5]
+                mData:     null
+                bSortable: false
+                aTargets:  [5]
                 mRender: (data, type, full) ->
                   return new EJS({text: viewPartialEmployeeManagerListButtonsEJS}).render(full)
               ]

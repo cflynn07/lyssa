@@ -462,8 +462,11 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       for order in orders
         orderArray.push '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
 
-      findRealCopy.order = orderArray
 
+      if orderArray.length > 0
+        findRealCopy.order = orderArray
+      #console.log 'findRealCopy'
+      #console.log findRealCopy
 
     #Find actualy query based on ids
     resource[resourceQueryParams.method](findRealCopy).success (topResult) ->

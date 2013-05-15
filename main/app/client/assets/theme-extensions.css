@@ -86,7 +86,9 @@ div.page-content {
     padding-top: 5px;
     margin-top: 5px;
     min-width: 28px;
-    background-image: url(../img/sidebar-toggler-light.jpg);
+    /*
+    background-image: url(/assets/img/sidebar-toggler-light.jpg);
+    */
     background-color: silver !important;
   }
 
@@ -169,18 +171,7 @@ ul.breadcrumb {
 td.details {
     background: lightgray !important;
 }
-.dataTables_wrapper {
-  overflow-x: auto;
-  width: 100%;
-}
-@media (max-width: 480px) {
-  .dataTables_wrapper {
-    overflow-x: scroll;
-  }
-  .dataTables_wrapper td {
-    padding: 2px;
-  }
-}
+
 /*
     Customize look and feel of menu
     -------------------------------
@@ -344,6 +335,16 @@ div.header span.username {
 }
 div.dataTables_length select {
   margin-bottom: 2px;
+}
+
+@media (max-width: 768px) {
+  .dataTables_wrapper {
+    overflow-x: scroll !important;
+    width: 100% !important;
+  }
+  .dataTables_wrapper td {
+    padding: 2px;
+  }
 }
 
 /*
