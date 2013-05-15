@@ -59,6 +59,9 @@ define [
                   ['name'],
                   oSettings
 
+                if !$scope.viewModel.currentDictionaryUid
+                  return
+
                 query.filter.push ['deletedAt', '=', 'null', 'and']
                 query.filter.push ['dictionaryUid', '=', $scope.viewModel.currentDictionaryUid, 'and']
 
