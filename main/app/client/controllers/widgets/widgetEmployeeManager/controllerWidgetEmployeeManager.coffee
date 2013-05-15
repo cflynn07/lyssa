@@ -228,6 +228,7 @@ define [
                 bFilter:         true
                 bInfo:           true
                 bDestroy:        true
+
               columnDefs: [
                 mData:     null
                 bSortable: true
