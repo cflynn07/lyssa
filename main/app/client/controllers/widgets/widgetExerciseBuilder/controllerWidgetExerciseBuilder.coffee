@@ -4,6 +4,7 @@ define [
   'angular-ui'
   'underscore'
   'underscore_string'
+  'cs!utils/utilBuildDTQuery'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilder.html'
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldOpenResponse.html'
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldButtons.html'
@@ -17,6 +18,7 @@ define [
   angularUi
   _
   _string
+  utilBuildDTQuery
 
   viewWidgetExerciseBuilder
   viewWidgetExerciseBuilderFieldOpenResponse
@@ -246,25 +248,25 @@ define [
               uid = $scope.escapeHtml obj.uid
               return new EJS(text: viewWidgetExerciseBuilderDetailsEJS).render({templateUid: uid})
             columnDefs: [
-              mData:    null
-              aTargets: [0]
+              mData:     null
+              aTargets:  [0]
+              bSortable: true
               mRender: (data, type, full) ->
                 resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
-
                 if full.name
                   resHtml += '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + $scope.escapeHtml(full.name) + '</span>'
-
                 resHtml += '</a>'
-                #resHtml += '<span>{{resourcePool[\'' + $scope.escapeHtml(full.uid) + '\'].revisions}} Revisions</span>'
                 return resHtml
             ,
-              mData:    null
-              aTargets: [1]
+              mData:     null
+              aTargets:  [1]
+              bSortable: true
               mRender: (data, type, full) ->
                 resHtml = _.str.capitalize(full.type)
             ,
-              mData:      null
-              aTargets:   [2]
+              mData:     null
+              aTargets:  [2]
+              bSortable: true
               mRender: (data, type, full) ->
                 uid = $scope.escapeHtml full.uid
                 html = new EJS({text: viewWidgetExerciseBuilderTemplateListButtonsEJS}).render({templateUid: uid})
@@ -272,17 +274,44 @@ define [
             options:
               bStateSave:      true
               iCookieDuration: 2419200
-              bJQueryUI:       true
+              bJQueryUI:       false
               bPaginate:       true
               bLengthChange:   true
               bFilter:         false
               bInfo:           true
               bDestroy:        true
+              bServerSide:     true
+              bProcessing:     true
+              fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                query = utilBuildDTQuery ['name', 'type'],
+                  ['name', 'type'],
+                  oSettings
+
+                query.filter.push ['deletedAt', '=', 'null']
+                query.expand = [{
+                  resource: 'revisions'
+                }]
+
+                cacheResponse   = ''
+                oSettings.jqXHR = apiRequest.get 'template', [], query, (response) ->
+                  if response.code == 200
+
+                    responseDataString = JSON.stringify(response.response)
+                    if cacheResponse == responseDataString
+                      return
+                    cacheResponse = responseDataString
+
+                    dataArr = _.toArray response.response.data
+
+                    fnCallback
+                      iTotalRecords:        response.response.length
+                      iTotalDisplayRecords: response.response.length
+                      aaData:               dataArr
+
+
 
           deleteConfirmDialogTemplate: (templateUid) ->
-            #Delete a template
             apiRequest.get 'template', [templateUid], {}, (response) ->
-
               title = 'Delete Dialog'
               msg   = 'Dire Consequences...'
               btns  = [
@@ -294,7 +323,6 @@ define [
                 label:    'Confirm'
                 cssClass: 'green'
               ]
-
               $dialog.messageBox(title, msg, btns).open()
                 .then (result) ->
                   if result

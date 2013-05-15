@@ -2,6 +2,36 @@
   <div class="container-fluid">
     <!-- BEGIN LOGO -->
 
+
+
+    <div style="margin-bottom:0px !important;" class="btn-group pull-left">
+
+      <button class="btn detail">
+        <i style="display:none;" class="m-icon-swapup"></i>
+        <i class="m-icon-swapdown "></i> Themis
+      </button>
+
+      <a style="display:none;" data-ng-click="$parent.viewModel.editEmployee('ac4358a5-9141-4b12-9024-8fe2c9d75aca')" data-ng-class="{true:'black', false:'blue'}[viewModel.currentTemplate.uid == 'ac4358a5-9141-4b12-9024-8fe2c9d75aca']" class="btn detail blue">Other
+
+        <i class="m-icon-swapright" style=""></i>
+
+      </a>
+
+      <button class="btn dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <!-- dropdown menu links -->
+        <li>
+          <a class="" data-ng-click=""><i class="icon-trash"></i> Product A</a>
+          <a class="" data-ng-click=""><i class="icon-trash"></i> Product B</a>
+          <a class="" data-ng-click=""><i class="icon-trash"></i> Product C</a>
+        </li>
+      </ul>
+    </div>
+
+
+
     <!-- END LOGO -->
 
 
@@ -26,8 +56,8 @@
       <!-- BEGIN INBOX DROPDOWN -->
       <li class="dropdown" id="header_inbox_bar">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <i style="color:#FFF !important;" class="icon-envelope-alt"></i>
-        <span class="badge">5</span>
+          <i style="color:#FFF !important;" class="icon-envelope-alt"></i>
+          <span style="display:none;" class="badge">5</span>
         </a>
         <ul class="dropdown-menu extended inbox">
           <li>
