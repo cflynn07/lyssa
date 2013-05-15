@@ -316,6 +316,9 @@ div.header span.username {
     Minor tweaks to datatables appearance
     ----------------------------------------------
 */
+.dataTables_wrapper {
+  position: relative;
+}
 .DataTables_sort_wrapper th {
     color: #000;
 }
@@ -323,6 +326,23 @@ div.header span.username {
     display: none;
 }
 
+.dataTables_processing {
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 250px;
+  height: 30px;
+  margin-left: -125px;
+  margin-top: -15px;
+  padding: 14px 0 2px 0;
+  border: 2px solid #DDDDDD;
+  text-align: center;
+  color: #FFF;
+  font-size: 18px;
+  background-color: #4b8df8;
+  opacity: 0.9;
+}
 
 .dataTables_wrapper .row-fluid {
     min-height: 0 !important;

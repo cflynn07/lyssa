@@ -88,7 +88,7 @@ define [
               bInfo:           true
               bDestroy:        true
               bServerSide:     true
-              bProcessing:     false
+              bProcessing:     true
               fnServerData: (sSource, aoData, fnCallback, oSettings) ->
                 query = utilBuildDTQuery ['name'],
                   ['name'],
@@ -242,7 +242,7 @@ define [
 
           $scope.viewModel.editDictionaryItem = (dictionaryUid) ->
             $scope.viewModel.editingDictionaryItemUid       = dictionaryUid
-            $scope.viewModel.editingDictionaryItemTempValue = $scope.viewModel.dictionaries[$scope.viewModel.currentDictionaryUid].dictionaryItems[$scope.viewModel.editingDictionaryItemUid].name
+            $scope.viewModel.editingDictionaryItemTempValue = $scope.resourcePool[$scope.viewModel.editingDictionaryItemUid].name
           $scope.viewModel.saveEditingDictionaryItem = (isInvalid) ->
             if isInvalid
               return
