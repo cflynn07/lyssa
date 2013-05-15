@@ -266,7 +266,7 @@ define [
             ,
               mData:     null
               aTargets:  [2]
-              bSortable: true
+              bSortable: false
               mRender: (data, type, full) ->
                 uid = $scope.escapeHtml full.uid
                 html = new EJS({text: viewWidgetExerciseBuilderTemplateListButtonsEJS}).render({templateUid: uid})
@@ -412,6 +412,7 @@ define [
             if !$scope.viewModel.templates
               return
 
+
             template = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
             $scope.viewModel.currentTemplateRevision = $scope.getLastObjectFromHash template.revisions
             #console.log $scope.viewModel.currentTemplateRevision
@@ -506,7 +507,7 @@ define [
         $scope.$on '$routeChangeSuccess', () ->
           hashChangeUpdate()
 
-        $scope.viewModel.fetchTemplates()
+        #$scope.viewModel.fetchTemplates()
     ]
 
 
