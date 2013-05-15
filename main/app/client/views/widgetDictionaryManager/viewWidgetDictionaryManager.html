@@ -44,7 +44,7 @@
               <thead>
               <tr>
                   <th class = "sorting">Name</th>
-                  <th class = "sorting">Items</th>
+                  <th class = "sorting_disabled">Items</th>
                   <th class = "sorting_disabled">Actions</th>
               </tr>
               </thead>
@@ -160,7 +160,7 @@
           <div class = "portlet-body light-grey">
 
 
-            <div data-ng-hide = "viewModel.dictionaries[viewModel.currentDictionaryUid] && !viewModel.dictionaries[viewModel.currentDictionaryUid].deletedAt">
+            <div data-ng-hide = "viewModel.currentDictionaryUid && !resourcePool[viewModel.currentDictionaryUid].deletedAt">
               <div class="box template-info-box fade in ng-scope">
                 <div class="inline-content">
                   <strong><i style="vertical-align:middle; margin-top:0;" class="m-icon-big-swapleft"></i></strong><h3>Select Dictionary</h3>
@@ -171,7 +171,7 @@
 
 
 
-            <div data-ng-show = "viewModel.dictionaries[viewModel.currentDictionaryUid] && !viewModel.dictionaries[viewModel.currentDictionaryUid].deletedAt">
+            <div data-ng-show = "viewModel.currentDictionaryUid && !resourcePool[viewModel.currentDictionaryUid].deletedAt">
 
 
               <div class="box template-info-box fade in ng-scope">
@@ -291,24 +291,24 @@
 
 
 
-
-
-
               <table
-                    class                = "table table-striped table-hover table-bordered dataTable"
-                    data-data-table      = "viewModel.dictionaryItemsOptions"
-                    data-aa-data         = "viewModel.dictionaries[viewModel.currentDictionaryUid].dictionaryItems"
-                    data-ao-column-defs  = "viewModel.columnDefsCurrentDictionaryItems"
-                    data-fn-row-callback = "myCallback">
+                    class                   = "table table-striped table-hover table-bordered dataTable"
+                    data-data-table         = "viewModel.dictionaryItemsOptions"
+                    data-aa-data            = "[]"
+
+                    data-update-on-resource-post = "dictionaryItem"
+                    data-update-watch       = "viewModel.currentDictionaryUid"
+
+                    data-ao-column-defs     = "viewModel.columnDefsCurrentDictionaryItems"
+                    data-fn-row-callback    = "myCallback">
                 <thead>
                 <tr>
                     <th class = "sorting">Name</th>
-                    <th class = "sorting">Referenced in Exercises</th>
-                    <th class = "sorting">Actions</th>
+                    <th class = "sorting_disabled">#</th>
+                    <th class = "sorting_disabled">Actions</th>
                 </tr>
                 </thead>
               </table>
-
 
 
 

@@ -15,6 +15,8 @@ define [
     query =
       offset: oSettings._iDisplayStart
       limit:  oSettings._iDisplayLength
+      filter: []
+      order:  []
     if sSearch.length > 0
       filter = []
       sSearchArr = sSearch.split ' '

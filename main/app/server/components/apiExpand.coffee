@@ -325,7 +325,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       return false
 
     for val in filter
-      if !_.isArray(val) or val.length != 3
+      if !_.isArray(val) or !(val.length == 3 or val.length == 4)
         console.log 'f2'
         return false
       for subVal in val
@@ -343,6 +343,10 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       if val[2].length > 200
         console.log 'f6'
         return false
+      if val[3]
+        if (val[3] != 'and') and (val[3] != 'or')
+          console.log 'f7'
+          return false
     return true
 
   checkPropertiesAgainstResource = (property) ->
@@ -410,17 +414,25 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       filterArr[1] = sanitize(filterArr[1]).trim()
       filterArr[2] = sanitize(filterArr[2]).trim()
 
+      connector = ''
+      if !filterArr[3]
+        connector = 'or'
+      else
+        connector = filterArr[3].toUpperCase()
+
       if filterArr[1].toLowerCase() == 'like'
-        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1].toUpperCase() + ' \'%' + filterArr[2] + '%\' or '
+        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1].toUpperCase() + ' \'%' + filterArr[2] + '%\'  ' + connector + ' '
       else
 
         if (filterArr[2] == 'null') && (filterArr[1].toLowerCase() != 'like')
-          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` ' + (if filterArr[1] == '=' then 'IS' else 'IS NOT') + ' NULL or '
+          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` ' + (if filterArr[1] == '=' then 'IS' else 'IS NOT') + ' NULL   ' + connector + ' '
         else
-          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\' or '
+          whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\'   ' + connector + ' '
 
 
-  whereString = whereString.substring(0, whereString.length - 4)
+  whereString = whereString.substring(0, whereString.length - 5)
+
+
 
   if !_.isUndefined(req.query.order)
     if !_.isArray(req.query.order) and _.isString(req.query.order)
@@ -443,6 +455,9 @@ module.exports = (req, res, resource, resourceQueryParams) ->
         orderArray.push '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
         whereString += '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
 
+
+  console.log 'whereString'
+  console.log whereString
 
   sequelize.query("SELECT `" + resource.tableName + "`.`id` FROM `" + resource.tableName + "` WHERE " + whereString,
   null,

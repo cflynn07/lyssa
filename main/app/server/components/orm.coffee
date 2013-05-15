@@ -19,7 +19,7 @@ exportObj =
         underscored: false
       syncOnAssociation: false
       paranoid: true
-      logging: console.log
+      logging: false # console.log
 
     if process.env.CIRCLECI
 

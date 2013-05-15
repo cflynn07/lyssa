@@ -173,47 +173,6 @@ define [
                 bServerSide:     true
                 sAjaxSource:     '/'
                 fnServerData: (sSource, aoData, fnCallback, oSettings) ->
-                  #console.log 'fnServerData'
-                  #console.log aoData
-                  #console.log oSettings
-
-                  ###
-                  sSearch = ''
-                  if oSettings and oSettings.oPreviousSearch and oSettings.oPreviousSearch.sSearch
-                    sSearch = oSettings.oPreviousSearch.sSearch
-
-                  query =
-                    offset: oSettings._iDisplayStart
-                    limit:  oSettings._iDisplayLength
-                  if sSearch.length > 0
-                    filter = []
-                    sSearchArr = sSearch.split ' '
-                    for word in sSearchArr
-                      filter.push ['firstName', 'like', word]
-                      filter.push ['lastName',  'like', word]
-                      filter.push ['email',     'like', word]
-                      filter.push ['phone',     'like', word]
-                    query.filter = filter
-
-
-                  order = []
-                  aaSorting = oSettings.aaSorting
-                  if _.isArray(aaSorting)
-                    for sortArr in aaSorting
-                      sortKeyName = ''
-                      if sortArr[0] is 0
-                        sortKeyName = 'firstName'
-                      else if sortArr[0] is 1
-                        sortKeyName = 'lastName'
-                      else if sortArr[0] is 2
-                        sortKeyName = 'email'
-                      else if sortArr[0] is 3
-                        sortKeyName = 'phone'
-                      else
-                        continue
-                      order.push [sortKeyName, sortArr[1]]
-                    query.order = order
-                    ###
 
                   query = utilBuildDTQuery ['firstName', 'lastName', 'email', 'phone'],
                     ['firstName', 'lastName', 'email', 'phone'],
@@ -229,11 +188,11 @@ define [
                       cacheResponse = responseDataString
                       empArr = _.toArray response.response.data
 
-                      fnCallback {
+                      fnCallback
                         iTotalRecords:        response.response.length
                         iTotalDisplayRecords: response.response.length
-                        aaData:               empArr  #response.response.data
-                      }
+                        aaData:               empArr
+
 
 
               columnDefs: [

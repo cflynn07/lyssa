@@ -43,10 +43,9 @@ define [
             newDictionaryForm:          {}
             newDictionaryItemForm:      {}
 
-
             dictionaryItemsOptions:
               bStateSave:      true
-              iCookieDuration: 2419200 # 1 month
+              iCookieDuration: 2419200
               bJQueryUI:       false
               bPaginate:       true
               bLengthChange:   true
@@ -56,19 +55,65 @@ define [
               bServerSide:     true
               bProcessing:     true
               fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                query = utilBuildDTQuery ['name'],
+                  ['name'],
+                  oSettings
 
+                query.filter.push ['deletedAt', '=', 'null', 'and']
+                query.filter.push ['dictionaryUid', '=', $scope.viewModel.currentDictionaryUid, 'and']
 
+                cacheResponse   = ''
+                oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response) ->
+                  if response.code == 200
 
+                    responseDataString = JSON.stringify(response.response)
+                    if cacheResponse == responseDataString
+                      return
+                    cacheResponse = responseDataString
+
+                    dataArr = _.toArray response.response.data
+
+                    fnCallback
+                      iTotalRecords:        response.response.length
+                      iTotalDisplayRecords: response.response.length
+                      aaData:               dataArr
 
             dictionaryListOptions:
               bStateSave:      true
-              iCookieDuration: 2419200 # 1 month
+              iCookieDuration: 2419200
               bJQueryUI:       false
               bPaginate:       true
               bLengthChange:   true
               bFilter:         false
               bInfo:           true
               bDestroy:        true
+              bServerSide:     true
+              bProcessing:     false
+              fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                query = utilBuildDTQuery ['name'],
+                  ['name'],
+                  oSettings
+
+                query.filter.push ['deletedAt', '=', 'null']
+                query.expand = [{
+                  resource: 'dictionaryItems'
+                }]
+
+                cacheResponse   = ''
+                oSettings.jqXHR = apiRequest.get 'dictionary', [], query, (response) ->
+                  if response.code == 200
+
+                    responseDataString = JSON.stringify(response.response)
+                    if cacheResponse == responseDataString
+                      return
+                    cacheResponse = responseDataString
+
+                    dataArr = _.toArray response.response.data
+
+                    fnCallback
+                      iTotalRecords:        response.response.length
+                      iTotalDisplayRecords: response.response.length
+                      aaData:               dataArr
 
             columnDefsCurrentDictionaryItems: [
               mDataProp:  "name"
@@ -85,17 +130,16 @@ define [
                   uid:  uid
                   data: data
             ,
-              mData:    null
-              aTargets: [1]
+              mData:     null
+              aTargets:  [1]
               mRender: (data, type, full) ->
-                return '0 templates'
+                return '0'
             ,
               mData:     null
               bSortable: false
               sWidth:    '30%'
               aTargets:  [2]
               mRender: (data, type, full) ->
-
                 name = 'editDictionaryItemForm' + full.uid.replace /-/g, '_'
                 name = $scope.escapeHtml name
                 uid  = $scope.escapeHtml full.uid.replace /-/g, ''
@@ -108,37 +152,33 @@ define [
                 return html
             ]
 
-
-
-
             columnDefsDictionaryList: [
               mDataProp: 'name'
-              aTargets: [0]
+              aTargets:  [0]
+              bSortable: true
               mRender: (data, type, full) ->
                 resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
                 resHtml += data #+ ' (' + $scope.getKeysLength(full.dictionaryItems) + ')'
                 resHtml += '</a>'
                 return resHtml
             ,
-              mData:  null
-              sWidth: '20%'
-              aTargets: [1]
+              mData:     null
+              bSortable: false
+              sWidth:    '20%'
+              aTargets:  [1]
               mRender: (data, type, full) ->
                 return $scope.getKeysLength(full.dictionaryItems)
             ,
               mData:     null
               bSortable: false
               sWidth:    '20%'
-              aTargets: [2]
+              aTargets:  [2]
               mRender: (data, type, full) ->
-
                 uid      = $scope.escapeHtml(full.uid)
                 viewRoot = $scope.viewRoot
-
                 html = new EJS({text: viewWidgetDictionaryManagerListButtonsEJS}).render
                   uid:      uid
                   viewRoot: viewRoot
-
             ]
 
             postNewDictionary: () ->
@@ -149,22 +189,17 @@ define [
               $scope.viewModel.newDictionaryForm = {}
 
             postNewDictionaryItem: () ->
-              #console.log 'p1'
               apiRequest.post 'dictionaryItem', {
-                dictionaryUid: $scope.viewModel.dictionaries[$scope.viewModel.currentDictionaryUid].uid
+                dictionaryUid: $scope.viewModel.currentDictionaryUid
                 name:          $scope.viewModel.newDictionaryItemForm.name
               }, (response) ->
-                #console.log response
                 return
               $scope.viewModel.newDictionaryItemForm = {}
 
 
           $scope.viewModel.deleteConfirmDialogDictionary = (dictionaryUid) ->
-
             apiRequest.get 'dictionary', [dictionaryUid], {}, (response) ->
-
               if response.code == 200
-
                 title = 'Delete Dialog'
                 msg   = 'Dire Consequences...'
                 btns  = [
@@ -176,20 +211,14 @@ define [
                   label:    'Confirm'
                   cssClass: 'green'
                 ]
-
                 $dialog.messageBox(title, msg, btns).open()
                   .then (result) ->
                     if result
                       apiRequest.delete 'dictionary', dictionaryUid, (result) ->
-                        #console.log result
-
 
 
           $scope.viewModel.deleteConfirmDialogDictionaryItem = (dictionaryItemUid) ->
-
             apiRequest.get 'dictionaryItem', [dictionaryItemUid], {}, (response) ->
-              #console.log response
-
               title = 'Delete Dialog'
               msg   = 'Dire Consequences...'
               btns  = [
@@ -201,12 +230,10 @@ define [
                 label:    'Confirm'
                 cssClass: 'green'
               ]
-
               $dialog.messageBox(title, msg, btns).open()
                 .then (result) ->
                   if result
                     apiRequest.delete 'dictionaryItem', dictionaryItemUid, (result) ->
-                      #console.log result
 
 
           $scope.viewModel.cancelEditDictionaryItem = () ->
@@ -232,6 +259,7 @@ define [
 
           setCurrentDictionary = () ->
             $scope.viewModel.currentDictionaryUid = $routeParams.dictionaryUid
+            #console.log $routeParams
 
           $scope.$on '$routeChangeSuccess', () ->
             #reset forms...
@@ -247,17 +275,9 @@ define [
           setCurrentDictionary()
 
 
-          apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
-
-            #dictArr = []
-            #for key, value of response.response.data
-            #  dictArr.push value
-
-            dictArr = response.response.data
-
-
-          #  window.responsePlay           = response
-            $scope.viewModel.dictionaries = dictArr
+          #apiRequest.get 'dictionary', [], {expand: [{'resource':'dictionaryItems'}]}, (response) ->
+          #  dictArr = response.response.data
+          #  $scope.viewModel.dictionaries = dictArr
 
       ]
 

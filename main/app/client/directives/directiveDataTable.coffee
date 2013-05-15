@@ -103,12 +103,12 @@ define [
               #html = $(data.nTable).find('tbody').html()
               #$(data.nTable).find('tbody').html($compile(html)(scope))
               clearTimeout drawCallbackRender
-              drawCallbackRender = setTimeout () ->
-                bindDetailCallbacks()
-                $compile($(data.nTable).find('tbody'))(scope)
-                if !scope.$$phase
-                  scope.$apply()
-              , 0
+              #drawCallbackRender = setTimeout () ->
+              bindDetailCallbacks()
+              $compile($(data.nTable).find('tbody'))(scope)
+              if !scope.$$phase
+                scope.$apply()
+              #, 0
 
             options['fnRowCallback'] = () ->
               return
@@ -125,6 +125,18 @@ define [
             scope.$on 'resourcePost', (e, data) ->
               if data['resourceName'] == attrs.updateOnResourcePost
                 dataTable.fnDraw() #Will call fnServerData()
+            scope.$on 'resourcePut', (e, data) ->
+              if data['resourceName'] == attrs.updateOnResourcePost
+                dataTable.fnDraw() #Will call fnServerData()
+
+
+
+
+          if options.bServerSide && attrs.updateWatch
+            scope.$watch attrs.updateWatch, () ->
+              dataTable.fnDraw()
+            , true
+
 
 
 
