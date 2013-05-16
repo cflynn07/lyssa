@@ -72,8 +72,8 @@ define [
       # MSC Helpers
       attachResourcesToParentsInPool = (apiCollectionName, resources) ->
 
-        console.log 'p3'
-        console.log arguments
+        #console.log 'p3'
+        #console.log arguments
 
         if !_.isArray resources
           resources = [resources]
@@ -93,8 +93,8 @@ define [
             #Does it end in "Uid"
             if endsWith propName2, 'Uid'
 
-              console.log 'p2'
-              console.log propName2
+              #console.log 'p2'
+              #console.log propName2
 
               objHashed = {}
               uid = obj.uid
@@ -105,12 +105,12 @@ define [
                 if !_.isUndefined resourcePool[propValue2][apiCollectionName]
                   _.extend resourcePool[propValue2][apiCollectionName], objHashed
 
-                  console.log 'p1'
-                  console.log resourcePool[propValue2][apiCollectionName]
+                  #console.log 'p1'
+                  #console.log resourcePool[propValue2][apiCollectionName]
 
                 else
 
-                  console.log 'p1a'
+                  #console.log 'p1a'
 
                   resourcePool[propValue2][apiCollectionName] = {}
                   _.extend resourcePool[propValue2][apiCollectionName], objHashed

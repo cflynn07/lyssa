@@ -7,11 +7,15 @@
     <h4><span>Template Manager</span></h4>
   </div>
 
-  <div class="portlet-body light-grey">
+  <div
+    data-ng-init = "viewModel.templatesListCollapsed = false"
+    class        = "portlet-body light-grey">
     <div class="row-fluid">
 
       <!-- Templates list -->
-      <div class="span5 responsive span8">
+      <div
+        data-ng-hide = "viewModel.templatesListCollapsed"
+        class        = "span5 responsive span8">
         <div class="portlet box grey">
           <div class="portlet-title">
             <h4><span>Templates</span></h4>
@@ -55,7 +59,9 @@
         </div>
       </div><!-- /Templates list -->
 
-      <div class="span7">
+      <div
+        data-ng-class = "{'span12 no-second-box-margin':viewModel.templatesListCollapsed, span7:!viewModel.templatesListCollapsed}"
+        class = "">
 
 
 
@@ -68,7 +74,26 @@
 
         <div class="portlet box grey">
           <div class="portlet-title">
-            <h4><span>Edit Revision</span></h4>
+
+            <div class="caption pull-left">
+              <h4><span>Edit Revision</span></h4>
+            </div>
+
+            <div style="margin:0;" class="tools pull-right">
+              <a
+                data-ng-click = "viewModel.templatesListCollapsed = !viewModel.templatesListCollapsed"
+                class         = "btn mini blue">
+                <p
+                  data-ng-hide = "viewModel.templatesListCollapsed"
+                  style="margin:0;"><i class="halflings-icon white chevron-left"></i><span style="vertical-align:bottom; font-size:14px;">Expand</span></p>
+                <p
+                  data-ng-show = "viewModel.templatesListCollapsed"
+                  style="margin:0;"><span style="vertical-align:bottom; font-size:14px;">Collapse</span><i class="halflings-icon white chevron-right"></i></p>
+              </a>
+            </div>
+
+            <div class="clearfix"></div>
+
           </div>
           <!-- portlet body -->
           <div class="portlet-body light-grey">

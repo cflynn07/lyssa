@@ -380,6 +380,10 @@ define [
                   $scope.viewModel.clearnewTemplateGroupForm()
                   console.log result
 
+
+
+
+
           putTemplate: (templateUid) ->
             apiRequest.put 'template', [templateUid], {
               name: $scope.viewModel.formEditTemplateName.name

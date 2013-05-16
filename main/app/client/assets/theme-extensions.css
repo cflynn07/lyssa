@@ -147,6 +147,10 @@ ul.breadcrumb {
     box-shadow: rgba(0, 0, 0, 0.35) 4px 4px 0px 0px !important;
 }
 
+.no-second-box-margin {
+  margin: 0 !important;
+}
+
 /*
     Customizing login page & fixing css related bug with new login widget on mobile viewport widths
     -----------------------------------------------------------------------------------------------
