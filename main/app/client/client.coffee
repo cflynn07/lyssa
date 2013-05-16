@@ -154,6 +154,7 @@ require [
   'cs!controllers/widgets/widgetFullExerciseSubmitter/controllerWidgetFullExerciseSubmitter'
   'cs!controllers/widgets/widget4oh4/controllerWidget4oh4'
   'cs!controllers/widgets/widgetEmployeeManager/controllerWidgetEmployeeManager'
+  'cs!controllers/widgets/widgetQuiz/controllerWidgetQuiz'
 ], (
   $
   jqueryUi
@@ -194,6 +195,7 @@ require [
   ControllerWidgetFullExerciseSubmitter
   ControllerWidget4oh4
   ControllerWidgetEmployeeManager
+  ControllerWidgetQuiz
 ) ->
 
   #Modules
@@ -225,6 +227,9 @@ require [
   FilterDeleted CS
 
   #Routes
+  # Note: loads all application routes (for all usertypes)
+  # Function of controllerCoreWidget to determine if active route is valid
+  # given the authenticated user's type
   CS.config ($routeProvider) ->
     for key, value of clientConfig.routes
       $routeProvider.when key,
@@ -253,5 +258,6 @@ require [
   ControllerWidget4oh4                  CS
   ControllerWidgetCoreFooter            CS
   ControllerWidgetEmployeeManager       CS
+  ControllerWidgetQuiz                  CS
 
   angular.bootstrap document, ['CS']

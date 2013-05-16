@@ -13,10 +13,13 @@ body {
 }
 .page-content {
     background-color: #FAFAFA;
-    margin-left: 223px;
+    margin-left: 183px;
     border-left: 2px solid #EEE !important;
-
 }
+.page-content-quiz-mode {
+  margin-left: 0px !important;
+}
+
 .sidebar-closed ul > li > a .selected {
   right: -7px !important;
 }
@@ -50,10 +53,6 @@ body {
   }
 }
 
-
-div.page-content {
-  margin-left: 183px;
-}
 .page-sidebar ul {
   width: 185px;
   margin-top: 2px;

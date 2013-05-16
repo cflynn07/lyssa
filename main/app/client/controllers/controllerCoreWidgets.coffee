@@ -49,17 +49,20 @@ define [
 
         #Determine if this is a valid application route
         if _.isUndefined($route.current) || _.isUndefined($route.current.path) || _.isUndefined($route.current.pathValue)
-          if previousRouteTitle == ''
+          if previousRouteTitle == '' && $scope.rootUser
             window.location.hash = '/' + clientConfig.simplifiedUserCategories[$scope.rootUser.type] + '/themis'
             return
           else
             trigger4oh4()
             return
 
-        #Determine if this is a valid route for the given user-type
-        if !clientConfig.routeMatchClientType($route.current.path, $scope.rootUser.type)
-          trigger4oh4()
-          return
+
+        if !clientConfig.isRouteQuiz($route.current.path)
+          #Determine if this is a valid route for the given user-type
+          if !clientConfig.routeMatchClientType($route.current.path, $scope.rootUser.type)
+            trigger4oh4()
+            return
+
 
         if !isDerivativeRoute($route.current.pathValue.title)
 
@@ -71,6 +74,7 @@ define [
           for value in $route.current.pathValue.widgets
             addWidgets.push widget: value
           $scope.widgetRows = widgets.concat addWidgets
+
 
           #Used by widgets for forming links
           $rootScope.viewRoot = $route.current.pathValue.root

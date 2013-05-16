@@ -2,12 +2,14 @@ define [
   'jquery'
   'underscore'
   'angular'
+  'cs!config/clientConfig'
   'text!views/viewCore.html'
   'text!config/clientOrmShare.json'
 ], (
   $
   _
   angular
+  clientConfig
   viewCore
   clientOrmShare
 ) ->
@@ -67,6 +69,18 @@ define [
       #temp
       $rootScope.rootStatus    = 'loading'
       $rootScope.loadingStatus = 'Establishing Secure Connection...'
+
+
+
+      #QuizMode
+      $rootScope.$on '$routeChangeSuccess', (event, current, previous) ->
+        if clientConfig.isRouteQuiz($route.current.path)
+          $rootScope.quizMode = true
+          return
+        else
+          $rootScope.quizMode = false
+
+
 
       #Get status, determine if user is authenticated or not.
       #unauthenticated shows login prompt, authenticated shows application

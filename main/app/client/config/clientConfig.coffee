@@ -2,7 +2,22 @@ define [], () ->
 
   config =
 
+    isRouteQuiz: (path) ->
+      return (path == '/quiz/:uid')
+
     routes:
+
+
+      #Mobile Quiz
+      '/quiz/:uid':
+        title: 'quiz'
+        root: '/quiz/:uid'
+        subRoutes: []
+        widgets:   [
+          'viewWidgetQuiz'
+        ]
+
+
       #Admin Dashboard
       '/admin/themis':
         title:     'Dashboard'
@@ -13,6 +28,7 @@ define [], () ->
         widgets:   [
 
         ]
+
       #Admin template builder
       '/admin/themis/templates':
         title:     'Templates'
@@ -29,6 +45,7 @@ define [], () ->
         widgets:   [
           'viewWidgetExerciseBuilder'
         ]
+
       #Admin schedule editor
       '/admin/themis/schedule':
         title:     'Schedule'
@@ -41,6 +58,7 @@ define [], () ->
         widgets:   [
           'viewWidgetScheduler'
         ]
+
       #Admin dictionaries editor
       '/admin/themis/dictionaries':
         title:     'Dictionaries'
@@ -53,7 +71,6 @@ define [], () ->
         widgets:   [
           'viewWidgetDictionaryManager'
         ]
-
 
       #Delegate exercise submission
       '/admin/themis/employees':
@@ -68,8 +85,6 @@ define [], () ->
           'viewWidgetEmployeeManager'
         ]
 
-
-
       #Delegate exercise submission
       '/admin/themis/exercises':
         title:     'Exercises'
@@ -82,8 +97,6 @@ define [], () ->
         widgets:   [
         ]
 
-
-
       #Delegate dashboard
       '/delegate/themis':
         title:     'Dashboard'
@@ -92,7 +105,6 @@ define [], () ->
         ]
         widgets:   [
         ]
-
 
       #Delegate exercise submission
       '/delegate/themis/exercises':

@@ -23,4 +23,6 @@ define [
           socket.emit 'authenticate:unauthenticate', {}, () ->
             $rootScope.rootStatus = 'login'
             $rootScope.rootUser   = {}
+            $rootScope.resourcePool           = []
+            $rootScope.resourceCollectionPool = []
     ]

@@ -23,6 +23,9 @@ define [
     Module.controller 'ControllerWidgetCoreLeftMenu', ['$scope', '$rootScope', '$route', '$templateCache',
     ($scope, $rootScope, $route, $templateCache) ->
 
+      if $scope.quizMode
+        return
+
       $rootScope.sidebarClosedToggle = () ->
         $rootScope.sidebarClosed = !$rootScope.sidebarClosed
 

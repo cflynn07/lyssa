@@ -13,13 +13,16 @@
 
   <!-- LEFT MENU GOES HERE -->
   <div
+    data-ng-hide       = "quizMode"
     data-ng-class      = "{'in':topBarOpen}"
     style              = "z-index:1000;"
     class              = "page-sidebar nav-collapse collapse"
     data-ng-controller = "ControllerWidgetCoreLeftMenu"
     data-ng-include    = "'viewWidgetCoreLeftMenu'"></div>
 
-  <div class="page-content">
+  <div
+    data-ng-class = "{'page-content-quiz-mode':quizMode}"
+    class         = "page-content">
     <!-- PAGE CONTENT GOES HERE -->
     <div
       class              = "container-fluid"

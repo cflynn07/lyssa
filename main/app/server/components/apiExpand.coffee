@@ -450,7 +450,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
     orderArray = []
     if orders.length > 0
-      whereString += 'ORDER BY '
+      whereString += ' ORDER BY '
       for order in orders
         orderArray.push '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
         whereString += '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
