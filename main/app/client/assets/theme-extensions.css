@@ -505,7 +505,11 @@ div.controls .dataTables_wrapper .row-fluid {
 div.controls .dataTables_filter input[type=text] {
   width: 100%;
 }
-
-
-
+div.controls .dataTables_filter > label {
+  display: inline-block;
+  width: 100%;
+}
+div.controls .required {
+  color: red !important;
+}
 

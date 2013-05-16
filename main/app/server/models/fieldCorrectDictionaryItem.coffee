@@ -1,36 +1,37 @@
-# dictionary model
-
+config = require '../config/config'
 orm = require '../components/oRM'
 SEQ = orm.SEQ
 
 module.exports =
   model:
-    id:   SEQ.INTEGER
-    name:
-      type: SEQ.STRING
-      validate:
-        len: [2, 100]
+    id:      SEQ.INTEGER
 
     clientUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
         notNull: true
-    dictionaryUid:
+    dictionaryItemUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+    fieldUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
         notNull: true
+
 
   relations: [
     relation: 'belongsTo'
     model: 'client'
   ,
     relation: 'belongsTo'
-    model: 'dictionary'
+    model: 'dictionaryItem'
   ,
-    relation: 'hasMany'
-    model: 'fieldCorrectDictionaryItem'
+    relation: 'belongsTo'
+    model: 'field'
   ]
+
   options:
     paranoid: true

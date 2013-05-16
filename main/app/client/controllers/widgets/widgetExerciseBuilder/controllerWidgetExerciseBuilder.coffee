@@ -143,12 +143,19 @@ define [
           $scope.formSelectIndividualAdd.$setPristine()
           $scope.$parent.viewModel.cancelAddNewField()
 
+        $scope.isFormInvalid = () ->
+          if !$scope.formSelectIndividualAdd
+            return
+          return $scope.formSelectIndividualAdd.$invalid
+
         $scope.dictionaryListDT =
           columnDefs: [
             mData:    null
             aTargets: [0]
+            bSortable: false
+            sWidth:   '10px'
             mRender: (data, type, full) ->
-              return '<input type="checkbox"></input>' #full.name
+              return '<input type="radio" data-required name="dictionary" data-ng-model="form.dictionary" value="' + full.uid + '"></input>' #full.name
           ,
             mData:    null
             aTargets: [1]
@@ -176,7 +183,7 @@ define [
 
               query.filter.push ['deletedAt', '=', 'null']
 
-              console.log query
+              #console.log query
 
               cacheResponse   = ''
               oSettings.jqXHR = apiRequest.get 'dictionary', [], query, (response) ->

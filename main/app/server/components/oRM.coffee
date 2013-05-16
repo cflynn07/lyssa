@@ -86,6 +86,8 @@ exportObj =
       options = object.options || {}
       modelName = name.replace(/\.js$/i, '')
 
+      #console.log modelName
+
       #add uid to each model
       object.model = _.extend({uid:
         type: Sequelize.STRING

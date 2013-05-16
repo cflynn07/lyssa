@@ -1,7 +1,7 @@
  <div
   data-ng-class = "{success:formSelectIndividualAdd.name.$valid, error:!formSelectIndividualAdd.name.$valid, 'ng-pristine':formSelectIndividualAdd.name.$pristine}"
   class         = "control-group">
-  <label class="control-label">Name</label>
+  <label class="control-label">Name <span class="required">*</span></label>
   <div class="controls input-icon">
     <input
       required
@@ -45,31 +45,48 @@
   </div>
 </div>
 
-<div class="control-group">
-  <label class="control-label">Dictionary</label>
+<div
+  data-ng-class = "{success:formSelectIndividualAdd.dictionary.$valid, error:!formSelectIndividualAdd.dictionary.$valid, 'ng-pristine':formSelectIndividualAdd.dictionary.$pristine}"
+  class         = "control-group">
+  <label class="control-label">Dictionary <span class="required">*</span></label>
   <div class="controls">
 
-    <div
-      style = "color:#000; border:1px solid #999;"
-      class = "">
 
-      <div>
-        <table
-          class                   = "table table-striped table-hover table-bordered dataTable"
-          data-data-table         = "dictionaryListDT.options"
-          ao-column-defs          = "dictionaryListDT.columnDefs"
-          data-parent-model       = "viewModel"
-          update-on-resource-post = "dictionary">
-          <thead>
-            <tr>
-              <th class = "sorting"></th>
-              <th class = "sorting">Name</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
+
+    <p style="margin-bottom:5px; font-size:16px;" data-ng-show="form.dictionary">
+      <span style="margin-bottom:4px;">
+        <span class="input-success color-green">
+          <i class="icon-ok"></i>
+        </span>
+        {{resourcePool[form.dictionary].name}}
+      </span>
+      <br><a class="btn red mini" data-ng-click = "form.dictionary = false">Cancel Selection</a>
+    </p>
+
+
+
+    <div
+      data-ng-hide = "form.dictionary"
+      style        = "color:#000; border:1px solid #999;"
+      class        = "">
+
+      <table
+        class                   = "table table-striped table-hover table-bordered dataTable"
+        data-data-table         = "dictionaryListDT.options"
+        ao-column-defs          = "dictionaryListDT.columnDefs"
+        data-parent-model       = "viewModel"
+        update-on-resource-post = "dictionary">
+        <thead>
+          <tr>
+            <th class = "sorting"></th>
+            <th class = "sorting">Name</th>
+          </tr>
+        </thead>
+      </table>
 
     </div>
+
+
 
   </div>
 </div>

@@ -1986,7 +1986,7 @@ textarea.placeholder {
 }
 
 .control-label .required {
-  color: #e02222;
+  color: #e02222 !important;
   font-size: 12px;
   padding-left: 2px;
 }
