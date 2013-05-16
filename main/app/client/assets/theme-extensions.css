@@ -170,6 +170,9 @@ ul.breadcrumb {
 td.details {
     background: lightgray !important;
 }
+td.details .table-advance thead tr th {
+  background-color: #DDD !important;
+}
 
 /*
     Customize look and feel of menu

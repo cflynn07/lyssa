@@ -93,6 +93,9 @@ define [
           if attrs.fnRowCallback
             options["fnRowCallback"] = scope.$eval(attrs.fnRowCallback)
 
+
+
+
           if options
             options['fnCreatedRow'] = (nRow, aData, iDataIndex) ->
               return
@@ -105,10 +108,12 @@ define [
               clearTimeout drawCallbackRender
               #drawCallbackRender = setTimeout () ->
               bindDetailCallbacks()
+
               $compile($(data.nTable).find('tbody'))(scope)
               if !scope.$$phase
                 scope.$apply()
               #, 0
+
 
             options['fnRowCallback'] = () ->
               return

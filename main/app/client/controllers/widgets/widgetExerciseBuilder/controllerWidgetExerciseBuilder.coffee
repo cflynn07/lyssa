@@ -10,6 +10,8 @@ define [
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldButtons.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderDetailsEJS.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderTemplateListButtonsEJS.html'
+  'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderNewTemplateForm.html'
+  'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderNewGroupForm.html'
   'ejs'
   'async'
 ], (
@@ -26,6 +28,8 @@ define [
 
   viewWidgetExerciseBuilderDetailsEJS
   viewWidgetExerciseBuilderTemplateListButtonsEJS
+  viewPartialExerciseBuilderNewTemplateForm
+  viewPartialExerciseBuilderNewGroupForm
 
   EJS
   async
@@ -43,6 +47,12 @@ define [
           viewWidgetExerciseBuilderFieldOpenResponse
         $templateCache.put 'viewWidgetExerciseBuilderFieldButtons',
           viewWidgetExerciseBuilderFieldButtons
+
+        #Partials
+        $templateCache.put 'viewPartialExerciseBuilderNewTemplateForm',
+          viewPartialExerciseBuilderNewTemplateForm
+        $templateCache.put 'viewPartialExerciseBuilderNewGroupForm',
+          viewPartialExerciseBuilderNewGroupForm
     ]
 
 
@@ -114,8 +124,8 @@ define [
 
 
 
-    Module.controller 'ControllerWidgetExerciseBuilderGroupEdit', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
+    Module.controller 'ControllerWidgetExerciseBuilderGroupEdit', ['$scope', '$routeParams', 'apiRequest', '$dialog',
+      ($scope, $routeParams, apiRequest, $dialog) ->
 
         fieldTypes = [
           'OpenResponse'
@@ -134,7 +144,11 @@ define [
 
           moveGroup: (dir) ->
             newOrdinal   = $scope.group.ordinal
-            groupsLength = _.filter(_.toArray($scope.$parent.viewModel.currentTemplateRevision.groups), (item) -> !item.deletedAt).length
+
+            if !$routeParams.revisionUid
+              return
+
+            groupsLength = _.filter(_.toArray($scope.resourcePool[$routeParams.revisionUid].groups), (item) -> !item.deletedAt).length
 
             if dir == 'down'
               newOrdinal++
@@ -149,7 +163,7 @@ define [
             _$scope = $scope
             helperReorderGroupOrdinals $scope,
               apiRequest,
-              $scope.$parent.viewModel.currentTemplateRevision.groups,
+              $scope.resourcePool[$routeParams.revisionUid].groups,
               newOrdinal,
               $scope.group.uid,
               () ->
@@ -181,8 +195,8 @@ define [
 
                     helperReorderGroupOrdinals $scope,
                       apiRequest,
-                      $scope.$parent.viewModel.currentTemplateRevision.groups,
-                      _.toArray($scope.$parent.viewModel.currentTemplateRevision.groups).length,
+                      $scope.resourcePool[$routeParams.revisionUid].groups,
+                      _.toArray($scope.resourcePool[$routeParams.revisionUid].groups).length,
                       false,
                       () ->
                         console.log 'groups reindexed'
@@ -310,6 +324,7 @@ define [
 
 
 
+
           deleteConfirmDialogTemplate: (templateUid) ->
             apiRequest.get 'template', [templateUid], {}, (response) ->
               title = 'Delete Dialog'
@@ -330,18 +345,25 @@ define [
                       return
                       #console.log result
 
+
+
           clearnewTemplateGroupForm: () ->
             $scope.viewModel.showAddNewTemplateGroup = false
-            $scope.newTemplateGroupForm.$setPristine()
+            if $scope.newTemplateGroupForm
+              $scope.newTemplateGroupForm.$setPristine()
             $scope.viewModel.newTemplateGroupForm = {}
 
           clearNewTemplateForm: () ->
             $scope.viewModel.showAddNewTemplate = false
-            $scope.newTemplateForm.$setPristine()
+            if $scope.newTemplateForm
+              $scope.newTemplateForm.$setPristine()
             $scope.viewModel.newTemplateForm = {}
 
           postNewTemplateGroup: () ->
-            $groupsObj = $scope.viewModel.currentTemplateRevision.groups
+            #$groupsObj = $scope.viewModel.currentTemplateRevision.groups
+            if !$scope.viewModel.routeParams.revisionUid
+              return
+            $groupsObj = $scope.resourcePool[$scope.viewModel.routeParams.revisionUid].groups
 
             helperReorderGroupOrdinals $scope,
               apiRequest,
@@ -353,9 +375,8 @@ define [
                   name:        $scope.viewModel.newTemplateGroupForm.name
                   description: $scope.viewModel.newTemplateGroupForm.description
                   ordinal:     0
-                  revisionUid: $scope.viewModel.currentTemplateRevision.uid
+                  revisionUid: $scope.viewModel.routeParams.revisionUid
                 }, (result) ->
-
                   $scope.viewModel.clearnewTemplateGroupForm()
                   console.log result
 
@@ -365,7 +386,9 @@ define [
             }, (response) ->
               console.log response
               $scope.viewModel.showEditTemplateName      = false
-              $scope.viewModel.formEditTemplateName.name = $scope.viewModel.currentTemplate.name
+              #$scope.viewModel.formEditTemplateName.name = $scope.viewModel.currentTemplate.name
+
+
 
           postNewTemplate: () ->
             apiRequest.post 'template', {
@@ -384,6 +407,7 @@ define [
 
               console.log result
 
+          ###
           fetchTemplates: () ->
             #API request loads templats -> revisions -> groups -> fields thanks to api uid hash reconciliation
             async.parallel [
@@ -401,16 +425,29 @@ define [
               if results[0] and results[0].response
                 $scope.viewModel.templates = results[0].response.data
                 hashChangeUpdate()
+          ###
 
 
-          currentTemplateRevision: false
+
+
+
+
+
+
+
+          currentTemplateRevision: {}
           fetchCurrentTemplateRevision: () ->
             if !$scope.viewModel.routeParams.templateUid
               $scope.viewModel.currentTemplateRevision = false
               return
-
             if !$scope.viewModel.templates
               return
+            if !$scope.viewModel.routeParams.templateUid
+              return
+            return
+            $scope.resourcePool[$scope.viewModel.routeParams.templateUid]
+
+            apiRequest.get 'revision', [], {}, (response) ->
 
 
             template = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
@@ -418,17 +455,45 @@ define [
             #console.log $scope.viewModel.currentTemplateRevision
 
 
+
+
           currentTemplate: false
           fetchCurrentTemplate: () ->
             if !$scope.viewModel.routeParams.templateUid
               $scope.viewModel.currentTemplate = false
               return
+            apiRequest.get 'template', [$scope.viewModel.routeParams.templateUid], {
+              expand: [{
+                resource: 'revisions',
+                expand: [{resource: 'groups'}]
+              }]
+            }, (response) ->
+              if response.code == 200
+                #console.log 'first response'
+                #console.log response
 
-            if !$scope.viewModel.templates
-              return
+                groupUids = []
+                for prop1, template of response.response.data
+                  for prop2, revision of template.revisions
+                    for prop3, group of revision.groups
+                      groupUids.push group.uid
 
-            $scope.viewModel.currentTemplate = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
+                apiRequest.get 'group', groupUids, {
+                  expand: [{resource: 'fields'}]
+                }, (response) ->
+                  #console.log 'groups'
+                  #console.log response
+
+
+            #$scope.viewModel.currentTemplate = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
             #console.log $scope.viewModel.currentTemplate
+
+
+
+
+
+
+
 
 
 
@@ -501,13 +566,18 @@ define [
         hashChangeUpdate = () ->
           $scope.viewModel.showEditTemplateName = false
           $scope.viewModel.routeParams          = $routeParams
-          $scope.viewModel.fetchCurrentTemplateRevision()
-          $scope.viewModel.fetchCurrentTemplate()
+          if $routeParams.templateUid
+            $scope.viewModel.fetchCurrentTemplate()
+          #$scope.viewModel.fetchCurrentTemplateRevision()
+          #$scope.viewModel.fetchCurrentTemplate()
+
 
         $scope.$on '$routeChangeSuccess', () ->
           hashChangeUpdate()
 
-        #$scope.viewModel.fetchTemplates()
+        hashChangeUpdate()
+        $scope.viewModel.fetchCurrentTemplate()
+
     ]
 
 

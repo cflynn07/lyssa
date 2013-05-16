@@ -38,8 +38,8 @@ define [
           updatePoolResource resourcePool[data['uid']], data
 
       socket.on 'resourcePost', (data) ->
-        #console.log 'resourcePost'
-        #console.log data
+        console.log 'resourcePost'
+        console.log data
         $rootScope.$broadcast 'resourcePost', data #['uid']
 
         if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])
@@ -47,30 +47,33 @@ define [
 
           #turn it into a hash obj on uid
           obj = {}
-          obj[data['resource']['uid']] = data['resource']
-          data['resource'] = obj
+          uid = data['resource']['uid']
+          obj[uid] = data['resource']
 
           #Add in to resourcePool also (this might be happening twice)
-          _.extend resourcePool, data['resource']
+          _.extend resourcePool, obj
+
+          #data['resource'] = resourcePool[obj.uid]
+
           #attach to parent resources if exist
           attachResourcesToParentsInPool data['apiCollectionName'], data['resource']
 
-          ###
-          addResourcesToOpenEndedGet data['apiCollectionName'],
-            data['resourceName'],
-            data['resource'],
-            {},
-            false
-          ###
+
+          #addResourcesToOpenEndedGet data['apiCollectionName'],
+          #  data['resourceName'],
+          #  data['resource'],
+          #  {},
+          #  false
+
 
 
 
       #
       # MSC Helpers
-      #
-      # TODO: FIX
       attachResourcesToParentsInPool = (apiCollectionName, resources) ->
-        return
+
+        console.log 'p3'
+        console.log arguments
 
         if !_.isArray resources
           resources = [resources]
@@ -82,13 +85,35 @@ define [
         for obj in resources
           for propName, propValue of obj #HASH
 
-            for propName2, propValue2 of propValue  #RESOURCE OBJECT
-              #Does it end in "Uid"
-              if endsWith propName2, 'Uid'
-                #Does the resource/hash (propValue2) exist in our pool?
-                if !_.isUndefined resourcePool[propValue2]
-                  if !_.isUndefined resourcePool[propValue2][apiCollectionName]
-                    _.extend resourcePool[propValue2][apiCollectionName], obj
+            propName2 = propName
+            propValue2 = propValue
+
+            #for propName2, propValue2 of propValue  #RESOURCE OBJECT
+
+            #Does it end in "Uid"
+            if endsWith propName2, 'Uid'
+
+              console.log 'p2'
+              console.log propName2
+
+              objHashed = {}
+              uid = obj.uid
+              objHashed[uid] = obj
+
+              #Does the resource/hash (propValue2) exist in our pool?
+              if !_.isUndefined resourcePool[propValue2]
+                if !_.isUndefined resourcePool[propValue2][apiCollectionName]
+                  _.extend resourcePool[propValue2][apiCollectionName], objHashed
+
+                  console.log 'p1'
+                  console.log resourcePool[propValue2][apiCollectionName]
+
+                else
+
+                  console.log 'p1a'
+
+                  resourcePool[propValue2][apiCollectionName] = {}
+                  _.extend resourcePool[propValue2][apiCollectionName], objHashed
 
 
 
@@ -233,6 +258,7 @@ define [
 
           #Opportunity to return from cache, then update cache if
           #we have all of the specified uids in the resourcePool
+          ###
           allUids = true
           if uids.length > 0
             respObj = {}
@@ -245,7 +271,8 @@ define [
             if allUids
               callback({code: 200, response: respObj})
           else
-            allUids = false
+          ###
+          allUids = false
 
 
           if uids.length == 0

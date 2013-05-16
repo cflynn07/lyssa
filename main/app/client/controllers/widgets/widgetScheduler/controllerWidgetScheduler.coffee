@@ -33,7 +33,7 @@ define [
           options:
             bStateSave:      true
             iCookieDuration: 2419200
-            bJQueryUI:       true
+            bJQueryUI:       false
             bPaginate:       true
             bLengthChange:   true
             bFilter:         false
