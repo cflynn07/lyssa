@@ -23,8 +23,8 @@ define [
       $templateCache.put 'viewCore', viewCore
     ]
 
-    Module.controller 'ControllerApp' , ['$rootScope', '$route', 'socket', 'authenticate',
-    ($rootScope, $route, socket, authenticate) ->
+    Module.controller 'ControllerApp' , ['$rootScope', '$route', '$routeParams', 'socket', 'authenticate',
+    ($rootScope, $route, $routeParams, socket, authenticate) ->
 
 
       #Global Helpers
@@ -70,10 +70,12 @@ define [
       $rootScope.rootStatus    = 'loading'
       $rootScope.loadingStatus = 'Establishing Secure Connection...'
 
-
+      $rootScope.routeParams = $routeParams
 
       #QuizMode
       $rootScope.$on '$routeChangeSuccess', (event, current, previous) ->
+        $rootScope.routeParams = $routeParams
+
         if clientConfig.isRouteQuiz($route.current.path)
           $rootScope.quizMode = true
           return

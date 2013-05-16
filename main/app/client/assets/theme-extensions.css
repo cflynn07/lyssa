@@ -143,6 +143,10 @@ body {
     box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35);// !important;
 }
 
+.widget-themis-finish .portlet.box.grey {
+  box-shadow: 1px 1px rgba(0,0,0,0.5);
+}
+
 ul.breadcrumb {
     box-shadow: rgba(0, 0, 0, 0.35) 4px 4px 0px 0px !important;
 }
@@ -495,6 +499,12 @@ div[data-ui-sortable] {
   min-height: 40px;
 }
 
+div.controls .dataTables_wrapper .row-fluid {
+  background-color: #EEE;
+}
+div.controls .dataTables_filter input[type=text] {
+  width: 100%;
+}
 
 
 

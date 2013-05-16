@@ -90,6 +90,7 @@ else
           'uuid':                     'vendor/uuid'
           'ejs':                      'vendor/ejs'
           'async':                    'vendor/async'
+          'jqueryTouchPunch':         'vendor/jquery.touch.punch'
         uglify:
           no_mangle: true
         hbs:
@@ -142,6 +143,8 @@ else
             deps:    ['underscore']
           jqueryMaskedInput:
             deps:    ['jquery', 'jqueryBrowser']
+          jqueryTouchPunch:
+            deps:    ['jquery']
 
 
           #File-upload assets

@@ -46,6 +46,7 @@ requirejs.config
     'uuid':                     'vendor/uuid'
     'ejs':                      'vendor/ejs'
     'async':                    'vendor/async'
+    'jqueryTouchPunch':         'vendor/jquery.touch.punch'
   hbs:
     disableI18n: true
     helperDirectory: 'views/helpers/'
@@ -96,6 +97,8 @@ requirejs.config
       deps:    ['underscore']
     jqueryMaskedInput:
       deps:    ['jquery', 'jqueryBrowser']
+    jqueryTouchPunch:
+      deps:    ['jquery']
 
 
     #File-upload assets
@@ -117,6 +120,7 @@ requirejs.config
 require [
   'jquery'
   'jquery-ui'
+  'jqueryTouchPunch'
   'bootstrap-toggle-buttons'
   'fullCalendar'
   'bootstrap'
@@ -158,6 +162,7 @@ require [
 ], (
   $
   jqueryUi
+  jqueryTouchPunch
   bootstrapToggleButtons
   jqueryFullCalendar
   bootstrap

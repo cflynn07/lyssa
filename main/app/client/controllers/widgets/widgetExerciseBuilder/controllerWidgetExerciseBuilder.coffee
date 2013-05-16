@@ -12,6 +12,9 @@ define [
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderTemplateListButtonsEJS.html'
   'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderNewTemplateForm.html'
   'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderNewGroupForm.html'
+  'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderGroupMenu.html'
+  'text!views/widgetExerciseBuilder/formPartials/viewPartialExerciseBuilderGroupFieldOpenResponse.html'
+  'text!views/widgetExerciseBuilder/formPartials/viewPartialExerciseBuilderGroupFieldSelectIndividual.html'
   'ejs'
   'async'
 ], (
@@ -30,6 +33,9 @@ define [
   viewWidgetExerciseBuilderTemplateListButtonsEJS
   viewPartialExerciseBuilderNewTemplateForm
   viewPartialExerciseBuilderNewGroupForm
+  viewPartialExerciseBuilderGroupMenu
+  viewPartialExerciseBuilderGroupFieldOpenResponse
+  viewPartialExerciseBuilderGroupFieldSelectIndividual
 
   EJS
   async
@@ -53,6 +59,14 @@ define [
           viewPartialExerciseBuilderNewTemplateForm
         $templateCache.put 'viewPartialExerciseBuilderNewGroupForm',
           viewPartialExerciseBuilderNewGroupForm
+        $templateCache.put 'viewPartialExerciseBuilderGroupMenu',
+          viewPartialExerciseBuilderGroupMenu
+
+        #Partials -- field adds
+        $templateCache.put 'viewPartialExerciseBuilderGroupFieldOpenResponse',
+          viewPartialExerciseBuilderGroupFieldOpenResponse
+        $templateCache.put 'viewPartialExerciseBuilderGroupFieldSelectIndividual',
+          viewPartialExerciseBuilderGroupFieldSelectIndividual
     ]
 
 
@@ -112,14 +126,104 @@ define [
             ordinal:  0
           }, (response) ->
             console.log response
-
           $scope.cancelAddNewField()
 
 
         $scope.isFormInvalid = () ->
+          if !$scope.formOpenResponseAdd
+            return
           return $scope.formOpenResponseAdd.$invalid
+    ]
+    Module.controller 'ControllerWidgetExerciseBuilderGroupFieldSelectIndividual', ['$scope', 'apiRequest', '$dialog',
+      ($scope, apiRequest, $dialog) ->
+        $scope.form = {}
+
+        $scope.cancelAddNewField = () ->
+          $scope.form = {}
+          $scope.formSelectIndividualAdd.$setPristine()
+          $scope.$parent.viewModel.cancelAddNewField()
+
+        $scope.dictionaryListDT =
+          columnDefs: [
+            mData:    null
+            aTargets: [0]
+            mRender: (data, type, full) ->
+              return '<input type="checkbox"></input>' #full.name
+          ,
+            mData:    null
+            aTargets: [1]
+            mRender: (data, type, full) ->
+              return full.name
+          ]
+          options:
+            bStateSave:      true
+            iCookieDuration: 2419200
+            bJQueryUI:       false
+            bPaginate:       true
+            bLengthChange:   false
+            bFilter:         true
+            bInfo:           true
+            bDestroy:        true
+            bServerSide:     true
+            bProcessing:     true
+            fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+              query = utilBuildDTQuery ['name'],
+                ['name'],
+                oSettings
+
+              if query.filter and !_.isUndefined(query.filter[0])
+                query.filter[0][3] = 'and'
+
+              query.filter.push ['deletedAt', '=', 'null']
+
+              console.log query
+
+              cacheResponse   = ''
+              oSettings.jqXHR = apiRequest.get 'dictionary', [], query, (response) ->
+                #console.log 'response'
+                if response.code == 200
+
+                  responseDataString = JSON.stringify(response.response)
+                  if cacheResponse == responseDataString
+                    return
+                  cacheResponse = responseDataString
+
+                  dataArr = _.toArray response.response.data
+
+                  fnCallback
+                    iTotalRecords:        response.response.length
+                    iTotalDisplayRecords: response.response.length
+                    aaData:               dataArr
 
 
+    ]
+    Module.controller 'ControllerWidgetExerciseBuilderGroupFieldSelectMultiple', ['$scope', 'apiRequest', '$dialog',
+      ($scope, apiRequest, $dialog) ->
+        $scope.form = {}
+
+        $scope.cancelAddNewField = () ->
+          $scope.form = {}
+          $scope.formSelectMultipleAdd.$setPristine()
+          $scope.$parent.viewModel.cancelAddNewField()
+
+    ]
+    Module.controller 'ControllerWidgetExerciseBuilderGroupFieldYesNo', ['$scope', 'apiRequest', '$dialog',
+      ($scope, apiRequest, $dialog) ->
+        $scope.form = {}
+
+        $scope.cancelAddNewField = () ->
+          $scope.form = {}
+          $scope.formYesNoAdd.$setPristine()
+          $scope.$parent.viewModel.cancelAddNewField()
+    ]
+    Module.controller 'ControllerWidgetExerciseBuilderGroupFieldPercentageSlider', ['$scope', 'apiRequest', '$dialog',
+      ($scope, apiRequest, $dialog) ->
+        $scope.form = {}
+
+        $scope.cancelAddNewField = () ->
+          $scope.form = {}
+          $scope.formPercentageSliderAdd.$setPristine()
+          $scope.$parent.viewModel.cancelAddNewField()
     ]
 
 
@@ -246,6 +350,20 @@ define [
       ($scope, $route, $routeParams, $templateCache, socket, apiRequest, $dialog) ->
 
         $scope.viewModel =
+
+          toggleTemplatesListCollapsed: () ->
+
+            options = {}
+            options.direction = 'left'
+
+            if !$scope.viewModel.templatesListCollapsed
+              $('#templatesListPortlet').effect 'blind', {direction:'left'}, () ->
+                $scope.viewModel.templatesListCollapsed = !$scope.viewModel.templatesListCollapsed
+                if !$scope.$$phase
+                  $scope.$apply()
+            else
+              $scope.viewModel.templatesListCollapsed = !$scope.viewModel.templatesListCollapsed
+
 
           showAddNewTemplate:      false
           showAddNewTemplateGroup: false
@@ -540,27 +658,25 @@ define [
 
         #Hack to update children, with rate limiting for performance
         rateLimit = null
-        $scope.$on 'resourcePut', (data, uid) ->
+        $scope.$on 'resourcePut', (e, data) ->
+
+          if !$scope.routeParams.revisionUid
+            return
+
+          groupUids = []
 
           found = false
-          for templateUid, template of $scope.viewModel.templates
-            if found
-              break
-            for revisionUid, revision of template.revisions
-              if found
+          for groupUid, group of $scope.resourcePool[$scope.routeParams.revisionUid].groups
+            groupUids.push groupUid
+            for fieldUid, field of group.fields
+              if fieldUid == data['uid']
+                found = true
                 break
-              for groupUid, group of revision.groups
-                if found
-                  break
-                for fieldUid, field of group.fields
-                  if fieldUid == uid
-                    found = true
-                    break
 
           if found
             clearTimeout rateLimit
             rateLimit = setTimeout () ->
-              apiRequest.get 'group', [], {expand: [{resource: 'fields'}]}, (response) ->
+              apiRequest.get 'group', groupUids, {expand: [{resource: 'fields'}]}, (response) ->
                 console.log 'GET groups.fields'
                 console.log response
             , 100

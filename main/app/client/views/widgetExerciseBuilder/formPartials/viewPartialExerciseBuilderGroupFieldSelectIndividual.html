@@ -1,0 +1,75 @@
+ <div
+  data-ng-class = "{success:formSelectIndividualAdd.name.$valid, error:!formSelectIndividualAdd.name.$valid, 'ng-pristine':formSelectIndividualAdd.name.$pristine}"
+  class         = "control-group">
+  <label class="control-label">Name</label>
+  <div class="controls input-icon">
+    <input
+      required
+      class             = "large m-wrap"
+      data-ng-minlength = "{{clientOrmShare.field.model.name.validate.len[0]}}"
+      data-ng-maxlength = "{{clientOrmShare.field.model.name.validate.len[1]}}"
+      data-ng-model     = "form.name"
+      type              = "text"
+      name              = "name">
+
+    <span class="input-success">
+      <i class="icon-ok"></i>
+    </span>
+
+    <span class="input-error">
+      <i class="icon-exclamation-sign"></i>
+    </span>
+
+    <div class="clear"></div>
+
+    <span
+      data-ng-show = "formSelectIndividualAdd.name.$error.minlength"
+      class        = "help-inline">Name must be longer than {{clientOrmShare.field.model.name.validate.len[0]}} characters</span>
+
+    <span
+      data-ng-show = "formSelectIndividualAdd.name.$error.maxlength"
+      class        = "help-inline">Name must be shorter than {{clientOrmShare.field.model.name.validate.len[1]}} characters</span>
+
+  </div>
+</div>
+
+
+<div class="control-group">
+  <label class="control-label">Description</label>
+  <div class="controls">
+    <textarea
+      data-ng-model = "form.description"
+      name          = "description"
+      class         = "large m-wrap"
+      rows          = "3"></textarea>
+  </div>
+</div>
+
+<div class="control-group">
+  <label class="control-label">Dictionary</label>
+  <div class="controls">
+
+    <div
+      style = "color:#000; border:1px solid #999;"
+      class = "">
+
+      <div>
+        <table
+          class                   = "table table-striped table-hover table-bordered dataTable"
+          data-data-table         = "dictionaryListDT.options"
+          ao-column-defs          = "dictionaryListDT.columnDefs"
+          data-parent-model       = "viewModel"
+          update-on-resource-post = "dictionary">
+          <thead>
+            <tr>
+              <th class = "sorting"></th>
+              <th class = "sorting">Name</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+</div>
