@@ -11,7 +11,7 @@
  Target Server Version : 50610
  File Encoding         : utf-8
 
- Date: 05/16/2013 18:39:31 PM
+ Date: 05/17/2013 00:40:42 AM
 */
 
 SET NAMES utf8;
@@ -38,9 +38,9 @@ CREATE TABLE `clients` (
   `updatedAt` datetime NOT NULL,
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uid` (`uid`) USING BTREE,
+  UNIQUE KEY `uid` (`uid`),
   UNIQUE KEY `indentifier` (`identifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Records of `clients`
@@ -68,7 +68,7 @@ CREATE TABLE `dictionaries` (
   KEY `fk_dictionaries_clients2` (`clientUid`),
   CONSTRAINT `fk_dictionaries_clients1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_dictionaries_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Records of `dictionaries`
@@ -102,7 +102,7 @@ CREATE TABLE `dictionaryItems` (
   CONSTRAINT `fk_dictionaryItems_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_dictionaryItems_dictionaries1` FOREIGN KEY (`dictionaryId`) REFERENCES `dictionaries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_dictionaryItems_dictionaries2` FOREIGN KEY (`dictionaryUid`) REFERENCES `dictionaries` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Records of `dictionaryItems`
@@ -137,7 +137,7 @@ CREATE TABLE `employees` (
   KEY `clientUid` (`clientUid`),
   CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11421 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=11421 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Records of `employees`
@@ -177,7 +177,7 @@ CREATE TABLE `eventParticipants` (
   CONSTRAINT `fk_eventParticipants_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_eventParticipants_events1` FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_eventParticipants_events2` FOREIGN KEY (`eventUid`) REFERENCES `events` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Table structure for `events`
@@ -211,7 +211,7 @@ CREATE TABLE `events` (
   CONSTRAINT `fk_events_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_events_employees1` FOREIGN KEY (`employeeId`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_events_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Records of `events`
@@ -251,7 +251,7 @@ CREATE TABLE `fieldCorrectDictionaryItems` (
   CONSTRAINT `fk_fieldCorrectDictionaryItems_fields2` FOREIGN KEY (`fieldId`) REFERENCES `fields` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_fieldCorrectDictionaryItems_dictionaryItems1` FOREIGN KEY (`dictionaryItemId`) REFERENCES `dictionaryItems` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_fieldCorrectDictionaryItems_dictionaryItems2` FOREIGN KEY (`dictionaryItemUid`) REFERENCES `dictionaryItems` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Table structure for `fields`
@@ -263,6 +263,7 @@ CREATE TABLE `fields` (
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `type` enum('openResponse','selectIndividual','selectMultiple','yesNo','slider') COLLATE utf8_bin DEFAULT NULL,
   `ordinal` int(11) NOT NULL DEFAULT '0',
+  `multiSelectCorrectRequirement` enum('any','all') COLLATE utf8_bin NOT NULL,
   `clientUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `groupUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `dictionaryUid` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -286,13 +287,13 @@ CREATE TABLE `fields` (
   CONSTRAINT `fk_fields_dictionaries2` FOREIGN KEY (`dictionaryUid`) REFERENCES `dictionaries` (`uid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_fields_groups1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_fields_groups2` FOREIGN KEY (`groupUid`) REFERENCES `groups` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Records of `fields`
 -- ----------------------------
 BEGIN;
-INSERT INTO `fields` VALUES ('5c2160df-b51f-4d73-8dde-3a3bc69c145b', '1', 'test name', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', null, '2013-05-07 00:10:36', '2013-05-07 00:10:36', null, '1', '26', null), ('9069caf7-1e5c-4343-a09c-fdcffd2085f5', '2', 'test new field', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', null, '2013-05-07 00:12:29', '2013-05-07 00:12:29', null, '1', '26', null), ('fa540ec5-a0ce-4179-b080-8b2c5df6f28b', '3', 'open response question', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', null, '2013-05-07 00:21:58', '2013-05-07 00:21:58', null, '1', '26', null), ('a7302ec0-8e47-478c-bb3a-3cd6f7cb83ec', '4', 'Question 1', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'f92a0b84-a708-4ce4-affa-212e8eecd263', null, '2013-05-07 00:39:36', '2013-05-08 02:31:07', null, '1', '27', null), ('6af7fc7f-736d-4396-891f-d4e8a93e1e28', '5', 'Second Open Response', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', null, '2013-05-07 00:58:46', '2013-05-08 02:25:48', null, '1', '7', null), ('de5bb6c2-aa39-4bda-836d-dda758c87763', '6', 'NEIN NEIN NEIN', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', '4e7540b5-a45f-4cd4-a08f-d691d871b33e', null, '2013-05-07 01:02:27', '2013-05-08 02:31:09', null, '1', '11', null), ('00892107-b0a8-4b62-8363-b8a4922736f1', '7', 'welcome 123', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', null, '2013-05-07 01:16:05', '2013-05-08 02:25:48', null, '1', '7', null), ('144bc5b1-8d4b-4b16-8804-a73af9c56086', '8', 'New Question', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'f92a0b84-a708-4ce4-affa-212e8eecd263', null, '2013-05-07 01:22:20', '2013-05-08 02:31:09', null, '1', '27', null), ('43bef3de-c48e-4dcd-a096-4ebed30e4154', '9', 'Open Response', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', '844e9167-323f-4295-8e5c-cf7c14d88849', null, '2013-05-07 18:05:50', '2013-05-08 02:31:03', null, '1', '28', null), ('72e39d49-f4ae-4c92-b061-d7e9b8cc5588', '10', 'Renamed Field234', 'openResponse', '1', '44cc27a5-af8b-412f-855a-57c8205d86f5', '844e9167-323f-4295-8e5c-cf7c14d88849', null, '2013-05-07 18:06:39', '2013-05-08 02:31:03', null, '1', '28', null), ('29693c01-aebc-4c48-be47-bad0c4655959', '11', 'Open Reponse A1', 'openResponse', '0', '44cc27a5-af8b-412f-855a-57c8205d86f5', '4e7540b5-a45f-4cd4-a08f-d691d871b33e', null, '2013-05-08 02:28:00', '2013-05-08 02:31:09', null, '1', '11', null);
+INSERT INTO `fields` VALUES ('5c2160df-b51f-4d73-8dde-3a3bc69c145b', '1', 'test name', 'openResponse', '0', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', null, '2013-05-07 00:10:36', '2013-05-07 00:10:36', null, '1', '26', null), ('9069caf7-1e5c-4343-a09c-fdcffd2085f5', '2', 'test new field', 'openResponse', '0', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', null, '2013-05-07 00:12:29', '2013-05-07 00:12:29', null, '1', '26', null), ('fa540ec5-a0ce-4179-b080-8b2c5df6f28b', '3', 'open response question', 'openResponse', '0', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'fc7c32e1-3415-4ee8-b561-0256693d4c46', null, '2013-05-07 00:21:58', '2013-05-07 00:21:58', null, '1', '26', null), ('a7302ec0-8e47-478c-bb3a-3cd6f7cb83ec', '4', 'Question 1', 'openResponse', '0', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'f92a0b84-a708-4ce4-affa-212e8eecd263', null, '2013-05-07 00:39:36', '2013-05-08 02:31:07', null, '1', '27', null), ('6af7fc7f-736d-4396-891f-d4e8a93e1e28', '5', 'Second Open Response', 'openResponse', '1', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', null, '2013-05-07 00:58:46', '2013-05-08 02:25:48', null, '1', '7', null), ('de5bb6c2-aa39-4bda-836d-dda758c87763', '6', 'NEIN NEIN NEIN', 'openResponse', '1', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', '4e7540b5-a45f-4cd4-a08f-d691d871b33e', null, '2013-05-07 01:02:27', '2013-05-08 02:31:09', null, '1', '11', null), ('00892107-b0a8-4b62-8363-b8a4922736f1', '7', 'welcome 123', 'openResponse', '0', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', '0f890de6-1c69-4f3c-b421-dc42275cfe38', null, '2013-05-07 01:16:05', '2013-05-08 02:25:48', null, '1', '7', null), ('144bc5b1-8d4b-4b16-8804-a73af9c56086', '8', 'New Question', 'openResponse', '1', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', 'f92a0b84-a708-4ce4-affa-212e8eecd263', null, '2013-05-07 01:22:20', '2013-05-08 02:31:09', null, '1', '27', null), ('43bef3de-c48e-4dcd-a096-4ebed30e4154', '9', 'Open Response', 'openResponse', '0', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', '844e9167-323f-4295-8e5c-cf7c14d88849', null, '2013-05-07 18:05:50', '2013-05-08 02:31:03', null, '1', '28', null), ('72e39d49-f4ae-4c92-b061-d7e9b8cc5588', '10', 'Renamed Field234', 'openResponse', '1', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', '844e9167-323f-4295-8e5c-cf7c14d88849', null, '2013-05-07 18:06:39', '2013-05-08 02:31:03', null, '1', '28', null), ('29693c01-aebc-4c48-be47-bad0c4655959', '11', 'Open Reponse A1', 'openResponse', '0', 'any', '44cc27a5-af8b-412f-855a-57c8205d86f5', '4e7540b5-a45f-4cd4-a08f-d691d871b33e', null, '2013-05-08 02:28:00', '2013-05-08 02:31:09', null, '1', '11', null);
 COMMIT;
 
 -- ----------------------------
@@ -322,7 +323,7 @@ CREATE TABLE `groups` (
   CONSTRAINT `fk_groups_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_groups_revisions1` FOREIGN KEY (`revisionId`) REFERENCES `revisions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_groups_revisions2` FOREIGN KEY (`revisionUid`) REFERENCES `revisions` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Records of `groups`
@@ -364,7 +365,7 @@ CREATE TABLE `revisions` (
   CONSTRAINT `fk_revisions_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_revisions_templates1` FOREIGN KEY (`templateId`) REFERENCES `templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_revisions_templates2` FOREIGN KEY (`templateUid`) REFERENCES `templates` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Records of `revisions`
@@ -398,7 +399,7 @@ CREATE TABLE `submissionFields` (
   CONSTRAINT `fk_submissionFields_clients2` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissionFields_submissionGroups1` FOREIGN KEY (`submissionGroupId`) REFERENCES `submissionGroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissionFields_submissionGroups2` FOREIGN KEY (`submissionGroupUid`) REFERENCES `submissionGroups` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Table structure for `submissionGroups`
@@ -425,7 +426,7 @@ CREATE TABLE `submissionGroups` (
   CONSTRAINT `fk_submissionGroups_submissions1` FOREIGN KEY (`submissionId`) REFERENCES `submissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissionGroups_submissions2` FOREIGN KEY (`clientId`) REFERENCES `submissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissionGroups_submissions3` FOREIGN KEY (`submissionUid`) REFERENCES `submissions` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Table structure for `submissions`
@@ -457,7 +458,7 @@ CREATE TABLE `submissions` (
   CONSTRAINT `fk_submissions_employees2` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissions_events1` FOREIGN KEY (`eventId`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_submissions_events2` FOREIGN KEY (`eventUid`) REFERENCES `events` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Table structure for `templates`
@@ -485,7 +486,7 @@ CREATE TABLE `templates` (
   CONSTRAINT `templates_ibfk_2` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `templates_ibfk_3` FOREIGN KEY (`employeeUid`) REFERENCES `employees` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `templates_ibfk_4` FOREIGN KEY (`clientUid`) REFERENCES `clients` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Records of `templates`

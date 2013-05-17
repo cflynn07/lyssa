@@ -12,7 +12,8 @@ body {
     overflow-y: scroll;
 }
 .page-content {
-    background-color: #FAFAFA;
+    //background-color: #FAFAFA;
+    background-color: #FFF;
     margin-left: 183px;
     border-left: 2px solid #EEE !important;
 }

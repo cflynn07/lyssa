@@ -14,6 +14,12 @@ module.exports =
     type:    SEQ.ENUM config.fieldTypes
     ordinal: SEQ.INTEGER
 
+    multiSelectCorrectRequirement:
+      type: SEQ.ENUM [
+        'all'
+        'any'
+      ]
+
     clientUid:
       type: SEQ.STRING
       validate:
