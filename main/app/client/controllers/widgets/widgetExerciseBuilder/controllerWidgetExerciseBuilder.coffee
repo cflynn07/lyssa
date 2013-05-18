@@ -6,7 +6,12 @@ define [
   'underscore_string'
   'cs!utils/utilBuildDTQuery'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilder.html'
-  'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldOpenResponse.html'
+
+
+  'text!views/widgetExerciseBuilder/fields/viewPartialExerciseBuilderFieldOpenResponse.html'
+  'text!views/widgetExerciseBuilder/fields/viewPartialExerciseBuilderFieldSelectIndividual.html'
+
+
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldButtons.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderDetailsEJS.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderTemplateListButtonsEJS.html'
@@ -26,7 +31,10 @@ define [
   utilBuildDTQuery
 
   viewWidgetExerciseBuilder
-  viewWidgetExerciseBuilderFieldOpenResponse
+
+  viewPartialExerciseBuilderFieldOpenResponse
+  viewPartialExerciseBuilderFieldSelectIndividual
+
   viewWidgetExerciseBuilderFieldButtons
 
   viewWidgetExerciseBuilderDetailsEJS
@@ -49,8 +57,12 @@ define [
           viewWidgetExerciseBuilder
 
         #Field Templates
-        $templateCache.put 'viewWidgetExerciseBuilderFieldOpenResponse',
-          viewWidgetExerciseBuilderFieldOpenResponse
+        $templateCache.put 'viewPartialExerciseBuilderFieldOpenResponse',
+          viewPartialExerciseBuilderFieldOpenResponse
+        $templateCache.put 'viewPartialExerciseBuilderFieldSelectIndividual',
+          viewPartialExerciseBuilderFieldSelectIndividual
+
+
         $templateCache.put 'viewWidgetExerciseBuilderFieldButtons',
           viewWidgetExerciseBuilderFieldButtons
 
@@ -148,6 +160,16 @@ define [
             return
           return $scope.formSelectIndividualAdd.$invalid
 
+        $scope.submitField = () ->
+          apiRequest.post 'field', {
+            name:          $scope.form.name
+            type:          'selectIndividual'
+            dictionaryUid: $scope.form.dictionaryUid
+            groupUid:      $scope.group.uid
+            ordinal:       0
+          }, (response) ->
+            console.log response
+          $scope.cancelAddNewField()
 
         $scope.removeFieldCorrectDictionaryItems = (uid) ->
           $scope.form.fieldCorrectDictionaryItems.splice($scope.form.fieldCorrectDictionaryItems.indexOf(uid), 1)
@@ -158,8 +180,6 @@ define [
           if $scope.form.fieldCorrectDictionaryItems.indexOf(uid) == -1
             $scope.form.fieldCorrectDictionaryItems.push uid
 
-
-
         $scope.dictionaryListDT =
           columnDefs: [
             mData:    null
@@ -167,7 +187,7 @@ define [
             bSortable: false
             sWidth:   '10px'
             mRender: (data, type, full) ->
-              return '<a data-ng-click="form.dictionary = \'' + full.uid + '\'; formSelectIndividualAdd.dictionary.$pristine = false; form.fieldCorrectDictionaryItems = undefined;" class="btn blue">Select</a>'
+              return '<a data-ng-click="form.dictionaryUid = \'' + full.uid + '\'; formSelectIndividualAdd.dictionaryUid.$pristine = false; form.fieldCorrectDictionaryItems = undefined;" class="btn blue">Select</a>'
               #return '<input type="radio" data-required name="dictionary" data-ng-model="form.dictionary" value="' + full.uid + '"></input>' #full.name
           ,
             mData:    null
@@ -250,11 +270,11 @@ define [
                 ['name'],
                 oSettings
 
-              console.log 'fnServerData'
-              console.log $scope.form.dictionary
-              console.log $scope.form
+              #console.log 'fnServerData'
+              #console.log $scope.form.dictionaryUid
+              #console.log $scope.form
 
-              if !$scope.form.dictionary
+              if !$scope.form.dictionaryUid
                 fnCallback
                   iTotalRecords:        0
                   iTotalDisplayRecords: 0
@@ -265,7 +285,7 @@ define [
                 query.filter[0][3] = 'and'
 
               query.filter.push ['deletedAt', '=', 'null', 'and']
-              query.filter.push ['dictionaryUid', '=', $scope.form.dictionary, 'and']
+              query.filter.push ['dictionaryUid', '=', $scope.form.dictionaryUid, 'and']
 
               #console.log query
 
@@ -434,6 +454,80 @@ define [
                 console.log response
               return false
     ]
+
+
+
+
+
+
+    Module.controller 'ControllerWidgetExerciseBuilderFieldManageSelectIndividual', ['$scope', 'apiRequest', '$dialog',
+      ($scope, apiRequest, $dialog) ->
+
+        #console.log $scope.field
+
+        $scope.dictionaryItemsDT =
+          columnDefs: [
+            mData:    null
+            aTargets: [0]
+            mRender: (data, type, full) ->
+              return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + full.name + '</span>'
+          ]
+          options:
+            bStateSave:      true
+            iCookieDuration: 2419200
+            bJQueryUI:       false
+            bPaginate:       true
+            bLengthChange:   false
+            bFilter:         true
+            bInfo:           true
+            bDestroy:        true
+            bServerSide:     true
+            bProcessing:     true
+            fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+              query = utilBuildDTQuery ['name'],
+                ['name'],
+                oSettings
+
+              if query.filter and !_.isUndefined(query.filter[0])
+                query.filter[0][3] = 'and'
+
+              query.filter.push ['deletedAt', '=', 'null', 'and']
+              query.filter.push ['dictionaryUid', '=', $scope.field.dictionaryUid, 'and']
+
+              cacheResponse   = ''
+              oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response) ->
+                if response.code == 200
+
+                  responseDataString = JSON.stringify(response.response)
+                  if cacheResponse == responseDataString
+                    return
+                  cacheResponse = responseDataString
+
+                  dataArr = _.toArray response.response.data
+
+                  fnCallback
+                    iTotalRecords:        response.response.length
+                    iTotalDisplayRecords: response.response.length
+                    aaData:               dataArr
+
+    ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

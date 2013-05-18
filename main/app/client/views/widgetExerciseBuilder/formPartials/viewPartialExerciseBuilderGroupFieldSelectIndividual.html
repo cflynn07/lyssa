@@ -46,38 +46,33 @@
 </div>
 
 <div
-  data-ng-class = "{success:formSelectIndividualAdd.dictionary.$valid, error:!formSelectIndividualAdd.dictionary.$valid, 'ng-pristine':formSelectIndividualAdd.dictionary.$pristine}"
+  data-ng-class = "{success:formSelectIndividualAdd.dictionaryUid.$valid, error:!formSelectIndividualAdd.dictionaryUid.$valid, 'ng-pristine':formSelectIndividualAdd.dictionaryUid.$pristine}"
   class         = "control-group">
   <label class="control-label">Dictionary <span class="required">*</span></label>
   <div class="controls">
 
 
 
-    <p style="margin-bottom:5px; font-size:16px;" data-ng-show="form.dictionary">
+    <p style="margin-bottom:5px; font-size:16px;" data-ng-show="form.dictionaryUid">
       <span style="margin-bottom:4px;">
         <span class="input-success color-green">
           <i class="icon-ok"></i>
         </span>
-        {{resourcePool[form.dictionary].name}}
+        {{resourcePool[form.dictionaryUid].name}}
       </span>
-      <br><a class="btn red mini" data-ng-click = "form.dictionary = false">Cancel Selection</a>
+      <br><a class="btn red mini" data-ng-click = "form.dictionaryUid = false">Cancel Selection</a>
     </p>
-
-
-
 
     <input
       required
-      name          = "dictionary"
-      data-ng-model = "form.dictionary"
-      data-ng-bind  = "form.dictionary"
+      name          = "dictionaryUid"
+      data-ng-model = "form.dictionaryUid"
+      data-ng-bind  = "form.dictionaryUid"
       data-ng-show  = "false"
       type          = "text">
 
-
-
     <div
-      data-ng-hide = "form.dictionary"
+      data-ng-hide = "form.dictionaryUid"
       style        = "color:#000; border:1px solid #999;"
       class        = "">
 
@@ -103,7 +98,7 @@
 
 
 <div
-  data-ng-show  = "form.dictionary"
+  data-ng-show  = "form.dictionaryUid"
   data-ng-class = "{success:formSelectIndividualAdd.fieldCorrectDictionaryItems.$valid, error:!formSelectIndividualAdd.fieldCorrectDictionaryItems.$valid, 'ng-pristine':formSelectIndividualAdd.fieldCorrectDictionaryItems.$pristine}"
   class         = "control-group">
   <label class="control-label">"Correct" Items <span class="required">*</span></label>
@@ -132,7 +127,7 @@
           data-data-table         = "dictionaryItemsListDT.options"
           ao-column-defs          = "dictionaryItemsListDT.columnDefs"
           data-parent-model       = "viewModel"
-          data-update-watch       = "form.dictionary"
+          data-update-watch       = "form.dictionaryUid"
           update-on-resource-post = "dictionaryItem">
           <thead>
             <tr>

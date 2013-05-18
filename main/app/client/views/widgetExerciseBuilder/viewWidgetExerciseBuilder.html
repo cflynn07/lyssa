@@ -54,7 +54,7 @@
               style           = "margin-bottom: 5px;"
               data-ng-hide    = "viewModel.showAddNewTemplate"
               data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
-              data-ng-click   = "viewModel.showAddNewTemplate=true;"
+              data-ng-click   = "viewModel.showAddNewTemplate = true;"
               class           = "btn btn-block">Show Archived <i class="m-icon-swapdown"></i></button>
 
 
@@ -64,7 +64,7 @@
 
       <div
         data-ng-class = "{true:'span12 no-second-box-margin', false:'span7'}[(viewModel.templatesListCollapsed && viewModel.routeParams.revisionUid)]"
-        class = "">
+        class         = "">
 
 
 
@@ -93,10 +93,16 @@
                 class         = "btn mini blue">
                 <p
                   data-ng-hide = "viewModel.templatesListCollapsed"
-                  style="margin:0;"><i class="halflings-icon white chevron-left"></i><span style="vertical-align:bottom; font-size:14px;"></span></p>
+                  style        = "margin:0;">
+                  <i style="width:11px;" class="halflings-icon white chevron-left"></i>
+                  <span style="vertical-align:bottom; font-size:14px;"></span>
+                </p>
                 <p
                   data-ng-show = "viewModel.templatesListCollapsed"
-                  style="margin:0;"><span style="vertical-align:bottom; font-size:14px;"></span><i class="halflings-icon white chevron-right"></i></p>
+                  style        = "margin:0;">
+                  <span style="vertical-align:bottom; font-size:14px;"></span>
+                  <i style="width:11px;" class="halflings-icon white chevron-right"></i>
+                </p>
               </a>
             </div>
 
@@ -212,7 +218,7 @@
                 data-ng-include = "'viewPartialExerciseBuilderNewGroupForm'">
               </div>
 
-              <ul class="breadcrumb">
+              <ul style="box-shadow:none !important; border:2px solid #DDD !important;" class="breadcrumb">
                 <li>
                   <i class="icon-home"></i>
                     <a>Groups</a>
@@ -390,20 +396,20 @@
                           data-ng-repeat = "field in group.fields | toArray | orderBy:'ordinal'"
                           data-field-uid = "{{field.uid}}">
                           <div
-                            data-ng-switch="field.type">
+                            data-ng-switch = "field.type">
 
 
                             <div class="portlet box grey">
                               <div class="portlet-title">
 
                                 <div class="caption">
-                                  <h4 style="margin-bottom:0 !important;" class="inline-content">
+                                  <h4 style="margin-bottom:0 !important; width:100%;" class="inline-content">
                                     <i class="icon-reorder"></i>
 
                                     <div class="btn-group">
                                       <a class="btn blue" href="#" data-toggle="dropdown">
-                                      Field Options
-                                      <i style="color:#FFF;" class="icon-angle-down"></i>
+                                        Field Options
+                                        <i style="color:#FFF;" class="icon-angle-down"></i>
                                       </a>
                                       <ul class="dropdown-menu">
                                          <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
@@ -412,31 +418,47 @@
                                     </div><!-- btn-group -->
 
                                     <span style="color:#FFF !important;">{{field.name}}</span>
+                                    <span style="color:#FFF !important; float:right;">
+
+                                      <a
+                                        data-ng-click = "hidePortletBody = !hidePortletBody"
+                                        class         = "btn blue">
+                                        <p
+                                          data-ng-hide = "hidePortletBody"
+                                          style        = "margin:0;">
+                                          <i style="margin:2px 0 0 0; width:11px;" class="halflings-icon white chevron-up"></i>
+                                          <span style="vertical-align:bottom; font-size:14px;"></span>
+                                        </p>
+                                        <p
+                                          data-ng-show = "hidePortletBody"
+                                          style        = "margin:0; width:11px;">
+                                          <span style="vertical-align:bottom; font-size:14px;"></span>
+                                          <i style="margin:2px 0 0 0;" class="halflings-icon white chevron-down"></i>
+                                        </p>
+                                      </a>
+
+                                    </span>
                                   </h4>
                                 </div><!-- caption -->
 
                               </div><!-- portlet-title -->
-                              <div style="background-color:#FFF; padding:10px 0 10px 0;" class="portlet-body">
+                              <div
+                                data-ng-hide = "hidePortletBody"
+                                style="background-color:#FFF; padding:10px 0 10px 0;"
+                                class="portlet-body">
 
 
                                 <div class="box template-info-box fade in">Field Info Goes Here?</div>
 
                                 <div
-                                  data-ng-switch-when="openResponse">
-
-                                  <div class="control-group">
-                                     <label class="control-label">{{field.name}}</label>
-                                     <div class="controls">
-                                        <input data-ng-disabled="true" type="text" placeholder="" class="m-wrap medium">
-                                        <span class="help-inline"></span>
-                                     </div>
-                                  </div>
-
+                                  data-ng-include     = "'viewPartialExerciseBuilderFieldOpenResponse'"
+                                  data-ng-switch-when = "openResponse">
                                 </div><!-- openResponse -->
 
 
                                 <div
-                                  data-ng-switch-when="selectIndividual">
+                                  data-ng-include     = "'viewPartialExerciseBuilderFieldSelectIndividual'"
+                                  data-ng-switch-when = "selectIndividual">
                                 </div><!-- selectIndividual -->
 
                                 <div
