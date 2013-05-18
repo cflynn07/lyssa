@@ -73,6 +73,96 @@ module.exports = (app) ->
                   callback null,
                     success: true
 
+
+
+
+
+                'dictionaryUid': (val, objectKey, object, callback) ->
+
+
+
+
+
+                  if _.isUndefined(object['type'])
+                    callback null,
+                      success: false
+                    return
+
+                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
+                  fieldType = object['type']
+                  switch fieldType
+                    when 'selectIndividual'
+                      #DictionaryUid required
+
+                      if _.isUndefined val
+                        callback null,
+                          success: false
+                          message:
+                            dictionaryUid: 'required'
+                        return
+
+                      async.parallel [
+                        (callback) ->
+                          client.find(
+                            where:
+                              uid: testClientUid
+                          ).success (resultClient) ->
+                            callback null, resultClient
+
+                        (callback) ->
+                          dictionary.find(
+                            where:
+                              clientUid: testClientUid
+                              uid: val
+                          ).success (resultDictionary) ->
+                            callback null, resultDictionary
+
+                      ], (error, results) ->
+
+                        resultClient     = results[0]
+                        resultDictionary = results[1]
+
+                        if !resultDictionary
+                          callback null,
+                            success: false
+                            message:
+                              'dictionaryUid': 'unknown'
+                          return
+
+                        if !resultClient
+                          callback null,
+                            success: false
+                            'clientUid': 'unknown'
+                          return
+
+                        #IF we do find the employee, but it doesn't belong to the same client...
+                        if resultDictionary.clientUid != resultClient.uid
+                          callback null,
+                            success: false
+                            message:
+                              'groupUid': 'unknown'
+                          return
+
+                        mapObj = {}
+                        mapObj[resultDictionary.uid]  = resultDictionary
+                        mapObj[resultClient.uid]      = resultClient
+                        callback null,
+                          success: true
+                          uidMapping: mapObj
+
+                    else
+                      #No dictionaryUid for fields that don't make sense
+                      callback null,
+                        success: false
+                        transform: [objectKey, 'dictionaryUid', null]
+
+
+
+
+
+
+
                 'groupUid': (val, objectKey, object, callback) ->
 
                   if _.isUndefined val
