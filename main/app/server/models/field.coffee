@@ -19,6 +19,7 @@ module.exports =
         'all'
         'any'
       ]
+      defaultValue: 'any'
 
     clientUid:
       type: SEQ.STRING
