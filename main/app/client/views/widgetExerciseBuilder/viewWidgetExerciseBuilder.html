@@ -130,8 +130,12 @@
 
               <div class="box template-info-box fade in">
 
+
                 <div class="row-fluid">
                   <div class="span12">
+
+                    <h4
+                      style = "font-weight:600; margin-top:0;"><span>Template Info</span></h4>
 
                     <h2
                       data-ng-hide = "viewModel.showEditTemplateName"
@@ -202,21 +206,133 @@
                       class           = "btn blue btn-block"><i class="icon-pencil m-icon-white"></i> Edit Name</button>
                   </div>
                   <div class="span6">
+
+                  </div>
+                </div>
+                <div class="row-fluid">
+                  <div class="span6">
                     <button
-                      style           = "margin-bottom: 5px;"
-                      data-ng-hide    = "viewModel.showAddNewTemplateGroup"
-                      data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
-                      data-ng-click   = "viewModel.showAddNewTemplateGroup=true;"
-                      class           = "btn green btn-block">Add Group <i class="m-icon-swapright m-icon-white"></i></button>
+                      style            = "margin-bottom: 5px;"
+                      data-ng-hide     = "viewModel.showAddNewTemplateGroup"
+                      data-ng-animate  = "{show: 'fadeIn', hide: 'fadeOut'}"
+                      data-ng-click    = "viewModel.showAddNewTemplateGroup=true;"
+                      data-ng-disabled = "resourcePool[viewModel.routeParams.revisionUid].finalized"
+                      class            = "btn green btn-block">Add Group <i class="m-icon-swapright m-icon-white"></i></button>
+                  </div>
+                  <div class="span6">
+                    <button
+                      style            = "margin-bottom: 5px;"
+                      data-ng-disabled = "resourcePool[viewModel.routeParams.revisionUid].finalized || !resourcePool[viewModel.routeParams.revisionUid].isFresh"
+                      data-ng-click    = "viewModel.putRevisionFinalize()"
+                      class            = "btn black btn-block">
+
+                      <i class="icon-save m-icon-white"></i>
+                      <span data-ng-hide = "resourcePool[viewModel.routeParams.revisionUid].finalized">Save Revision</span>
+                      <span data-ng-show = "resourcePool[viewModel.routeParams.revisionUid].finalized">Saved</span>
+
+                    </button>
                   </div>
                 </div>
 
-              </div>
+              </div><!-- template info box / main menu -->
+
+
 
 
               <div
                 data-ng-include = "'viewPartialExerciseBuilderNewGroupForm'">
               </div>
+
+
+
+
+              <div
+                data-ng-init = "editRevisionChangeSummary = false"
+                class="box template-info-box fade in">
+
+                <h4
+                  style = "font-weight:600; margin-top:0;"><span>Revision Change Summary</span></h4>
+
+                <div
+                  data-ng-show = "resourcePool[viewModel.routeParams.revisionUid].finalized">
+
+                  <p
+                    data-ng-hide = "editRevisionChangeSummary">
+                    {{resourcePool[viewModel.routeParams.revisionUid].changeSummary}}
+                  </p>
+
+                </div><!-- finalized -->
+
+                <div
+                  data-ng-hide = "resourcePool[viewModel.routeParams.revisionUid].finalized">
+
+                  <p
+                    data-ng-hide = "editRevisionChangeSummary">
+                    {{resourcePool[viewModel.routeParams.revisionUid].changeSummary}}
+                  </p>
+
+                  <form
+                    data-ng-show = "editRevisionChangeSummary"
+                    style        = "margin:0;"
+                    name         = "revisionChangeSummaryForm">
+                    <div
+                      style = "margin:0;"
+                      class = "control-group">
+                      <div
+                        style = "text-align:center;"
+                        class = "controls">
+                          <textarea
+                            name          = "revisionChangeSummary"
+                            data-ng-model = "viewModel.revisionChangeSummary"
+                            style         = "width:97% !important; background-color:#FFF;"
+                            class         = "large m-wrap"
+                            rows          = "3"></textarea>
+                      </div>
+                    </div>
+                  </form>
+
+                  <div
+                    data-ng-show = "editRevisionChangeSummary"
+                    style        = "margin-left:0;"
+                    class        = "span12">
+                    <button
+                      data-ng-show     = "editRevisionChangeSummary"
+                      style            = "margin-bottom: 5px;"
+                      data-ng-disabled = "resourcePool[viewModel.routeParams.revisionUid].changeSummary == viewModel.revisionChangeSummary"
+                      data-ng-click    = "viewModel.putRevisionChangeSummary(); editRevisionChangeSummary = false;"
+                      class            = "btn green btn-block span6">
+                      <i class="icon-save m-icon-white"></i> Save
+                    </button>
+
+                    <button
+                      data-ng-show  = "editRevisionChangeSummary"
+                      style         = "margin-bottom: 5px; margin-top: 0;"
+                      data-ng-click = "editRevisionChangeSummary = false;"
+                      class         = "btn red btn-block span6">
+                      <i class="icon-remove m-icon-white"></i> Cancel
+                    </button>
+                  </div>
+
+                  <div
+                    data-ng-hide = "editRevisionChangeSummary"
+                    style        = "margin-left:0;"
+                    class        = "span12">
+                    <button
+                      data-ng-hide     = "editRevisionChangeSummary"
+                      style            = "margin-bottom: 5px;"
+                      data-ng-click    = "viewModel.revisionChangeSummary = resourcePool[viewModel.routeParams.revisionUid].changeSummary; editRevisionChangeSummary = true;"
+                      class            = "btn blue btn-block">
+                      <i class="icon-pencil m-icon-white"></i> Edit
+                    </button>
+                  </div>
+
+                  <div class="clearfix"></div>
+                </div><!-- not finalized -->
+
+
+
+              </div><!-- template info box / change summary -->
+
 
               <ul style="box-shadow:none !important; border:2px solid #DDD !important;" class="breadcrumb">
                 <li>
@@ -404,7 +520,9 @@
 
                                 <div class="caption">
                                   <h4 style="margin-bottom:0 !important; width:100%;" class="inline-content">
-                                    <i class="icon-reorder"></i>
+                                    <i
+                                      data-ng-class = "{ 'icon-reorder-disabled': resourcePool[viewModel.routeParams.revisionUid].finalized }"
+                                      class         = "icon-reorder"></i>
 
                                     <div class="btn-group">
                                       <a class="btn blue" href="#" data-toggle="dropdown">

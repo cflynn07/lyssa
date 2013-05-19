@@ -496,6 +496,9 @@ form.template-builder-form .portlet-title .btn-group {
 .icon-reorder {
   cursor: move;
 }
+.icon-recorder-disabled {
+  cursor: not-allowed;
+}
 form.template-builder-form .ui-sortable-placeholder {
   background: #4d90fe;
   opacity: 0.8;

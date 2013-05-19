@@ -457,9 +457,6 @@ define [
 
 
 
-
-
-
     Module.controller 'ControllerWidgetExerciseBuilderFieldManageSelectIndividual', ['$scope', 'apiRequest', '$dialog',
       ($scope, apiRequest, $dialog) ->
 
@@ -534,6 +531,7 @@ define [
 
     Module.controller 'ControllerWidgetExerciseBuilder', ['$scope', '$route', '$routeParams', '$templateCache', 'socket', 'apiRequest', '$dialog',
       ($scope, $route, $routeParams, $templateCache, socket, apiRequest, $dialog) ->
+
 
         $scope.viewModel =
 
@@ -688,6 +686,36 @@ define [
 
 
 
+
+          revisionChangeSummary: ''
+          putRevisionChangeSummary: () ->
+            apiRequest.put 'revision', [$scope.viewModel.routeParams.revisionUid], {
+              changeSummary: $scope.viewModel.revisionChangeSummary
+            }, (response) ->
+              console.log response
+
+
+          putRevisionFinalize: () ->
+            title = 'Save Revision'
+            msg   = 'Save this exercise revision if you\'re done editing. You will not be able to make changes to this revision after your save.'
+            btns  = [
+              result:   false
+              label:    'Cancel'
+              cssClass: 'red'
+            ,
+              result:   true
+              label:    'Confirm'
+              cssClass: 'green'
+            ]
+            $dialog.messageBox(title, msg, btns).open()
+              .then (result) ->
+                if result
+                  apiRequest.put 'revision', [$scope.viewModel.routeParams.revisionUid], {
+                    finalized: true
+                  }, (response) ->
+                    console.log response
+
+
           putTemplate: (templateUid) ->
             apiRequest.put 'template', [templateUid], {
               name: $scope.viewModel.formEditTemplateName.name
@@ -777,8 +805,9 @@ define [
               }]
             }, (response) ->
               if response.code == 200
-                #console.log 'first response'
-                #console.log response
+
+                #if !_.isUndefined $scope.resourcePool[$scope.viewModel.routeParams.revisionUid]
+                #  $scope.viewModel.revisionChangeSummary = $scope.resourcePool[$scope.viewModel.routeParams.revisionUid].changeSummary
 
                 groupUids = []
                 for prop1, template of response.response.data
@@ -809,6 +838,8 @@ define [
 
         $scope.fieldsSortableOptions =
           connectWith: 'div[data-ui-sortable]'
+          disabled: () ->
+            return true
           update: () ->
 
             $('div[data-group-uid]').each () ->
