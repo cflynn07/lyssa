@@ -66,6 +66,10 @@ module.exports = (app) ->
                       message:
                         ordinal: 'required'
 
+                'multiSelectCorrectRequirement': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
                 'clientUid': (val, objectKey, object, callback) ->
 
                   testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
@@ -253,6 +257,10 @@ module.exports = (app) ->
                       message:
                         ordinal: 'required'
 
+                'multiSelectCorrectRequirement': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
                 'clientUid': (val, objectKey, object, callback) ->
 
                   if !_.isUndefined val
@@ -328,7 +336,7 @@ module.exports = (app) ->
                           callback null,
                             success: false
                             message:
-                              'groupUid': 'unknown'
+                              'dictionaryUid': 'unknown'
                           return
 
                         mapObj = {}
@@ -402,6 +410,9 @@ module.exports = (app) ->
                     mapObj = {}
                     mapObj[resultGroup.uid]  = resultGroup
                     mapObj[resultClient.uid] = resultClient
+
+                    console.log mapObj
+
                     callback null,
                       success: true
                       uidMapping: mapObj

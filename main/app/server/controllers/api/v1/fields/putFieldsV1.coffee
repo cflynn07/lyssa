@@ -73,7 +73,9 @@ module.exports = (app) ->
                   callback null,
                     success: true
 
-
+                'multiSelectCorrectRequirement': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
 
 
 
@@ -273,6 +275,10 @@ module.exports = (app) ->
 
                 'ordinal': (val, objectKey, object, callback) ->
 
+                  callback null,
+                    success: true
+
+                'multiSelectCorrectRequirement': (val, objectKey, object, callback) ->
                   callback null,
                     success: true
 

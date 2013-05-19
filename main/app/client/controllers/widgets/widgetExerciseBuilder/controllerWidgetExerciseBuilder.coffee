@@ -838,8 +838,7 @@ define [
 
         $scope.fieldsSortableOptions =
           connectWith: 'div[data-ui-sortable]'
-          disabled: () ->
-            return true
+          disabled: false
           update: () ->
 
             $('div[data-group-uid]').each () ->

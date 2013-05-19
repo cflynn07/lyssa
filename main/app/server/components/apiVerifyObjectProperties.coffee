@@ -67,6 +67,7 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
             if _.isObject val.uidMapping
               for mappingUid, mappingORMResource of val.uidMapping
                 uidMappings[mappingUid] = mappingORMResource
+                console.log mappingUid
 
 
           if _.isArray val.transform
@@ -87,14 +88,19 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
 
           #Give everyone their own brand new uid
           #testObjects[key]['uid'] = uuid.v4()
-
+          #console.log uidMappings
           for objectPropKey, objectPropValue of object
+            #console.log objectPropKey
+            #console.log objectPropValue
+            if _.isNull(objectPropValue) || _.isUndefined(objectPropValue)
+              continue
 
             suffix = 'Uid'
+
             if objectPropKey.indexOf(suffix, objectPropKey.length - suffix.length) > -1
               #This property ends in Uid
-              propertyAssocORM  = uidMappings[objectPropValue]
-              propertyPrefix    = objectPropKey.substring(0, objectPropKey.indexOf('Uid'))
+              propertyAssocORM                        = uidMappings[objectPropValue]
+              propertyPrefix                          = objectPropKey.substring(0, objectPropKey.indexOf('Uid'))
               testObjects[key][propertyPrefix + 'Id'] = propertyAssocORM.id
 
 
