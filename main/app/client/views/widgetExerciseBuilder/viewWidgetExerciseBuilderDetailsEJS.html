@@ -71,7 +71,7 @@
     class        = "portlet box blue sub-portlet"
     style        = "margin-bottom:5px;">
     <div class="portlet-title">
-      <h4><span>Revisions</span></h4>
+      <h4><span>Revisions ({{ (resourcePool['<%= templateUid %>'].revisions | toArray | filter:{finalized:'true'}).length }})</span></h4>
     </div>
     <div
       style = "padding:0;"

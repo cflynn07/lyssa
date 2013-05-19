@@ -77,6 +77,13 @@ module.exports = (app) ->
                   callback null,
                     success: true
 
+                'percentageSliderLeft': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
+                'percentageSliderRight': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
 
 
                 'dictionaryUid': (val, objectKey, object, callback) ->
@@ -279,6 +286,14 @@ module.exports = (app) ->
                     success: true
 
                 'multiSelectCorrectRequirement': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
+                'percentageSliderLeft': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
+                'percentageSliderRight': (val, objectKey, object, callback) ->
                   callback null,
                     success: true
 

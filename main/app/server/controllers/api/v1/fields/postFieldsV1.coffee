@@ -10,13 +10,13 @@ insertHelper              = require config.appRoot + 'server/components/insertHe
 
 module.exports = (app) ->
 
-  group    = ORM.model 'group'
-  template = ORM.model 'template'
-  employee = ORM.model 'employee'
-  client   = ORM.model 'client'
-  revision = ORM.model 'revision'
-  field    = ORM.model 'field'
-  dictionary    = ORM.model 'dictionary'
+  group      = ORM.model 'group'
+  template   = ORM.model 'template'
+  employee   = ORM.model 'employee'
+  client     = ORM.model 'client'
+  revision   = ORM.model 'revision'
+  field      = ORM.model 'field'
+  dictionary = ORM.model 'dictionary'
 
 
   app.post config.apiSubDir + '/v1/fields', (req, res) ->
@@ -32,7 +32,7 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-            apiVerifyObjectProperties this, group, req.body, req, res, {
+            apiVerifyObjectProperties this, field, req.body, req, res, {
               requiredProperties:
                 'name': (val, objectKey, object, callback) ->
 
@@ -67,6 +67,14 @@ module.exports = (app) ->
                         ordinal: 'required'
 
                 'multiSelectCorrectRequirement': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
+                'percentageSliderLeft': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
+                'percentageSliderRight': (val, objectKey, object, callback) ->
                   callback null,
                     success: true
 
@@ -223,7 +231,7 @@ module.exports = (app) ->
 
           when 'clientSuperAdmin', 'clientAdmin'
 
-            apiVerifyObjectProperties this, group, req.body, req, res, {
+            apiVerifyObjectProperties this, field, req.body, req, res, {
               requiredProperties:
                 'name': (val, objectKey, object, callback) ->
 
@@ -258,6 +266,14 @@ module.exports = (app) ->
                         ordinal: 'required'
 
                 'multiSelectCorrectRequirement': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
+                'percentageSliderLeft': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
+                'percentageSliderRight': (val, objectKey, object, callback) ->
                   callback null,
                     success: true
 

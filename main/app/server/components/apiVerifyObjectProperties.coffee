@@ -67,7 +67,7 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
             if _.isObject val.uidMapping
               for mappingUid, mappingORMResource of val.uidMapping
                 uidMappings[mappingUid] = mappingORMResource
-                console.log mappingUid
+                #console.log mappingUid
 
 
           if _.isArray val.transform

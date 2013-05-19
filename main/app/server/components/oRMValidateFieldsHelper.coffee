@@ -7,12 +7,31 @@ module.exports = (postObjects, resourceModel) ->
   #collect everything wrong with the object to send back to user
   objectValidationErrors = []
 
+
+  ###
+  console.log 'resourceModel.name'
+  console.log resourceModel.name
+  console.log 'resourceModel.rawAttributes'
+  console.log resourceModel.rawAttributes
+  ###
+
+
   for object, key in postObjects
     #Test some validations on resourceModel, namely ENUM types
+
+    #console.log 'object'
+    #console.log object
+
+
     for propertyName, propertyValue of object
 
       testAttribute = resourceModel.rawAttributes[propertyName]
       if !_.isUndefined testAttribute
+
+        #console.log testAttribute.type
+        #console.log testAttribute.values
+        #console.log 'testAttribute.type'
+        #console.log testAttribute.type
 
         if testAttribute.type and (testAttribute.type is 'ENUM')
           if testAttribute.values.indexOf(propertyValue) is -1

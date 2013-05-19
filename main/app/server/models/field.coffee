@@ -21,6 +21,15 @@ module.exports =
       ]
       defaultValue: 'any'
 
+    percentageSliderLeft:
+      type: SEQ.STRING
+      validate:
+        len: [1, 100]
+    percentageSliderRight:
+      type: SEQ.STRING
+      validate:
+        len: [1, 100]
+
     clientUid:
       type: SEQ.STRING
       validate:

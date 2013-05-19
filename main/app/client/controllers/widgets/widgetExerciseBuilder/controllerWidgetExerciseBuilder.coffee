@@ -20,6 +20,7 @@ define [
   'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderGroupMenu.html'
   'text!views/widgetExerciseBuilder/formPartials/viewPartialExerciseBuilderGroupFieldOpenResponse.html'
   'text!views/widgetExerciseBuilder/formPartials/viewPartialExerciseBuilderGroupFieldSelectIndividual.html'
+  'text!views/widgetExerciseBuilder/formPartials/viewPartialExerciseBuilderGroupFieldPercentageSlider.html'
   'ejs'
   'async'
 ], (
@@ -44,6 +45,7 @@ define [
   viewPartialExerciseBuilderGroupMenu
   viewPartialExerciseBuilderGroupFieldOpenResponse
   viewPartialExerciseBuilderGroupFieldSelectIndividual
+  viewPartialExerciseBuilderGroupFieldPercentageSlider
 
   EJS
   async
@@ -79,6 +81,8 @@ define [
           viewPartialExerciseBuilderGroupFieldOpenResponse
         $templateCache.put 'viewPartialExerciseBuilderGroupFieldSelectIndividual',
           viewPartialExerciseBuilderGroupFieldSelectIndividual
+        $templateCache.put 'viewPartialExerciseBuilderGroupFieldPercentageSlider',
+          viewPartialExerciseBuilderGroupFieldPercentageSlider
     ]
 
 
@@ -118,7 +122,11 @@ define [
         topCallback()
 
 
-
+    ###
+    #
+    #  BEGIN Field add form controllers
+    #
+    ###
 
     Module.controller 'ControllerWidgetExerciseBuilderGroupFieldOpenResponse', ['$scope', 'apiRequest', '$dialog',
       ($scope, apiRequest, $dialog) ->
@@ -336,7 +344,36 @@ define [
           $scope.form = {}
           $scope.formPercentageSliderAdd.$setPristine()
           $scope.$parent.viewModel.cancelAddNewField()
+
+        $scope.submitField = () ->
+          apiRequest.post 'field', {
+            name:                  $scope.form.name
+            type:                  'slider'
+            percentageSliderLeft:  'LEFT V1'
+            percentageSliderRight: 'RIGHT V1'
+            groupUid:              $scope.group.uid
+            ordinal:               0
+          }, (response) ->
+            console.log response
+          $scope.cancelAddNewField()
+
+
+        $scope.isFormInvalid = () ->
+          if !$scope.formPercentageSliderAdd
+            return
+          return $scope.formPercentageSliderAdd.$invalid
+
     ]
+
+
+
+
+    ###
+    #
+    #  END Field add form controllers
+    #
+    ###
+
 
 
 
@@ -454,6 +491,13 @@ define [
                 console.log response
               return false
     ]
+
+
+
+
+
+
+
 
 
 

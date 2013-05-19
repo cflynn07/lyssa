@@ -10,7 +10,7 @@
       data-ng-class = "{true:'black', false:'blue'}[viewModel.routeParams.templateUid == '<%= templateUid %>']"
       class         = "btn detail">
       <i style="display:none;" class="m-icon-swapup m-icon-white"></i>
-      <i class="m-icon-swapdown m-icon-white"></i> Revisions
+      <i class="m-icon-swapdown m-icon-white"></i> Revisions ({{ (resourcePool['<%= templateUid %>'].revisions | toArray).length }})
     </button>
 
 

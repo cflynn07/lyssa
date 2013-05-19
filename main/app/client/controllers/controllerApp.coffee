@@ -40,7 +40,6 @@ define [
         div.appendChild(document.createTextNode(str))
         div.innerHTML
 
-
       helperSortHash = (hash, timeProp = 'createdAt') ->
         hashArray       = _.toArray hash
         sortedHashArray = _.sortBy hashArray, (obj) ->
@@ -60,6 +59,8 @@ define [
           resArray.push val
         #Sorting?
         return resArray
+
+      $rootScope.clientConfig = clientConfig
 
       #quick hack
       $('body').removeClass 'login'
