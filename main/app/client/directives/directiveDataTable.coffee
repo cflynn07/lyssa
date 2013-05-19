@@ -21,11 +21,9 @@ define [
           bindDetailCallbacks = () ->
             element.find('.detail').unbind('click').bind 'click', () ->
 
-
               $el   = $(this).parents('tr')
               el    = $el.get(0)
               _this = this
-
 
               if dataTable.fnIsOpen el
 
@@ -92,38 +90,22 @@ define [
             options["aoColumnDefs"] = scope.$eval(attrs.aoColumnDefs)
           if attrs.fnRowCallback
             options["fnRowCallback"] = scope.$eval(attrs.fnRowCallback)
-
-
-
-
           if options
             options['fnCreatedRow'] = (nRow, aData, iDataIndex) ->
               return
 
 
-            drawCallbackRender = null
-            options['fnDrawCallback'] = (data) ->
-              #html = $(data.nTable).find('tbody').html()
-              #$(data.nTable).find('tbody').html($compile(html)(scope))
-              clearTimeout drawCallbackRender
-              #drawCallbackRender = setTimeout () ->
-              bindDetailCallbacks()
-
-              $compile($(data.nTable).find('tbody'))(scope)
-              if !scope.$$phase
-                scope.$apply()
-              #, 0
-
-
-            options['fnRowCallback'] = () ->
-              return
-              #console.log 'fnRowCallback'
+          options['fnDrawCallback'] = (data) ->
+            bindDetailCallbacks()
+            $compile($(data.nTable).find('tbody'))(scope)
+            if !scope.$$phase
+              scope.$apply()
+          options['fnRowCallback'] = () ->
+            return
 
           # apply the plugin
           dataTable  = element.dataTable(options)
           keysLength = scope.getKeysLength(attrs.aaData)
-
-
 
           # This method of updating is used for server-side data tables
           if options.bServerSide && attrs.updateOnResourcePost
@@ -134,36 +116,23 @@ define [
               if data['resourceName'] == attrs.updateOnResourcePost
                 dataTable.fnDraw() #Will call fnServerData()
 
-
-
-
           if options.bServerSide && attrs.updateWatch
             scope.$watch attrs.updateWatch, () ->
               dataTable.fnDraw()
             , true
 
-
-
-
           # watch for any changes to our data, rebuild the DataTable
           scope.$watch attrs.aaData, (value, oldValue) ->
-
             if keysLength == scope.getKeysLength(value)
               return
-
             keysLength = scope.getKeysLength(value)
-
             val = value or null
-
             if val
-
               convertedVal = []
               for propName, propVal of val
                 if !propVal.deletedAt
                   convertedVal.push propVal
-
               dataTable.fnClearTable()
               dataTable.fnAddData convertedVal
-
           , true
 

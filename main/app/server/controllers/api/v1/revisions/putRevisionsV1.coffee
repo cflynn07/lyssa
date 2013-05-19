@@ -64,14 +64,19 @@ module.exports = (app) ->
                   callback null,
                     success: true
                 'finalized': (val, objectKey, object, callback) ->
-                  if val != 'true' && val != 'false'
+                  if _.isUndefined val
+                    callback null,
+                      success: true
+                    return
+
+                  if val != 'true' && val != 'false' && (val is not true) && (val is not false)
                     callback null,
                       success: false
                       message:
                         finalized: 'invalid'
                     return
 
-                  transVal = if (val == 'true') then true else false
+                  transVal = if (val == 'true' || (val is true)) then true else false
 
                   callback null,
                     success: true
@@ -120,15 +125,19 @@ module.exports = (app) ->
                   callback null,
                     success: true
                 'finalized': (val, objectKey, object, callback) ->
+                  if _.isUndefined val
+                    callback null,
+                      success: true
+                    return
 
-                  if val != 'true' && val != 'false'
+                  if val != 'true' && val != 'false' && (val is not true) && (val is not false)
                     callback null,
                       success: false
                       message:
                         finalized: 'invalid'
                     return
 
-                  transVal = if (val == 'true') then true else false
+                  transVal = if (val == 'true' || (val is true)) then true else false
 
                   callback null,
                     success: true

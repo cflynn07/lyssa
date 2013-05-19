@@ -182,6 +182,9 @@ td.details {
 td.details .table-advance thead tr th {
   background-color: #DDD !important;
 }
+.condensed-data-table td, .condensed-data-table th {
+  padding: 2px;
+}
 
 /*
     Customize look and feel of menu
@@ -327,9 +330,12 @@ div.header span.username {
     Minor tweaks to datatables appearance
     ----------------------------------------------
 */
+/*
+Disabled this to get popovers to work, don't know why I had in the first place
 .dataTables_wrapper {
   position: relative;
 }
+*/
 .DataTables_sort_wrapper th {
     color: #000;
 }
@@ -445,6 +451,10 @@ ul.nav .dropdown-submenu > .dropdown-menu {
 
 .portlet.box.blue.sub-portlet .portlet-title {
   background-color: #4b8df8 !important;
+}
+
+.portlet.box.red.sub-portlet .portlet-title {
+  background-color: #e02222 !important;
 }
 
 .color-red {
