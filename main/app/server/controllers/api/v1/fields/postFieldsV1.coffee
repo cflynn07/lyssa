@@ -427,8 +427,6 @@ module.exports = (app) ->
                     mapObj[resultGroup.uid]  = resultGroup
                     mapObj[resultClient.uid] = resultClient
 
-                    console.log mapObj
-
                     callback null,
                       success: true
                       uidMapping: mapObj

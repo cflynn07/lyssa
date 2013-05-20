@@ -10,9 +10,9 @@ define [
 
   'text!views/widgetExerciseBuilder/fields/viewPartialExerciseBuilderFieldOpenResponse.html'
   'text!views/widgetExerciseBuilder/fields/viewPartialExerciseBuilderFieldSelectIndividual.html'
-
-
+  'text!views/widgetExerciseBuilder/fields/viewPartialExerciseBuilderFieldSlider.html'
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldButtons.html'
+
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderDetailsEJS.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderTemplateListButtonsEJS.html'
   'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderNewTemplateForm.html'
@@ -35,7 +35,7 @@ define [
 
   viewPartialExerciseBuilderFieldOpenResponse
   viewPartialExerciseBuilderFieldSelectIndividual
-
+  viewPartialExerciseBuilderFieldSlider
   viewWidgetExerciseBuilderFieldButtons
 
   viewWidgetExerciseBuilderDetailsEJS
@@ -63,8 +63,8 @@ define [
           viewPartialExerciseBuilderFieldOpenResponse
         $templateCache.put 'viewPartialExerciseBuilderFieldSelectIndividual',
           viewPartialExerciseBuilderFieldSelectIndividual
-
-
+        $templateCache.put 'viewPartialExerciseBuilderFieldSlider',
+          viewPartialExerciseBuilderFieldSlider
         $templateCache.put 'viewWidgetExerciseBuilderFieldButtons',
           viewWidgetExerciseBuilderFieldButtons
 
@@ -349,8 +349,8 @@ define [
           apiRequest.post 'field', {
             name:                  $scope.form.name
             type:                  'slider'
-            percentageSliderLeft:  'LEFT V1'
-            percentageSliderRight: 'RIGHT V1'
+            percentageSliderLeft:  $scope.form.leftValue
+            percentageSliderRight: $scope.form.rightValue
             groupUid:              $scope.group.uid
             ordinal:               0
           }, (response) ->
@@ -365,9 +365,6 @@ define [
 
     ]
 
-
-
-
     ###
     #
     #  END Field add form controllers
@@ -376,7 +373,11 @@ define [
 
 
 
-
+    ###
+    #
+    #   GROUP CONTROLLER
+    #
+    ###
     Module.controller 'ControllerWidgetExerciseBuilderGroupEdit', ['$scope', '$routeParams', 'apiRequest', '$dialog',
       ($scope, $routeParams, apiRequest, $dialog) ->
 
@@ -491,16 +492,17 @@ define [
                 console.log response
               return false
     ]
+    ######
 
 
-
-
-
-
-
-
-
-
+    ###
+    #
+    #  FIELDS CONTROLLERS
+    #
+    ###
+    Module.controller 'ControllerWidgetExerciseBuilderFieldManageOpenResponse', ['$scope', 'apiRequest', '$dialog',
+      ($scope, apiRequest, $dialog) ->
+    ]
     Module.controller 'ControllerWidgetExerciseBuilderFieldManageSelectIndividual', ['$scope', 'apiRequest', '$dialog',
       ($scope, apiRequest, $dialog) ->
 
@@ -552,27 +554,40 @@ define [
                     aaData:               dataArr
 
     ]
+    Module.controller 'ControllerWidgetExerciseBuilderFieldManageSelectMultiple', ['$scope', 'apiRequest', '$dialog',
+      ($scope, apiRequest, $dialog) ->
+    ]
+    Module.controller 'ControllerWidgetExerciseBuilderFieldManageYesNo', ['$scope', 'apiRequest', '$dialog',
+      ($scope, apiRequest, $dialog) ->
+    ]
+    Module.controller 'ControllerWidgetExerciseBuilderFieldManageSlider', ['$scope', 'apiRequest', '$dialog',
+      ($scope, apiRequest, $dialog) ->
+
+        $scope.slider =
+          value: 50
+          step:  5
+
+        #setInterval () ->
+        #  console.log $scope.slider
+        #, 500
+
+
+    ]
+    ###
+    #
+    #  END FIELDS CONTROLLERS
+    #
+    ###
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    ###
+    #
+    #  PRIMARY CONTROLLER
+    #
+    ###
     Module.controller 'ControllerWidgetExerciseBuilder', ['$scope', '$route', '$routeParams', '$templateCache', 'socket', 'apiRequest', '$dialog',
       ($scope, $route, $routeParams, $templateCache, socket, apiRequest, $dialog) ->
 
@@ -669,8 +684,6 @@ define [
                       aaData:               dataArr
 
 
-
-
           deleteConfirmDialogTemplate: (templateUid) ->
             apiRequest.get 'template', [templateUid], {}, (response) ->
               title = 'Delete Dialog'
@@ -690,8 +703,6 @@ define [
                     apiRequest.delete 'template', templateUid, (result) ->
                       return
                       #console.log result
-
-
 
           clearnewTemplateGroupForm: () ->
             $scope.viewModel.showAddNewTemplateGroup = false
@@ -725,10 +736,6 @@ define [
                 }, (result) ->
                   $scope.viewModel.clearnewTemplateGroupForm()
                   console.log result
-
-
-
-
 
 
           revisionChangeSummary: ''
@@ -784,35 +791,7 @@ define [
               }, (result) ->
                 console.log result
                 $scope.viewModel.clearNewTemplateForm()
-
-              console.log result
-
-          ###
-          fetchTemplates: () ->
-            #API request loads templats -> revisions -> groups -> fields thanks to api uid hash reconciliation
-            async.parallel [
-              (callback) ->
-                apiRequest.get 'template', [], {expand:[{resource: 'revisions'}]}, (response) ->
-                  callback(null, response)
-              (callback) ->
-                apiRequest.get 'revision', [], {expand:[{resource: 'groups', expand:[{resource: 'fields'}]}]}, (response) ->
-                  callback(null, response)
-              (callback) ->
-                apiRequest.get 'employee', [], {expand: [{resource: 'revisions'}]}, (response) ->
-                  callback(null, response)
-            ], (err, results) ->
-
-              if results[0] and results[0].response
-                $scope.viewModel.templates = results[0].response.data
-                hashChangeUpdate()
-          ###
-
-
-
-
-
-
-
+              #console.log result
 
 
           currentTemplateRevision: {}
@@ -833,9 +812,6 @@ define [
             template = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
             $scope.viewModel.currentTemplateRevision = $scope.getLastObjectFromHash template.revisions
             #console.log $scope.viewModel.currentTemplateRevision
-
-
-
 
           currentTemplate: false
           fetchCurrentTemplate: () ->
@@ -868,16 +844,6 @@ define [
 
             #$scope.viewModel.currentTemplate = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
             #console.log $scope.viewModel.currentTemplate
-
-
-
-
-
-
-
-
-
-
 
 
         $scope.fieldsSortableOptions =

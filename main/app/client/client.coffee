@@ -139,6 +139,7 @@ require [
   'cs!directives/directiveUniqueField'
   'cs!directives/directiveDataTable'
   'cs!directives/directiveFileUpload'
+  'cs!directives/directiveSlider'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
@@ -181,6 +182,7 @@ require [
   DirectiveUniqueField
   DirectiveDataTable
   DirectiveFileUpload
+  DirectiveSlider
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
@@ -220,6 +222,7 @@ require [
   DirectiveUniqueField        CS
   DirectiveDataTable          CS
   DirectiveFileUpload         CS
+  DirectiveSlider             CS
 
   #Services
   ServiceSocket       CS
