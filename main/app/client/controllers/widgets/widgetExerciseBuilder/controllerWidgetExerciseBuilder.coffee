@@ -638,6 +638,7 @@ define [
               mData:     null
               aTargets:  [1]
               bSortable: true
+              sWidth:    '45px'
               mRender: (data, type, full) ->
                 resHtml = _.str.capitalize(full.type)
             ,

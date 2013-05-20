@@ -139,7 +139,7 @@
 
                     <h2
                       data-ng-hide = "viewModel.showEditTemplateName"
-                      style="margin-top:0;"><span>{{resourcePool[viewModel.routeParams.templateUid].name}}</span></h2>
+                      style="margin-top:0;"><span>{{ resourcePool[viewModel.routeParams.templateUid].name }}</span></h2>
 
 
                     <form
@@ -356,7 +356,7 @@
               <div
                 data-ng-repeat = "group in resourcePool[viewModel.routeParams.templateUid].revisions[viewModel.routeParams.revisionUid].groups | toArray | deleted | orderBy:'ordinal':false"
                 data-ng-init   = "nameEditing=false;"
-                data-group-uid = "{{group.uid}}">
+                data-group-uid = "{{ group.uid }}">
 
                 <div data-ng-controller="ControllerWidgetExerciseBuilderGroupEdit" class="template-builder-group">
 
@@ -537,7 +537,7 @@
                                       </ul>
                                     </div><!-- btn-group -->
 
-                                    <span style="color:#FFF !important;">{{field.name}}</span>
+                                    <span style="color:#FFF !important;">{{ field.name }}</span>
                                     <span style="color:#FFF !important; float:right;">
 
                                       <a
