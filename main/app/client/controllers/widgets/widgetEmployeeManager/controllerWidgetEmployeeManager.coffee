@@ -47,8 +47,13 @@ define [
     Module.controller 'ControllerWidgetEmployeeManagerEditEmployee', ['$scope', 'apiRequest',
     ($scope, apiRequest) ->
 
-      $scope.editEmployee = $scope.resourcePool[$scope.editingEmployeeUid]
-      $scope.viewModel.editEmployeeForm = _.extend {}, $scope.editEmployee
+      $scope = $scope.$new(true)
+
+      console.log '$scope.viewModel.editEmployeeForm'
+      console.log $scope.viewModel.editEmployeeForm
+
+      $scope.editEmployee               = $scope.resourcePool[$scope.editingEmployeeUid]
+      $scope.viewModel.editEmployeeForm = $scope.editEmployee
 
       $scope.updateInProgress     = false
       $scope.updateActionComplete = false
