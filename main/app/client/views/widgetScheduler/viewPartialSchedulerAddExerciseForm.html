@@ -118,7 +118,40 @@
                     class="control-group">
                      <label class="control-label">Date</label>
                      <div class="controls">
-                        <div data-datepicker data-months="1"></div>
+
+
+
+                      <input
+                        required
+                        name          = "date"
+                        data-ng-model = "viewModel.newEventForm.date"
+                        data-ng-bind  = "viewModel.newEventForm.date"
+                        data-ng-show  = "false"
+                        type          = "text">
+
+
+
+                      <div class="input-append bootstrap-timepicker-component">
+
+                        <input
+
+                          data-date-time-picker
+                          data-model = "viewModel.newEventForm.date"
+
+                          name       = "date"
+                          class      = "m-wrap m-ctrl-small timepicker-default"
+                          type       = "text" />
+
+                        <span class="add-on">
+                          <i style="display:inline-block !important;" class="icon-time"></i>
+                        </span>
+
+                      </div>
+
+                      TimeZone: {{viewModel.clientTimeZone}}
+
+
+
                      </div>
                   </div>
 

@@ -3,6 +3,7 @@ define [
   'angular'
   'ejs'
   'cs!utils/utilBuildDTQuery'
+  'cs!utils/utilParseClientTimeZone'
   'underscore'
 
   'text!views/widgetScheduler/viewWidgetScheduler.html'
@@ -13,6 +14,7 @@ define [
   angular
   EJS
   utilBuildDTQuery
+  utilParseClientTimeZone
   _
 
   viewWidgetScheduler
@@ -39,7 +41,9 @@ define [
     Module.controller 'ControllerWidgetSchedulerAddEvent', ['$scope', '$route', '$routeParams', 'apiRequest'
       ($scope, $route, $routeParams, apiRequest) ->
 
+
         viewModel =
+          clientTimeZone: utilParseClientTimeZone()
           employeeListDT:
             detailRow: (obj) ->
               return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj

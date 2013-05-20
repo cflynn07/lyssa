@@ -49,8 +49,8 @@ requirejs.config
     'jqueryTouchPunch':         'vendor/jquery.touch.punch'
     'boostrapDateTimePicker':   'vendor/bootstrap-datetimepicker'
   hbs:
-    disableI18n: true
-    helperDirectory: 'views/helpers/'
+    disableI18n:       true
+    helperDirectory:   'views/helpers/'
     templateExtension: 'html'
   shim:
     angular:
@@ -130,6 +130,7 @@ require [
   'cs!config/clientConfig'
   'angular-ui'
   'angular-bootstrap'
+  'boostrapDateTimePicker'
   'cs!animations/animationSlideUpDown'
   'cs!animations/animationFadeInOut'
   'cs!directives/directiveAnimateIn'
@@ -144,6 +145,7 @@ require [
   'cs!directives/directiveSlider'
   'cs!directives/directiveCalendar'
   'cs!directives/directiveEditEmployee'
+  'cs!directives/directiveDateTimePicker'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
@@ -175,6 +177,7 @@ require [
   clientConfig
   angularUi
   angularBootstrap
+  boostrapDateTimePicker
   AnimationSlideUpDown
   AnimationFadeInOut
   DirectiveAnimateIn
@@ -189,6 +192,7 @@ require [
   DirectiveSlider
   DirectiveCalendar
   DirectiveEditEmployee
+  DirectiveDateTimePicker
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
@@ -231,6 +235,7 @@ require [
   DirectiveSlider             CS
   DirectiveCalendar           CS
   DirectiveEditEmployee       CS
+  DirectiveDateTimePicker     CS
 
   #Services
   ServiceSocket       CS
