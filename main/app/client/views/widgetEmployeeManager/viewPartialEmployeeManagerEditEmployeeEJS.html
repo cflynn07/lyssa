@@ -1,6 +1,8 @@
-<div data-ng-init = "editingEmployeeUid = '<%= uid %>'">
+<div>
   <div
     data-ng-controller = "ControllerWidgetEmployeeManagerEditEmployee">
+
+    <div data-ng-init="subViewModel.editingEmployeeUid = '<%= uid %>'"></div>
 
     <div class="portlet box grey">
       <div class="portlet-title">
@@ -26,7 +28,7 @@
                     <input
                       data-ng-disabled  = "updateInProgress"
                       data-required
-                      data-ng-model     = "viewModel.editEmployeeForm.firstName"
+                      data-ng-model     = "subViewModel.editEmployeeForm.firstName"
                       data-ng-minlength = "{{clientOrmShare.employee.model.firstName.validate.len[0]}}"
                       data-ng-maxlength = "{{clientOrmShare.employee.model.firstName.validate.len[1]}}"
                       name              = "firstName"
@@ -72,7 +74,7 @@
                     <input
                       data-ng-disabled  = "updateInProgress"
                       data-required
-                      data-ng-model     = "viewModel.editEmployeeForm.lastName"
+                      data-ng-model     = "subViewModel.editEmployeeForm.lastName"
                       data-ng-minlength = "{{clientOrmShare.employee.model.lastName.validate.len[0]}}"
                       data-ng-maxlength = "{{clientOrmShare.employee.model.lastName.validate.len[1]}}"
                       name              = "lastName"
@@ -122,7 +124,7 @@
                     <input
                       data-ng-disabled  = "updateInProgress"
                       data-required
-                      data-ng-model     = "viewModel.editEmployeeForm.email"
+                      data-ng-model     = "subViewModel.editEmployeeForm.email"
                       data-unique-field = '{"resource": "employee", "property": "email"}'
                       name          = "email"
                       type          = "email"
@@ -147,7 +149,7 @@
 
                     <span
                       data-ng-show="editEmployeeForm.email.$error.uniqueField"
-                      class="help-inline">Another employee with the email address <strong>{{viewModel.editEmployeeForm.email}}</strong> already exists</span>
+                      class="help-inline">Another employee with the email address <strong>{{subViewModel.editEmployeeForm.email}}</strong> already exists</span>
 
                   </div>
                </div>
@@ -166,7 +168,7 @@
                       data-required
                       data-unique-field = '{"resource": "employee", "property": "phone"}'
                       data-ui-mask  = "'999-999-9999'"
-                      data-ng-model = "viewModel.editEmployeeForm.phone"
+                      data-ng-model = "subViewModel.editEmployeeForm.phone"
                       name          = "phone"
                       type          = "text"
                       class         = "m-wrap span10"
@@ -190,7 +192,7 @@
 
                     <span
                       data-ng-show="editEmployeeForm.phone.$error.uniqueField"
-                      class="help-inline">Another employee with the phone number <strong>{{viewModel.editEmployeeForm.phone}}</strong> already exists</span>
+                      class="help-inline">Another employee with the phone number <strong>{{subViewModel.editEmployeeForm.phone}}</strong> already exists</span>
 
                   </div>
                </div>
@@ -214,11 +216,11 @@
                       <label class="checkbox line">
                         <div class="checker">
                           <span
-                            data-ng-class = "{checked: viewModel.editEmployeeForm.delegate}"
-                            data-ng-click = "viewModel.editEmployeeForm.delegate = !viewModel.editEmployeeForm.delegate"
+                            data-ng-class = "{checked: subViewModel.editEmployeeForm.delegate}"
+                            data-ng-click = "subViewModel.editEmployeeForm.delegate = !subViewModel.editEmployeeForm.delegate"
                             class="">
                             <input
-                              data-ng-model = "viewModel.editEmployeeForm.delegate"
+                              data-ng-model = "subViewModel.editEmployeeForm.delegate"
                               name          = "delegate"
                               type          = "checkbox">
                           </span>
@@ -239,7 +241,7 @@
           <div class="form-actions">
             <button
               data-ng-disabled = "editEmployeeForm.$invalid || updateInProgress || updateActionComplete"
-              data-ng-click    = "viewModel.updateEmployee()"
+              data-ng-click    = "subViewModel.updateEmployee()"
               type             = "submit"
               class            = "btn green pull-right"><i class="icon-pencil m-icon-white"></i>
                 <span style="color:#FFF !important;" data-ng-hide="updateActionComplete">Update Employee</span>

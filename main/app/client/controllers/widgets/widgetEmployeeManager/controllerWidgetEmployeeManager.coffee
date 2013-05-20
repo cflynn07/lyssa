@@ -44,30 +44,46 @@ define [
     ]
 
 
+
+
     Module.controller 'ControllerWidgetEmployeeManagerEditEmployee', ['$scope', 'apiRequest',
     ($scope, apiRequest) ->
 
-      $scope.editEmployee = $scope.resourcePool[$scope.editingEmployeeUid]
-      $scope.viewModel.editEmployeeForm = _.extend {}, $scope.editEmployee
+      init = () ->
+        $scope.subViewModel = {}
 
-      $scope.updateInProgress     = false
-      $scope.updateActionComplete = false
+        $scope.subViewModel.editEmployee     = $scope.resourcePool[$scope.subViewModel.editingEmployeeUid]
+        $scope.subViewModel.editEmployeeForm = angular.copy($scope.subViewModel.editEmployee)
 
-      #Make savable again if changes after save
-      $scope.$watch('viewModel.editEmployeeForm', (() ->
-        $scope.updateActionComplete = false
-      ), true)
+        console.log $scope.subViewModel
 
-      $scope.viewModel.updateEmployee = () ->
+        $scope.subViewModel.updateInProgress     = false
+        $scope.subViewModel.updateActionComplete = false
+
+        #Make savable again if changes after save
+        $scope.$watch('subViewModel.editEmployeeForm', (() ->
+          $scope.updateActionComplete = false
+        ), true)
+
+      init()
+
+      $scope.$watch 'subViewModel.editingEmployeeUid', () ->
+        console.log '$scope.subViewModel.editingEmployeeUid'
+        console.log $scope.subViewModel.editingEmployeeUid
+        console.log $scope.resourcePool[$scope.subViewModel.editingEmployeeUid]
+        init()
+
+
+      $scope.subViewModel.updateEmployee = () ->
         $scope.updateInProgress = true
 
         apiRequest.put 'employee', $scope.editEmployee.uid, {
-          firstName: $scope.viewModel.editEmployeeForm.firstName
-          lastName:  $scope.viewModel.editEmployeeForm.lastName
-          email:     $scope.viewModel.editEmployeeForm.email
-          phone:     $scope.viewModel.editEmployeeForm.phone
+          firstName: $scope.subViewModel.editEmployeeForm.firstName
+          lastName:  $scope.subViewModel.editEmployeeForm.lastName
+          email:     $scope.subViewModel.editEmployeeForm.email
+          phone:     $scope.subViewModel.editEmployeeForm.phone
         }, (response) ->
-          console.log response
+          #console.log response
           $scope.updateInProgress     = false
           $scope.updateActionComplete = true
 
