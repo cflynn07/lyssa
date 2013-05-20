@@ -105,7 +105,10 @@ define [
 
           # apply the plugin
           dataTable  = element.dataTable(options)
-          keysLength = scope.getKeysLength(attrs.aaData)
+          if attrs.aaData
+            keysLength = scope.getKeysLength(attrs.aaData)
+          else
+            keysLength = 0
 
           # This method of updating is used for server-side data tables
           if options.bServerSide && attrs.updateOnResourcePost

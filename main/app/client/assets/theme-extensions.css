@@ -324,6 +324,10 @@ div.header span.username {
   position: relative;
 }
 
+.dataTables_wrapper tbody, .dataTables_wrapper thead {
+  background-color: #FFF !important;
+}
+
 .DataTables_sort_wrapper th {
     color: #000;
 }

@@ -12,12 +12,11 @@ define [
 
     Module.directive 'slider', () ->
       directive =
-        restrict:   'A'
-        #transclude: false
-        template:   '<div class="slider"></div>'
+        restrict: 'A'
+        template: '<div class="slider"></div>'
         scope:
           options: '=options'
-          color:   '@color'
+          color: '@color'
         link: ($scope, element, attrs) ->
 
           sliderElem = element.find('.slider')

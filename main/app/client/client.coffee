@@ -140,6 +140,7 @@ require [
   'cs!directives/directiveDataTable'
   'cs!directives/directiveFileUpload'
   'cs!directives/directiveSlider'
+  'cs!directives/directiveCalendar'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
@@ -183,6 +184,7 @@ require [
   DirectiveDataTable
   DirectiveFileUpload
   DirectiveSlider
+  DirectiveCalendar
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
@@ -223,6 +225,7 @@ require [
   DirectiveDataTable          CS
   DirectiveFileUpload         CS
   DirectiveSlider             CS
+  DirectiveCalendar           CS
 
   #Services
   ServiceSocket       CS

@@ -20,28 +20,117 @@ define [
 
   (Module) ->
 
+
+
     Module.run ['$templateCache',
-    ($templateCache) ->
-      $templateCache.put 'viewWidgetScheduler',
-        viewWidgetScheduler
-      $templateCache.put 'viewPartialSchedulerAddExerciseForm',
-        viewPartialSchedulerAddExerciseForm
+      ($templateCache) ->
+
+        $templateCache.put 'viewWidgetScheduler',
+          viewWidgetScheduler
+
+        $templateCache.put 'viewPartialSchedulerAddExerciseForm',
+          viewPartialSchedulerAddExerciseForm
     ]
+
+
+
+    Module.controller 'ControllerWidgetSchedulerAddEvent', ['$scope', '$route', '$routeParams', 'apiRequest'
+      ($scope, $route, $routeParams, apiRequest) ->
+
+        viewModel =
+          employeeListDT:
+            detailRow: (obj) ->
+              return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
+            options:
+              bProcessing:     true
+              bStateSave:      true
+              iCookieDuration: 2419200 # 1 month
+              bPaginate:       true
+              bLengthChange:   true
+              bFilter:         true
+              bInfo:           true
+              bDestroy:        true
+              bServerSide:     true
+              sAjaxSource:     '/'
+              fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                query = utilBuildDTQuery ['firstName', 'lastName', 'email', 'phone'],
+                  ['firstName', 'lastName', 'email', 'phone'],
+                  oSettings
+
+                cacheResponse   = ''
+                oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
+                  if response.code == 200
+
+                    responseDataString = JSON.stringify(response.response)
+                    if cacheResponse == responseDataString
+                      return
+                    cacheResponse = responseDataString
+                    empArr = _.toArray response.response.data
+
+                    fnCallback
+                      iTotalRecords:        response.response.length
+                      iTotalDisplayRecords: response.response.length
+                      aaData:               empArr
+
+            columnDefs: [
+              mData:     null
+              bSortable: true
+              aTargets:  [0]
+              mRender: (data, type, full) ->
+                #console.log 'colrender1'
+                #console.log arguments
+                #return full.firstName
+                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].firstName">' + full.firstName + '</span>'
+            ,
+              mData:     null
+              bSortable: true
+              aTargets:  [1]
+              mRender: (data, type, full) ->
+                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].lastName">' + full.lastName + '</span>'
+            ,
+              mData:     null
+              bSortable: true
+              aTargets:  [2]
+              mRender: (data, type, full) ->
+                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].email">' + full.email + '</span>'
+            ,
+              mData:     null
+              bSortable: true
+              aTargets:  [3]
+              mRender: (data, type, full) ->
+                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].phone">' + full.phone + '</span>'
+            ,
+              mData:     null
+              bSortable: false
+              aTargets:  [4]
+              mRender: (data, type, full) ->
+                return '' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
+            ,
+              mData:     null
+              bSortable: false
+              aTargets:  [5]
+              mRender: (data, type, full) ->
+                return ''
+            ]
+
+        $scope.viewModel = viewModel
+
+    ]
+
+
+
+
+
 
     Module.controller 'ControllerWidgetScheduler', ['$scope', '$route', '$routeParams', 'apiRequest'
     ($scope, $route, $routeParams, apiRequest) ->
 
       viewModel =
-
-        addNewEventForm:       {}
-        routeParams:           $routeParams
-
-        events:                {}
-        calendarEventsObjects: []
-
+        addNewEventForm: {}
+        routeParams:     $routeParams
         eventListDT:
           detailRow: (obj) ->
-            return ''
+            return ' - '
           columnDefs: [
             mData:     null
             aTargets:  [0]
@@ -100,130 +189,7 @@ define [
                     iTotalDisplayRecords: response.response.length
                     aaData:               dataArr
 
-
-        renderEvents: () ->
-
-          $('#primaryFullCalendar')
-            .fullCalendar('removeEvents')
-            .fullCalendar('removeEventSources')
-          $('#secondaryFullCalendar')
-            .fullCalendar('removeEvents')
-            .fullCalendar('removeEventSources')
-
-          eventsArray = []
-          for uid, eventObj of viewModel.events
-            eventObj =
-              title: eventObj.name
-              start: new Date(eventObj.dateTime)
-            eventsArray.push eventObj
-          viewModel.calendarEventsObjects = eventsArray
-
-          $('#primaryFullCalendar')
-            .fullCalendar('addEventSource', viewModel.calendarEventsObjects)
-          $('#secondaryFullCalendar')
-            .fullCalendar('addEventSource', viewModel.calendarEventsObjects)
-          $('#primaryFullCalendar')
-            .fullCalendar('refetchEvents')
-          $('#secondaryFullCalendar')
-            .fullCalendar('refetchEvents')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        employees :            {}
-        newTemplateFormEmployeesDT:
-          options:
-            bStateSave:      true
-            iCookieDuration: 2419200
-            bJQueryUI:       false
-            bPaginate:       true
-            bLengthChange:   true
-            bFilter:         false
-            bInfo:           true
-            bDestroy:        true
-          columnDefs: [
-            mData:    null
-            aTargets: [0]
-            mRender: (data, type, full) ->
-              return full.firstName
-          ,
-            mData:    null
-            aTargets: [1]
-            mRender: (data, type, full) ->
-              return full.email
-          ,
-            mData:    null
-            aTargets: [2]
-            mRender: (data, type, full) ->
-              return 'test'
-          ]
-
-
-
-        exerciseListDT:
-          detailRow: (obj) ->
-            uid = $scope.escapeHtml obj.uid
-            return ''
-          columnDefs: [
-            mData:  null
-            aTargets:   [0]
-            mRender: (data, type, full) ->
-              resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
-              if full.name
-                resHtml += $scope.escapeHtml(full.name)
-              resHtml += '</a>'
-              return resHtml
-          ,
-            mData:      null
-            aTargets:   [1]
-            mRender: (data, type, full) ->
-              html = new EJS({text: viewWidgetSchedulerListButtonsEJS}).render
-                full:     full
-                name:     full.name
-                viewRoot: $scope.viewRoot
-              #uid = $scope.escapeHtml full.uid
-              #html = ''
-          ]
-          options:
-            bStateSave:      true
-            iCookieDuration: 2419200
-            bJQueryUI:       true
-            bPaginate:       true
-            bLengthChange:   true
-            bFilter:         false
-            bInfo:           true
-            bDestroy:        true
-
-
-
-
-
-
-
-
-
-
-
-
-      viewModel.calendarEventsObjects = [{
-        title: 'new event'
-        start: new Date()
-      }]
-
-
+        fullCalendarOptions: {}
 
 
       calConfObj = {
@@ -247,43 +213,13 @@ define [
 
       }
 
-
-      $('#primaryFullCalendar')
-        .fullCalendar(calConfObj)
-
-
-      ###
-      setInterval () ->
-        console.log 'refetchEvents'
-        $('#primaryFullCalendar')
-          .fullCalendar('refetchEvents')
-      , 2000
-      ###
-
-
-
-      ###
-      $('#secondaryFullCalendar')
-        .fullCalendar(calConfObj)
-      ###
-
-
-
+      #$('#primaryFullCalendar')
+      #  .fullCalendar(calConfObj)
 
       hashChangeUpdate = () ->
         $scope.viewModel.routeParams = $routeParams
       $scope.$on '$routeChangeSuccess', () ->
         hashChangeUpdate()
-
-
-
-
-      $scope.$watch 'viewModel.events', (value) ->
-        return
-        viewModel.renderEvents()
-      , true
-
-
 
       $scope.viewModel = viewModel
 
