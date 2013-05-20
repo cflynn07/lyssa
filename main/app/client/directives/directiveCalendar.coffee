@@ -16,12 +16,19 @@ define [
         template: '<div class="calendar"></div>'
         scope:
           options: '=options'
+          activateWatch: '=activateWatch'
           refetchOnPost: '@refetchOnPost'
           refetchOnPut:  '@refetchOnPut'
         link: ($scope, element, attrs) ->
 
           calendarElem = element.find('.calendar')
-          calendarElem.fullCalendar $scope.options
+
+          activated = false
+          activate = () ->
+            if activated
+              return
+            activated = true
+            calendarElem.fullCalendar $scope.options
 
 
           #Listen for events to refetch events
@@ -31,3 +38,9 @@ define [
           $scope.$on 'resourcePut', (e, data) ->
             if data['resourceName'] == $scope.refetchOnPut
               calendarElem.fullCalendar 'refetchEvents'
+
+
+          $scope.$watch 'activateWatch', () ->
+            if $scope.activateWatch is true
+              activate()
+          , true

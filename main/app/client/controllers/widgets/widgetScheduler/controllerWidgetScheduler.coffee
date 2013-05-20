@@ -180,42 +180,24 @@ define [
               cacheResponse   = ''
               oSettings.jqXHR = apiRequest.get 'event', [], query, (response) ->
 
-                #console.log 'response'
-                #console.log response
-
                 if response.code == 200
 
                   responseDataString = JSON.stringify(response.response)
                   if cacheResponse == responseDataString
                     return
-
                   cacheResponse = responseDataString
+
                   dataArr = _.toArray response.response.data
                   fnCallback
                     iTotalRecords:        response.response.length
                     iTotalDisplayRecords: response.response.length
                     aaData:               dataArr
 
-                  ###
-                  #Also fetch associated revisions & templates... (this is a pain in the ass)
-                  revisionUids = []
-                  for key, value of response.response.data
-                    revisionUids.push value.revisionUid
-                  revisionUids = _.uniq revisionUids
 
-                  apiRequest.get 'revision', revisionUids, {}, (response) ->
-                    if response.code == 200
 
-                      templateUids = []
-                      for key, value of response.response.data
-                        templateUids.push value.revisionUid
-                      templateUids = _.uniq templateUids
 
-                      console.log templateUids
-                      apiRequest.get 'template', templateUids, {}, (response) ->
-                        return
-                  #Fetched revisions & templates
-                  ###
+
+
 
 
         fullCalendarOptions:
@@ -228,6 +210,7 @@ define [
             apiRequest.get 'event', [], {
               filter: filter
             }, (response) ->
+              console.log response
 
               eventsArr = []
               if response.code == 200
@@ -241,6 +224,39 @@ define [
               if JSON.stringify(eventsArr) != $scope.viewModel.fullCalendarOptions.eventsResultCache
                 $scope.viewModel.fullCalendarOptions.eventsResultCache = JSON.stringify(eventsArr)
                 callback eventsArr
+
+
+
+
+        fullCalendarOptionsSecondary:
+          eventsResultCache: {}
+          events: (start, end, callback) ->
+
+            filter  = [['dateTime', '>', (new Date(start).toISOString()), 'and'], ['dateTime', '<', (new Date(end).toISOString())]]
+            curDate = new Date()
+
+            apiRequest.get 'event', [], {
+              filter: filter
+            }, (response) ->
+              #console.log response
+
+              eventsArr = []
+              if response.code == 200
+                for key, eventObj of response.response.data
+                  FCEventObj =
+                    title: eventObj.name
+                    start: new Date(eventObj.dateTime)
+                    className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
+                  eventsArr.push FCEventObj
+
+              if JSON.stringify(eventsArr) != $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache
+                $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache = JSON.stringify(eventsArr)
+                callback eventsArr
+
+
+
+
+
 
 
 

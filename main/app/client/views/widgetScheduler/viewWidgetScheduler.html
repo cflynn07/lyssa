@@ -18,6 +18,13 @@
           </div>
           <div class="portlet-body light-grey">
 
+            <button
+              style           = "margin-bottom: 20px;"
+              data-ng-show    = "viewModel.showNewExerciseForm"
+              data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
+              data-ng-click   = "viewModel.showNewExerciseForm = false"
+              class           = "btn green btn-block">Cancel Add Exercise <i class="m-icon-swapright m-icon-white"></i></button>
+
 
             <button
               style           = "margin-bottom: 20px;"
@@ -54,7 +61,14 @@
             <h4><span>Calendar</span></h4>
           </div>
           <div class="portlet-body light-grey">
-            <div id="secondaryFullCalendar"></div>
+
+            <div
+              data-calendar
+              data-activate-watch  = "viewModel.routeParams.eventUid || viewModel.showNewExerciseForm"
+              data-options         = "viewModel.fullCalendarOptionsSecondary"
+              data-refetch-on-post = "event"
+              data-refetch-on-put  = "event"></div>
+
           </div>
         </div>
 
@@ -80,6 +94,7 @@
 
             <div
               data-calendar
+              data-activate-watch  = "!(viewModel.routeParams.eventUid || viewModel.showNewExerciseForm)"
               data-options         = "viewModel.fullCalendarOptions"
               data-refetch-on-post = "event"
               data-refetch-on-put  = "event"></div>
