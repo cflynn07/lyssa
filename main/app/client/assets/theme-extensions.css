@@ -530,3 +530,15 @@ div.controls .required {
   color: red !important;
 }
 
+/**
+------
+*/
+.event {
+  border: 1px solid #FFF;
+}
+.pastEvent {
+  background-color: #555555;
+}
+.upcomingEvent {
+  background-color: #4b8df8;
+}

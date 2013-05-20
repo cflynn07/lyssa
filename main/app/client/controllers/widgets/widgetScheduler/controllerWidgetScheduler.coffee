@@ -3,6 +3,7 @@ define [
   'angular'
   'ejs'
   'cs!utils/utilBuildDTQuery'
+  'underscore'
 
   'text!views/widgetScheduler/viewWidgetScheduler.html'
   'text!views/widgetScheduler/viewWidgetSchedulerListButtonsEJS.html'
@@ -12,6 +13,7 @@ define [
   angular
   EJS
   utilBuildDTQuery
+  _
 
   viewWidgetScheduler
   viewWidgetSchedulerListButtonsEJS
@@ -145,15 +147,16 @@ define [
             mData:     null
             aTargets:  [1]
             bSortable: true
-            sWidth:    '45px'
+            sWidth:    '100px'
             mRender: (data, type, full) ->
-              resHtml = '<span >' + '' + '</span>'
+              resHtml = '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].dateTime | date:\'short\'"></span>'
           ,
             mData:     null
             aTargets:  [2]
             bSortable: true
+            sWidth:    '100px'
             mRender: (data, type, full) ->
-              return '--'
+              resHtml = '<span data-ng-bind="resourcePool[resourcePool[\'' + full.revisionUid + '\'].templateUid].type"></span>'
           ]
           options:
             bStateSave:      true
@@ -167,8 +170,8 @@ define [
             bServerSide:     true
             bProcessing:     true
             fnServerData: (sSource, aoData, fnCallback, oSettings) ->
-              query = utilBuildDTQuery ['name', 'type'],
-                ['name', 'type'],
+              query = utilBuildDTQuery ['name', 'dateTime'],
+                ['name', 'dateTime'],
                 oSettings
 
               query.filter.push ['deletedAt', '=', 'null']
@@ -180,47 +183,67 @@ define [
                   responseDataString = JSON.stringify(response.response)
                   if cacheResponse == responseDataString
                     return
+
                   cacheResponse = responseDataString
-
                   dataArr = _.toArray response.response.data
-
                   fnCallback
                     iTotalRecords:        response.response.length
                     iTotalDisplayRecords: response.response.length
                     aaData:               dataArr
 
-        fullCalendarOptions: {}
+                  #Also fetch associated revisions & templates... (this is a pain in the ass)
+                  revisionUids = []
+                  for key, value of response.response.data
+                    revisionUids.push value.revisionUid
+                  revisionUids = _.uniq revisionUids
+
+                  apiRequest.get 'revision', revisionUids, {}, (response) ->
+                    if response.code == 200
+
+                      templateUids = []
+                      for key, value of response.response.data
+                        templateUids.push value.revisionUid
+                      templateUids = _.uniq templateUids
+
+                      console.log templateUids
+                      apiRequest.get 'template', templateUids, {}, (response) ->
+                        return
+                  #Fetched revisions & templates
 
 
-      calConfObj = {
-        events: (start, end, callback) ->
-          filter = [['dateTime', '>', (new Date(start).toISOString()), 'and'], ['dateTime', '<', (new Date(end).toISOString())]]
-          console.log filter
 
-          apiRequest.get 'event', [], {
-            filter: filter
-          }, (response) ->
-            console.log response
+        fullCalendarOptions:
+          eventsResultCache: {}
+          events: (start, end, callback) ->
 
-            eventsArr = []
-            if response.code == 200
-              for key, eventObj of response.response.data
-                eventsArr.push {
-                  title: eventObj.name
-                  start: new Date(eventObj.dateTime)
-                }
-            callback eventsArr
+            filter  = [['dateTime', '>', (new Date(start).toISOString()), 'and'], ['dateTime', '<', (new Date(end).toISOString())]]
+            curDate = new Date()
 
-      }
+            apiRequest.get 'event', [], {
+              filter: filter
+            }, (response) ->
 
-      #$('#primaryFullCalendar')
-      #  .fullCalendar(calConfObj)
+              eventsArr = []
+              if response.code == 200
+                for key, eventObj of response.response.data
+                  FCEventObj =
+                    title: eventObj.name
+                    start: new Date(eventObj.dateTime)
+                    className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
+                  eventsArr.push FCEventObj
+
+              if JSON.stringify(eventsArr) != $scope.viewModel.fullCalendarOptions.eventsResultCache
+                $scope.viewModel.fullCalendarOptions.eventsResultCache = JSON.stringify(eventsArr)
+                callback eventsArr
+
+
+
+
 
       hashChangeUpdate = () ->
         $scope.viewModel.routeParams = $routeParams
       $scope.$on '$routeChangeSuccess', () ->
         hashChangeUpdate()
-
       $scope.viewModel = viewModel
 
     ]

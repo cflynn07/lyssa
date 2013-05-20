@@ -36,8 +36,8 @@
               <thead>
                 <tr>
                   <th class = "sorting">Name</th>
-                  <th class = "sorting">Type</th>
-                  <th class = "sorting_disabled"></th>
+                  <th class = "sorting">Date</th>
+                  <th class = "sorting_disabled">Type</th>
                 </tr>
               </thead>
             </table>
@@ -80,7 +80,9 @@
 
             <div
               data-calendar
-              data-options = "viewModel.fullCalendarOptions"></div>
+              data-options         = "viewModel.fullCalendarOptions"
+              data-refetch-on-post = "event"
+              data-refetch-on-put  = "event"></div>
 
           </div><!-- /portlet-body -->
         </div><!-- /portlet-box -->
