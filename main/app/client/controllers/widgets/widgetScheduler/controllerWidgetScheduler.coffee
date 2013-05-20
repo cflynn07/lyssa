@@ -228,20 +228,44 @@ define [
 
       calConfObj = {
         events: (start, end, callback) ->
-          console.log 'events function'
-          console.log arguments
-          callback [{
-            title: 'Test Event'
-            date:  new Date(end + ' +7200')
-          }]
+          filter = [['dateTime', '>', (new Date(start).toISOString()), 'and'], ['dateTime', '<', (new Date(end).toISOString())]]
+          console.log filter
+
+          apiRequest.get 'event', [], {
+            filter: filter
+          }, (response) ->
+            console.log response
+
+            eventsArr = []
+            if response.code == 200
+              for key, eventObj of response.response.data
+                eventsArr.push {
+                  title: eventObj.name
+                  start: new Date(eventObj.dateTime)
+                }
+            callback eventsArr
+
       }
 
 
       $('#primaryFullCalendar')
         .fullCalendar(calConfObj)
+
+
+      ###
+      setInterval () ->
+        console.log 'refetchEvents'
+        $('#primaryFullCalendar')
+          .fullCalendar('refetchEvents')
+      , 2000
+      ###
+
+
+
+      ###
       $('#secondaryFullCalendar')
         .fullCalendar(calConfObj)
-
+      ###
 
 
 
