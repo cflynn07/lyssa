@@ -91,6 +91,7 @@ else
           'ejs':                      'vendor/ejs'
           'async':                    'vendor/async'
           'jqueryTouchPunch':         'vendor/jquery.touch.punch'
+          'boostrapDateTimePicker':   'vendor/bootstrap-datetimepicker'
         uglify:
           no_mangle: true
         hbs:
@@ -145,7 +146,8 @@ else
             deps:    ['jquery', 'jqueryBrowser']
           jqueryTouchPunch:
             deps:    ['jquery']
-
+          boostrapDateTimePicker:
+            deps:    ['jquery', 'jquery-ui', 'bootstrap']
 
           #File-upload assets
           jqueryFileUpload:

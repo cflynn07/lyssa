@@ -47,6 +47,7 @@ requirejs.config
     'ejs':                      'vendor/ejs'
     'async':                    'vendor/async'
     'jqueryTouchPunch':         'vendor/jquery.touch.punch'
+    'boostrapDateTimePicker':   'vendor/bootstrap-datetimepicker'
   hbs:
     disableI18n: true
     helperDirectory: 'views/helpers/'
@@ -99,7 +100,8 @@ requirejs.config
       deps:    ['jquery', 'jqueryBrowser']
     jqueryTouchPunch:
       deps:    ['jquery']
-
+    boostrapDateTimePicker:
+      deps:    ['jquery', 'jquery-ui', 'bootstrap']
 
     #File-upload assets
     jqueryFileUpload:

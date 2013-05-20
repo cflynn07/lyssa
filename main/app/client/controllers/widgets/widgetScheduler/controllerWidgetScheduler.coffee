@@ -225,9 +225,6 @@ define [
                 $scope.viewModel.fullCalendarOptions.eventsResultCache = JSON.stringify(eventsArr)
                 callback eventsArr
 
-
-
-
         fullCalendarOptionsSecondary:
           eventsResultCache: {}
           events: (start, end, callback) ->

@@ -9,7 +9,6 @@
       <h4><span>Add Exercise</span></h4>
     </div>
 
-
     <div class="portlet-body form">
       <form
         name  = "newEventForm"
@@ -19,6 +18,7 @@
             <div class="navbar steps">
                <div class="navbar-inner">
                   <ul class="row-fluid nav nav-pills">
+
                      <li
                        class="span4 active">
                         <a href="" data-toggle="tab" class="step active">
@@ -26,18 +26,21 @@
                           <span class="desc"><i class="icon-ok"></i> Exercise Setup</span>
                         </a>
                      </li>
+
                      <li class="span4">
                         <a href="" data-toggle="tab" class="step">
                           <span class="number">2</span>
                           <span class="desc"><i class="icon-ok"></i> Template & Revision</span>
                         </a>
                      </li>
+
                      <li class="span4">
                         <a href="" data-toggle="tab" class="step">
                           <span class="number">3</span>
                           <span class="desc"><i class="icon-ok"></i> Delegates & Employees</span>
                         </a>
                      </li>
+
                   </ul>
                </div>
             </div>
@@ -49,7 +52,7 @@
             <div class="tab-content">
 
                <div class="tab-pane active">
-                  <h3 class="block">Basic Info</h3>
+                  <h3 class="block">Set up a new exercise or quiz</h3>
 
                   <div
                     data-ng-class = "{success:newEventForm.eventType.$valid, error:!newEventForm.eventType.$valid, 'ng-pristine':newEventForm.eventType.$pristine}"
@@ -59,7 +62,7 @@
                         <select
                           data-ng-model = "viewModel.newEventForm.eventType"
                           name          = "eventType">
-                          <option value="mini">Mini Exercise</option>
+                          <option value="mini">Employee Quiz</option>
                           <option value="full">Full Exercise</option>
                         </select>
                      </div>
