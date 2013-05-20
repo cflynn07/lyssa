@@ -18,6 +18,7 @@ define [
 
       #Hash of all ORM resources
       resourcePool = {}
+
       #Make available...
       $rootScope.resourcePool = resourcePool
 
@@ -30,8 +31,8 @@ define [
 
       #TODO: Account for parent/child relationship changes
       socket.on 'resourcePut', (data) ->
-        #console.log 'resourcePut'
-        #console.log data
+        console.log 'resourcePut'
+        console.log data
         $rootScope.$broadcast 'resourcePut', data #['uid']
 
         if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
@@ -171,23 +172,31 @@ define [
           if !_.isArray passedValueObjOrArray
             passedValueObjOrArray = [passedValueObjOrArray]
 
-          for obj in passedValueObjOrArray
+          for obj in passedValueObjOrArray #<-- At this point it's an array ^
 
             if !_.isUndefined resourcePool[obj.uid]
               #We have it already
               updatePoolResource resourcePool[obj.uid], obj
               responseHash[obj.uid] = resourcePool[obj.uid]
-
             else
               #It's new
               addPoolResource obj
               responseHash[obj.uid] = obj
 
+
+
             for objKey, objValue of obj
-              if _.isArray objValue
+              if _.isArray(objValue)
                 #We turn properties that are arrays of objects into hashes of objects indexed by Uid
                 obj[objKey] = recursiveCallback objValue
                 updatePoolResource resourcePool[obj.uid], obj
+
+              else if (_.isObject(objValue) && !_.isUndefined(objValue.uid))
+                if _.isUndefined resourcePool[obj.uid]
+                  addPoolResource obj
+                else
+                  updatePoolResource resourcePool[obj.uid], obj
+                recursiveCallback(objValue)
 
           return responseHash
 

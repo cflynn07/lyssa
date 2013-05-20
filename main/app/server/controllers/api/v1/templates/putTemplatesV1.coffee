@@ -62,6 +62,23 @@ module.exports = (app) ->
                 'type': (val, objectKey, object, callback) ->
                   callback null,
                     success: true
+                'deletedAt': (val, objectKey, object, callback) ->
+                  if _.isUndefined(val)
+                    callback null,
+                      success: true
+                    return
+
+                  if (val != 'null') && (val is not null)
+                    callback null,
+                      success: false
+                      message:
+                        deletedAt: 'invalid'
+                    return
+
+                  callback null,
+                    success: true
+                    transform: [objectKey, 'deletedAt', null]
+
                 'employeeUid': (val, objectKey, object, callback) ->
 
                   #find this template by checking uid, check to see if uid is set
@@ -169,6 +186,23 @@ module.exports = (app) ->
                 'type': (val, objectKey, object, callback) ->
                   callback null,
                     success: true
+
+                'deletedAt': (val, objectKey, object, callback) ->
+                  if _.isUndefined(val)
+                    callback null,
+                      success: true
+                    return
+
+                  if (val != 'null') && (val is not null)
+                    callback null,
+                      success: false
+                      message:
+                        deletedAt: 'invalid'
+                    return
+
+                  callback null,
+                    success: true
+
                 'employeeUid': (val, objectKey, object, callback) ->
 
                   #find this template by checking uid, check to see if uid is set

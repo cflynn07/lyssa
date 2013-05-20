@@ -156,7 +156,7 @@ define [
             bSortable: true
             sWidth:    '100px'
             mRender: (data, type, full) ->
-              resHtml = '<span data-ng-bind="resourcePool[resourcePool[\'' + full.revisionUid + '\'].templateUid].type"></span>'
+              resHtml = '<span data-ng-bind="resourcePool[resourcePool[\'' + full.revisionUid + '\'].templateUid].name"></span>'
           ]
           options:
             bStateSave:      true
@@ -175,9 +175,14 @@ define [
                 oSettings
 
               query.filter.push ['deletedAt', '=', 'null']
+              query.expand = [{resource: 'revision', expand:[{resource: 'template'}]}]
 
               cacheResponse   = ''
               oSettings.jqXHR = apiRequest.get 'event', [], query, (response) ->
+
+                #console.log 'response'
+                #console.log response
+
                 if response.code == 200
 
                   responseDataString = JSON.stringify(response.response)
@@ -191,6 +196,7 @@ define [
                     iTotalDisplayRecords: response.response.length
                     aaData:               dataArr
 
+                  ###
                   #Also fetch associated revisions & templates... (this is a pain in the ass)
                   revisionUids = []
                   for key, value of response.response.data
@@ -209,7 +215,7 @@ define [
                       apiRequest.get 'template', templateUids, {}, (response) ->
                         return
                   #Fetched revisions & templates
-
+                  ###
 
 
         fullCalendarOptions:

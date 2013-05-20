@@ -26,6 +26,8 @@ module.exports =
         isUUID: 4
         notNull: true
 
+    deletedAt: SEQ.DATE
+
   relations: [
     relation: 'belongsTo'
     model: 'client'

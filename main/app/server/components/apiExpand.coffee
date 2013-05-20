@@ -66,6 +66,8 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     #verify no circular references, which shouldn't be possible anways
     #since we're only allowing "downstream" (hasMany, hasOne) associations
     #to be extended/fetched
+    # ^ NOT TRUE ANYMORE...
+
     extendedModels = []
     downstreamAssociations = []
 
@@ -74,6 +76,9 @@ module.exports = (req, res, resource, resourceQueryParams) ->
         downstreamAssociations.push (item.target.name + 's')
       if item.associationType.toLowerCase() is 'hasone'
         downstreamAssociations.push item.target.name
+      if item.associationType.toLowerCase() is 'belongsto'
+        downstreamAssociations.push item.target.name
+
 
     for v in req.apiExpand
       if downstreamAssociations.indexOf(v.resource) == -1
@@ -215,6 +220,8 @@ module.exports = (req, res, resource, resourceQueryParams) ->
           for propertyName, propertyValue of obj
             if _.isArray propertyValue
               recursiveBindToRooms propertyValue
+            else if _.isObject(propertyValue) && !_.isUndefined(propertyValue.uid)
+              recursiveBindToRooms(propertyValue)
 
       recursiveBindToRooms topResultJSON
 
@@ -463,8 +470,8 @@ module.exports = (req, res, resource, resourceQueryParams) ->
         whereString += '`' + resource.tableName + '`.`' + order[0] + '` ' + order[1].toUpperCase()
 
 
-  console.log 'whereString'
-  console.log whereString
+  #console.log 'whereString'
+  #console.log whereString
 
   sequelize.query("SELECT `" + resource.tableName + "`.`id` FROM `" + resource.tableName + "` WHERE " + whereString,
   null,
@@ -537,13 +544,22 @@ module.exports = (req, res, resource, resourceQueryParams) ->
             #console.log '======================='
             #console.log subResult
             #console.log subResultPropertyToExpandKey
+            #console.log subResult[subResultPropertyToExpandKey]
             #console.log '======================='
 
+
             subResourceIds = []
-            for subResource in subResult[subResultPropertyToExpandKey]
-              subResourceIds.push subResource.id
+            if _.isObject(subResult[subResultPropertyToExpandKey]) and !_.isArray(subResult[subResultPropertyToExpandKey])
+              subResourceIds.push(subResult[subResultPropertyToExpandKey].id)
+
+            else if _.isArray(subResult[subResultPropertyToExpandKey])
+              for subResource in subResult[subResultPropertyToExpandKey]
+                subResourceIds.push subResource.id
 
             subResourceExpandModels = []
+
+            #console.log 'subResourceIds'
+            #console.log subResourceIds
 
 
             #console.log 'expandResourceObjectArrayValue'
@@ -558,15 +574,29 @@ module.exports = (req, res, resource, resourceQueryParams) ->
               if model
                 subResourceExpandModels.push model
 
+            #console.log 'subResourceExpandModels'
+            #console.log subResourceExpandModels
+
             ((asyncMethods, subResourceToExpandModel, subResourceIds, subResourceExpandModels, subResult, subResultPropertyToExpandKey) ->
 
               asyncMethods.push (callback) ->
+
+                #console.log 'subResourceIds'
+                #console.log subResourceIds
 
                 subResourceToExpandModel.findAll(
                   where:
                     id: subResourceIds
                   include: subResourceExpandModels
                 ).success (resultNewSubResource) ->
+
+
+                  #If singular result and meant to be parent property of existing object -- convert from array to object
+                  lastCharOfProp = subResultPropertyToExpandKey.substring(subResultPropertyToExpandKey.length, subResultPropertyToExpandKey.length - 1)
+                  if lastCharOfProp != 's' && _.isArray(resultNewSubResource) && resultNewSubResource.length == 1
+                    resultNewSubResource = resultNewSubResource[0]
+
+
                   subResult[subResultPropertyToExpandKey] = resultNewSubResource
                   callback()
 
