@@ -595,15 +595,17 @@ define [
         $scope.viewModel =
 
           toggleTemplatesListCollapsed: () ->
-
             options = {}
             options.direction = 'left'
-
             if !$scope.viewModel.templatesListCollapsed
               $('#templatesListPortlet').effect 'blind', {direction:'left'}, () ->
-                $scope.viewModel.templatesListCollapsed = !$scope.viewModel.templatesListCollapsed
-                if !$scope.$$phase
-                  $scope.$apply()
+
+                setTimeout () ->
+                  $scope.viewModel.templatesListCollapsed = !$scope.viewModel.templatesListCollapsed
+                  if !$scope.$$phase
+                    $scope.$apply()
+                , 150
+
             else
               $scope.viewModel.templatesListCollapsed = !$scope.viewModel.templatesListCollapsed
 
