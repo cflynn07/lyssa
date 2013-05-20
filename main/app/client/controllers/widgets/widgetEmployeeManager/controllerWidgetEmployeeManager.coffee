@@ -45,53 +45,6 @@ define [
 
 
 
-
-    Module.controller 'ControllerWidgetEmployeeManagerEditEmployee', ['$scope', 'apiRequest',
-    ($scope, apiRequest) ->
-
-      init = () ->
-        $scope.subViewModel = {}
-
-        $scope.subViewModel.editEmployee     = $scope.resourcePool[$scope.subViewModel.editingEmployeeUid]
-        $scope.subViewModel.editEmployeeForm = angular.copy($scope.subViewModel.editEmployee)
-
-        console.log $scope.subViewModel
-
-        $scope.subViewModel.updateInProgress     = false
-        $scope.subViewModel.updateActionComplete = false
-
-        #Make savable again if changes after save
-        $scope.$watch('subViewModel.editEmployeeForm', (() ->
-          $scope.updateActionComplete = false
-        ), true)
-
-      init()
-
-      $scope.$watch 'subViewModel.editingEmployeeUid', () ->
-        console.log '$scope.subViewModel.editingEmployeeUid'
-        console.log $scope.subViewModel.editingEmployeeUid
-        console.log $scope.resourcePool[$scope.subViewModel.editingEmployeeUid]
-        init()
-
-
-      $scope.subViewModel.updateEmployee = () ->
-        $scope.updateInProgress = true
-
-        apiRequest.put 'employee', $scope.editEmployee.uid, {
-          firstName: $scope.subViewModel.editEmployeeForm.firstName
-          lastName:  $scope.subViewModel.editEmployeeForm.lastName
-          email:     $scope.subViewModel.editEmployeeForm.email
-          phone:     $scope.subViewModel.editEmployeeForm.phone
-        }, (response) ->
-          #console.log response
-          $scope.updateInProgress     = false
-          $scope.updateActionComplete = true
-
-    ]
-
-
-
-
     Module.controller 'ControllerWidgetEmployeeManagerCSVUpload', ['$scope', 'apiRequest',
     ($scope, apiRequest) ->
 
@@ -176,7 +129,9 @@ define [
             employees: {}
             employeeListDT:
               detailRow: (obj) ->
-                return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
+                #return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
+                return '<div data-edit-employee data-client-orm-share="clientOrmShare" data-resource-pool="resourcePool" data-employee-uid="' + obj.uid + '"></div>'
+
               options:
                 bProcessing:  true
                 bStateSave:      true
