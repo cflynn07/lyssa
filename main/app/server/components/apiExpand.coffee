@@ -337,7 +337,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
       if !checkPropertiesAgainstResource(val[0])
         console.log 'f4'
         return false
-      if (val[1] != '=') and (val[1] != '!=') and (val[1].toLowerCase() != 'like')
+      if (val[1] != '=') and (val[1] != '!=') and (val[1].toLowerCase() != 'like') and (val[1] != '>') and (val[1] != '<')
         console.log 'f5'
         return false
       if val[2].length > 200
@@ -422,12 +422,19 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
       if filterArr[1].toLowerCase() == 'like'
         whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1].toUpperCase() + ' \'%' + filterArr[2] + '%\'  ' + connector + ' '
+
+      else if (filterArr[1].toLowerCase() == '>') or (filterArr[1].toLowerCase() == '<')
+        whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` ' + filterArr[1] + ' \'' + filterArr[2] + '\'  ' + connector + ' '
       else
 
         if (filterArr[2] == 'null') && (filterArr[1].toLowerCase() != 'like')
           whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` ' + (if filterArr[1] == '=' then 'IS' else 'IS NOT') + ' NULL   ' + connector + ' '
         else
           whereString += '`' + resource.tableName + '`.`' + filterArr[0] + '` COLLATE UTF8_GENERAL_CI ' + filterArr[1] + ' \'' + filterArr[2] + '\'   ' + connector + ' '
+
+
+
+
 
 
   whereString = whereString.substring(0, whereString.length - 5)
@@ -465,6 +472,10 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
     #Hunt down ID's to grab, & total result set length...
     #resource[resourceQueryParams.method](findCopy).success (filterIds) ->
+
+    if _.isNull filterIds
+      res.jsonAPIRespond config.apiErrorResponse 'generalInvalid'
+      return
 
     totalSetLen    = filterIds.length
     offsetLimitSet = filterIds.splice resourceQueryParams.find.offset, resourceQueryParams.find.limit

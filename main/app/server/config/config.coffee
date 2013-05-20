@@ -47,6 +47,9 @@ module.exports =
     'invalidOrderQuery':
       code: 400
       message: 'invalid order query parameter'
+    'generalInvalid':
+      code: 400
+      message: 'invalid request'
 
   apiResponseCodes:
 

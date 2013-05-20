@@ -13,6 +13,7 @@ define [
   'text!views/widgetExerciseBuilder/fields/viewPartialExerciseBuilderFieldSlider.html'
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldButtons.html'
 
+
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderDetailsEJS.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderTemplateListButtonsEJS.html'
   'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderNewTemplateForm.html'
