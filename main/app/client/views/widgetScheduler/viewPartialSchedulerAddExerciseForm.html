@@ -116,10 +116,8 @@
                   <div
                     data-ng-class = "{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}"
                     class="control-group">
-                     <label class="control-label">Date</label>
+                     <label class="control-label">Start Date & Time</label>
                      <div class="controls">
-
-
 
                       <input
                         required
@@ -129,32 +127,21 @@
                         data-ng-show  = "false"
                         type          = "text">
 
-
-
                       <div class="input-append bootstrap-timepicker-component">
-
                         <input
-
                           data-date-time-picker
                           data-model = "viewModel.newEventForm.date"
-
-                          name       = "date"
                           class      = "m-wrap m-ctrl-small timepicker-default"
                           type       = "text" />
-
                         <span class="add-on">
                           <i style="display:inline-block !important;" class="icon-time"></i>
                         </span>
-
                       </div>
 
-                      TimeZone: {{viewModel.clientTimeZone}}
-
-
+                      <span style="display:inline-block !important;" class="help-inline">TimeZone: {{viewModel.clientTimeZone}}</span>
 
                      </div>
                   </div>
-
 
                </div>
 

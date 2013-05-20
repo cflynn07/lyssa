@@ -17,8 +17,10 @@ define [
         link: ($scope, element, attrs) ->
 
           element.datetimepicker({
-            showTimezone: true
-            format:       'mm/dd/yyyy hh:ii'
+            showMeridian: true
+            startDate:    new Date()
+            autoClose:    true
+            format:       'dd MM yyyy - HH:ii P'
           }).on 'changeDate', (e) ->
             $scope.$apply () ->
               $scope.model = e.date
