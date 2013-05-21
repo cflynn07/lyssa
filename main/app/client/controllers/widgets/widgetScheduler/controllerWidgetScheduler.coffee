@@ -45,7 +45,7 @@ define [
         viewModel =
           clientTimeZone:   utilParseClientTimeZone()
 
-          activeWizardStep: 1
+          activeWizardStep: 0
           isStepValid: (step = false) ->
             if !$scope.newEventForm
               return false
@@ -53,7 +53,7 @@ define [
             if step is false
               step = viewModel.activeWizardStep
             step0Valid = (form.eventType.$valid && form.name.$valid && form.description.$valid && form.date.$valid)
-            step1Valid = false
+            step1Valid = (form.templateUid.$valid && form.revisionUid.$valid)
             step2Valid = true
             switch step
               when 2
@@ -87,8 +87,11 @@ define [
               mData:     null
               aTargets:  [2]
               bSortable: false
+              sWidth: '70px'
               mRender: (data, type, full) ->
-                html = '<button data-ng-click="$parent.viewModel.newEventForm.templateUid = \'' + full.uid + '\'">Select</button>'
+                html  = '<div class="inline-content">'
+                html += '<button class="btn blue" data-ng-click="$parent.viewModel.newEventForm.templateUid = \'' + full.uid + '\'; $parent.newEventForm.templateUid.$pristine = false;">Select</button>'
+                html += '</div>'
             ]
             options:
               bStateSave:      true
@@ -106,13 +109,24 @@ define [
                   ['name', 'type'],
                   oSettings
 
-                query.filter.push ['deletedAt', '=', 'null']
+                if _.isUndefined($scope.viewModel.newEventForm) || _.isUndefined($scope.viewModel.newEventForm.eventType)
+                  return
+
+                console.log $scope.viewModel.newEventForm
+                console.log 'p1'
+
+                query.filter.push ['deletedAt', '=', 'null', 'and']
+                query.filter.push ['type',      '=', $scope.viewModel.newEventForm.eventType,   'and']
+
                 query.expand = [{
                   resource: 'revisions'
                 }]
 
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'template', [], query, (response) ->
+                  console.log 'response'
+                  console.log response
+
                   if response.code == 200
                     responseDataString = JSON.stringify(response.response)
                     if cacheResponse == responseDataString
@@ -154,7 +168,9 @@ define [
               aTargets:  [3]
               bSortable: false
               mRender: (data, type, full) ->
-                html = '' #'<button data-ng-click="$parent.viewModel.newEventForm.templateUid = \'' + full.uid + '\'">Select</button>'
+                html  = '<div class="inline-content">'
+                html += '<button class="btn blue" data-ng-click="$parent.viewModel.newEventForm.revisionUid = \'' + full.uid + '\'; $parent.newEventForm.revisionUid.$pristine = false;">Select</button>'
+                html += '</div>'
             ]
             options:
               bStateSave:      true
@@ -175,7 +191,7 @@ define [
                 if _.isUndefined($scope.viewModel.newEventForm) || _.isUndefined($scope.viewModel.newEventForm.templateUid)
                   return
 
-                query.filter.push ['deletedAt', '=', 'null', 'and']
+                query.filter.push ['deletedAt',   '=', 'null', 'and']
                 query.filter.push ['templateUid', '=', $scope.viewModel.newEventForm.templateUid, 'and']
                 query.expand = [{resource: 'template'}, {resource: 'employee'}]
 

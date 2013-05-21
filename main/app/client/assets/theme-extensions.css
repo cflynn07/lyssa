@@ -139,7 +139,7 @@ body {
     box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35);
 }
 
-.widget-themis-finish .portlet.box.grey {
+.widget-themis-finish .portlet.box.grey, .widget-themis-finish .portlet.box.green {
   box-shadow: 1px 1px rgba(0,0,0,0.5);
 }
 
@@ -235,6 +235,7 @@ div.header span.username {
     ----------------------------------------------
 */
 .inline-content {
+    text-align: center;
     white-space: nowrap;
 }
 .inline-content > * {
