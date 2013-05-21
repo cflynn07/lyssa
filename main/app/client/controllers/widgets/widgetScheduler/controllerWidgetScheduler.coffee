@@ -45,7 +45,7 @@ define [
         viewModel =
           clientTimeZone:   utilParseClientTimeZone()
           newEventForm:     {}
-          activeWizardStep: 2
+          activeWizardStep: 0
 
           isStepValid: (step = false) ->
             if !$scope.newEventForm
