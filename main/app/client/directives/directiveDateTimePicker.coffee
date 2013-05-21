@@ -13,16 +13,18 @@ define [
         restrict:   'A'
         scope:
           model:  '=model'
+          form:   '=form'
         replace: true
         link: ($scope, element, attrs) ->
 
           element.datetimepicker({
             showMeridian: true
             startDate:    new Date()
-            autoClose:    true
+            autoclose:    true
             format:       'dd MM yyyy - HH:ii P'
           }).on 'changeDate', (e) ->
             $scope.$apply () ->
               $scope.model = e.date
+              $scope.form.$pristine = false
 
             console.log arguments

@@ -43,7 +43,34 @@ define [
 
 
         viewModel =
-          clientTimeZone: utilParseClientTimeZone()
+
+
+          activeWizardStep: 0
+          isStepValid: (step = false) ->
+            if !$scope.newEventForm
+              return false
+            form = $scope.newEventForm
+
+            if step is false
+              step = viewModel.activeWizardStep
+
+            step0Valid = (form.eventType.$valid && form.name.$valid && form.description.$valid && form.date.$valid)
+            step1Valid = false
+            step2Valid = true
+
+            switch step
+              when 2
+                result = step0Valid && step1Valid && step2Valid
+              when 1
+                result = step0Valid && step1Valid
+              when 0
+                result = step0Valid
+
+            return result
+
+
+
+          clientTimeZone:   utilParseClientTimeZone()
           employeeListDT:
             detailRow: (obj) ->
               return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj

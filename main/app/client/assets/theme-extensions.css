@@ -464,8 +464,11 @@ ul.nav .dropdown-submenu > .dropdown-menu {
   ---------------------------------------------------------------
 */
 
-input[type=text], textarea {
+input, textarea, select {
   background-color: #FFF !important;
+}
+input, textarea, select {
+  color: #333 !important;
 }
 
 .template-builder-group .navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
@@ -541,4 +544,16 @@ div.controls .required {
 }
 .upcomingEvent {
   background-color: #4b8df8;
+}
+
+
+/**
+------
+*/
+ul.nav-pills .done span.number, ul.nav-pills .active span.number {
+  color: #FFF !important;
+}
+
+ul.nav-pills span.number {
+  font-weight: 700 !important;
 }

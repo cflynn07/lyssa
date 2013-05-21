@@ -19,136 +19,168 @@
                <div class="navbar-inner">
                   <ul class="row-fluid nav nav-pills">
 
-                     <li
-                       class="span4 active">
-                        <a href="" data-toggle="tab" class="step active">
+                    <li
+                      data-ng-class = "{'active':(viewModel.activeWizardStep == 0), 'done':(viewModel.activeWizardStep > 0)}"
+                      class         = "span4">
+                        <a
+                          data-ng-class = "{'active':(viewModel.activeWizardStep == 0)}"
+                          data-ng-click = "viewModel.activeWizardStep = 0"
+                          class         = "step">
                           <span class="number">1</span>
-                          <span class="desc"><i class="icon-ok"></i> Exercise Setup</span>
+                          <span class="desc"><i class="icon-ok"></i> Setup</span>
                         </a>
-                     </li>
+                    </li>
 
-                     <li class="span4">
-                        <a href="" data-toggle="tab" class="step">
+                    <li
+                      data-ng-class = "{'active':(viewModel.activeWizardStep == 1), 'done':(viewModel.activeWizardStep > 1)}"
+                      class         = "span4">
+                        <a
+                          data-ng-class = "{'active':(viewModel.activeWizardStep == 1)}"
+                          data-ng-click = "viewModel.isStepValid(0) && (viewModel.activeWizardStep = 1)"
+                          class         = "step">
                           <span class="number">2</span>
                           <span class="desc"><i class="icon-ok"></i> Template & Revision</span>
                         </a>
-                     </li>
+                    </li>
 
-                     <li class="span4">
-                        <a href="" data-toggle="tab" class="step">
+                    <li
+                      data-ng-class = "{'active':(viewModel.activeWizardStep == 2), 'done':(viewModel.activeWizardStep > 2)}"
+                      class         = "span4">
+                        <a
+                          data-ng-class = "{'active':(viewModel.activeWizardStep == 2)}"
+                          data-ng-click = "viewModel.isStepValid(1) && (viewModel.activeWizardStep = 2)"
+                          class         = "step">
                           <span class="number">3</span>
                           <span class="desc"><i class="icon-ok"></i> Delegates & Employees</span>
                         </a>
-                     </li>
+                    </li>
 
                   </ul>
                </div>
-            </div>
+            </div><!-- navbar steps -->
 
             <div id="bar" class="progress progress-success progress-striped">
-               <div class="bar" style="width: 25%;"></div>
+               <div class="bar" style="width: {{ (viewModel.activeWizardStep+1) / 3.0 * 100 }}%;"></div>
             </div>
 
             <div class="tab-content">
 
-               <div class="tab-pane active">
-                  <h3 class="block">Set up a new exercise or quiz</h3>
-
-                  <div
-                    data-ng-class = "{success:newEventForm.eventType.$valid, error:!newEventForm.eventType.$valid, 'ng-pristine':newEventForm.eventType.$pristine}"
-                    class         = "control-group">
-                     <label class="control-label">Type</label>
-                     <div class="controls">
-                        <select
-                          data-ng-model = "viewModel.newEventForm.eventType"
-                          name          = "eventType">
-                          <option value="mini">Employee Quiz</option>
-                          <option value="full">Full Exercise</option>
-                        </select>
-                     </div>
-                  </div>
 
 
-                  <div
-                    data-ng-class = "{success:newEventForm.name.$valid, error:!newEventForm.name.$valid, 'ng-pristine':newEventForm.name.$pristine}"
-                    class         = "control-group">
-                     <label class="control-label">Name</label>
-                     <div class="controls">
-                        <input
-                          data-required
-                          data-ng-minlength = "{{clientOrmShare.event.model.name.validate.len[0]}}"
-                          data-ng-maxlength = "{{clientOrmShare.event.model.name.validate.len[1]}}"
-                          data-ng-model     = "viewModel.newEventForm.name"
-                          type              = "text"
-                          name              = "name"
-                          class             = "large m-wrap">
 
-                          <div class="clear"></div>
-                          <span
-                            data-ng-show = "newEventForm.name.$error.minlength"
-                            class        = "help-inline">
-                              Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters
-                          </span>
-                          <span
-                            data-ng-show = "newEventForm.name.$error.maxlength"
-                            class        = "help-inline">
-                              Name must be shorter than {{clientOrmShare.event.model.name.validate.len[1]}} characters
-                          </span>
+              <div
+                data-ng-show    = "viewModel.activeWizardStep == 0"
+                data-ng-animate = "{show:'fade-in'}"
+                data-ng-class   = "{'active':(viewModel.activeWizardStep == 0)}"
+                class           = "tab-pane">
+                <h3 class="block">Set up a new exercise or quiz</h3>
 
-                     </div>
-                  </div>
+                <div
+                  data-ng-class = "{success:newEventForm.eventType.$valid, error:!newEventForm.eventType.$valid, 'ng-pristine':newEventForm.eventType.$pristine}"
+                  class         = "control-group">
+                   <label class="control-label">Type</label>
+                   <div class="controls">
+                      <select
+                        data-ng-model = "viewModel.newEventForm.eventType"
+                        name          = "eventType">
+                        <option value="mini">Employee Quiz</option>
+                        <option value="full">Full Exercise</option>
+                      </select>
+                   </div>
+                </div>
 
 
-                  <div
-                    data-ng-class = "{success:newEventForm.description.$valid, error:!newEventForm.description.$valid, 'ng-pristine':newEventForm.description.$pristine}"
-                    class="control-group">
-                     <label class="control-label">Description</label>
-                     <div class="controls">
-                        <textarea
-                          name          = "description"
-                          data-ng-model = "viewModel.newEventForm.description"
-                          class         = "large m-wrap"
-                          rows          = "3"></textarea>
-                     </div>
-                  </div>
-
-
-                  <div
-                    data-ng-class = "{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}"
-                    class="control-group">
-                     <label class="control-label">Start Date & Time</label>
-                     <div class="controls">
-
+                <div
+                  data-ng-class = "{success:newEventForm.name.$valid, error:!newEventForm.name.$valid, 'ng-pristine':newEventForm.name.$pristine}"
+                  class         = "control-group">
+                   <label class="control-label">Name</label>
+                   <div class="controls">
                       <input
-                        required
-                        name          = "date"
-                        data-ng-model = "viewModel.newEventForm.date"
-                        data-ng-bind  = "viewModel.newEventForm.date"
-                        data-ng-show  = "false"
-                        type          = "text">
+                        data-required
+                        data-ng-minlength = "{{clientOrmShare.event.model.name.validate.len[0]}}"
+                        data-ng-maxlength = "{{clientOrmShare.event.model.name.validate.len[1]}}"
+                        data-ng-model     = "viewModel.newEventForm.name"
+                        type              = "text"
+                        name              = "name"
+                        class             = "large m-wrap">
 
-                      <div class="input-append bootstrap-timepicker-component">
-                        <input
-                          data-date-time-picker
-                          data-model = "viewModel.newEventForm.date"
-                          class      = "m-wrap m-ctrl-small timepicker-default"
-                          type       = "text" />
-                        <span class="add-on">
-                          <i style="display:inline-block !important;" class="icon-time"></i>
+                        <div class="clear"></div>
+                        <span
+                          data-ng-show = "newEventForm.name.$error.minlength"
+                          class        = "help-inline">
+                            Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters
                         </span>
-                      </div>
+                        <span
+                          data-ng-show = "newEventForm.name.$error.maxlength"
+                          class        = "help-inline">
+                            Name must be shorter than {{clientOrmShare.event.model.name.validate.len[1]}} characters
+                        </span>
 
-                      <span style="display:inline-block !important;" class="help-inline">TimeZone: {{viewModel.clientTimeZone}}</span>
-
-                     </div>
-                  </div>
-
-               </div>
+                   </div>
+                </div>
 
 
+                <div
+                  data-ng-class = "{success:newEventForm.description.$valid, error:!newEventForm.description.$valid, 'ng-pristine':newEventForm.description.$pristine}"
+                  class="control-group">
+                   <label class="control-label">Description</label>
+                   <div class="controls">
+                      <textarea
 
-               <div
-                 class="tab-pane" id="tab2">
+                        name          = "description"
+                        data-ng-model = "viewModel.newEventForm.description"
+                        class         = "large m-wrap"
+                        rows          = "3"></textarea>
+                   </div>
+                </div>
+
+
+                <div
+                  data-ng-class = "{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}"
+                  class="control-group">
+                   <label class="control-label">Start Date & Time</label>
+                   <div class="controls">
+
+                    <input
+                      required
+                      name          = "date"
+                      data-ng-model = "viewModel.newEventForm.date"
+                      data-ng-bind  = "viewModel.newEventForm.date"
+                      data-ng-show  = "false"
+                      type          = "text">
+
+                    <div class="input-append bootstrap-timepicker-component">
+                      <input
+                        data-date-time-picker
+                        data-form  = "newEventForm.date"
+                        data-model = "viewModel.newEventForm.date"
+                        class      = "m-wrap m-ctrl-small timepicker-default"
+                        type       = "text" />
+                      <span class="add-on">
+                        <i style="display:inline-block !important;" class="icon-time"></i>
+                      </span>
+                    </div>
+
+                    <span style="display:inline-block !important;" class="help-inline">TimeZone: {{viewModel.clientTimeZone}}</span>
+
+                   </div>
+                </div>
+              </div><!-- tab-pane -->
+
+
+
+
+
+
+
+
+
+              <div
+                data-ng-show    = "viewModel.activeWizardStep == 1"
+                data-ng-animate = "{show:'fade-in'}"
+                data-ng-class   = "{'active':(viewModel.activeWizardStep == 1)}"
+                class           = "tab-pane">
+
                   <h3 class="block">Provide your profile details</h3>
                   <div class="control-group">
                      <label class="control-label">Fullname</label>
@@ -205,11 +237,16 @@
                         <textarea class="span6 m-wrap" rows="3"></textarea>
                      </div>
                   </div>
-               </div>
+              </div><!-- tab-pane -->
 
 
 
-               <div class="tab-pane">
+              <div
+                data-ng-show    = "viewModel.activeWizardStep == 2"
+                data-ng-animate = "{show:'fade-in'}"
+                data-ng-class   = "{'active':(viewModel.activeWizardStep == 2)}"
+                class           = "tab-pane">
+
                   <h3 class="block">Provide your billing and credit card details</h3>
                   <div class="control-group">
                      <label class="control-label">Card Holder Name</label>
@@ -258,26 +295,39 @@
                         </label>
                      </div>
                   </div>
-               </div>
+              </div><!-- tab-pane -->
+
+            </div><!-- tab-content -->
 
 
-            </div>
 
-            <div class="form-actions clearfix">
 
-               <a class="btn button-previous" style="display: inline-block;">
-                 <i class="m-icon-swapleft"></i> Back
-               </a>
+            <div class="form-actions clearfix inline-content">
 
-               <a href="javascript:;" class="btn blue button-next" style="display: none;">
-                 Continue <i class="m-icon-swapright m-icon-white"></i>
-               </a>
+              <a
+                data-ng-click = "viewModel.activeWizardStep = viewModel.activeWizardStep - 1"
+                data-ng-hide  = "viewModel.activeWizardStep == 0"
+                class         = "btn button-previous">
+                <i class="m-icon-swapleft"></i> Back
+              </a>
 
-               <a href="javascript:;" class="btn green button-submit" style="display: inline-block;">
-                 Submit <i class="m-icon-swapright m-icon-white"></i>
-               </a>
+              <a
+                data-ng-disabled = "!viewModel.isStepValid()"
+                data-ng-click    = "viewModel.isStepValid() && (viewModel.activeWizardStep = viewModel.activeWizardStep + 1)"
+                data-ng-hide     = "viewModel.activeWizardStep == 2"
+                class            = "btn blue">
+                Continue <i class="m-icon-swapright m-icon-white"></i>
+              </a>
 
-            </div>
+              <a
+                data-ng-show = "viewModel.activeWizardStep == 2"
+                class        = "btn green button-submit">
+                Submit <i class="m-icon-swapright m-icon-white"></i>
+              </a>
+
+            </div><!-- form-actions -->
+
+
 
          </div>
       </form>

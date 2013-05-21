@@ -3464,8 +3464,8 @@ Form wizard
 .form-wizard .done .step i {
   font-size: 12px;
   font-weight: normal;
-  color: #999;
-  display: inline-block;
+  color: #999 !important;
+  display: inline-block !important;
 }
 
 /* bootstrap chosen overlaping bug fix*/
