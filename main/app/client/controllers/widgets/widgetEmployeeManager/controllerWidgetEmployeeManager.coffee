@@ -164,8 +164,6 @@ define [
                         iTotalDisplayRecords: response.response.length
                         aaData:               empArr
 
-
-
               columnDefs: [
                 mData:     null
                 bSortable: true
@@ -192,7 +190,7 @@ define [
                 bSortable: true
                 aTargets:  [3]
                 mRender: (data, type, full) ->
-                  return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].phone">' + full.phone + '</span>'
+                  return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].phone | tel">' + full.phone + '</span>'
               ,
                 mData:     null
                 bSortable: false

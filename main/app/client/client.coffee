@@ -152,6 +152,7 @@ require [
   'cs!services/serviceAPIRequest'
   'cs!filters/filterToArray'
   'cs!filters/filterDeleted'
+  'cs!filters/filterTelephone'
   'cs!controllers/controllerApp'
   'cs!controllers/controllerCoreWidgets'
   'cs!controllers/controllerWidgetCoreLeftMenu'
@@ -199,6 +200,7 @@ require [
   ServiceAPIRequest
   FilterToArray
   FilterDeleted
+  FilterTelephone
   ControllerApp
   ControllerCoreWidgets
   ControllerWidgetCoreLeftMenu
@@ -244,8 +246,9 @@ require [
   ServiceAPIRequest   CS
 
   #Filters
-  FilterToArray CS
-  FilterDeleted CS
+  FilterToArray   CS
+  FilterDeleted   CS
+  FilterTelephone CS
 
   #Routes
   # Note: loads all application routes (for all usertypes)

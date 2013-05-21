@@ -235,7 +235,6 @@ div.header span.username {
     ----------------------------------------------
 */
 .inline-content {
-    text-align: center;
     white-space: nowrap;
 }
 .inline-content > * {

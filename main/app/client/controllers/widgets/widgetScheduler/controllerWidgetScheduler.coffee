@@ -44,8 +44,9 @@ define [
 
         viewModel =
           clientTimeZone:   utilParseClientTimeZone()
+          newEventForm:     {}
+          activeWizardStep: 2
 
-          activeWizardStep: 0
           isStepValid: (step = false) ->
             if !$scope.newEventForm
               return false
@@ -64,9 +65,15 @@ define [
                 result = step0Valid
             return result
 
+          addEmployeeToEvent: (employeeUid) ->
+            console.log arguments
+            console.log $scope.viewModel.newEventForm
 
+            if !_.isArray(viewModel.newEventForm.employeeUids)
+              viewModel.newEventForm.employeeUids = []
 
-
+            if viewModel.newEventForm.employeeUids.indexOf(employeeUid) == -1
+              viewModel.newEventForm.employeeUids.push employeeUid
 
 
           templatesListDataTable:
@@ -137,9 +144,6 @@ define [
                       iTotalRecords:        response.response.length
                       iTotalDisplayRecords: response.response.length
                       aaData:               dataArr
-
-
-
 
 
 
@@ -214,21 +218,9 @@ define [
 
 
 
-
-
-
-
-
-
-
-
-
-
           employeeListDT:
-            detailRow: (obj) ->
-              return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
             options:
-              bProcessing:     true
+              bProcessing:  true
               bStateSave:      true
               iCookieDuration: 2419200 # 1 month
               bPaginate:       true
@@ -239,6 +231,7 @@ define [
               bServerSide:     true
               sAjaxSource:     '/'
               fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+
                 query = utilBuildDTQuery ['firstName', 'lastName', 'email', 'phone'],
                   ['firstName', 'lastName', 'email', 'phone'],
                   oSettings
@@ -246,13 +239,11 @@ define [
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
                   if response.code == 200
-
                     responseDataString = JSON.stringify(response.response)
                     if cacheResponse == responseDataString
                       return
                     cacheResponse = responseDataString
                     empArr = _.toArray response.response.data
-
                     fnCallback
                       iTotalRecords:        response.response.length
                       iTotalDisplayRecords: response.response.length
@@ -284,7 +275,7 @@ define [
               bSortable: true
               aTargets:  [3]
               mRender: (data, type, full) ->
-                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].phone">' + full.phone + '</span>'
+                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].phone | tel ">' + full.phone + '</span>'
             ,
               mData:     null
               bSortable: false
@@ -294,10 +285,20 @@ define [
             ,
               mData:     null
               bSortable: false
+              sWidth: '70px'
               aTargets:  [5]
               mRender: (data, type, full) ->
-                return ''
+                html  = '<div class="inline-content">'
+                html += '<button class="btn blue" data-ng-disabled="($parent.viewModel.newEventForm.employeeUids.length && $parent.viewModel.newEventForm.employeeUids.indexOf(\'' + full.uid + '\') != -1)" data-ng-click="$parent.viewModel.addEmployeeToEvent(\'' + full.uid + '\'); $parent.newEventForm.employeeUids.$pristine = false;">'
+                html += '<span style="color:#FFF !important;" data-ng-hide="($parent.viewModel.newEventForm.employeeUids.length && $parent.viewModel.newEventForm.employeeUids.indexOf(\'' + full.uid + '\') != -1)">Select</span>'
+                html += '<span style="color:#FFF !important;" data-ng-show="($parent.viewModel.newEventForm.employeeUids.length && $parent.viewModel.newEventForm.employeeUids.indexOf(\'' + full.uid + '\') != -1)">Selected</span>'
+                html += '</button>'
+                html += '</div>'
             ]
+
+
+
+
 
         $scope.viewModel = viewModel
 

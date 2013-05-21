@@ -11,6 +11,7 @@
 
     <div class="portlet-body form">
       <form
+        novalidate
         name  = "newEventForm"
         class = "form-horizontal">
          <div class="form-wizard">
@@ -306,57 +307,68 @@
                 data-ng-animate = "{show:'fade-in'}"
                 data-ng-class   = "{'active':(viewModel.activeWizardStep == 2)}"
                 class           = "tab-pane">
+                  <h3 class="block">Select participants</h3>
+                  <div
+                    data-ng-class = "{success:newEventForm.employeeUids.$valid, error:!newEventForm.employeeUids.$valid, 'ng-pristine':newEventForm.employeeUids.$pristine}"
+                    class         = "control-group">
 
-                  <h3 class="block">Provide your billing and credit card details</h3>
-                  <div class="control-group">
-                     <label class="control-label">Card Holder Name</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Bank Name</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Debit/Credit Card Number</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">CVC</label>
-                     <div class="controls">
-                        <input type="text" placeholder="" class="m-wrap">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Expiration Date(MM/YYYY)</label>
-                     <div class="controls">
-                        <input type="text" placeholder="MM" class="m-wrap small">
-                        <input type="text" placeholder="YYYY" class="m-wrap small">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Payment Options</label>
-                     <div class="controls">
-                        <label class="checkbox line">
-                        <div class="checker" id="uniform-undefined"><span><input type="checkbox" value="" style="opacity: 0;"></span></div> Auto-Pay with this Credit Card
-                        </label>
-                        <label class="checkbox line">
-                        <div class="checker" id="uniform-undefined"><span><input type="checkbox" value="" style="opacity: 0;"></span></div> Email me monthly billing
-                        </label>
-                     </div>
-                  </div>
+                    <label
+                      data-ng-show = "viewModel.newEventForm.eventType == 'mini'"
+                      class        = "control-label">Employees</label>
+                    <label
+                      data-ng-show = "viewModel.newEventForm.eventType == 'full'"
+                      class        = "control-label">Delegates</label>
+
+
+                    <div class="controls">
+
+
+                      <input
+                        required
+                        name          = "employeeUids"
+                        data-ng-model = "viewModel.newEventForm.employeeUids"
+                        data-ng-bind  = "viewModel.newEventForm.employeeUids"
+                        data-ng-show  = "false"
+                        type          = "text">
+
+
+                      <div
+                        data-ng-show = "viewModel.newEventForm.employeeUids.length"
+                        class        = "box template-info-box fade in">
+                        <p style = "margin-bottom:5px; font-size:16px;">
+                          <span class="input-success color-green">
+                            <i class="icon-ok"></i>
+                          </span>
+                          <h4><span>Selected: {{viewModel.newEventForm.employeeUids.length || 0}}</span></h4>
+                        </p>
+                      </div><!-- span6 -->
+
+                      <table
+                        class                                  = "table table-striped table-hover table-bordered dataTable"
+                        data-data-table                        = "viewModel.employeeListDT.options"
+                        ao-column-defs                         = "viewModel.employeeListDT.columnDefs"
+                        data-parent-model                      = "viewModel.employeeListDT"
+                        aa-data                                = "viewModel.employees"
+                        data-parent-data-table-view-model-prop = "employeeListDT"
+                        update-on-resource-post                = "employee"
+                        fn-row-callback                        = "">
+                        <thead>
+                          <tr>
+                              <th class = "sorting">First Name</th>
+                              <th class = "sorting">Last Name</th>
+                              <th class = "sorting">Email</th>
+                              <th class = "sorting">Phone Number</th>
+                              <th class = "sorting_disabled">Type</th>
+                              <th class = "sorting_disabled"></th>
+                          </tr>
+                        </thead>
+                      </table>
+
+                    </div><!-- controls -->
+
+
+                  </div><!-- control-group -->
               </div><!-- tab-pane -->
-
             </div><!-- tab-content -->
 
 
