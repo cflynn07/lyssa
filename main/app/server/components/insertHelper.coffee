@@ -3,7 +3,7 @@ _      = require 'underscore'
 config = require '../config/config'
 uuid   = require 'node-uuid'
 
-module.exports = (apiCollectionName, clientUid, resource, objects, req, res, app) ->
+module.exports = (apiCollectionName, clientUid, resource, objects, req, res, app, insertMethodCallback = false) ->
   #Give everyone their own brand new uid
   for object, key in objects
     objects[key]['uid'] = uuid.v4()
@@ -46,8 +46,10 @@ module.exports = (apiCollectionName, clientUid, resource, objects, req, res, app
             for uid in responseUids
               req.io.join(uid)
 
-
-
       callback()
   , (err, results) ->
-    res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201], uids: responseUids)
+
+    if insertMethodCallback is false
+      res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201], uids: responseUids)
+    else
+      insertMethodCallback(responseUids)
