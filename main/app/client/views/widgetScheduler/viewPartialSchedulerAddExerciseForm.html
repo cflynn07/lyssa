@@ -152,6 +152,7 @@
                     <div class="input-append bootstrap-timepicker-component">
                       <input
                         data-date-time-picker
+                        readonly   = "readonly"
                         data-form  = "newEventForm.date"
                         data-model = "viewModel.newEventForm.date"
                         class      = "m-wrap m-ctrl-small timepicker-default"
@@ -181,63 +182,91 @@
                 data-ng-class   = "{'active':(viewModel.activeWizardStep == 1)}"
                 class           = "tab-pane">
 
-                  <h3 class="block">Provide your profile details</h3>
+                  <h3 class="block">Choose a template & revision</h3>
+
+                  <div
+                    data-ng-class = "{success:newEventForm.templateUid.$valid, error:!newEventForm.templateUid.$valid, 'ng-pristine':newEventForm.templateUid.$pristine}"
+                    class         = "control-group">
+                    <label class="control-label">Template</label>
+                    <div class="controls">
+
+                      <input
+                      required
+                      name          = "templateUid"
+                      data-ng-model = "viewModel.newEventForm.templateUid"
+                      data-ng-show  = "false"
+                      type          = "text">
+
+                      <p
+                        class        = "DTSelectedItemInfo"
+                        data-ng-show = "viewModel.newEventForm.templateUid">
+                        <span>
+                          <span class="input-success color-green">
+                            <i class="icon-ok"></i>
+                          </span>
+                          {{resourcePool[viewModel.newEventForm.templateUid].name}}
+                        </span>
+                        <br><a class="btn red mini" data-ng-click = "viewModel.newEventForm.templateUid = false">Cancel Selection</a>
+                      </p>
+
+                      <div data-ng-hide = "viewModel.newEventForm.templateUid">
+                        <table
+                          class                                  = "table table-striped table-hover table-bordered dataTable"
+                          data-data-table                        = "viewModel.templatesListDataTable.options"
+                          data-ao-column-defs                    = "viewModel.templatesListDataTable.columnDefs"
+                          data-parent-data-table-view-model-prop = "templatesListDataTable"
+                          update-on-resource-post                = "template"
+                          data-fn-row-callback                   = "">
+                          <thead>
+                            <tr>
+                                <th class = "sorting">Name</th>
+                                <th class = "sorting">Type</th>
+                                <th class = "sorting_disabled"></th>
+                            </tr>
+                          </thead>
+                        </table>
+                      </div>
+
+                    </div><!-- controls -->
+                  </div><!-- tab-pane -->
+
+
+
+
                   <div class="control-group">
-                     <label class="control-label">Fullname</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your fullname</span>
-                     </div>
+                    <label class="control-label">Revision</label>
+                    <div class="controls">
+
+                      <p data-ng-hide="viewModel.newEventForm.templateUid">Select a template</p>
+
+                      <div data-ng-show = "viewModel.newEventForm.templateUid">
+                        <table
+                          class                                  = "table table-striped table-hover table-bordered dataTable"
+                          data-data-table                        = "viewModel.revisionsListDataTable.options"
+                          data-ao-column-defs                    = "viewModel.revisionsListDataTable.columnDefs"
+                          data-parent-data-table-view-model-prop = "revisionsListDataTable"
+                          update-on-resource-post                = "revision"
+                          data-update-watch                      = "viewModel.newEventForm.templateUid">
+                          <thead>
+                            <tr>
+                                <th class = "sorting">Owner</th>
+                                <th class = "sorting">Date Created</th>
+                                <th class = "sorting">Change Summary</th>
+                                <th class = "sorting_disabled"></th>
+                            </tr>
+                          </thead>
+                        </table>
+                      </div>
+
+
+                    </div>
                   </div>
-                  <div class="control-group">
-                     <label class="control-label">Email</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your email address</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Phone Number</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your phone number</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Gender</label>
-                     <div class="controls">
-                        <label class="radio">
-                        <div class="radio" id="uniform-optionsRadios1"><span class="checked"><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="" style="opacity: 0;"></span></div>
-                        Male
-                        </label>
-                        <div class="clearfix"></div>
-                        <label class="radio">
-                        <div class="radio" id="uniform-optionsRadios2"><span><input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" style="opacity: 0;"></span></div>
-                        Female
-                        </label>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Address</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your street address</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">City/Town</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your city or town</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Remarks</label>
-                     <div class="controls">
-                        <textarea class="span6 m-wrap" rows="3"></textarea>
-                     </div>
-                  </div>
+
+
               </div><!-- tab-pane -->
+
+
+
 
 
 
@@ -332,6 +361,13 @@
          </div>
       </form>
    </div>
+
+
+
+
+
+
+
 
 
 
@@ -491,6 +527,18 @@
         class         = "btn red btn-block">close</button>
 
     </div><!-- portlet-body -->
+
+
+
+
+
+
+
+
+
+
+
+
 
   </div><!-- portlet-box add-exercise -->
 </div>

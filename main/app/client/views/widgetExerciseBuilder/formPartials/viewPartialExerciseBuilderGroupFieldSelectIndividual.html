@@ -52,9 +52,10 @@
   <div class="controls">
 
 
-
-    <p style="margin-bottom:5px; font-size:16px;" data-ng-show="form.dictionaryUid">
-      <span style="margin-bottom:4px;">
+    <p
+      class        = "DTSelectedItemInfo"
+      data-ng-show = "form.dictionaryUid">
+      <span>
         <span class="input-success color-green">
           <i class="icon-ok"></i>
         </span>
@@ -63,6 +64,7 @@
       <br><a class="btn red mini" data-ng-click = "form.dictionaryUid = false">Cancel Selection</a>
     </p>
 
+
     <input
       required
       name          = "dictionaryUid"
@@ -70,6 +72,7 @@
       data-ng-bind  = "form.dictionaryUid"
       data-ng-show  = "false"
       type          = "text">
+
 
     <div
       data-ng-hide = "form.dictionaryUid"

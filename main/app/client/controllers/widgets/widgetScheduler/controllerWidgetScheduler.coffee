@@ -43,21 +43,18 @@ define [
 
 
         viewModel =
+          clientTimeZone:   utilParseClientTimeZone()
 
-
-          activeWizardStep: 0
+          activeWizardStep: 1
           isStepValid: (step = false) ->
             if !$scope.newEventForm
               return false
             form = $scope.newEventForm
-
             if step is false
               step = viewModel.activeWizardStep
-
             step0Valid = (form.eventType.$valid && form.name.$valid && form.description.$valid && form.date.$valid)
             step1Valid = false
             step2Valid = true
-
             switch step
               when 2
                 result = step0Valid && step1Valid && step2Valid
@@ -65,12 +62,152 @@ define [
                 result = step0Valid && step1Valid
               when 0
                 result = step0Valid
-
             return result
 
 
 
-          clientTimeZone:   utilParseClientTimeZone()
+
+
+
+          templatesListDataTable:
+            columnDefs: [
+              mData:     null
+              aTargets:  [0]
+              bSortable: true
+              mRender: (data, type, full) ->
+                resHtml = '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name"></span>'
+            ,
+              mData:     null
+              aTargets:  [1]
+              bSortable: true
+              sWidth:    '45px'
+              mRender: (data, type, full) ->
+                resHtml = _.str.capitalize(full.type)
+            ,
+              mData:     null
+              aTargets:  [2]
+              bSortable: false
+              mRender: (data, type, full) ->
+                html = '<button data-ng-click="$parent.viewModel.newEventForm.templateUid = \'' + full.uid + '\'">Select</button>'
+            ]
+            options:
+              bStateSave:      true
+              iCookieDuration: 2419200
+              bJQueryUI:       false
+              bPaginate:       true
+              bLengthChange:   true
+              bFilter:         false
+              bInfo:           true
+              bDestroy:        true
+              bServerSide:     true
+              bProcessing:     true
+              fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                query = utilBuildDTQuery ['name', 'type'],
+                  ['name', 'type'],
+                  oSettings
+
+                query.filter.push ['deletedAt', '=', 'null']
+                query.expand = [{
+                  resource: 'revisions'
+                }]
+
+                cacheResponse   = ''
+                oSettings.jqXHR = apiRequest.get 'template', [], query, (response) ->
+                  if response.code == 200
+                    responseDataString = JSON.stringify(response.response)
+                    if cacheResponse == responseDataString
+                      return
+                    cacheResponse = responseDataString
+                    dataArr = _.toArray response.response.data
+                    fnCallback
+                      iTotalRecords:        response.response.length
+                      iTotalDisplayRecords: response.response.length
+                      aaData:               dataArr
+
+
+
+
+
+
+          revisionsListDataTable:
+            columnDefs: [
+              mData:     null
+              aTargets:  [0]
+              bSortable: true
+              mRender: (data, type, full) ->
+                resHtml  = '<span data-ng-bind="resourcePool[resourcePool[\'' + full.uid + '\'].employee.uid].firstName"></span> '
+                resHtml += '<span data-ng-bind="resourcePool[resourcePool[\'' + full.uid + '\'].employee.uid].lastName"></span>'
+            ,
+              mData:     null
+              aTargets:  [1]
+              bSortable: true
+              mRender: (data, type, full) ->
+                resHtml = '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].createdAt | date:\'short\'"></span>'
+            ,
+              mData:     null
+              aTargets:  [2]
+              bSortable: true
+              mRender: (data, type, full) ->
+                resHtml = '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].changeSummary"></span>'
+            ,
+              mData:     null
+              aTargets:  [3]
+              bSortable: false
+              mRender: (data, type, full) ->
+                html = '' #'<button data-ng-click="$parent.viewModel.newEventForm.templateUid = \'' + full.uid + '\'">Select</button>'
+            ]
+            options:
+              bStateSave:      true
+              iCookieDuration: 2419200
+              bJQueryUI:       false
+              bPaginate:       true
+              bLengthChange:   true
+              bFilter:         false
+              bInfo:           true
+              bDestroy:        true
+              bServerSide:     true
+              bProcessing:     true
+              fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                query = utilBuildDTQuery [],
+                  [],
+                  oSettings
+
+                if _.isUndefined($scope.viewModel.newEventForm) || _.isUndefined($scope.viewModel.newEventForm.templateUid)
+                  return
+
+                query.filter.push ['deletedAt', '=', 'null', 'and']
+                query.filter.push ['templateUid', '=', $scope.viewModel.newEventForm.templateUid, 'and']
+                query.expand = [{resource: 'template'}, {resource: 'employee'}]
+
+                cacheResponse   = ''
+                oSettings.jqXHR = apiRequest.get 'revision', [], query, (response) ->
+
+                  console.log 'response'
+                  console.log response
+
+                  if response.code == 200
+                    responseDataString = JSON.stringify(response.response)
+                    if cacheResponse == responseDataString
+                      return
+                    cacheResponse = responseDataString
+                    dataArr = _.toArray response.response.data
+                    fnCallback
+                      iTotalRecords:        response.response.length
+                      iTotalDisplayRecords: response.response.length
+                      aaData:               dataArr
+
+
+
+
+
+
+
+
+
+
+
+
+
           employeeListDT:
             detailRow: (obj) ->
               return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
