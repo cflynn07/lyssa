@@ -89,3 +89,21 @@ module.exports =
       return
 
     _.extend @errorResponse(apiResponseErrorsObject.code), message: apiResponseErrorsObject.message
+
+  apiSuccessPostResponse: (res, responseUid) ->
+
+    responseUids = []
+
+    if _.isString(responseUid) || !_.isArray(responseUid)
+      responseUids = [responseUid]
+
+    else if _.isArray(responseUid)
+      for uid in responseUid
+        if _.isString uid
+          responseUids.push uid
+
+    res.jsonAPIRespond(code: 201, message: @apiResponseCodes[201], uids: responseUids)
+
+
+
+

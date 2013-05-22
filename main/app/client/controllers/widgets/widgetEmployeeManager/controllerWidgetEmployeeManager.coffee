@@ -60,6 +60,23 @@ define [
         processNewUsers: () ->
           $scope.viewModel.processingUsers = true
 
+          apiPostArr = []
+          for item in $scope.viewModel.csvUsersResult
+            apiPostArr.push {
+              firstName: item[0]
+              lastName:  item[1]
+              email:     item[2]
+              phone:     item[3]
+            }
+
+          d1 = Date.now()
+          apiRequest.post 'employee', apiPostArr, {silent:true}, (response) ->
+            console.log 'response'
+            console.log response
+            console.log Date.now() - d1
+
+
+          ###
           async.mapLimit $scope.viewModel.csvUsersResult, 1, (item, callback) ->
             d1 = Date.now()
             apiRequest.post 'employee', {
@@ -79,7 +96,7 @@ define [
 
           , (err, result) ->
             cosole.log 'done with all!'
-
+          ###
 
 
       $scope.uploadStart = (e, response) ->
@@ -144,7 +161,7 @@ define [
                 bServerSide:     true
                 sAjaxSource:     '/'
                 fnServerData: (sSource, aoData, fnCallback, oSettings) ->
-
+                  #return
                   query = utilBuildDTQuery ['firstName', 'lastName', 'email', 'phone'],
                     ['firstName', 'lastName', 'email', 'phone'],
                     oSettings

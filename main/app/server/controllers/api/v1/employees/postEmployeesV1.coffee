@@ -25,17 +25,9 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-            if _.isArray(req.body)
+            insertMethod = (item, insertMethodCallback = false) ->
 
-
-
-            else
-
-
-
-            insertMethod = (insertCallback = false) ->
-
-              apiVerifyObjectProperties this, employee, req.body, req, res, {
+              apiVerifyObjectProperties this, employee, item, req, res, {
                 requiredProperties:
 
                   'identifier': (val, objectKey, object, callback) ->
@@ -178,14 +170,30 @@ module.exports = (app) ->
 
               }, (objects) ->
                 #insertHelper objects, res
-                insertHelper 'employees', clientUid, employee, objects, req, res, app
+                insertHelper 'employees', clientUid, employee, objects, req, res, app, insertMethodCallback
+
+
+
+            if _.isArray req.body
+              async.mapSeries req.body, (item, callback) ->
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                config.apiSuccessPostResponse res, results
+            else
+              insertMethod(req.body)
 
 
 
           when 'clientSuperAdmin'
 
+            counter = 0
             insertMethod = (item, insertMethodCallback = false) ->
               #CSA Can make other CSA
+
+              console.log 'insertMethod - ' + counter
+              counter++
+
               apiVerifyObjectProperties this, employee, item, req, res, {
                 requiredProperties:
 
@@ -219,6 +227,13 @@ module.exports = (app) ->
                           success: true
 
                   'firstName': (val, objectKey, object, callback) ->
+
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          firstName: 'required'
+                      return
 
                     callback null,
                       success: true
@@ -351,7 +366,11 @@ module.exports = (app) ->
                       return
 
                     if _.isUndefined val
-                      object[objectKey] = 'clientDelegate'
+                      object['type'] = 'clientDelegate'
+                      callback null,
+                        success: true
+                      #  transform: [object, 'type', 'clientDelegate']
+                      return
 
                     callback null,
                       success: false
@@ -403,180 +422,187 @@ module.exports = (app) ->
                 insertHelper 'employees', clientUid, employee, objects, req, res, app, insertMethodCallback
 
 
-
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
-                insertMethod req.body, () ->
-                  callback()
-
-
-
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                config.apiSuccessPostResponse res, results
             else
               insertMethod(req.body)
 
 
-
           when 'clientAdmin'
 
+            insertMethod = (item, insertMethodCallback = false) ->
+              #CSA Can make other CSA
+              apiVerifyObjectProperties this, employee, item, req, res, {
+                requiredProperties:
 
-            #CSA Can make other CSA
-            apiVerifyObjectProperties this, employee, req.body, req, res, {
-              requiredProperties:
-
-                'identifier': (val, objectKey, object, callback) ->
-
-
-                  callback null,
-                    success: true
-                  return
+                  'identifier': (val, objectKey, object, callback) ->
 
 
-                  if _.isUndefined object['uid']
                     callback null,
-                      success: false
+                      success: true
                     return
 
-                  employee.find(
-                    where:
-                      clientUid:  clientUid
-                      identifier: val
-                  ).success (resultEmployee) ->
 
-                    #Cant be duplicates
-                    if resultEmployee && resultEmployee.uid != object['uid']
+                    if _.isUndefined object['uid']
                       callback null,
                         success: false
-                        message:
-                          identifier: 'duplicate'
-                    else
-                      callback null,
-                        success: true
+                      return
 
-                'firstName': (val, objectKey, object, callback) ->
-
-                  callback null,
-                    success: true
-
-                'lastName': (val, objectKey, object, callback) ->
-
-                  callback null,
-                    success: true
-
-                'email': (val, objectKey, object, callback) ->
-
-                  callback null,
-                    success: true
-
-                'phone': (val, objectKey, object, callback) ->
-
-                  callback null,
-                    success: true
-
-                'username': (val, objectKey, object, callback) ->
-
-
-                  callback null,
-                    success: true
-                  return
-
-
-                  if _.isUndefined object['uid']
-                    callback null,
-                      success: false
-                    return
-
-                  employee.find(
-                    where:
-                      clientUid: clientUid
-                      username:  val
-                  ).success (resultEmployee) ->
-
-                    #Cant be duplicates
-                    if resultEmployee && resultEmployee.uid != object['uid']
-                      callback null,
-                        success: false
-                        message:
-                          username: 'duplicate'
-                    else
-                      callback null,
-                        success: true
-
-                'password': (val, objectKey, object, callback) ->
-
-
-                  callback null,
-                    success: true
-                  return
-
-                  if _.isUndefined(val) || val.length > 100
-                    callback null,
-                      success: false
-                    return
-
-                  #Convert string to hash
-                  bcrypt.genSalt 10, (err, salt) ->
-                    bcrypt.hash val, salt, (err, hash) ->
-                      callback null,
-                        success:   false
-                        transform: [object, 'password', hash]
-
-                'type': (val, objectKey, object, callback) ->
-
-                  if val == 'superAdmin' or val == 'clientSuperAdmin'
-                    callback null,
-                      success: false
-                      message:
-                        type: 'invalid'
-                    return
-
-                  callback null,
-                    success: false
-
-                'clientUid': (val, objectKey, object, callback) ->
-
-                  if _.isUndefined val
-
-                    client.find(
+                    employee.find(
                       where:
-                        uid: clientUid
-                    ).success (resultClient) ->
+                        clientUid:  clientUid
+                        identifier: val
+                    ).success (resultEmployee) ->
 
-                      if resultClient
-                        mapObj = {}
-                        mapObj[resultClient.uid]   = resultClient
-                        callback null,
-                          success: true
-                          uidMapping: mapObj
-                          transform: [objectKey, 'clientUid', resultClient.uid]
-                      else
+                      #Cant be duplicates
+                      if resultEmployee && resultEmployee.uid != object['uid']
                         callback null,
                           success: false
                           message:
-                            clientUid: 'unknown'
-
-                  else
-
-                    client.find(
-                      where:
-                        uid: val
-                    ).success (resultClient) ->
-
-                      if resultClient
-                        mapObj = {}
-                        mapObj[resultClient.uid]   = resultClient
+                            identifier: 'duplicate'
+                      else
                         callback null,
                           success: true
-                          uidMapping: mapObj
-                          transform: [objectKey, 'clientUid', resultClient.uid]
-                      else
+
+                  'firstName': (val, objectKey, object, callback) ->
+
+                    callback null,
+                      success: true
+
+                  'lastName': (val, objectKey, object, callback) ->
+
+                    callback null,
+                      success: true
+
+                  'email': (val, objectKey, object, callback) ->
+
+                    callback null,
+                      success: true
+
+                  'phone': (val, objectKey, object, callback) ->
+
+                    callback null,
+                      success: true
+
+                  'username': (val, objectKey, object, callback) ->
+
+
+                    callback null,
+                      success: true
+                    return
+
+
+                    if _.isUndefined object['uid']
+                      callback null,
+                        success: false
+                      return
+
+                    employee.find(
+                      where:
+                        clientUid: clientUid
+                        username:  val
+                    ).success (resultEmployee) ->
+
+                      #Cant be duplicates
+                      if resultEmployee && resultEmployee.uid != object['uid']
                         callback null,
                           success: false
                           message:
-                            clientUid: 'unknown'
+                            username: 'duplicate'
+                      else
+                        callback null,
+                          success: true
 
-            }, (objects) ->
-              #insertHelper objects, res
-              insertHelper 'employees', clientUid, employee, objects, req, res, app
+                  'password': (val, objectKey, object, callback) ->
+
+
+                    callback null,
+                      success: true
+                    return
+
+                    if _.isUndefined(val) || val.length > 100
+                      callback null,
+                        success: false
+                      return
+
+                    #Convert string to hash
+                    bcrypt.genSalt 10, (err, salt) ->
+                      bcrypt.hash val, salt, (err, hash) ->
+                        callback null,
+                          success:   false
+                          transform: [object, 'password', hash]
+
+                  'type': (val, objectKey, object, callback) ->
+
+                    if val == 'superAdmin' or val == 'clientSuperAdmin'
+                      callback null,
+                        success: false
+                        message:
+                          type: 'invalid'
+                      return
+
+                    callback null,
+                      success: false
+
+                  'clientUid': (val, objectKey, object, callback) ->
+
+                    if _.isUndefined val
+
+                      client.find(
+                        where:
+                          uid: clientUid
+                      ).success (resultClient) ->
+
+                        if resultClient
+                          mapObj = {}
+                          mapObj[resultClient.uid]   = resultClient
+                          callback null,
+                            success: true
+                            uidMapping: mapObj
+                            transform: [objectKey, 'clientUid', resultClient.uid]
+                        else
+                          callback null,
+                            success: false
+                            message:
+                              clientUid: 'unknown'
+
+                    else
+
+                      client.find(
+                        where:
+                          uid: val
+                      ).success (resultClient) ->
+
+                        if resultClient
+                          mapObj = {}
+                          mapObj[resultClient.uid]   = resultClient
+                          callback null,
+                            success: true
+                            uidMapping: mapObj
+                            transform: [objectKey, 'clientUid', resultClient.uid]
+                        else
+                          callback null,
+                            success: false
+                            message:
+                              clientUid: 'unknown'
+
+              }, (objects) ->
+                #insertHelper objects, res
+                insertHelper 'employees', clientUid, employee, objects, req, res, app, insertMethodCallback
+
+
+            if _.isArray req.body
+              async.mapSeries req.body, (item, callback) ->
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                config.apiSuccessPostResponse res, results
+            else
+              insertMethod(req.body)
 
 
           when 'clientDelegate', 'clientAuditor'

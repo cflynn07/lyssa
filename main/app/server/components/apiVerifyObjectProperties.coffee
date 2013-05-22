@@ -12,8 +12,14 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
   First iterate over all the properties of all the objects and verify that all required fields are present
   Also build an array of callbacks to test each required field
   ###
-  if !_.isArray testObjects
-    testObjects = [testObjects]
+  if _.isArray(testObjects) || !_.isObject(testObjects)
+    res.jsonAPIRespond config.errorResponse(400)
+    return
+
+
+
+  testObjects = [testObjects]
+
 
 
   unknownProperties = preventUnknownFieldsHelper(resourceModel, testObjects, requirements)

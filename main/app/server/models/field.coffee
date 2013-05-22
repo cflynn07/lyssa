@@ -53,7 +53,7 @@ module.exports =
     relation: 'belongsTo'
     model: 'group'
   ,
-    relation: 'hasOne'
+    relation: 'belongsTo'
     model: 'dictionary'
   ,
     relation: 'hasMany'

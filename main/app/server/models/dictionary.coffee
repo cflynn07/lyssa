@@ -11,7 +11,6 @@ module.exports =
       validate:
         isAlphanumeric: true
         len: [5, 100]
-
     clientUid:
       type: SEQ.STRING
       validate:

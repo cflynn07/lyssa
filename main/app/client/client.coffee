@@ -131,6 +131,7 @@ require [
   'angular-ui'
   'angular-bootstrap'
   'boostrapDateTimePicker'
+  'vendor/fastclick'
   'cs!animations/animationSlideUpDown'
   'cs!animations/animationFadeInOut'
   'cs!directives/directiveAnimateIn'
@@ -179,6 +180,7 @@ require [
   angularUi
   angularBootstrap
   boostrapDateTimePicker
+  FastClick
   AnimationSlideUpDown
   AnimationFadeInOut
   DirectiveAnimateIn
@@ -285,3 +287,7 @@ require [
   ControllerWidgetQuiz                  CS
 
   angular.bootstrap document, ['CS']
+
+  window.addEventListener 'load', () ->
+    FastClick.attach document.body
+  false

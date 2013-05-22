@@ -329,7 +329,7 @@ define [
               console.log '----'
               ###
 
-        post: (resourceName, objects, callback) ->
+        post: (resourceName, objects, query, callback) ->
           if !validateResource resourceName
             return
 

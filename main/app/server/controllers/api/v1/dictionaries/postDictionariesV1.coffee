@@ -29,29 +29,93 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-            apiVerifyObjectProperties this, dictionary, req.body, req, res, {
-              requiredProperties:
-                'name': (val, objectKey, object, callback) ->
 
-                  if !_.isUndefined val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        name: 'required'
 
-                'clientUid': (val, objectKey, object, callback) ->
 
-                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+            insertMethod = (item, insertMethodCallback = false) ->
+              apiVerifyObjectProperties this, dictionary, item, req, res, {
+                requiredProperties:
+                  'name': (val, objectKey, object, callback) ->
 
-                  client.find(
-                    where:
-                      uid: testClientUid
-                  ).success (resultClient) ->
+                    if !_.isUndefined val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          name: 'required'
 
-                    if resultClient
+                  'clientUid': (val, objectKey, object, callback) ->
+
+                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
+                    client.find(
+                      where:
+                        uid: testClientUid
+                    ).success (resultClient) ->
+
+                      if resultClient
+                        mapObj = {}
+                        mapObj[resultClient.uid] = resultClient
+
+                        callback null,
+                          success:   true
+                          transform: [objectKey, 'clientUid', resultClient.uid]
+                          uidMapping: mapObj
+                      else
+                        callback null,
+                          success:   false
+                          message:
+                            clientUid: 'unknown'
+
+              }, (objects) ->
+                insertHelper 'dictionaries', clientUid, dictionary, objects, req, res, app, insertMethodCallback
+
+            if _.isArray req.body
+              async.mapSeries req.body, (item, callback) ->
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                console.log arguments
+                config.apiSuccessPostResponse res, results
+            else
+              insertMethod(req.body)
+
+
+          when 'clientSuperAdmin', 'clientAdmin'
+
+            insertMethod = (item, insertMethodCallback = false) ->
+
+              apiVerifyObjectProperties this, dictionary, item, req, res, {
+                requiredProperties:
+                  'name': (val, objectKey, object, callback) ->
+
+                    if !_.isUndefined val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          name: 'required'
+
+                  'clientUid': (val, objectKey, object, callback) ->
+
+                    if !_.isUndefined val
+                      callback null,
+                        success: false
+                        message:
+                          clientUid: 'unknown'
+                      return
+
+                    testClientUid = clientUid #if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
+                    client.find(
+                      where:
+                        uid: testClientUid
+                    ).success (resultClient) ->
+
                       mapObj = {}
                       mapObj[resultClient.uid] = resultClient
 
@@ -59,60 +123,20 @@ module.exports = (app) ->
                         success:   true
                         transform: [objectKey, 'clientUid', resultClient.uid]
                         uidMapping: mapObj
-                    else
-                      callback null,
-                        success:   false
-                        message:
-                          clientUid: 'unknown'
 
-            }, (objects) ->
+              }, (objects) ->
 
-              #insertHelper.call(this, objects, res)
-              insertHelper 'dictionaries', clientUid, dictionary, objects, req, res, app
+                insertHelper 'dictionaries', clientUid, dictionary, objects, req, res, app, insertMethodCallback
 
-          when 'clientSuperAdmin', 'clientAdmin'
-
-            apiVerifyObjectProperties this, dictionary, req.body, req, res, {
-              requiredProperties:
-                'name': (val, objectKey, object, callback) ->
-
-                  if !_.isUndefined val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        name: 'required'
-
-                'clientUid': (val, objectKey, object, callback) ->
-
-                  if !_.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        clientUid: 'unknown'
-                    return
-
-                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                  client.find(
-                    where:
-                      uid: testClientUid
-                  ).success (resultClient) ->
-
-                    mapObj = {}
-                    mapObj[resultClient.uid] = resultClient
-
-                    callback null,
-                      success:   true
-                      transform: [objectKey, 'clientUid', resultClient.uid]
-                      uidMapping: mapObj
-
-            }, (objects) ->
-
-              #insertHelper.call(this, objects, res)
-              insertHelper 'dictionaries', clientUid, dictionary, objects, req, res, app
+            if _.isArray req.body
+              async.mapSeries req.body, (item, callback) ->
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                console.log arguments
+                config.apiSuccessPostResponse res, results
+            else
+              insertMethod(req.body)
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)
