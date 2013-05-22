@@ -344,7 +344,7 @@ define [
 
           socket.apiRequest 'POST',
             '/' + apiCollectionName,
-            {}       #query
+            query,   #query
             objects, #data
             (response) ->
               #console.log 'response'

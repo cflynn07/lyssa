@@ -34,7 +34,7 @@ module.exports = (apiCollectionName, clientUid, resource, objects, req, res, app
       #broadcast update if silent == false
       #SIO DEFAULT == false
       #HTTP DEFAULT == true
-      if !silent
+      if !silent && !_.isArray(req.body) #If bulk-post, no broadcast
         app.io.room(roomName).broadcast 'resourcePost',
           apiCollectionName: apiCollectionName
           resourceName:      resource.name
