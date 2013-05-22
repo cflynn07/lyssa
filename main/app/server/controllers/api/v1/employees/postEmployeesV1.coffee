@@ -13,6 +13,8 @@ module.exports = (app) ->
   employee = ORM.model 'employee'
   client   = ORM.model 'client'
 
+  bulkObjectsIndex = 0
+
   app.post config.apiSubDir + '/v1/employees', (req, res) ->
     async.series [
       (callback) ->
@@ -27,7 +29,7 @@ module.exports = (app) ->
 
             insertMethod = (item, insertMethodCallback = false) ->
 
-              apiVerifyObjectProperties this, employee, item, req, res, {
+              apiVerifyObjectProperties this, employee, item, req, res, insertMethodCallback, {
                 requiredProperties:
 
                   'identifier': (val, objectKey, object, callback) ->
@@ -177,7 +179,9 @@ module.exports = (app) ->
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
                 insertMethod item, (createdUid) ->
+
                   callback null, createdUid
+
               , (err, results) ->
                 config.apiSuccessPostResponse res, results
             else
@@ -194,7 +198,7 @@ module.exports = (app) ->
               console.log 'insertMethod - ' + counter
               counter++
 
-              apiVerifyObjectProperties this, employee, item, req, res, {
+              apiVerifyObjectProperties this, employee, item, req, res, insertMethodCallback, {
                 requiredProperties:
 
                   'identifier': (val, objectKey, object, callback) ->
@@ -425,7 +429,12 @@ module.exports = (app) ->
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
                 insertMethod item, (createdUid) ->
+
+                  console.log 'insertMethodCallback'
+                  console.log arguments
+
                   callback null, createdUid
+
               , (err, results) ->
                 config.apiSuccessPostResponse res, results
             else
@@ -436,7 +445,7 @@ module.exports = (app) ->
 
             insertMethod = (item, insertMethodCallback = false) ->
               #CSA Can make other CSA
-              apiVerifyObjectProperties this, employee, item, req, res, {
+              apiVerifyObjectProperties this, employee, item, req, res, insertMethodCallback, {
                 requiredProperties:
 
                   'identifier': (val, objectKey, object, callback) ->

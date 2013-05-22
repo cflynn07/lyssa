@@ -92,17 +92,29 @@ module.exports =
 
   apiSuccessPostResponse: (res, responseUid) ->
 
-    responseUids = []
+    responseUids  = {}
+    errorsIndexes = []
 
-    if _.isString(responseUid) || !_.isArray(responseUid)
-      responseUids = [responseUid]
+    if !_.isArray(responseUid)
+      responseUids = {'0': responseUid}
 
     else if _.isArray(responseUid)
-      for uid in responseUid
-        if _.isString uid
-          responseUids.push uid
+      for uid, key in responseUid
+        if _.isObject uid
+          errorsIndexes.push key
+        responseUids[key] = uid
 
-    res.jsonAPIRespond(code: 201, message: @apiResponseCodes[201], uids: responseUids)
+    finalResponseObj =
+      code:    201
+      message: @apiResponseCodes[201]
+      uids:    responseUids
+
+    if errorsIndexes.length > 0
+      finalResponseObj.code    = 400
+      finalResponseObj.message = @apiResponseCodes[400]
+      finalResponseObj.errors  = errorsIndexes
+
+    res.jsonAPIRespond finalResponseObj
 
 
 

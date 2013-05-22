@@ -48,7 +48,6 @@ module.exports = (apiCollectionName, clientUid, resource, objects, req, res, app
 
     if insertMethodCallback is false
       config.apiSuccessPostResponse res, responseUid
-
       #res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201], uids: responseUids)
     else
       insertMethodCallback(responseUid)

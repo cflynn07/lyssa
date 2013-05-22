@@ -6,36 +6,41 @@ _                       = require 'underscore'
 preventUnknownFieldsHelper = require config.appRoot + 'server/components/preventUnknownFieldsHelper'
 
 
-module.exports = (scope, resourceModel, testObjects, req, res, requirements, finalMethod) ->
+module.exports = (scope, resourceModel, testObjects, req, res, insertMethodCallback = false, requirements, finalMethod) ->
 
   ###
   First iterate over all the properties of all the objects and verify that all required fields are present
   Also build an array of callbacks to test each required field
   ###
+
   if _.isArray(testObjects) || !_.isObject(testObjects)
-    res.jsonAPIRespond config.errorResponse(400)
+    resp = config.errorResponse(400)
+    if insertMethodCallback
+      insertMethodCallback resp
+    else
+      res.jsonAPIRespond resp
     return
-
-
 
   testObjects = [testObjects]
 
-
-
   unknownProperties = preventUnknownFieldsHelper(resourceModel, testObjects, requirements)
   if unknownProperties.length > 0
-    res.jsonAPIRespond _.extend config.errorResponse(400), {messages: unknownProperties}
+    resp = _.extend config.errorResponse(400), {messages: unknownProperties}
+    if insertMethodCallback
+      insertMethodCallback resp
+    else
+      res.jsonAPIRespond resp
     return
-
-
 
   #validates each object property against any validation specs in resourceModel
   objectValidationErrors = oRMValidateFieldsHelper testObjects, resourceModel
-  #if objectValidationErrors.length > 0
-  #  res.jsonAPIRespond _.extend config.errorResponse(400), messages: objectValidationErrors
-  #  return
-
-
+  if objectValidationErrors.length > 0
+    resp = _.extend config.errorResponse(400), messages: objectValidationErrors
+    if insertMethodCallback
+      insertMethodCallback resp
+    else
+      res.jsonAPIRespond resp
+    return
 
 
   async.series [
@@ -83,7 +88,15 @@ module.exports = (scope, resourceModel, testObjects, req, res, requirements, fin
 
         if (objectValidationErrors.length > 0) or (errorMessages.length > 0)
           #  res.jsonAPIRespond _.extend config.errorResponse(400), messages: objectValidationErrors
-          res.jsonAPIRespond _.extend config.errorResponse(400), messages: errorMessages.concat objectValidationErrors
+
+          #\/ -- newer than ^
+          #res.jsonAPIRespond _.extend config.errorResponse(400), messages: errorMessages.concat objectValidationErrors
+          resp = _.extend config.errorResponse(400), messages: errorMessages.concat objectValidationErrors
+          if insertMethodCallback
+            insertMethodCallback resp
+          else
+            res.jsonAPIRespond resp
+
           superCallback(new Error 'object property test failed')
           return
 
