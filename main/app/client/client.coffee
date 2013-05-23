@@ -172,6 +172,7 @@ require [
   'cs!controllers/widgets/widget4oh4/controllerWidget4oh4'
   'cs!controllers/widgets/widgetEmployeeManager/controllerWidgetEmployeeManager'
   'cs!controllers/widgets/widgetQuiz/controllerWidgetQuiz'
+  'cs!controllers/widgets/widgetActivityFeed/controllerWidgetActivityFeed'
 ], (
   $
   jqueryUi
@@ -222,6 +223,7 @@ require [
   ControllerWidget4oh4
   ControllerWidgetEmployeeManager
   ControllerWidgetQuiz
+  ControllerWidgetActivityFeed
 ) ->
 
   #Modules
@@ -290,6 +292,7 @@ require [
   ControllerWidgetCoreFooter            CS
   ControllerWidgetEmployeeManager       CS
   ControllerWidgetQuiz                  CS
+  ControllerWidgetActivityFeed          CS
 
   angular.bootstrap document, ['CS']
 

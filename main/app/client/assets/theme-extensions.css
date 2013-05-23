@@ -180,7 +180,12 @@ td.details .table-advance thead tr th {
 .condensed-data-table td, .condensed-data-table th {
   padding: 2px;
 }
-
+div.controls .dataTables_filter > label {
+  text-align: right;
+}
+div.controls .dataTables_filter input[type=text] {
+  width: 50% !important;
+}
 /*
     Customize look and feel of menu
     -------------------------------

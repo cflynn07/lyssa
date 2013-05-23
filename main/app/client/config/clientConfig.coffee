@@ -26,7 +26,7 @@ define [], () ->
 
         ]
         widgets:   [
-
+          'viewWidgetActivityFeed'
         ]
 
       #Admin template builder

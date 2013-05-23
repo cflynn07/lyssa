@@ -322,12 +322,9 @@ module.exports = (app) ->
 
 
                     if _.isUndefined object['phone']
-                      callback null
+                      callback null,
                         success: false
                       return
-
-
-
 
 
                     sql = ORM.SEQ.Utils.format [
@@ -338,7 +335,7 @@ module.exports = (app) ->
                     #Check both email & phone
                     sequelize.query(sql).success (resultEmployee) ->
                       if !resultEmployee
-                        callback null
+                        callback null,
                           success: true
                         return
 
@@ -350,7 +347,7 @@ module.exports = (app) ->
                       if resultEmployee.email == val
                         errorMsg.email = 'duplicate'
 
-                      callback null
+                      callback null,
                         success: false
                         message: errorMsg
 

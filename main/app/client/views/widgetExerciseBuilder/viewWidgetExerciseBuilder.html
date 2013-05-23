@@ -10,14 +10,16 @@
   <div
     data-ng-init = "viewModel.templatesListCollapsed = false"
     class        = "portlet-body light-grey">
+
     <div class="row-fluid">
 
       <!-- Templates list -->
       <div
+        id           = "templatesListPortlet"
         data-ng-hide = "viewModel.templatesListCollapsed && viewModel.routeParams.revisionUid"
         class        = "span5 responsive span8">
         <div
-          id           = "templatesListPortlet"
+
           data-ng-show = "!viewModel.templatesListCollapsed"
           class        = "portlet box grey">
           <div class="portlet-title">
@@ -84,7 +86,6 @@
 
 
             <div
-              data-ng-show = "viewModel.routeParams.revisionUid"
               style        = "margin:0;"
               class        = "tools pull-right">
               <a

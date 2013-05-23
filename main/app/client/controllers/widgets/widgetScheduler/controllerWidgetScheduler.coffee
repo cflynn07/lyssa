@@ -48,7 +48,7 @@ define [
         viewModel =
           clientTimeZone:   utilParseClientTimeZone()
           newEventForm:     {}
-          activeWizardStep: 0
+          activeWizardStep: 2
 
           isStepValid: (step = false) ->
             if !$scope.newEventForm
@@ -361,6 +361,25 @@ define [
     ($scope, $route, $routeParams, apiRequest) ->
 
       viewModel =
+
+        exerciseListCollapsed: false
+        toggleExerciseListCollapsed: () ->
+          console.log 'p2'
+          options = {}
+          options.direction = 'left'
+          if !$scope.viewModel.exerciseListCollapsed
+            $('#listPortlet').effect 'blind', {direction:'left'}, () ->
+
+              setTimeout () ->
+                $scope.viewModel.exerciseListCollapsed = !$scope.viewModel.exerciseListCollapsed
+                if !$scope.$$phase
+                  $scope.$apply()
+              , 150
+
+          else
+            $scope.viewModel.exerciseListCollapsed = !$scope.viewModel.exerciseListCollapsed
+
+
         addNewEventForm: {}
         routeParams:     $routeParams
         eventListDT:
