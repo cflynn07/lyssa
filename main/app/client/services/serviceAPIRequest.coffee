@@ -308,7 +308,7 @@ define [
             if !_.isUndefined resourcePoolCollections[hashString]
               collectionHashSaved = true
               if _.isFunction callback
-                callback({code: 200, response: resourcePoolCollections[hashString]})
+                callback({code: 200, response: resourcePoolCollections[hashString].response}, resourcePoolCollections[hashString].responseRaw)
 
 
           #if !allUids and !collectionHashSaved
@@ -318,6 +318,8 @@ define [
             {},     #data
             (response) ->
 
+              responseRaw = JSON.stringify(response)
+
               if response.code == 200
 
                 #HERE we turn array into hash indexed by uids
@@ -326,21 +328,19 @@ define [
 
                 if uids.length == 0
                   #This was open-ended GET request. Store it.
-                  resourcePoolCollections[hashString] = response.response
+                  resourcePoolCollections[hashString] =
+                    response:    response.response
+                    responseRaw: responseRaw
                   #addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response.data, expand, cacheSyncRequest
-
-                console.log 'x1'
 
                 if !allUids and !collectionHashSaved
                   if _.isFunction callback
-                    callback response
-
-                console.log 'x2'
+                    callback response, responseRaw
 
               else
                 if !allUids and !collectionHashSaved
                   if _.isFunction callback
-                    callback response
+                    callback response, responseRaw
 
 
               ###

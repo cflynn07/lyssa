@@ -1,6 +1,8 @@
 define [
+  'underscore'
   'io'
 ], (
+  _
   io
 ) ->
 
@@ -32,7 +34,7 @@ define [
               url:    url
               data:   data
               query:  query
-            }, () ->
+            }, (response) ->
               args = arguments
               $rootScope.$apply () ->
                 callback.apply socket, args

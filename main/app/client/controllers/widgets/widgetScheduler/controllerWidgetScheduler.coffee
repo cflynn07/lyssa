@@ -155,14 +155,14 @@ define [
                 }]
 
                 cacheResponse   = ''
-                oSettings.jqXHR = apiRequest.get 'template', [], query, (response) ->
+                oSettings.jqXHR = apiRequest.get 'template', [], query, (response, responseRaw) ->
                  #console.log 'response'
                  #console.log response
 
                   console.log 'a2'
 
                   if response.code == 200
-                    responseDataString = utilSafeStringify(response.response) #JSON.stringify(response.response)JSON.stringify(response.response)
+                    responseDataString = responseRaw #utilSafeStringify(response.response) #JSON.stringify(response.response)JSON.stringify(response.response)
 
                    #console.log 'utilSafeStringify'
                    #console.log responseDataString
@@ -231,13 +231,12 @@ define [
                 query.expand = [{resource: 'template'}, {resource: 'employee'}]
 
                 cacheResponse   = ''
-                oSettings.jqXHR = apiRequest.get 'revision', [], query, (response) ->
+                oSettings.jqXHR = apiRequest.get 'revision', [], query, (response, responseRaw) ->
 
-                 #console.log 'response'
-                 #console.log response
+
 
                   if response.code == 200
-                    responseDataString = utilSafeStringify(response.response) #JSON.stringify(response.response)
+                    responseDataString = responseRaw #utilSafeStringify(response.response) #JSON.stringify(response.response)
 
                    #console.log 'utilSafeStringify'
                    #console.log responseDataString
