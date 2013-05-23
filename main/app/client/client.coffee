@@ -125,6 +125,7 @@ requirejs.config
 require [
   'jquery'
   'jquery-ui'
+  'gritter'
   'jqueryTouchPunch'
   'bootstrap-toggle-buttons'
   'fullCalendar'
@@ -174,6 +175,7 @@ require [
 ], (
   $
   jqueryUi
+  gritter
   jqueryTouchPunch
   bootstrapToggleButtons
   jqueryFullCalendar

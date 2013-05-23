@@ -156,7 +156,7 @@
 
       var item = $('#gritter-item-' + this._item_count);
 
-      item.fadeIn(this.fade_in_speed, function(){
+      item.effect('slide', {direction: 'right'}, this.fade_in_speed, function(){
         Gritter['_after_open_' + number]($(this));
       });
 
