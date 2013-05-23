@@ -13,7 +13,7 @@ define [
 
     cache = []
     value = JSON.stringify object, (key, value) ->
-      #console.log 'stacky'
+      console.log 'stacky'
       if _.isObject(value)
         if cache.indexOf(value) > -1
           return

@@ -228,11 +228,11 @@ define [
               #console.log query
 
               cacheResponse   = ''
-              oSettings.jqXHR = apiRequest.get 'dictionary', [], query, (response) ->
+              oSettings.jqXHR = apiRequest.get 'dictionary', [], query, (response, responseRaw) ->
                 #console.log 'response'
                 if response.code == 200
 
-                  responseDataString = JSON.stringify(response.response)
+                  responseDataString = responseRaw #JSON.stringify(response.response)
                   if cacheResponse == responseDataString
                     return
                   cacheResponse = responseDataString
@@ -299,12 +299,12 @@ define [
               #console.log query
 
               cacheResponse   = ''
-              oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response) ->
+              oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response, responseRaw) ->
                 console.log 'response'
                 console.log response
                 if response.code == 200
 
-                  responseDataString = JSON.stringify(response.response)
+                  responseDataString = responseRaw #JSON.stringify(response.response)
                   if cacheResponse == responseDataString
                     return
                   cacheResponse = responseDataString
@@ -539,10 +539,10 @@ define [
               query.filter.push ['dictionaryUid', '=', $scope.field.dictionaryUid, 'and']
 
               cacheResponse   = ''
-              oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response) ->
+              oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response, responseRaw) ->
                 if response.code == 200
 
-                  responseDataString = JSON.stringify(response.response)
+                  responseDataString = responseRaw #JSON.stringify(response.response)
                   if cacheResponse == responseDataString
                     return
                   cacheResponse = responseDataString
@@ -669,13 +669,16 @@ define [
                 query.filter.push ['deletedAt', '=', 'null']
                 query.expand = [{
                   resource: 'revisions'
+                  expand: [{
+                    resource: 'template'
+                  }]
                 }]
 
                 cacheResponse   = ''
-                oSettings.jqXHR = apiRequest.get 'template', [], query, (response) ->
+                oSettings.jqXHR = apiRequest.get 'template', [], query, (response, responseRaw) ->
                   if response.code == 200
 
-                    responseDataString = JSON.stringify(response.response)
+                    responseDataString = responseRaw #JSON.stringify(response.response)
                     if cacheResponse == responseDataString
                       return
                     cacheResponse = responseDataString
@@ -882,7 +885,6 @@ define [
                   console.log result
 
                 #delete $scope.resourcePool[fieldUid]
-
                 groupFieldOrdinal++
 
 

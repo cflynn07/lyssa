@@ -320,11 +320,15 @@ define [
 
               responseRaw = JSON.stringify(response)
 
+              #console.log 'x1'
+
               if response.code == 200
 
                 #HERE we turn array into hash indexed by uids
                 response.response.data = reconcileResultsWithPool response.response.data
                 collectionHashSaved    = false
+
+                #console.log 'x2'
 
                 if uids.length == 0
                   #This was open-ended GET request. Store it.
@@ -336,6 +340,8 @@ define [
                 if !allUids and !collectionHashSaved
                   if _.isFunction callback
                     callback response, responseRaw
+
+                #console.log 'x3'
 
               else
                 if !allUids and !collectionHashSaved

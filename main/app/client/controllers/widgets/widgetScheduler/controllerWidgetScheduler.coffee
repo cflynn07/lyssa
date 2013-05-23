@@ -139,7 +139,7 @@ define [
                   ['name', 'type'],
                   oSettings
 
-                console.log 'a1'
+                #console.log 'a1'
 
                 if _.isUndefined($scope.viewModel.newEventForm) || _.isUndefined($scope.viewModel.newEventForm.eventType)
                   return
@@ -152,14 +152,17 @@ define [
 
                 query.expand = [{
                   resource: 'revisions'
+                  expand: [{
+                    resource: 'template'
+                  }]
                 }]
 
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'template', [], query, (response, responseRaw) ->
-                 #console.log 'response'
-                 #console.log response
+                  console.log 'response'
+                  console.log response
 
-                  console.log 'a2'
+                  #console.log 'a2'
 
                   if response.code == 200
                     responseDataString = responseRaw #utilSafeStringify(response.response) #JSON.stringify(response.response)JSON.stringify(response.response)
@@ -169,13 +172,20 @@ define [
 
                     if cacheResponse == responseDataString
                       return
+
                     cacheResponse = responseDataString
                     dataArr = _.toArray response.response.data
+
+                    #console.log 'a3'
+
+                    #console.log dataArr
+
                     fnCallback
                       iTotalRecords:        response.response.length
                       iTotalDisplayRecords: response.response.length
                       aaData:               dataArr
 
+                    #console.log 'a4'
 
 
           revisionsListDataTable:
@@ -271,9 +281,9 @@ define [
                   oSettings
 
                 cacheResponse   = ''
-                oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
+                oSettings.jqXHR = apiRequest.get 'employee', [], query, (response, responseRaw) ->
                   if response.code == 200
-                    responseDataString = utilSafeStringify(response.response) #JSON.stringify(response.response)
+                    responseDataString = responseRaw #utilSafeStringify(response.response) #JSON.stringify(response.response)
 
                    #console.log 'utilSafeStringify'
                    #console.log responseDataString
@@ -401,11 +411,11 @@ define [
               query.expand = [{resource: 'revision', expand:[{resource: 'template'}]}]
 
               cacheResponse   = ''
-              oSettings.jqXHR = apiRequest.get 'event', [], query, (response) ->
+              oSettings.jqXHR = apiRequest.get 'event', [], query, (response, responseRaw) ->
 
                 if response.code == 200
 
-                  responseDataString = utilSafeStringify(response.response) #JSON.stringify(response.response)
+                  responseDataString = responseRaw #utilSafeStringify(response.response) #JSON.stringify(response.response)
 
                  #console.log 'utilSafeStringify'
                  #console.log responseDataString
@@ -432,13 +442,15 @@ define [
             right: 'today month,agendaWeek,agendaDay,prev,next'
           eventsResultCache: {}
           events: (start, end, callback) ->
+            console.log 'fetching events...'
+
 
             filter  = [['dateTime', '>', (new Date(start).toISOString()), 'and'], ['dateTime', '<', (new Date(end).toISOString())]]
             curDate = new Date()
 
             apiRequest.get 'event', [], {
               filter: filter
-            }, (response) ->
+            }, (response, responseRaw) ->
              #console.log response
 
               eventsArr = []
@@ -450,9 +462,13 @@ define [
                     className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
                   eventsArr.push FCEventObj
 
-              if JSON.stringify(eventsArr) != $scope.viewModel.fullCalendarOptions.eventsResultCache
-                $scope.viewModel.fullCalendarOptions.eventsResultCache = utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)
+
+
+              if responseRaw != $scope.viewModel.fullCalendarOptions.eventsResultCache
+                $scope.viewModel.fullCalendarOptions.eventsResultCache = responseRaw    #utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)
                 callback eventsArr
+
+
 
         fullCalendarOptionsSecondary:
           header:
@@ -465,7 +481,7 @@ define [
 
             apiRequest.get 'event', [], {
               filter: filter
-            }, (response) ->
+            }, (response, responseRaw) ->
               #console.log response
 
               eventsArr = []
@@ -477,8 +493,8 @@ define [
                     className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
                   eventsArr.push FCEventObj
 
-              if JSON.stringify(eventsArr) != $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache
-                $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache = utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)
+              if responseRaw != $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache
+                $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache = responseRaw #utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)
                 callback eventsArr
 
 
