@@ -23,6 +23,7 @@ requirejs.config
     'jquery':               'vendor/jquery'
     'jquery-ui':            'vendor/jquery-ui'
     'bootstrap':            'vendor/bootstrap'
+    'gritter':              'vendor/jquery.gritter'
 
 
     'bootstrapFileUpload':      'vendor/bootstrap-fileupload'
@@ -102,6 +103,8 @@ requirejs.config
       deps:    ['jquery']
     boostrapDateTimePicker:
       deps:    ['jquery', 'jquery-ui', 'bootstrap']
+    gritter:
+      deps:    ['jquery']
 
     #File-upload assets
     jqueryFileUpload:

@@ -29,11 +29,8 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-
-
-
             insertMethod = (item, insertMethodCallback = false) ->
-              apiVerifyObjectProperties this, dictionary, item, req, res, {
+              apiVerifyObjectProperties this, dictionary, item, req, res, insertMethodCallback, {
                 requiredProperties:
                   'name': (val, objectKey, object, callback) ->
 
@@ -77,7 +74,6 @@ module.exports = (app) ->
                 insertMethod item, (createdUid) ->
                   callback null, createdUid
               , (err, results) ->
-                console.log arguments
                 config.apiSuccessPostResponse res, results
             else
               insertMethod(req.body)
@@ -87,7 +83,7 @@ module.exports = (app) ->
 
             insertMethod = (item, insertMethodCallback = false) ->
 
-              apiVerifyObjectProperties this, dictionary, item, req, res, {
+              apiVerifyObjectProperties this, dictionary, item, req, res, insertMethodCallback, {
                 requiredProperties:
                   'name': (val, objectKey, object, callback) ->
 
@@ -133,7 +129,6 @@ module.exports = (app) ->
                 insertMethod item, (createdUid) ->
                   callback null, createdUid
               , (err, results) ->
-                console.log arguments
                 config.apiSuccessPostResponse res, results
             else
               insertMethod(req.body)

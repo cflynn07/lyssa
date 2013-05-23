@@ -28,301 +28,323 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-            apiVerifyObjectProperties this, revision, req.body, req, res, {
-              requiredProperties:
-                'changeSummary': (val, objectKey, object, callback) ->
+            insertMethod = (item, insertMethodCallback = false) ->
+              apiVerifyObjectProperties this, revision, item, req, res, insertMethodCallback, {
+                requiredProperties:
+                  'changeSummary': (val, objectKey, object, callback) ->
 
-                  if _.isUndefined val
+                    if _.isUndefined val
+                      callback null,
+                        success: false
+                        message:
+                          changeSummary: 'required'
+                    else
+                      callback null,
+                        success: true
+
+                  'scope': (val, objectKey, object, callback) ->
+
+                    if _.isUndefined val
+                      callback null,
+                        success: false
+                        message:
+                          scope: 'required'
+                    else
+                      callback null,
+                        success: true
+
+                  'clientUid': (val, objectKey, object, callback) ->
+
+                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
                     callback null,
-                      success: false
-                      message:
-                        changeSummary: 'required'
-                  else
-                    callback null,
-                      success: true
+                      success:   true
+                      transform: [objectKey, 'clientUid', testClientUid]
 
-                'scope': (val, objectKey, object, callback) ->
+                    ###
+                    if _.isUndefined val
+                      callback null,
+                        success: true
+                        transform:  [objectKey, 'clientUid', clientUid]
 
-                  if _.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        scope: 'required'
-                  else
-                    callback null,
-                      success: true
+                    else
+                      client.find(
+                        where:
+                          uid: val
+                      ).success (resultClient) ->
 
-                'clientUid': (val, objectKey, object, callback) ->
+                        if resultClient
+                          mapObj = {}
+                          mapObj[resultClient.uid] = resultClient
+                          callback null,
+                            success:    true
+                            uidMapping: mapObj
+                            #transform:  [objectKey, 'clientUid', resultClient.uid]
+                        else
+                          callback null,
+                            success: false
+                            message:
+                              clientUid: 'unknown'
+                    ###
 
-                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+                  'templateUid': (val, objectKey, object, callback) ->
 
-                  callback null,
-                    success:   true
-                    transform: [objectKey, 'clientUid', testClientUid]
+                    if _.isUndefined val
+                      callback null,
+                        success: false
+                        message:
+                          templateUid: 'required'
+                      return
 
-                  ###
-                  if _.isUndefined val
-                    callback null,
-                      success: true
-                      transform:  [objectKey, 'clientUid', clientUid]
+                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
-                  else
-                    client.find(
-                      where:
-                        uid: val
-                    ).success (resultClient) ->
+                    async.parallel [
+                      (callback) ->
+                        client.find(
+                          where:
+                            uid: testClientUid
+                        ).success (resultClient) ->
+                          callback null, resultClient
 
-                      if resultClient
-                        mapObj = {}
-                        mapObj[resultClient.uid] = resultClient
-                        callback null,
-                          success:    true
-                          uidMapping: mapObj
-                          #transform:  [objectKey, 'clientUid', resultClient.uid]
-                      else
+                      (callback) ->
+                        template.find(
+                          where:
+                            uid: val
+                        ).success (resultTemplate) ->
+                          callback null, resultTemplate
+
+
+                    ], (error, results) ->
+
+                      resultClient   = results[0]
+                      resultTemplate = results[1]
+
+                      if !resultTemplate
                         callback null,
                           success: false
                           message:
-                            clientUid: 'unknown'
-                  ###
+                            'templateUid': 'unknown'
+                        return
 
-                'templateUid': (val, objectKey, object, callback) ->
+                      if !resultClient
+                        callback null,
+                          success: false
+                          'clientUid': 'unknown'
+                        return
 
-                  if _.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        templateUid: 'required'
-                    return
+                      #IF we do find the employee, but it doesn't belong to the same client...
+                      if resultTemplate.clientUid != resultClient.uid
+                        callback null,
+                          success: false
+                          message:
+                            'templateUid': 'unknown'
+                        return
 
-                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                  async.parallel [
-                    (callback) ->
-                      client.find(
-                        where:
-                          uid: testClientUid
-                      ).success (resultClient) ->
-                        callback null, resultClient
-
-                    (callback) ->
-                      template.find(
-                        where:
-                          uid: val
-                      ).success (resultTemplate) ->
-                        callback null, resultTemplate
-
-
-                  ], (error, results) ->
-
-                    resultClient   = results[0]
-                    resultTemplate = results[1]
-
-                    if !resultTemplate
-                      callback null,
-                        success: false
-                        message:
-                          'templateUid': 'unknown'
-                      return
-
-                    if !resultClient
-                      callback null,
-                        success: false
-                        'clientUid': 'unknown'
-                      return
-
-                    #IF we do find the employee, but it doesn't belong to the same client...
-                    if resultTemplate.clientUid != resultClient.uid
-                      callback null,
-                        success: false
-                        message:
-                          'templateUid': 'unknown'
-                      return
-
-                    mapObj = {}
-                    mapObj[resultTemplate.uid] = resultTemplate
-                    mapObj[resultClient.uid]   = resultClient
-                    callback null,
-                      success: true
-                      uidMapping: mapObj
-                      transform: [objectKey, 'clientUid', resultClient.uid]
-
-            }, (objects) ->
-
-              #insertHelper.call(this, objects, res)
-              insertHelper 'revisions', clientUid, revision, objects, req, res, app
-
-          when 'clientSuperAdmin', 'clientAdmin'
-
-            apiVerifyObjectProperties this, revision, req.body, req, res, {
-              requiredProperties:
-                'changeSummary': (val, objectKey, object, callback) ->
-
-                  if _.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        changeSummary: 'required'
-                  else
-                    callback null,
-                      success: true
-
-                'scope': (val, objectKey, object, callback) ->
-
-                  if _.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        scope: 'required'
-                  else
-                    callback null,
-                      success: true
-
-                'clientUid': (val, objectKey, object, callback) ->
-
-                  #For everyone besides superAdmins, they shouldn't be specifying clientUids
-                  if !_.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        clientUid: 'unknown'
-                    return
-                  else
-                    client.find(
-                      where:
-                        uid: clientUid
-                    ).success (resultClient) ->
-                      #This should never fail, apiAuth should block
                       mapObj = {}
-                      mapObj[resultClient.uid] = resultClient
+                      mapObj[resultTemplate.uid] = resultTemplate
+                      mapObj[resultClient.uid]   = resultClient
                       callback null,
                         success: true
                         uidMapping: mapObj
-                        transform: [objectKey, 'clientUid', clientUid] #<-- take from session
+                        transform: [objectKey, 'clientUid', resultClient.uid]
+
+              }, (objects) ->
+
+                #insertHelper.call(this, objects, res)
+                insertHelper 'revisions', clientUid, revision, objects, req, res, app, insertMethodCallback
+
+            if _.isArray req.body
+              async.mapSeries req.body, (item, callback) ->
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                config.apiSuccessPostResponse res, results
+            else
+              insertMethod(req.body)
 
 
-                'templateUid': (val, objectKey, object, callback) ->
+          when 'clientSuperAdmin', 'clientAdmin'
 
-                  if _.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        templateUid: 'required'
-                    return
+            insertMethod = (item, insertMethodCallback = false) ->
+              apiVerifyObjectProperties this, revision, item, req, res, insertMethodCallback, {
+                requiredProperties:
+                  'changeSummary': (val, objectKey, object, callback) ->
 
-                  async.parallel [
-                    (callback) ->
+                    if _.isUndefined val
+                      callback null,
+                        success: false
+                        message:
+                          changeSummary: 'required'
+                    else
+                      callback null,
+                        success: true
+
+                  'scope': (val, objectKey, object, callback) ->
+
+                    if _.isUndefined val
+                      callback null,
+                        success: false
+                        message:
+                          scope: 'required'
+                    else
+                      callback null,
+                        success: true
+
+                  'clientUid': (val, objectKey, object, callback) ->
+
+                    #For everyone besides superAdmins, they shouldn't be specifying clientUids
+                    if !_.isUndefined val
+                      callback null,
+                        success: false
+                        message:
+                          clientUid: 'unknown'
+                      return
+                    else
                       client.find(
                         where:
                           uid: clientUid
                       ).success (resultClient) ->
-                        callback null, resultClient
+                        #This should never fail, apiAuth should block
+                        mapObj = {}
+                        mapObj[resultClient.uid] = resultClient
+                        callback null,
+                          success: true
+                          uidMapping: mapObj
+                          transform: [objectKey, 'clientUid', clientUid] #<-- take from session
 
-                    (callback) ->
-                      template.find(
-                        where:
-                          uid: val
-                      ).success (resultTemplate) ->
-                        callback null, resultTemplate
 
+                  'templateUid': (val, objectKey, object, callback) ->
 
-                  ], (error, results) ->
-
-                    resultClient   = results[0]
-                    resultTemplate = results[1]
-
-                    if !resultTemplate
+                    if _.isUndefined val
                       callback null,
                         success: false
                         message:
-                          'templateUid': 'unknown'
+                          templateUid: 'required'
                       return
 
-                    if !resultClient
+                    async.parallel [
+                      (callback) ->
+                        client.find(
+                          where:
+                            uid: clientUid
+                        ).success (resultClient) ->
+                          callback null, resultClient
+
+                      (callback) ->
+                        template.find(
+                          where:
+                            uid: val
+                        ).success (resultTemplate) ->
+                          callback null, resultTemplate
+
+
+                    ], (error, results) ->
+
+                      resultClient   = results[0]
+                      resultTemplate = results[1]
+
+                      if !resultTemplate
+                        callback null,
+                          success: false
+                          message:
+                            'templateUid': 'unknown'
+                        return
+
+                      if !resultClient
+                        callback null,
+                          success: false
+                          'clientUid': 'unknown'
+                        return
+
+                      #IF we do find the employee, but it doesn't belong to the same client...
+                      if resultTemplate.clientUid != resultClient.uid
+                        callback null,
+                          success: false
+                          message:
+                            'templateUid': 'unknown'
+                        return
+
+                      mapObj = {}
+                      mapObj[resultTemplate.uid] = resultTemplate
+                      mapObj[resultClient.uid]   = resultClient
                       callback null,
-                        success: false
-                        'clientUid': 'unknown'
-                      return
+                        success: true
+                        uidMapping: mapObj
+                        transform: [objectKey, 'clientUid', resultClient.uid]
 
-                    #IF we do find the employee, but it doesn't belong to the same client...
-                    if resultTemplate.clientUid != resultClient.uid
+                  'employeeUid': (val, objectKey, object, callback) ->
+
+                    if !_.isUndefined val
+                        callback null,
+                          success: false
+                          message:
+                            employeeUid: 'unknown'
+                        return
+
+                    async.parallel [
+                      (callback) ->
+                        client.find(
+                          where:
+                            uid: clientUid
+                        ).success (resultClient) ->
+                          callback null, resultClient
+
+                      (callback) ->
+                        employee.find(
+                          where:
+                            clientUid: clientUid
+                            uid: employeeUid
+                        ).success (resultEmployee) ->
+                          callback null, resultEmployee
+
+                    ], (error, results) ->
+
+                      resultClient   = results[0]
+                      resultEmployee = results[1]
+
+                      if !resultEmployee
+                        callback null,
+                          success: false
+                          message:
+                            'employeeUid': 'unknown'
+                        return
+
+                      if !resultClient
+                        callback null,
+                          success: false
+                          'clientUid': 'unknown'
+                        return
+
+                      #IF we do find the employee, but it doesn't belong to the same client...
+                      if resultEmployee.clientUid != resultClient.uid
+                        callback null,
+                          success: false
+                          message:
+                            'employeeUid': 'unknown'
+                        return
+
+                      mapObj = {}
+                      mapObj[resultEmployee.uid] = resultEmployee
+                      mapObj[resultClient.uid]   = resultClient
                       callback null,
-                        success: false
-                        message:
-                          'templateUid': 'unknown'
-                      return
+                        success: true
+                        uidMapping: mapObj
+                        transform: [objectKey, 'employeeUid', resultEmployee.uid]
 
-                    mapObj = {}
-                    mapObj[resultTemplate.uid] = resultTemplate
-                    mapObj[resultClient.uid]   = resultClient
-                    callback null,
-                      success: true
-                      uidMapping: mapObj
-                      transform: [objectKey, 'clientUid', resultClient.uid]
+              }, (objects) ->
 
-                'employeeUid': (val, objectKey, object, callback) ->
+                #insertHelper.call(this, objects, res)
+                insertHelper 'revisions', clientUid, revision, objects, req, res, app, insertMethodCallback
 
-                  if !_.isUndefined val
-                      callback null,
-                        success: false
-                        message:
-                          employeeUid: 'unknown'
-                      return
+            if _.isArray req.body
+              async.mapSeries req.body, (item, callback) ->
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                config.apiSuccessPostResponse res, results
+            else
+              insertMethod(req.body)
 
-                  async.parallel [
-                    (callback) ->
-                      client.find(
-                        where:
-                          uid: clientUid
-                      ).success (resultClient) ->
-                        callback null, resultClient
-
-                    (callback) ->
-                      employee.find(
-                        where:
-                          clientUid: clientUid
-                          uid: employeeUid
-                      ).success (resultEmployee) ->
-                        callback null, resultEmployee
-
-                  ], (error, results) ->
-
-                    resultClient   = results[0]
-                    resultEmployee = results[1]
-
-                    if !resultEmployee
-                      callback null,
-                        success: false
-                        message:
-                          'employeeUid': 'unknown'
-                      return
-
-                    if !resultClient
-                      callback null,
-                        success: false
-                        'clientUid': 'unknown'
-                      return
-
-                    #IF we do find the employee, but it doesn't belong to the same client...
-                    if resultEmployee.clientUid != resultClient.uid
-                      callback null,
-                        success: false
-                        message:
-                          'employeeUid': 'unknown'
-                      return
-
-                    mapObj = {}
-                    mapObj[resultEmployee.uid] = resultEmployee
-                    mapObj[resultClient.uid]   = resultClient
-                    callback null,
-                      success: true
-                      uidMapping: mapObj
-                      transform: [objectKey, 'employeeUid', resultEmployee.uid]
-
-            }, (objects) ->
-
-              #insertHelper.call(this, objects, res)
-              insertHelper 'revisions', clientUid, revision, objects, req, res, app
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

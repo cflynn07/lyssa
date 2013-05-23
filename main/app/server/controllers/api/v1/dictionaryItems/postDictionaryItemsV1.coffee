@@ -29,190 +29,216 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-            apiVerifyObjectProperties this, dictionaryItem, req.body, req, res, {
-              requiredProperties:
-                'name': (val, objectKey, object, callback) ->
+            insertMethod = (item, insertMethodCallback = false) ->
+              apiVerifyObjectProperties this, dictionaryItem, item, req, res, insertMethodCallback, {
+                requiredProperties:
+                  'name': (val, objectKey, object, callback) ->
 
-                  if !_.isUndefined val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        name: 'required'
-
-                'clientUid': (val, objectKey, object, callback) ->
-
-                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                  callback null,
-                    success:   true
-                    transform: [objectKey, 'clientUid', testClientUid]
-
-                'dictionaryUid': (val, objectKey, object, callback) ->
-
-                  if _.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        dictionaryUid: 'required'
-                    return
-
-                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                  async.parallel [
-                    (callback) ->
-                      client.find(
-                        where:
-                          uid: testClientUid
-                      ).success (resultClient) ->
-                        callback null, resultClient
-
-                    (callback) ->
-                      dictionary.find(
-                        where:
-                          clientUid: testClientUid
-                          uid:       val
-                      ).success (resultDictionary) ->
-                        callback null, resultDictionary
-
-
-                  ], (error, results) ->
-
-                    resultClient      = results[0]
-                    resultDictionary  = results[1]
-
-                    if !resultDictionary
+                    if !_.isUndefined val
+                      callback null,
+                        success: true
+                    else
                       callback null,
                         success: false
                         message:
-                          'dictionarUid': 'unknown'
-                      return
+                          name: 'required'
 
-                    if !resultClient
-                      callback null,
-                        success: false
-                        'clientUid': 'unknown'
-                      return
+                  'clientUid': (val, objectKey, object, callback) ->
 
-                    #IF we do find the employee, but it doesn't belong to the same client...
-                    if resultDictionary.clientUid != resultClient.uid
+                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
+                    callback null,
+                      success:   true
+                      transform: [objectKey, 'clientUid', testClientUid]
+
+                  'dictionaryUid': (val, objectKey, object, callback) ->
+
+                    if _.isUndefined val
                       callback null,
                         success: false
                         message:
-                          'dictionarUid': 'unknown'
+                          dictionaryUid: 'required'
                       return
 
-                    mapObj = {}
-                    mapObj[resultDictionary.uid]  = resultDictionary
-                    mapObj[resultClient.uid]      = resultClient
-                    callback null,
-                      success: true
+                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
 
-                      uidMapping: mapObj
+                    async.parallel [
+                      (callback) ->
+                        client.find(
+                          where:
+                            uid: testClientUid
+                        ).success (resultClient) ->
+                          callback null, resultClient
+
+                      (callback) ->
+                        dictionary.find(
+                          where:
+                            clientUid: testClientUid
+                            uid:       val
+                        ).success (resultDictionary) ->
+                          callback null, resultDictionary
 
 
-            }, (objects) ->
+                    ], (error, results) ->
 
-              #insertHelper.call(this, objects, res)
-              insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, req, res, app
+                      resultClient      = results[0]
+                      resultDictionary  = results[1]
+
+                      if !resultDictionary
+                        callback null,
+                          success: false
+                          message:
+                            'dictionarUid': 'unknown'
+                        return
+
+                      if !resultClient
+                        callback null,
+                          success: false
+                          'clientUid': 'unknown'
+                        return
+
+                      #IF we do find the employee, but it doesn't belong to the same client...
+                      if resultDictionary.clientUid != resultClient.uid
+                        callback null,
+                          success: false
+                          message:
+                            'dictionarUid': 'unknown'
+                        return
+
+                      mapObj = {}
+                      mapObj[resultDictionary.uid]  = resultDictionary
+                      mapObj[resultClient.uid]      = resultClient
+                      callback null,
+                        success: true
+
+                        uidMapping: mapObj
+
+
+              }, (objects) ->
+
+                #insertHelper.call(this, objects, res)
+                insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, req, res, app, insertMethodCallback
+
+
+            if _.isArray req.body
+              async.mapSeries req.body, (item, callback) ->
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                config.apiSuccessPostResponse res, results
+            else
+              insertMethod(req.body)
+
 
           when 'clientSuperAdmin', 'clientAdmin'
 
-            apiVerifyObjectProperties this, dictionaryItem, req.body, req, res, {
-              requiredProperties:
-                'name': (val, objectKey, object, callback) ->
+            insertMethod = (item, insertMethodCallback = false) ->
+              apiVerifyObjectProperties this, dictionaryItem, item, req, res, insertMethodCallback, {
+                requiredProperties:
+                  'name': (val, objectKey, object, callback) ->
 
-                  if !_.isUndefined val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        name: 'required'
-
-                'clientUid': (val, objectKey, object, callback) ->
-
-                  if !_.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        clientUid: 'unknown'
-                    return
-
-                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                  callback null,
-                    success:   true
-                    transform: [objectKey, 'clientUid', testClientUid]
-
-                'dictionaryUid': (val, objectKey, object, callback) ->
-
-                  if _.isUndefined val
-                    callback null,
-                      success: false
-                      message:
-                        dictionaryUid: 'required'
-                    return
-
-                  testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                  async.parallel [
-                    (callback) ->
-                      client.find(
-                        where:
-                          uid: testClientUid
-                      ).success (resultClient) ->
-                        callback null, resultClient
-
-                    (callback) ->
-                      dictionary.find(
-                        where:
-                          clientUid: testClientUid
-                          uid:       val
-                      ).success (resultDictionary) ->
-                        callback null, resultDictionary
-
-                  ], (error, results) ->
-
-                    resultClient      = results[0]
-                    resultDictionary  = results[1]
-
-                    if !resultDictionary
+                    if !_.isUndefined val
+                      callback null,
+                        success: true
+                    else
                       callback null,
                         success: false
                         message:
-                          'dictionaryUid': 'unknown'
-                      return
+                          name: 'required'
 
-                    if !resultClient
-                      callback null,
-                        success: false
-                        'clientUid': 'unknown'
-                      return
+                  'clientUid': (val, objectKey, object, callback) ->
 
-                    #IF we do find the employee, but it doesn't belong to the same client...
-                    if resultDictionary.clientUid != resultClient.uid
+                    if !_.isUndefined val
                       callback null,
                         success: false
                         message:
-                          'dictionaryUid': 'unknown'
+                          clientUid: 'unknown'
                       return
 
-                    mapObj = {}
-                    mapObj[resultDictionary.uid]  = resultDictionary
-                    mapObj[resultClient.uid]      = resultClient
+                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
                     callback null,
-                      success: true
-                      uidMapping: mapObj
+                      success:   true
+                      transform: [objectKey, 'clientUid', testClientUid]
+
+                  'dictionaryUid': (val, objectKey, object, callback) ->
+
+                    if _.isUndefined val
+                      callback null,
+                        success: false
+                        message:
+                          dictionaryUid: 'required'
+                      return
+
+                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+
+                    async.parallel [
+                      (callback) ->
+                        client.find(
+                          where:
+                            uid: testClientUid
+                        ).success (resultClient) ->
+                          callback null, resultClient
+
+                      (callback) ->
+                        dictionary.find(
+                          where:
+                            clientUid: testClientUid
+                            uid:       val
+                        ).success (resultDictionary) ->
+                          callback null, resultDictionary
+
+                    ], (error, results) ->
+
+                      resultClient      = results[0]
+                      resultDictionary  = results[1]
+
+                      if !resultDictionary
+                        callback null,
+                          success: false
+                          message:
+                            'dictionaryUid': 'unknown'
+                        return
+
+                      if !resultClient
+                        callback null,
+                          success: false
+                          'clientUid': 'unknown'
+                        return
+
+                      #IF we do find the employee, but it doesn't belong to the same client...
+                      if resultDictionary.clientUid != resultClient.uid
+                        callback null,
+                          success: false
+                          message:
+                            'dictionaryUid': 'unknown'
+                        return
+
+                      mapObj = {}
+                      mapObj[resultDictionary.uid]  = resultDictionary
+                      mapObj[resultClient.uid]      = resultClient
+                      callback null,
+                        success: true
+                        uidMapping: mapObj
 
 
-            }, (objects) ->
+              }, (objects) ->
 
-              #insertHelper.call(this, objects, res)
-              insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, req, res, app
+                #insertHelper.call(this, objects, res)
+                insertHelper 'dictionaryItems', clientUid, dictionaryItem, objects, req, res, app, insertMethodCallback
+
+
+
+            if _.isArray req.body
+              async.mapSeries req.body, (item, callback) ->
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                config.apiSuccessPostResponse res, results
+            else
+              insertMethod(req.body)
+
+
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

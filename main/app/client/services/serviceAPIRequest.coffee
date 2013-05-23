@@ -83,6 +83,7 @@ define [
         endsWith = (string, suffix) ->
           return string.indexOf(suffix, string.length - suffix.length) != -1
 
+
         for obj in resources
           for propName, propValue of obj #HASH
 
@@ -161,10 +162,18 @@ define [
         resourcePool[resource.uid] = resource
         resourcePool[resource.uid].isFresh = true
 
+
+
+
       #Merge each result with resourcePool hash
       reconcileResultsWithPool = (results) ->
 
+        seen = []
+
         recursiveCallback = (passedValueObjOrArray) ->
+          #console.log 'p1'
+          #console.log 'seen'
+          #console.log seen
 
           responseHash = {}
 
@@ -173,6 +182,8 @@ define [
             passedValueObjOrArray = [passedValueObjOrArray]
 
           for obj in passedValueObjOrArray #<-- At this point it's an array ^
+
+            seen.push obj
 
             if !_.isUndefined resourcePool[obj.uid]
               #We have it already
@@ -196,12 +207,19 @@ define [
                   addPoolResource obj
                 else
                   updatePoolResource resourcePool[obj.uid], obj
+
+                if seen.indexOf(objValue) > -1
+                  continue
                 recursiveCallback(objValue)
+
 
           return responseHash
 
         responseHash = recursiveCallback results
         return responseHash
+
+
+
 
       validateResource = (resourceName) ->
         if _.isUndefined clientOrmShare[resourceName]
@@ -311,14 +329,20 @@ define [
                   resourcePoolCollections[hashString] = response.response
                   #addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response.data, expand, cacheSyncRequest
 
+                console.log 'x1'
+
                 if !allUids and !collectionHashSaved
                   if _.isFunction callback
                     callback response
+
+                console.log 'x2'
 
               else
                 if !allUids and !collectionHashSaved
                   if _.isFunction callback
                     callback response
+
+
               ###
               console.log '----'
               console.log 'resourcePool'

@@ -1,11 +1,26 @@
 /* the norm */
 #gritter-notice-wrapper {
 	position:fixed;
-	top:20px;
-	right:20px;
+	top:50px;
+	right:16px;
 	width:301px;
 	z-index:9999;
 }
+
+
+@media (max-width: 767px) {
+  #gritter-notice-wrapper {
+    right: 10px !important;
+  }
+}
+@media (max-width: 480px) {
+  #gritter-notice-wrapper {
+    top: 100px;
+    right: 10px !important;
+  }
+}
+
+
 #gritter-notice-wrapper.top-left {
     left: 20px;
     right: auto;
@@ -98,4 +113,20 @@
 }
 .gritter-light .gritter-title {
     text-shadow: none;
+}
+
+
+
+.gritter-top, .gritter-item, .gritter-bottom {
+  background: #2672EC !important;
+}
+.gritter-item-wrapper {
+  border: 2px solid #094AB2;
+  opacity: 0.8;
+}
+.gritter-item-wrapper:hover {
+  opacity: 1;
+}
+.gritter-title {
+  text-shadow: none;
 }

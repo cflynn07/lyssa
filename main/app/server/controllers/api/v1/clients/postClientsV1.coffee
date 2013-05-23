@@ -18,137 +18,141 @@ module.exports = (app) ->
         apiAuth req, res, callback
       (callback) ->
 
+
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
-
-
-        #Make sure no duplicate identifiers
-        identifiers = []
-        if _.isArray req.body
-          for value in req.body
-            if identifiers.indexOf(value.identifer) != -1
-              res.jsonAPIRespond(code: 201, message: config.apiResponseCodes[201])
-              return
-
 
 
         switch userType
           when 'superAdmin'
 
-            apiVerifyObjectProperties this, client, req.body, req, res, {
-              requiredProperties:
-                'name': (val, objectKey, object, callback) ->
-                  if val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        name: 'required'
+            insertMethod = (item, insertMethodCallback = false) ->
 
-                'identifier': (val, objectKey, object, callback) ->
-                  if val
+              apiVerifyObjectProperties this, client, item, req, res, insertMethodCallback, {
+                requiredProperties:
+                  'name': (val, objectKey, object, callback) ->
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          name: 'required'
 
-                    #Make sure no duplicates
-                    clients.find(
-                      where:
-                        identifier: val
-                    ).success
+                  'identifier': (val, objectKey, object, callback) ->
+                    if val
 
-                    callback null,
-                      success: true
+                      #Make sure no duplicates
+                      clients.find(
+                        where:
+                          identifier: val
+                      ).success
 
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        identifier: 'required'
+                      callback null,
+                        success: true
 
-                'address1':      (val, objectKey, object, callback) ->
-                  if val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        address1: 'required'
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          identifier: 'required'
 
-                'address2':      (val, objectKey, object, callback) ->
-                  if val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        address2: 'required'
+                  'address1':      (val, objectKey, object, callback) ->
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          address1: 'required'
 
-                'address3':      (val, objectKey, object, callback) ->
-                  if val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        address3: 'required'
+                  'address2':      (val, objectKey, object, callback) ->
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          address2: 'required'
 
-                'city':          (val, objectKey, object, callback) ->
-                  if val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        city: 'required'
+                  'address3':      (val, objectKey, object, callback) ->
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          address3: 'required'
 
-                'stateProvince': (val, objectKey, object, callback) ->
-                  if val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        stateProvince: 'required'
+                  'city':          (val, objectKey, object, callback) ->
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          city: 'required'
 
-                'country':       (val, objectKey, object, callback) ->
-                  if val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        country: 'required'
+                  'stateProvince': (val, objectKey, object, callback) ->
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          stateProvince: 'required'
 
-                'telephone':     (val, objectKey, object, callback) ->
-                  if val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        telephone: 'required'
+                  'country':       (val, objectKey, object, callback) ->
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          country: 'required'
 
-                'fax':           (val, objectKey, object, callback) ->
-                  if val
-                    callback null,
-                      success: true
-                  else
-                    callback null,
-                      success: false
-                      message:
-                        fax: 'required'
+                  'telephone':     (val, objectKey, object, callback) ->
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          telephone: 'required'
 
-            }, (objects) ->
+                  'fax':           (val, objectKey, object, callback) ->
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          fax: 'required'
 
-              #insertHelper.call(this, objects, res)
-              insertHelper 'clients', clientUid, client, objects, req, res, app
+              }, (objects) ->
+
+                #insertHelper.call(this, objects, res)
+                insertHelper 'clients', clientUid, client, objects, req, res, app, insertMethodCallback
+
+
+            if _.isArray req.body
+              async.mapSeries req.body, (item, callback) ->
+                insertMethod item, (createdUid) ->
+                  callback null, createdUid
+              , (err, results) ->
+                config.apiSuccessPostResponse res, results
+            else
+              insertMethod(req.body)
+
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)

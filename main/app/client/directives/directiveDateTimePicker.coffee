@@ -27,4 +27,4 @@ define [
               $scope.model = e.date
               $scope.form.$pristine = false
 
-            console.log arguments
+            #console.log arguments

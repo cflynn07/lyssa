@@ -4,6 +4,8 @@ define [
   'ejs'
   'cs!utils/utilBuildDTQuery'
   'cs!utils/utilParseClientTimeZone'
+  'cs!utils/utilSafeStringify'
+
   'underscore'
 
   'text!views/widgetScheduler/viewWidgetScheduler.html'
@@ -15,6 +17,7 @@ define [
   EJS
   utilBuildDTQuery
   utilParseClientTimeZone
+  utilSafeStringify
   _
 
   viewWidgetScheduler
@@ -66,14 +69,34 @@ define [
             return result
 
           addEmployeeToEvent: (employeeUid) ->
-            console.log arguments
-            console.log $scope.viewModel.newEventForm
 
             if !_.isArray(viewModel.newEventForm.employeeUids)
               viewModel.newEventForm.employeeUids = []
 
             if viewModel.newEventForm.employeeUids.indexOf(employeeUid) == -1
               viewModel.newEventForm.employeeUids.push employeeUid
+
+          closeAddNewExerciseForm: () ->
+           #console.log 'closeAddNewExerciseForm'
+            $scope.viewModel.newEventForm        = {}
+            $scope.viewModel.activeWizardStep    = 0
+            $scope.$parent.viewModel.showNewExerciseForm = false
+            $scope.newEventForm.$setPristine()
+
+          submitAddNewExercise: () ->
+
+            form = viewModel.newEventForm
+            apiRequest.post 'event', {
+              name:        form.name
+              dateTime:    (new Date(form.date).toISOString())
+              revisionUid: form.revisionUid
+            }, {}, (response) ->
+             #console.log 'response'
+             #console.log response
+
+            viewModel.closeAddNewExerciseForm()
+
+
 
 
           templatesListDataTable:
@@ -116,11 +139,13 @@ define [
                   ['name', 'type'],
                   oSettings
 
+                console.log 'a1'
+
                 if _.isUndefined($scope.viewModel.newEventForm) || _.isUndefined($scope.viewModel.newEventForm.eventType)
                   return
 
-                console.log $scope.viewModel.newEventForm
-                console.log 'p1'
+               #console.log $scope.viewModel.newEventForm
+               #console.log 'p1'
 
                 query.filter.push ['deletedAt', '=', 'null', 'and']
                 query.filter.push ['type',      '=', $scope.viewModel.newEventForm.eventType,   'and']
@@ -131,11 +156,17 @@ define [
 
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'template', [], query, (response) ->
-                  console.log 'response'
-                  console.log response
+                 #console.log 'response'
+                 #console.log response
+
+                  console.log 'a2'
 
                   if response.code == 200
-                    responseDataString = JSON.stringify(response.response)
+                    responseDataString = utilSafeStringify(response.response) #JSON.stringify(response.response)JSON.stringify(response.response)
+
+                   #console.log 'utilSafeStringify'
+                   #console.log responseDataString
+
                     if cacheResponse == responseDataString
                       return
                     cacheResponse = responseDataString
@@ -202,11 +233,15 @@ define [
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'revision', [], query, (response) ->
 
-                  console.log 'response'
-                  console.log response
+                 #console.log 'response'
+                 #console.log response
 
                   if response.code == 200
-                    responseDataString = JSON.stringify(response.response)
+                    responseDataString = utilSafeStringify(response.response) #JSON.stringify(response.response)
+
+                   #console.log 'utilSafeStringify'
+                   #console.log responseDataString
+
                     if cacheResponse == responseDataString
                       return
                     cacheResponse = responseDataString
@@ -239,7 +274,11 @@ define [
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
                   if response.code == 200
-                    responseDataString = JSON.stringify(response.response)
+                    responseDataString = utilSafeStringify(response.response) #JSON.stringify(response.response)
+
+                   #console.log 'utilSafeStringify'
+                   #console.log responseDataString
+
                     if cacheResponse == responseDataString
                       return
                     cacheResponse = responseDataString
@@ -367,7 +406,11 @@ define [
 
                 if response.code == 200
 
-                  responseDataString = JSON.stringify(response.response)
+                  responseDataString = utilSafeStringify(response.response) #JSON.stringify(response.response)
+
+                 #console.log 'utilSafeStringify'
+                 #console.log responseDataString
+
                   if cacheResponse == responseDataString
                     return
                   cacheResponse = responseDataString
@@ -386,6 +429,8 @@ define [
 
 
         fullCalendarOptions:
+          header:
+            right: 'today month,agendaWeek,agendaDay,prev,next'
           eventsResultCache: {}
           events: (start, end, callback) ->
 
@@ -395,7 +440,7 @@ define [
             apiRequest.get 'event', [], {
               filter: filter
             }, (response) ->
-              console.log response
+             #console.log response
 
               eventsArr = []
               if response.code == 200
@@ -407,10 +452,12 @@ define [
                   eventsArr.push FCEventObj
 
               if JSON.stringify(eventsArr) != $scope.viewModel.fullCalendarOptions.eventsResultCache
-                $scope.viewModel.fullCalendarOptions.eventsResultCache = JSON.stringify(eventsArr)
+                $scope.viewModel.fullCalendarOptions.eventsResultCache = utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)
                 callback eventsArr
 
         fullCalendarOptionsSecondary:
+          header:
+            right: 'today month,agendaWeek,agendaDay,prev,next'
           eventsResultCache: {}
           events: (start, end, callback) ->
 
@@ -432,7 +479,7 @@ define [
                   eventsArr.push FCEventObj
 
               if JSON.stringify(eventsArr) != $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache
-                $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache = JSON.stringify(eventsArr)
+                $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache = utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)
                 callback eventsArr
 
 

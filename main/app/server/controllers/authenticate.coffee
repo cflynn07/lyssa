@@ -65,6 +65,14 @@ module.exports = (app) ->
 
   unauthenticate = (req) ->
     delete req.session.user
+
+    try
+      #console.log req.io.manager.rooms
+      for key, value of req.io.manager.rooms
+        req.io.leave key.substring(1, key.length)
+    catch e
+      console.log e
+
     req.session.save () ->
       req.io.respond true
 
