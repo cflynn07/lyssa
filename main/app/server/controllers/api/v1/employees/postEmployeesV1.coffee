@@ -58,23 +58,80 @@ module.exports = (app) ->
 
                   'firstName': (val, objectKey, object, callback) ->
 
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          firstName: 'required'
+                      return
+
                     callback null,
                       success: true
 
                   'lastName': (val, objectKey, object, callback) ->
+
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          lastName: 'required'
+                      return
 
                     callback null,
                       success: true
 
                   'email': (val, objectKey, object, callback) ->
 
-                    callback null,
-                      success: true
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          email: 'required'
+                      return
+
+                    #Verify no duplicates
+                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+                    employee.find(
+                      where:
+                        clientUid: testClientUid
+                        email: val
+                    ).success (resultEmployee) ->
+                      #Cant be duplicates
+                      if resultEmployee
+                        callback null,
+                          success: false
+                          message:
+                            email: 'duplicate'
+                      else
+                        callback null,
+                          success: true
+
 
                   'phone': (val, objectKey, object, callback) ->
 
-                    callback null,
-                      success: true
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          phone: 'required'
+                      return
+
+                    #Verify no duplicates
+                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+                    employee.find(
+                      where:
+                        clientUid: testClientUid
+                        phone: val
+                    ).success (resultEmployee) ->
+                      #Cant be duplicates
+                      if resultEmployee
+                        callback null,
+                          success: false
+                          message:
+                            phone: 'duplicate'
+                      else
+                        callback null,
+                          success: true
 
                   'username': (val, objectKey, object, callback) ->
 
@@ -244,18 +301,124 @@ module.exports = (app) ->
 
                   'lastName': (val, objectKey, object, callback) ->
 
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          lastName: 'required'
+                      return
+
                     callback null,
                       success: true
 
                   'email': (val, objectKey, object, callback) ->
 
-                    callback null,
-                      success: true
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          email: 'required'
+                      return
+
+
+                    if _.isUndefined object['phone']
+                      callback null
+                        success: false
+                      return
+
+
+
+
+
+                    sql = ORM.SEQ.Utils.format [
+                      'SELECT * FROM employees WHERE email = ? or phone = ? LIMIT 1'
+                      val
+                      object['phone']
+                    ]
+                    #Check both email & phone
+                    sequelize.query(sql).success (resultEmployee) ->
+                      if !resultEmployee
+                        callback null
+                          success: true
+                        return
+
+                      errorMsg = {}
+
+                      if resultEmployee.phone == object['phone']
+                        errorMsg.phone = 'duplicate'
+
+                      if resultEmployee.email == val
+                        errorMsg.email = 'duplicate'
+
+                      callback null
+                        success: false
+                        message: errorMsg
+
+                      return
+
+
+                    return
+
+
+
+
+
+
+                    #Verify no duplicates
+                    testClientUid = clientUid # if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+                    employee.find(
+                      where:
+                        clientUid: testClientUid
+                        email: val
+                    ).success (resultEmployee) ->
+                      #Cant be duplicates
+                      if resultEmployee
+                        callback null,
+                          success: false
+                          message:
+                            email: 'duplicate'
+                      else
+                        callback null,
+                          success: true
+
 
                   'phone': (val, objectKey, object, callback) ->
 
+
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          phone: 'required'
+                      return
+
                     callback null,
                       success: true
+
+                    return
+
+
+
+
+
+
+
+                    #Verify no duplicates
+                    testClientUid = clientUid # if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+                    employee.find(
+                      where:
+                        clientUid: testClientUid
+                        phone: val
+                    ).success (resultEmployee) ->
+                      #Cant be duplicates
+                      if resultEmployee
+                        callback null,
+                          success: false
+                          message:
+                            phone: 'duplicate'
+                      else
+                        callback null,
+                          success: true
 
                   'username': (val, objectKey, object, callback) ->
 
@@ -479,23 +642,80 @@ module.exports = (app) ->
 
                   'firstName': (val, objectKey, object, callback) ->
 
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          firstName: 'required'
+                      return
+
                     callback null,
                       success: true
 
                   'lastName': (val, objectKey, object, callback) ->
+
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          lastName: 'required'
+                      return
 
                     callback null,
                       success: true
 
                   'email': (val, objectKey, object, callback) ->
 
-                    callback null,
-                      success: true
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          email: 'required'
+                      return
+
+                    #Verify no duplicates
+                    testClientUid = clientUid #if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+                    employee.find(
+                      where:
+                        clientUid: testClientUid
+                        email: val
+                    ).success (resultEmployee) ->
+                      #Cant be duplicates
+                      if resultEmployee
+                        callback null,
+                          success: false
+                          message:
+                            email: 'duplicate'
+                      else
+                        callback null,
+                          success: true
+
 
                   'phone': (val, objectKey, object, callback) ->
 
-                    callback null,
-                      success: true
+                    if _.isUndefined(val) || val == ''
+                      callback null,
+                        success: false
+                        message:
+                          phone: 'required'
+                      return
+
+                    #Verify no duplicates
+                    testClientUid = clientUid #if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+                    employee.find(
+                      where:
+                        clientUid: testClientUid
+                        phone: val
+                    ).success (resultEmployee) ->
+                      #Cant be duplicates
+                      if resultEmployee
+                        callback null,
+                          success: false
+                          message:
+                            phone: 'duplicate'
+                      else
+                        callback null,
+                          success: true
 
                   'username': (val, objectKey, object, callback) ->
 
