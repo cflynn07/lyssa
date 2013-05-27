@@ -10,9 +10,7 @@
 
 
 <li
-  data-ng-class = "{true:'active'}[locationHash == '/admin/themis/templates'
-    || locationHash == '/admin/themis/templates/exercises'
-    || locationHash == '/admin/themis/templates/quizes']"
+  data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/templates') === 0]"
   class         = "">
   <a href="#/admin/themis/templates">
     <i class="icon-cogs"></i>
@@ -22,12 +20,12 @@
   <ul class="sub-menu">
     <li>
       <a
-        data-ng-class = "{true:'active'}[locationHash == '/admin/themis/templates/exercises']"
+        data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/templates/exercises') === 0]"
         href          = "#/admin/themis/templates/exercises">Exercises</a>
     </li>
     <li>
       <a
-        data-ng-class = "{true:'active'}[locationHash == '/admin/themis/templates/quizes']"
+        data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/templates/quizes') === 0]"
         href          = "#/admin/themis/templates/quizes">Quizes</a>
     </li>
   </ul>
@@ -35,7 +33,7 @@
 
 
 <li
-  data-ng-class = "{true:'active'}[locationHash == '/admin/themis/schedule']"
+  data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/schedule') === 0]"
   class         = "">
   <a href="#/admin/themis/schedule">
     <i class="icon-table"></i>
@@ -46,7 +44,7 @@
 
 
 <li
-  data-ng-class = "{true:'active'}[locationHash == '/admin/themis/settings']"
+  data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/settings') === 0]"
   class         = "">
   <a href="#/admin/themis/settings">
     <i class="icon-user"></i>
@@ -56,12 +54,12 @@
   <ul class="sub-menu">
     <li>
       <a
-        data-ng-class = "{true:'active'}[locationHash == '/admin/themis/settings/dicationaries']"
+        data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/settings/dictionaries') === 0]"
         href          = "#/admin/themis/settings/dictionaries">Dictionaries</a>
     </li>
     <li>
       <a
-        data-ng-class = "{true:'active'}[locationHash == '/admin/themis/settings/employees']"
+        data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/settings/employees') === 0]"
         href          = "#/admin/themis/settings/employees">Employees</a>
     </li>
   </ul>

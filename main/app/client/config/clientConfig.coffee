@@ -87,6 +87,7 @@ define [], () ->
 
 
 
+
       #Admin schedule editor
       '/admin/themis/schedule':
         title:     'Schedule'
@@ -100,10 +101,22 @@ define [], () ->
           'viewWidgetScheduler'
         ]
 
-      #Admin dictionaries editor
-      '/admin/themis/dictionaries':
+
+
+
+
+
+      '/admin/themis/settings':
         title:     'Dictionaries'
-        root:       '/admin/themis/dictionaries'
+        root:       '/admin/themis/settings'
+        subRoutes: [
+        ]
+        widgets:   [
+        ]
+
+      '/admin/themis/settings/dictionaries':
+        title:     'Dictionaries'
+        root:       '/admin/themis/settings/dictionaries'
         subRoutes: [
           '/:dictionaryUid':
             title:       'Dictionaries'
@@ -114,9 +127,9 @@ define [], () ->
         ]
 
       #Delegate exercise submission
-      '/admin/themis/employees':
+      '/admin/themis/settings/employees':
         title:     'Employees'
-        root:      '/delegate/themis/employees'
+        root:      '/delegate/themis/settings/employees'
         subRoutes: [
           '/:employeeUid':
             title:       'Employees'
@@ -125,6 +138,11 @@ define [], () ->
         widgets:   [
           'viewWidgetEmployeeManager'
         ]
+
+
+
+
+
 
       #Delegate exercise submission
       '/admin/themis/exercises':
@@ -165,6 +183,9 @@ define [], () ->
         ]
         widgets:   [
         ]
+
+
+
 
 
     simplifiedUserCategories:
