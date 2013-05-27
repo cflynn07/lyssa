@@ -35,15 +35,10 @@ define [
       if $scope.quizMode
         return
 
-
-
-
       $rootScope.sidebarClosedToggle = () ->
         $rootScope.sidebarClosed = !$rootScope.sidebarClosed
 
       $scope.menuChoices = []
-
-
 
       ###
       for key, value of clientConfig.routes
@@ -84,15 +79,18 @@ define [
         return className
 
       $scope.updateActiveMenuItem = () ->
+        $scope.locationHash = $location.$$path
+        ###
         $scope.activeMenuItem    = ''
         #$scope.activeSubMenuItem = ''
         if !_.isUndefined($route.current) and !_.isUndefined($route.current.pathValue)
           $scope.activeMenuItem = $route.current.pathValue.title
-          $scope.locationHash = $location.$$path
+          $scope.locationHash   = $location.$$path
           #console.log '$location.$$path'
           #console.log $location.$$path
+        ###
 
       $scope.$on '$routeChangeSuccess', (scope, current, previous) ->
-       $scope.updateActiveMenuItem()
+        $scope.updateActiveMenuItem()
       $scope.updateActiveMenuItem()
     ]

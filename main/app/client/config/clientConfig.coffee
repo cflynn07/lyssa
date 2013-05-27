@@ -7,7 +7,6 @@ define [], () ->
 
     routes:
 
-
       #Mobile Quiz
       '/quiz/:uid':
         title: 'quiz'
@@ -16,9 +15,6 @@ define [], () ->
         widgets:   [
           'viewWidgetQuiz'
         ]
-
-
-
 
       #User personal admin
       '/profile':
@@ -40,27 +36,18 @@ define [], () ->
           'viewWidgetActivityFeed'
         ]
 
-
-
-
-
       '/admin/themis/templates':
         title:     'Templates'
         root:      '/admin/themis/templates'
         subRoutes: [
-
         ]
         widgets:   [
-          'viewWidgetExerciseBuilder'
         ]
+
       '/admin/themis/templates/exercises':
-        title:     'Templates'
+        title:     'Templates - Exercises'
         root:      '/admin/themis/templates/exercises'
         subRoutes: [
-        #  '/:templateUid':
-        #    title:       'Templates'
-        #    subMenuItem: false
-        #,
           '/:templateUid/:revisionUid':
             title:       'Templates'
             subMenuItem: false
@@ -68,14 +55,11 @@ define [], () ->
         widgets:   [
           'viewWidgetExerciseBuilder'
         ]
+
       '/admin/themis/templates/quizes':
-        title:     'Templates'
+        title:     'Templates - Quizes'
         root:      '/admin/themis/templates/quizes'
         subRoutes: [
-        #  '/:templateUid':
-        #    title:       'Templates'
-        #    subMenuItem: false
-        #,
           '/:templateUid/:revisionUid':
             title:       'Templates'
             subMenuItem: false
@@ -83,9 +67,6 @@ define [], () ->
         widgets:   [
           'viewWidgetExerciseBuilder'
         ]
-
-
-
 
 
       #Admin schedule editor
@@ -100,11 +81,6 @@ define [], () ->
         widgets:   [
           'viewWidgetScheduler'
         ]
-
-
-
-
-
 
       '/admin/themis/settings':
         title:     'Dictionaries'
@@ -126,6 +102,7 @@ define [], () ->
           'viewWidgetDictionaryManager'
         ]
 
+
       #Delegate exercise submission
       '/admin/themis/settings/employees':
         title:     'Employees'
@@ -140,10 +117,6 @@ define [], () ->
         ]
 
 
-
-
-
-
       #Delegate exercise submission
       '/admin/themis/exercises':
         title:     'Exercises'
@@ -156,12 +129,6 @@ define [], () ->
         widgets:   [
           'viewWidgetFullExerciseSubmitter'
         ]
-
-
-
-
-
-
 
       #Delegate dashboard
       '/delegate/themis':
@@ -183,9 +150,6 @@ define [], () ->
         ]
         widgets:   [
         ]
-
-
-
 
 
     simplifiedUserCategories:

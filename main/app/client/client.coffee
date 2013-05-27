@@ -136,6 +136,7 @@ require [
   'angular-bootstrap'
   'boostrapDateTimePicker'
   'vendor/fastclick'
+  'cs!config/clientRoutes'
   'cs!animations/animationSlideUpDown'
   'cs!animations/animationFadeInOut'
   'cs!directives/directiveAnimateIn'
@@ -187,6 +188,7 @@ require [
   angularBootstrap
   boostrapDateTimePicker
   FastClick
+  ClientRoutes
   AnimationSlideUpDown
   AnimationFadeInOut
   DirectiveAnimateIn
@@ -263,6 +265,8 @@ require [
   # Note: loads all application routes (for all usertypes)
   # Function of controllerCoreWidget to determine if active route is valid
   # given the authenticated user's type
+
+  ###
   CS.config ($routeProvider) ->
     for key, value of clientConfig.routes
       $routeProvider.when key,
@@ -277,6 +281,12 @@ require [
               pathValue: _.extend(value, objectValue)
     $routeProvider.otherwise
       invalid: true
+  ###
+
+  CS.config ['$routeProvider', ($routeProvider) ->
+    ClientRoutes $routeProvider
+  ]
+
 
   ControllerApp                         CS
   ControllerCoreWidgets                 CS

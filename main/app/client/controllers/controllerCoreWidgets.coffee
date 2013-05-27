@@ -25,15 +25,15 @@ define [
     Module.controller 'ControllerCoreWidgets', ['$scope', '$route', '$rootScope',
     ($scope, $route, $rootScope) ->
 
-
       $scope.widgetRows   = [{widget: 'viewWidgetBreadCrumbs'}]
-      previousRouteTitle  = ''
+      previousRouteGroup  = ''
 
       isDerivativeRoute   = (newRouteTitle) ->
         result = true
-        if newRouteTitle != previousRouteTitle
+
+        if newRouteTitle != previousRouteGroup
           result = false
-          previousRouteTitle = newRouteTitle
+          previousRouteGroup = newRouteTitle
         return result
 
       stripAllButBC = () ->
@@ -43,13 +43,13 @@ define [
         widgets = stripAllButBC()
         widgets.push widget:'viewWidget4oh4'
         $scope.widgetRows = widgets
-        previousRouteTitle = ''
+        previousRouteGroup = ''
 
       loadNewRoute = () ->
 
         #Determine if this is a valid application route
-        if _.isUndefined($route.current) || _.isUndefined($route.current.path) || _.isUndefined($route.current.pathValue)
-          if previousRouteTitle == '' && $scope.rootUser
+        if _.isUndefined($route.current) # || _.isUndefined($route.current.path) || _.isUndefined($route.current.pathValue)
+          if previousRouteGroup == '' && $scope.rootUser
             window.location.hash = '/' + clientConfig.simplifiedUserCategories[$scope.rootUser.type] + '/themis'
             return
           else
@@ -64,21 +64,23 @@ define [
           #  trigger4oh4()
           #  return
 
+        #if !isDerivativeRoute($route.current.pathValue.title)
 
-        if !isDerivativeRoute($route.current.pathValue.title)
+        if $route.current.$$route.group != previousRouteGroup
+          previousRouteGroup = $route.current.$$route.group
 
-          #$('body').scrollTop 0
           $('body').animate({scrollTop: 0}, 700)
 
           widgets = stripAllButBC()
           addWidgets = []
-          for value in $route.current.pathValue.widgets
+
+          for value in $route.current.$$route.widgetViews
             addWidgets.push widget: value
           $scope.widgetRows = widgets.concat addWidgets
 
-
           #Used by widgets for forming links
-          $rootScope.viewRoot = $route.current.pathValue.root
+          $rootScope.viewRoot = $route.current.$$route.root
+
 
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
         loadNewRoute()
