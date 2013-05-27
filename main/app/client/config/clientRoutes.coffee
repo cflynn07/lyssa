@@ -102,6 +102,8 @@ define [], () ->
         'viewWidgetEmployeeManager'
       ]
 
+    $routeProvider.otherwise
+      invalid: true
 
 
 

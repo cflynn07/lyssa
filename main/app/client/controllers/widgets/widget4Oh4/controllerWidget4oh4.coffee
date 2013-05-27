@@ -15,26 +15,6 @@ define [
 
     Module.controller 'ControllerWidget4oh4', ['$scope', '$route', ($scope, $route) ->
 
-      loadNewRoute = () ->
-        return
 
-      loadNewRoute()
-
-      #once = false
-      $scope.$on '$routeChangeSuccess', (event, current, previous) ->
-
-      updateShit = () ->
-        $scope.widgetRows = [
-          widget: 'viewWidgetBreadCrumbs'
-        ,
-          widget: 'viewWidgetFullExerciseSubmitter'
-        ,
-          widget: 'viewWidgetScheduler'
-        ,
-          widget: 'viewWidgetDictionaryManager'
-        ,
-          widget: 'viewWidgetExerciseBuilder'
-        ]
-      updateShit()
 
     ]

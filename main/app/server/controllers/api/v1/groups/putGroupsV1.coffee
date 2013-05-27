@@ -27,7 +27,7 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-            apiVerifyObjectProperties this, group, req.body, req, res, {
+            apiVerifyObjectProperties this, group, req.body, req, res, false, {
               requiredProperties:
                 'uid': (val, objectKey, object, callback) ->
 
@@ -72,7 +72,7 @@ module.exports = (app) ->
 
           when 'clientSuperAdmin', 'clientAdmin'
 
-            apiVerifyObjectProperties this, group, req.body, req, res, {
+            apiVerifyObjectProperties this, group, req.body, req, res, false, {
               requiredProperties:
                 'uid': (val, objectKey, object, callback) ->
 
