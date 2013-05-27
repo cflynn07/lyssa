@@ -1,7 +1,20 @@
-<div data-ng-controller="ControllerWidgetFullExerciseSubmitter">
-  <div data-animate-in data-collapse-widget data-title="Submit Exercise" data-widget-themis="true" data-color="blue">
+<div
+  data-animate-in
+  class              = "widget-themis-finish portlet box blue"
+  data-ng-controller = "ControllerWidgetFullExerciseSubmitter">
+  <div class="portlet-title">
+    <h4><span>My Exercises</span></h4>
+  </div>
+  <div class="portlet-body light-grey">
 
-    <h3>Submit Exercise</h3>
+    <div
+      data-ng-include    = "'widgetPartialExerciseSubmitterOverview'"
+      data-ng-controller = "ControllerWidgetFullExerciseSubmitterOverview"></div>
+
+    <div
+      data-ng-include    = "'widgetPartialExerciseSubmitterExercise'"
+      data-ng-controller = "ControllerWidgetFullExerciseSubmitterExercise"></div>
 
   </div>
 </div>
+

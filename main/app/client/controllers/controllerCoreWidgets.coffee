@@ -57,11 +57,12 @@ define [
             return
 
 
-        if !clientConfig.isRouteQuiz($route.current.path)
+        #if !clientConfig.isRouteQuiz($route.current.path)
           #Determine if this is a valid route for the given user-type
-          if !clientConfig.routeMatchClientType($route.current.path, $scope.rootUser.type)
-            trigger4oh4()
-            return
+          #console.log 'routeMatchClientType'
+          #if !clientConfig.routeMatchClientType($route.current.path, $scope.rootUser.type)
+          #  trigger4oh4()
+          #  return
 
 
         if !isDerivativeRoute($route.current.pathValue.title)

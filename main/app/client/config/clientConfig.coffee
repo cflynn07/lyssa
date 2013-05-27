@@ -18,6 +18,17 @@ define [], () ->
         ]
 
 
+
+
+      #User personal admin
+      '/profile':
+        title: 'Profile'
+        root: '/profile'
+        widgets: [
+
+        ]
+        subRoutes: []
+
       #Admin Dashboard
       '/admin/themis':
         title:     'Dashboard'
@@ -29,10 +40,22 @@ define [], () ->
           'viewWidgetActivityFeed'
         ]
 
-      #Admin template builder
+
+
+
+
       '/admin/themis/templates':
         title:     'Templates'
         root:      '/admin/themis/templates'
+        subRoutes: [
+
+        ]
+        widgets:   [
+          'viewWidgetExerciseBuilder'
+        ]
+      '/admin/themis/templates/exercises':
+        title:     'Templates'
+        root:      '/admin/themis/templates/exercises'
         subRoutes: [
         #  '/:templateUid':
         #    title:       'Templates'
@@ -45,6 +68,24 @@ define [], () ->
         widgets:   [
           'viewWidgetExerciseBuilder'
         ]
+      '/admin/themis/templates/quizes':
+        title:     'Templates'
+        root:      '/admin/themis/templates/quizes'
+        subRoutes: [
+        #  '/:templateUid':
+        #    title:       'Templates'
+        #    subMenuItem: false
+        #,
+          '/:templateUid/:revisionUid':
+            title:       'Templates'
+            subMenuItem: false
+        ]
+        widgets:   [
+          'viewWidgetExerciseBuilder'
+        ]
+
+
+
 
       #Admin schedule editor
       '/admin/themis/schedule':
@@ -66,7 +107,7 @@ define [], () ->
         subRoutes: [
           '/:dictionaryUid':
             title:       'Dictionaries'
-            subMenuItem: false
+            subMenuItem: true
         ]
         widgets:   [
           'viewWidgetDictionaryManager'
@@ -95,7 +136,14 @@ define [], () ->
             subMenuItem: false
         ]
         widgets:   [
+          'viewWidgetFullExerciseSubmitter'
         ]
+
+
+
+
+
+
 
       #Delegate dashboard
       '/delegate/themis':

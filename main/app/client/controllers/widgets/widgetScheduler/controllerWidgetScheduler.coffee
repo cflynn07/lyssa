@@ -48,7 +48,7 @@ define [
         viewModel =
           clientTimeZone:   utilParseClientTimeZone()
           newEventForm:     {}
-          activeWizardStep: 2
+          activeWizardStep: 0
 
           isStepValid: (step = false) ->
             if !$scope.newEventForm
@@ -461,7 +461,7 @@ define [
             right: 'today month,agendaWeek,agendaDay,prev,next'
           eventsResultCache: {}
           events: (start, end, callback) ->
-            console.log 'fetching events...'
+            #console.log 'fetching events...'
 
 
             filter  = [['dateTime', '>', (new Date(start).toISOString()), 'and'], ['dateTime', '<', (new Date(end).toISOString())]]

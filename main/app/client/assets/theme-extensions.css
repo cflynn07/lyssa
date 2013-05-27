@@ -190,8 +190,14 @@ div.controls .dataTables_filter input[type=text] {
     Customize look and feel of menu
     -------------------------------
 */
+
+.page-sidebar > ul > li:first-child {
+  border-top: 0 !important;
+}
+
 .page-sidebar > ul > li > a {
     font-size: 14px;
+    font-weight: 500;
 }
 .page-sidebar > ul > li.active > a {
     background: #4b8df8 !important;

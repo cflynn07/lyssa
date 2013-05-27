@@ -1,0 +1,68 @@
+<li
+  data-ng-class = "{true:'active'}[locationHash == '/admin/themis']"
+  class         = "">
+  <a href="#/admin/themis">
+    <i class="icon-home"></i>
+    <span class="title">Dashboard</span>
+    <span class="selected"></span>
+  </a>
+</li>
+
+
+<li
+  data-ng-class = "{true:'active'}[locationHash == '/admin/themis/templates'
+    || locationHash == '/admin/themis/templates/exercises'
+    || locationHash == '/admin/themis/templates/quizes']"
+  class         = "">
+  <a href="#/admin/themis/templates">
+    <i class="icon-cogs"></i>
+    <span class="title">Templates</span>
+    <span class="arrow"></span>
+  </a>
+  <ul class="sub-menu">
+    <li>
+      <a
+        data-ng-class = "{true:'active'}[locationHash == '/admin/themis/templates/exercises']"
+        href          = "#/admin/themis/templates/exercises">Exercises</a>
+    </li>
+    <li>
+      <a
+        data-ng-class = "{true:'active'}[locationHash == '/admin/themis/templates/quizes']"
+        href          = "#/admin/themis/templates/quizes">Quizes</a>
+    </li>
+  </ul>
+</li>
+
+
+<li
+  data-ng-class = "{true:'active'}[locationHash == '/admin/themis/schedule']"
+  class         = "">
+  <a href="#/admin/themis/schedule">
+    <i class="icon-table"></i>
+    <span class="title">Schedule</span>
+    <span class="arrow"></span>
+  </a>
+</li>
+
+
+<li
+  data-ng-class = "{true:'active'}[locationHash == '/admin/themis/settings']"
+  class         = "">
+  <a href="#/admin/themis/settings">
+    <i class="icon-user"></i>
+    <span class="title">Settings</span>
+    <span class="arrow "></span>
+  </a>
+  <ul class="sub-menu">
+    <li>
+      <a
+        data-ng-class = "{true:'active'}[locationHash == '/admin/themis/settings/dicationaries']"
+        href          = "#/admin/themis/settings/dictionaries">Dictionaries</a>
+    </li>
+    <li>
+      <a
+        data-ng-class = "{true:'active'}[locationHash == '/admin/themis/settings/employees']"
+        href          = "#/admin/themis/settings/employees">Employees</a>
+    </li>
+  </ul>
+</li>

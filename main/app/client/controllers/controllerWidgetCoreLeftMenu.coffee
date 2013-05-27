@@ -2,13 +2,17 @@ define [
   'jquery'
   'underscore'
   'angular'
-  'text!views/viewWidgetCoreLeftMenu.html'
+  'text!views/widgetLeftMenu/viewWidgetCoreLeftMenu.html'
+  'text!views/widgetLeftMenu/viewWidgetCoreLeftMenuOptionsAdmin.html'
+  'text!views/widgetLeftMenu/viewWidgetCoreLeftMenuOptionsDelegate.html'
   'cs!config/clientConfig'
 ], (
   $
   _
   angular
   viewWidgetCoreLeftMenu
+  viewWidgetCoreLeftMenuOptionsAdmin
+  viewWidgetCoreLeftMenuOptionsDelegate
   clientConfig
 ) ->
 
@@ -16,21 +20,32 @@ define [
 
     Module.run ['$templateCache',
     ($templateCache) ->
-      $templateCache.put 'viewWidgetCoreLeftMenu', viewWidgetCoreLeftMenu
+      $templateCache.put 'viewWidgetCoreLeftMenu',
+        viewWidgetCoreLeftMenu
+      $templateCache.put 'viewWidgetCoreLeftMenuOptionsAdmin',
+        viewWidgetCoreLeftMenuOptionsAdmin
+      $templateCache.put 'viewWidgetCoreLeftMenuOptionsDelegate',
+        viewWidgetCoreLeftMenuOptionsDelegate
     ]
 
 
-    Module.controller 'ControllerWidgetCoreLeftMenu', ['$scope', '$rootScope', '$route', '$templateCache',
-    ($scope, $rootScope, $route, $templateCache) ->
+    Module.controller 'ControllerWidgetCoreLeftMenu', ['$scope', '$rootScope', '$route', '$templateCache', '$location',
+    ($scope, $rootScope, $route, $templateCache, $location) ->
 
       if $scope.quizMode
         return
+
+
+
 
       $rootScope.sidebarClosedToggle = () ->
         $rootScope.sidebarClosed = !$rootScope.sidebarClosed
 
       $scope.menuChoices = []
 
+
+
+      ###
       for key, value of clientConfig.routes
         if clientConfig.routeMatchClientType(key, $scope.rootUser.type)
           menuObj       = {}
@@ -39,7 +54,6 @@ define [
 
           $scope.menuChoices.push menuObj
 
-      ###
       [{
         hash: 'menu1a'
         title: 'Menu Option 1'
@@ -74,6 +88,9 @@ define [
         #$scope.activeSubMenuItem = ''
         if !_.isUndefined($route.current) and !_.isUndefined($route.current.pathValue)
           $scope.activeMenuItem = $route.current.pathValue.title
+          $scope.locationHash = $location.$$path
+          #console.log '$location.$$path'
+          #console.log $location.$$path
 
       $scope.$on '$routeChangeSuccess', (scope, current, previous) ->
        $scope.updateActiveMenuItem()

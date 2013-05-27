@@ -18,11 +18,11 @@ module.exports =
         notNull: true
 
   relations: [
-    relation: 'belongsTo'
-    model: 'client'
-  ,
-    relation: 'hasMany'
-    model: 'dictionaryItem'
+#    relation: 'belongsTo'
+#    model: 'client'
+#  ,
+#    relation: 'hasMany'
+#    model: 'dictionaryItem'
   ]
   options:
     paranoid: true
