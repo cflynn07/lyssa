@@ -42,7 +42,8 @@
     "formidable":    "*",
     "nodetime":      "*",
     "node-uuid":     "*",
-    "validator":     "*"
+    "validator":     "*",
+    "node-schedule": "*"
   },
   "devDependencies": {
     "mocha": 					        "1.8.2",
