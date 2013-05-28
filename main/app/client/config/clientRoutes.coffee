@@ -94,6 +94,13 @@ define [], () ->
       widgetViews: [
         'viewWidgetDictionaryManager'
       ]
+    $routeProvider.when '/admin/themis/settings/dictionaries/:dictionaryUid',
+      root: '/admin/themis/settings/dictionaries'
+      group: 'settingsDictionaries'
+      subGroup: ''
+      widgetViews: [
+        'viewWidgetDictionaryManager'
+      ]
     $routeProvider.when '/admin/themis/settings/employees',
       root: '/admin/themis/settings/employees'
       group: 'settingsEmployees'

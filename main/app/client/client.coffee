@@ -49,6 +49,7 @@ requirejs.config
     'async':                    'vendor/async'
     'jqueryTouchPunch':         'vendor/jquery.touch.punch'
     'boostrapDateTimePicker':   'vendor/bootstrap-datetimepicker'
+    'soundmanager2':            'vendor/soundmanager2'
   hbs:
     disableI18n:       true
     helperDirectory:   'views/helpers/'
@@ -119,6 +120,8 @@ requirejs.config
       deps:    ['jquery']
     tmplMin:
       deps:    ['jquery']
+    soundmanager2:
+      exports: 'soundManager'
 
 
 

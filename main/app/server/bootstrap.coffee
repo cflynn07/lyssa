@@ -93,6 +93,7 @@ else
           'async':                    'vendor/async'
           'jqueryTouchPunch':         'vendor/jquery.touch.punch'
           'boostrapDateTimePicker':   'vendor/bootstrap-datetimepicker'
+          'soundmanager2':            'vendor/soundmanager2'
         uglify:
           no_mangle: true
         hbs:
@@ -165,6 +166,8 @@ else
             deps:    ['jquery']
           tmplMin:
             deps:    ['jquery']
+          soundmanager2:
+            exports: 'soundManager'
 
       ###
 
