@@ -1,5 +1,5 @@
-redis = require 'redis'
-express = require 'express.io'
+redis      = require 'redis'
+express    = require 'express.io'
 redisStore = require('connect-redis')(express)
 
 if GLOBAL.env? and GLOBAL.env.DOTCLOUD_DATA_REDIS_HOST?
@@ -11,9 +11,9 @@ if GLOBAL.env? and GLOBAL.env.DOTCLOUD_DATA_REDIS_HOST?
 else
   redisOptions =
     prefix: ''
-    host: 'localhost'
-    port: 6379
-    pass: ''
+    host:   'localhost'
+    port:   6379
+    pass:   ''
 
 createClient = () ->
   client = redis.createClient(redisOptions.port, redisOptions.host)

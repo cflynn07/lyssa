@@ -42,7 +42,9 @@
     "formidable":    "*",
     "nodetime":      "*",
     "node-uuid":     "*",
-    "validator":     "*"
+    "validator":     "*",
+    "twilio":        "*",
+    "node-schedule": "*"
   },
   "devDependencies": {
     "mocha": 					        "1.8.2",

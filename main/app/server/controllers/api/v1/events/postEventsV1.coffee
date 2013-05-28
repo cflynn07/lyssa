@@ -8,13 +8,16 @@ sequelize                 = ORM.setup()
 _                         = require 'underscore'
 insertHelper              = require config.appRoot + 'server/components/insertHelper'
 
+
+redisClient  = require(config.appRoot + 'server/config/redis').createClient()
+
+
 module.exports = (app) ->
 
   employee  = ORM.model 'employee'
   client    = ORM.model 'client'
   event     = ORM.model 'event'
   revision  = ORM.model 'revision'
-
 
   app.post config.apiSubDir + '/v1/events', (req, res) ->
     async.series [
@@ -154,7 +157,14 @@ module.exports = (app) ->
               }, (objects) ->
 
                 #insertHelper.call(this, objects, res)
-                insertHelper 'events', clientUid, event, objects, req, res, app, insertMethodCallback
+                insertHelper 'events', clientUid, event, objects, req, res, app, (uid) ->
+
+                  redisClient.publish 'eventCronChannel', uid
+
+                  if _.isFunction(insertMethodCallback)
+                    insertMethodCallback.call(this, arguments)
+                  else
+                    config.apiSuccessPostResponse res, uid
 
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
@@ -302,7 +312,19 @@ module.exports = (app) ->
               }, (objects) ->
 
                 #insertHelper.call(this, objects, res)
-                insertHelper 'events', clientUid, event, objects, req, res, app, insertMethodCallback
+                insertHelper 'events', clientUid, event, objects, req, res, app, (uid) ->
+                  #hardwire in here
+                  console.log 'p1'
+                  console.log arguments
+                  console.log insertMethodCallback
+
+                  redisClient.publish 'eventCronChannel', uid
+
+                  if _.isFunction(insertMethodCallback)
+                    insertMethodCallback.call(this, arguments)
+                  else
+                    config.apiSuccessPostResponse res, uid
+
 
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
