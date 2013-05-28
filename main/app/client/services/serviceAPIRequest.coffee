@@ -396,7 +396,7 @@ define [
           #helper
 
 
-        put: (resourceName, uid, properties, callback) ->
+        put: (resourceName, uid, properties, query, callback) ->
           if !validateResource resourceName
             return
 
@@ -409,7 +409,7 @@ define [
 
           socket.apiRequest 'PUT',
             '/' + apiCollectionName,
-            {} #query
+            query,
             properties, #data
             (response) ->
 
@@ -420,7 +420,7 @@ define [
               callback(response)
 
 
-        delete: (resourceName, uid, callback) ->
+        delete: (resourceName, uid, query, callback) ->
           if !validateResource resourceName
             return
 
@@ -432,7 +432,7 @@ define [
 
           socket.apiRequest 'DELETE',
             '/' + apiCollectionName,
-            {} #query
+            query #query
             uid, #data
             (response) ->
 

@@ -290,7 +290,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
   if !_.isUndefined(req.query.offset)
     offset = Math.floor(parseInt(req.query.offset, 10))
-    console.log 'offset: ' + offset
+    #console.log 'offset: ' + offset
     if !_.isNaN(offset) and _.isNumber(offset)
       resourceQueryParams.find.offset = offset
 
@@ -326,7 +326,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     return true
 
   checkFilterQueryProperty = (filter) ->
-    console.log filter
+    #console.log filter
     if !_.isArray filter
       console.log 'f1'
       return false

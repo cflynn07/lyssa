@@ -43,6 +43,7 @@
     "nodetime":      "*",
     "node-uuid":     "*",
     "validator":     "*",
+    "twilio":        "*",
     "node-schedule": "*"
   },
   "devDependencies": {

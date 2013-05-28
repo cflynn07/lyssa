@@ -24,6 +24,9 @@ define [
             dateFormat: 'yy-mm-dd'
             numberOfMonths: parseInt(scope.months || 1) #2 #scope.months
             onSelect: (dateText, inst) ->
+
+              console.log arguments
+
               scope.$apply (scope) ->
                 scope.model = dateText
                 return

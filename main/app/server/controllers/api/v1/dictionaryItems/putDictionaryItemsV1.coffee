@@ -28,7 +28,7 @@ module.exports = (app) ->
           when 'superAdmin'
 
 
-            apiVerifyObjectProperties this, dictionaryItem, req.body, req, res, {
+            apiVerifyObjectProperties this, dictionaryItem, req.body, req, res, false, {
               requiredProperties:
                 'uid': (val, objectKey, object, callback) ->
 
@@ -81,7 +81,7 @@ module.exports = (app) ->
           when 'clientSuperAdmin', 'clientAdmin'
 
 
-            apiVerifyObjectProperties this, dictionaryItem, req.body, req, res, {
+            apiVerifyObjectProperties this, dictionaryItem, req.body, req, res, false, {
               requiredProperties:
                 'uid': (val, objectKey, object, callback) ->
 

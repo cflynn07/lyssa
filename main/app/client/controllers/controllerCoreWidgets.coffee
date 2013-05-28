@@ -47,8 +47,9 @@ define [
 
       loadNewRoute = () ->
 
+        #console.log $route
         #Determine if this is a valid application route
-        if _.isUndefined($route.current) # || _.isUndefined($route.current.path) || _.isUndefined($route.current.pathValue)
+        if _.isUndefined($route.current.$$route)
           if previousRouteGroup == '' && $scope.rootUser
             window.location.hash = '/' + clientConfig.simplifiedUserCategories[$scope.rootUser.type] + '/themis'
             return

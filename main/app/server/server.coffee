@@ -7,11 +7,7 @@ config  = require './config/config'
 if !GLOBAL.assetHash
   GLOBAL.assetHash = 'client'
 
-#Read dotCloud ENV file if exists
-try
-  GLOBAL.env = JSON.parse fs.readFileSync '/home/dotcloud/environment.json', 'utf-8'
-catch error
-  GLOBAL.env = false
+require('./config/envGlobals')(GLOBAL)
 
 #set up orm
 require('./components/oRM').setup()
@@ -26,8 +22,6 @@ else
     accountKey: '3e685ab0740eddb9a958f950a66bd728df2f1cca'
     appName:    'Lyssa - Development'
 ###
-
-
 
 #redis clients
 pub   = require('./config/redis').createClient()
@@ -84,11 +78,8 @@ app.configure () ->
     app.use express.static path.join(__dirname, '../client'), { maxAge: maxAge }
     app.use express.errorHandler()
 
-
-
 #Authentication module
 require('./controllers/authenticate')(app)
-
 
 #API Requests
 app.io.route 'apiRequest', (req) ->
@@ -100,10 +91,15 @@ app.io.route 'apiRequest', (req) ->
           code: 404
           error: 'not found'
 
-
 #Mount all controllers (API & Regular)
 require('./components/controllers')(app)
 
+###
+test = require('./config/redis').createClient()
+setInterval () ->
+  test.publish 'eventsUpdated', 'test message'
+, 1000
+###
 
 app.listen app.get 'port'
 console.log 'server listening on port: ' + app.get 'port'

@@ -27,7 +27,7 @@ module.exports = (app) ->
         switch userType
           when 'superAdmin'
 
-            apiVerifyObjectProperties this, employee, req.body, req, res, {
+            apiVerifyObjectProperties this, employee, req.body, req, res, false, {
               requiredProperties:
                 'uid': (val, objectKey, object, callback) ->
 
@@ -166,7 +166,7 @@ module.exports = (app) ->
           when 'clientSuperAdmin'
 
             #CSA Can make other CSA
-            apiVerifyObjectProperties this, employee, req.body, req, res, {
+            apiVerifyObjectProperties this, employee, req.body, req, res, false, {
               requiredProperties:
                 'uid': (val, objectKey, object, callback) ->
 
@@ -303,7 +303,7 @@ module.exports = (app) ->
           when 'clientAdmin'
 
             #CSA Can make other CSA
-            apiVerifyObjectProperties this, employee, req.body, req, res, {
+            apiVerifyObjectProperties this, employee, req.body, req, res, false, {
               requiredProperties:
                 'uid': (val, objectKey, object, callback) ->
 

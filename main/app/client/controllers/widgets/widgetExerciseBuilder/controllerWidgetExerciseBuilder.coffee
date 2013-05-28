@@ -115,7 +115,7 @@ define [
 
         apiRequest.put 'group', item.uid, {
           ordinal: item.ordinal
-        }, (result) ->
+        }, {}, (result) ->
           callback()
 
       , (err, results) ->
@@ -145,7 +145,7 @@ define [
             type:     'openResponse'
             groupUid: $scope.group.uid
             ordinal:  0
-          }, (response) ->
+          }, {}, (response) ->
             console.log response
           $scope.cancelAddNewField()
 
@@ -176,7 +176,7 @@ define [
             dictionaryUid: $scope.form.dictionaryUid
             groupUid:      $scope.group.uid
             ordinal:       0
-          }, (response) ->
+          }, {}, (response) ->
             console.log response
           $scope.cancelAddNewField()
 
@@ -354,7 +354,7 @@ define [
             percentageSliderRight: $scope.form.rightValue
             groupUid:              $scope.group.uid
             ordinal:               0
-          }, (response) ->
+          }, {}, (response) ->
             console.log response
           $scope.cancelAddNewField()
 
@@ -424,7 +424,7 @@ define [
               () ->
                 apiRequest.put 'group', [$scope.group.uid], {
                   ordinal: newOrdinal
-                }, (response) ->
+                }, {}, (response) ->
                   console.log response
 
 
@@ -445,7 +445,7 @@ define [
             $dialog.messageBox(title, msg, btns).open()
               .then (result) ->
                 if result
-                  apiRequest.delete 'group', [groupUid], (result) ->
+                  apiRequest.delete 'group', [groupUid], {}, (result) ->
                     #console.log result
 
                     helperReorderGroupOrdinals $scope,
@@ -489,7 +489,7 @@ define [
 
               apiRequest.put 'group', groupUid, {
                 name: $scope.resourcePool[groupUid].name
-              }, (response) ->
+              }, {}, (response) ->
                 console.log response
               return false
     ]
@@ -707,7 +707,7 @@ define [
               $dialog.messageBox(title, msg, btns).open()
                 .then (result) ->
                   if result
-                    apiRequest.delete 'template', templateUid, (result) ->
+                    apiRequest.delete 'template', templateUid, {}, (result) ->
                       return
                       #console.log result
 
@@ -740,7 +740,7 @@ define [
                   description: $scope.viewModel.newTemplateGroupForm.description
                   ordinal:     0
                   revisionUid: $scope.viewModel.routeParams.revisionUid
-                }, (result) ->
+                }, {}, (result) ->
                   $scope.viewModel.clearnewTemplateGroupForm()
                   console.log result
 
@@ -749,7 +749,7 @@ define [
           putRevisionChangeSummary: () ->
             apiRequest.put 'revision', [$scope.viewModel.routeParams.revisionUid], {
               changeSummary: $scope.viewModel.revisionChangeSummary
-            }, (response) ->
+            }, {}, (response) ->
               console.log response
 
 
@@ -770,14 +770,14 @@ define [
                 if result
                   apiRequest.put 'revision', [$scope.viewModel.routeParams.revisionUid], {
                     finalized: true
-                  }, (response) ->
+                  }, {}, (response) ->
                     console.log response
 
 
           putTemplate: (templateUid) ->
             apiRequest.put 'template', [templateUid], {
               name: $scope.viewModel.formEditTemplateName.name
-            }, (response) ->
+            }, {}, (response) ->
               console.log response
               $scope.viewModel.showEditTemplateName      = false
               #$scope.viewModel.formEditTemplateName.name = $scope.viewModel.currentTemplate.name
@@ -788,14 +788,14 @@ define [
             apiRequest.post 'template', {
               name:        $scope.viewModel.newTemplateForm.name
               type:        $scope.viewModel.newTemplateForm.type
-            }, (result) ->
+            }, {}, (result) ->
 
               #Create first revision
               apiRequest.post 'revision', {
                 changeSummary: ''
                 scope:         ''
                 templateUid:   result.uids[0]
-              }, (result) ->
+              }, {}, (result) ->
                 console.log result
                 $scope.viewModel.clearNewTemplateForm()
               #console.log result
@@ -881,7 +881,7 @@ define [
                 apiRequest.put 'field', fieldUid, {
                   ordinal:  groupFieldOrdinal
                   groupUid: groupUid
-                }, (result) ->
+                }, {}, (result) ->
                   console.log result
 
                 #delete $scope.resourcePool[fieldUid]

@@ -5,6 +5,9 @@ _      = require 'underscore'
 
 module.exports = (resourceModel, objects, requirements) ->
 
+  #console.log 'requirements'
+  #console.log requirements
+
   unknownProperties = []
   for object, key in objects
 

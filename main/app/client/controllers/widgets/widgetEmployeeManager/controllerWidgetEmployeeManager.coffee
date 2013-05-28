@@ -139,7 +139,7 @@ define [
                 lastName:  viewModel.newEmployeeManualAddForm.lastName
                 email:     viewModel.newEmployeeManualAddForm.email
                 phone:     viewModel.newEmployeeManualAddForm.phone
-              }, (response) ->
+              }, {}, (response) ->
                 console.log response
               resetHelper()
 

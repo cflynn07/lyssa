@@ -187,7 +187,7 @@ define [
             postNewDictionary: () ->
               apiRequest.post 'dictionary', {
                 name: $scope.viewModel.newDictionaryForm.name
-              }, (response) ->
+              }, {}, (response) ->
                 return
               $scope.viewModel.newDictionaryForm = {}
 
@@ -195,7 +195,7 @@ define [
               apiRequest.post 'dictionaryItem', {
                 dictionaryUid: $scope.viewModel.currentDictionaryUid
                 name:          $scope.viewModel.newDictionaryItemForm.name
-              }, (response) ->
+              }, {}, (response) ->
                 return
               $scope.viewModel.newDictionaryItemForm = {}
 
@@ -251,7 +251,7 @@ define [
               return
             apiRequest.put 'dictionaryItem', $scope.viewModel.editingDictionaryItemUid, {
               name: $scope.viewModel.editingDictionaryItemTempValue
-            }, (response) ->
+            }, {}, (response) ->
               #console.log 'response'
               #console.log response
             $scope.viewModel.cancelEditDictionaryItem()
