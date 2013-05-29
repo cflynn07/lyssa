@@ -7,43 +7,4 @@
   style           = "z-index:1001; background-color:#F1F1F1 !important;"
   data-ng-show    = "rootEmployee.type == 'clientDelegate'"
   data-ng-include = "'viewWidgetCoreLeftMenuOptionsDelegate'"></ul>
-
-
-
-
-
-
-<ul style="display:none; z-index:1001; background-color:#F1F1F1 !important;">
-
-
-
-
-
-  <li data-ng-class="getClass(choice.title, true)" data-ng-repeat="choice in menuChoices">
-    <a data-ng-href="#{{choice.hash}}">
-      <i class="icon-home"></i>
-      <span class="title">{{choice.title}}</span>
-      <span class="arrow"></span>
-      <span class="selected"></span>
-    </a>
-
-    <ul data-ng-show="choice.sub" class="sub">
-      <li data-ng-class="getClass(subChoice.title, false)" data-ng-repeat="subChoice in choice.sub">
-        <a data-ng-href="#{{subChoice.hash}}">{{subChoice.title}}</a>
-      </li>
-    </ul>
-  </li>
-
-
-
-
-
-  <li>
-    <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-    <div data-ng-click="sidebarClosedToggle()" class="sidebar-toggler hidden-phone"></div>
-    <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-    <br/>
-  </li>
-
-</ul>
 <!-- END SIDEBAR MENU -->

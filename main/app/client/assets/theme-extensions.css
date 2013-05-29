@@ -41,6 +41,13 @@ body {
   background-color: #094AB2 !important;
 }
 
+.sidebar-closed > .page-sidebar > ul > li:hover > .sub-menu {
+  background-color: #F1F1F1;
+}
+.sidebar-closed > .page-sidebar > ul > li > a .selected {
+  right: -7px !important;
+}
+
 @media (max-width: 979px) {
   .page-content {
     margin-left: 0 !important;

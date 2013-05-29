@@ -10,7 +10,8 @@ insertHelper              = require config.appRoot + 'server/components/insertHe
 
 module.exports = (app) ->
 
-  client = ORM.model 'client'
+  client   = ORM.model 'client'
+  activity = ORM.model 'activity'
 
   app.post config.apiSubDir + '/v1/activityreadstate', (req, res) ->
     async.series [
@@ -18,144 +19,54 @@ module.exports = (app) ->
         apiAuth req, res, callback
       (callback) ->
 
+        userType    = req.session.user.type
+        clientUid   = req.session.user.clientUid
+        employeeUid = req.session.user.uid
 
-        userType  = req.session.user.type
-        clientUid = req.session.user.clientUid
+        customInsertMethod = (body, req, res, app) ->
+          if !_.isArray(body)
+            body = [body]
+
+          for activityUid in body
+            if !_.isString(activityUid)
+              res.jsonAPIRespond config.apiErrorResponse('unknownRootResourceId')
+              return
+
+          for activityUid in body
+            try
+
+              ((activityUid) ->
+                sequelize.query("INSERT INTO activitiesReadState VALUES (NULL, \'" + employeeUid + "\', \'" + activityUid + "\', \'" + clientUid + "\')", null, {raw:true}).done (err, queryResults) ->
+                  activity.find(
+                    where:
+                      uid: activityUid
+                  ).success (activityResult) ->
+                    if !activityResult
+                      return
+                    if _.isArray activityResult
+                      activityResult = activityResult[0]
+                    if !_.isUndefined(app.io) and _.isFunction(app.io.room)
+
+                      activityResult = JSON.parse(JSON.stringify(activityResult))
+                      activityResult.readState = true
+
+                      app.io.room(employeeUid + '-' + activityResult.uid).broadcast 'resourcePut', {uid: activityResult.uid, readState: true}
+                )(activityUid)
+
+            catch e
+              console.log e
+
+          res.jsonAPIRespond config.response(201)
 
 
         switch userType
           when 'superAdmin'
 
-            insertMethod = (item, insertMethodCallback = false) ->
-
-              apiVerifyObjectProperties this, client, item, req, res, insertMethodCallback, {
-                requiredProperties:
-                  'name': (val, objectKey, object, callback) ->
-                    if val
-                      callback null,
-                        success: true
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          name: 'required'
-
-                  'identifier': (val, objectKey, object, callback) ->
-                    if val
-
-                      #Make sure no duplicates
-                      clients.find(
-                        where:
-                          identifier: val
-                      ).success
-
-                      callback null,
-                        success: true
-
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          identifier: 'required'
-
-                  'address1':      (val, objectKey, object, callback) ->
-                    if val
-                      callback null,
-                        success: true
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          address1: 'required'
-
-                  'address2':      (val, objectKey, object, callback) ->
-                    if val
-                      callback null,
-                        success: true
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          address2: 'required'
-
-                  'address3':      (val, objectKey, object, callback) ->
-                    if val
-                      callback null,
-                        success: true
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          address3: 'required'
-
-                  'city':          (val, objectKey, object, callback) ->
-                    if val
-                      callback null,
-                        success: true
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          city: 'required'
-
-                  'stateProvince': (val, objectKey, object, callback) ->
-                    if val
-                      callback null,
-                        success: true
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          stateProvince: 'required'
-
-                  'country':       (val, objectKey, object, callback) ->
-                    if val
-                      callback null,
-                        success: true
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          country: 'required'
-
-                  'telephone':     (val, objectKey, object, callback) ->
-                    if val
-                      callback null,
-                        success: true
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          telephone: 'required'
-
-                  'fax':           (val, objectKey, object, callback) ->
-                    if val
-                      callback null,
-                        success: true
-                    else
-                      callback null,
-                        success: false
-                        message:
-                          fax: 'required'
-
-              }, (objects) ->
-
-                #insertHelper.call(this, objects, res)
-                insertHelper 'clients', clientUid, client, objects, req, res, app, insertMethodCallback
-
-
-            if _.isArray req.body
-              async.mapSeries req.body, (item, callback) ->
-                insertMethod item, (createdUid) ->
-                  callback null, createdUid
-              , (err, results) ->
-                config.apiSuccessPostResponse res, results
-            else
-              insertMethod(req.body)
-
+            customInsertMethod(req.body, req, res, app)
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
-            res.jsonAPIRespond config.errorResponse(401)
+
+            customInsertMethod(req.body, req, res, app)
 
     ]
 

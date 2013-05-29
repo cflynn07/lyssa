@@ -8,8 +8,51 @@ _         = require 'underscore'
 
 module.exports = (app) ->
 
+  tempRespondHolder = () ->
+  expandWithReadResult = (req, response) ->
+    if response.code == 200
+      uids = []
+      data = response.response.data
+      if !_.isArray(data)
+        data = [data]
 
-  client = ORM.model 'client'
+      for item in data
+        #console.log item
+        uids.push '\'' + item.uid + '\''
+
+        #Join special rooms
+        if !_.isUndefined(req.io) and _.isFunction(req.io.join)
+          if !_.isUndefined(req.session) and !_.isUndefined(req.session.user) and !_.isUndefined(req.session.user.clientUid)
+            req.io.join req.session.user.uid + '-' + item.uid
+
+
+      if _.isArray(response.response.data)
+        for activityItem, key in response.response.data
+          response.response.data[key].readState = false
+      else
+        response.response.data.readState = false
+
+
+      #console.log "SELECT * FROM activitiesReadState WHERE activityUid in (" + uids.join(',') + ")"
+      sequelize.query("SELECT * FROM activitiesReadState WHERE activityUid in (" + uids.join(',') + ")", null, {raw:true}).done (err, queryReslts) ->
+        if _.isArray(response.response.data)
+          for readStateItem in queryReslts
+            for activityItem, key in response.response.data
+              if activityItem.uid == readStateItem.activityUid
+                response.response.data[key].readState = true
+                break;
+        else
+          for readStateItem in queryReslts
+            if response.response.data.uid == readStateItem.activityUid
+              response.response.data.readState = true
+              break;
+        tempRespondHolder(response)
+    else
+      tempRespondHolder(response)
+
+
+
+  activity = ORM.model 'activity'
 
   app.get config.apiSubDir + '/v1/activity', (req, res) ->
     async.series [
@@ -24,21 +67,30 @@ module.exports = (app) ->
           when 'superAdmin'
 
             params =
-              searchExpectsMultiple: true
-              method:                'findAll'
-              find:                  {}
-            apiExpand(req, res, client, params)
+              method: 'findAll'
+              find: {}
+
+            #How we attach 'read status' to each activity item for each user
+            tempRespondHolder  = res.jsonAPIRespond
+            res.jsonAPIRespond = (response) ->
+              expandWithReadResult req, response
+
+            apiExpand(req, res, activity, params)
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 
             params =
-              searchExpectsMultiple: true
-              method:                'findAll'
+              method: 'findAll'
               find:
                 where:
-                  uid: clientUid
+                  clientUid: clientUid
 
-            apiExpand(req, res, client, params)
+            #How we attach 'read status' to each activity item for each user
+            tempRespondHolder  = res.jsonAPIRespond
+            res.jsonAPIRespond = (response) ->
+              expandWithReadResult req, response
+
+            apiExpand(req, res, activity, params)
 
     ]
 
@@ -61,25 +113,28 @@ module.exports = (app) ->
                 where:
                   uid: uids
 
-            apiExpand(req, res, client, params)
+            #How we attach 'read status' to each activity item for each user
+            tempRespondHolder  = res.jsonAPIRespond
+            res.jsonAPIRespond = (response) ->
+              expandWithReadResult req, response
+
+            apiExpand(req, res, activity, params)
 
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 
-            #These guys should never be able to request any client
-            #other than their own. Therefore we don't even have to bother
-            #running a query if uids.length > 1
+            params =
+              method: 'findAll'
+              find:
+                where:
+                  uid: uids
+                  clientUid: clientUid
 
-            if uids.length > 1 or (uids[0] != clientUid)
-              res.jsonAPIRespond config.errorResponse(401)
+            #How we attach 'read status' to each activity item for each user
+            tempRespondHolder  = res.jsonAPIRespond
+            res.jsonAPIRespond = (response) ->
+              expandWithReadResult req, response
 
-            else
-              params =
-                method: 'findAll'
-                find:
-                  where:
-                    uid: uids
-
-              apiExpand(req, res, client, params)
+            apiExpand(req, res, activity, params)
     ]
 

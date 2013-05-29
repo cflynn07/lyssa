@@ -12,8 +12,6 @@
   </div><!-- quizmode = true -->
 
 
-
-
   <div
     data-ng-switch-when = "false">
 
@@ -31,7 +29,10 @@
             <div class="progress progress-striped active">
               <div id="pre_loading_bar" style="width: 100%;" class="bar"></div>
             </div>
-            <h4 data-ng-bind-template="{{loadingStatus}}">Loading...</h4>
+            <h4><i
+              style         = "color: {{ loadingStatusColor }}"
+              data-ng-class = "loadingStatusIcon"
+              class         = "icon-cog"></i>&nbsp;<span data-ng-bind-template = "{{ loadingStatus }}">Loading...</span></h4>
           </div>
         </div>
       </div>

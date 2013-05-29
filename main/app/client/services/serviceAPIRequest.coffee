@@ -232,6 +232,9 @@ define [
         #One exception to pluralization for dictionary
         if resourceName == 'dictionary'
           apiCollectionName = 'dictionaries'
+        if resourceName == 'activity'
+          apiCollectionName = 'activity'
+
         return apiCollectionName
 
 

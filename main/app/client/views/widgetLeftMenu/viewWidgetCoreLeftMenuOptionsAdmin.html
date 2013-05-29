@@ -4,7 +4,6 @@
   <a href="#/admin/themis">
     <i class="icon-home"></i>
     <span class="title">Dashboard</span>
-    <span class="arrow"></span>
     <span class="selected"></span>
   </a>
 </li>
@@ -16,10 +15,15 @@
   <a href="#/admin/themis/templates">
     <i class="icon-cogs"></i>
     <span class="title">Templates</span>
-    <span class="arrow"></span>
+    <span
+      data-ng-class = "{true:'open'}[locationHash.indexOf('/admin/themis/templates') === 0]"
+      class         = "arrow"></span>
     <span class="selected"></span>
   </a>
-  <ul class="sub-menu">
+  <ul
+    data-ng-show    = "locationHash.indexOf('/admin/themis/templates') === 0"
+    data-ng-animate = "{show:'slideDown', hide:'slideUp'}"
+    class           = "sub-menu">
     <li>
       <a
         data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/templates/exercises') === 0]"
@@ -40,7 +44,6 @@
   <a href="#/admin/themis/schedule">
     <i class="icon-table"></i>
     <span class="title">Schedule</span>
-    <span class="arrow"></span>
     <span class="selected"></span>
   </a>
 </li>
@@ -52,10 +55,15 @@
   <a href="#/admin/themis/settings">
     <i class="icon-user"></i>
     <span class="title">Settings</span>
-    <span class="arrow"></span>
+    <span
+      data-ng-class = "{true:'open'}[locationHash.indexOf('/admin/themis/settings') === 0]"
+      class         = "arrow"></span>
     <span class="selected"></span>
   </a>
-  <ul class="sub-menu">
+  <ul
+    data-ng-show    = "locationHash.indexOf('/admin/themis/settings') === 0"
+    data-ng-animate = "{show:'slideDown', hide:'slideUp'}"
+    class           = "sub-menu">
     <li>
       <a
         data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/settings/dictionaries') === 0]"
@@ -67,4 +75,12 @@
         href          = "#/admin/themis/settings/employees">Employees</a>
     </li>
   </ul>
+</li>
+
+
+<li>
+  <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+  <div data-ng-click="sidebarClosedToggle()" class="sidebar-toggler hidden-phone"></div>
+  <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+  <br/>
 </li>

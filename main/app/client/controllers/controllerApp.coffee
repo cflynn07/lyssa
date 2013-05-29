@@ -69,7 +69,10 @@ define [
 
       #temp
       $rootScope.rootStatus    = 'loading'
-      $rootScope.loadingStatus = 'Establishing Secure Connection...'
+
+      $rootScope.loadingStatus      = 'Connecting...'
+      $rootScope.loadingStatusColor = '#35aa47 !important'
+      $rootScope.loadingStatusIcon  = 'icon-lock'
 
       $rootScope.routeParams = $routeParams
 

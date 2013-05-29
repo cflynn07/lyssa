@@ -477,6 +477,7 @@ module.exports = (req, res, resource, resourceQueryParams) ->
   null,
   {raw: true}).done (err, filterIds) ->
 
+
     #Hunt down ID's to grab, & total result set length...
     #resource[resourceQueryParams.method](findCopy).success (filterIds) ->
 
