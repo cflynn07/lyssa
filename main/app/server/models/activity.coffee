@@ -6,11 +6,51 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id:   SEQ.INTEGER
-    name:
+    type: SEQ.ENUM [
+      'createRevision'
+      'createDictionary'
+      'createEmployee'
+      'createEmployeeBulk'
+      'createEvent'
+      'editEvent'
+      'viewQuizExercise'
+      'completeQuizExercise'
+    ]
+
+    #Optional stuff each may have
+    templateUid:
       type: SEQ.STRING
       validate:
-        isAlphanumeric: true
-        len: [5, 100]
+        isUUID: 4
+        notNull: false
+    revisionUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: false
+    dictionaryUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: false
+    dictionaryItemUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: false
+    employeeUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: false
+    eventUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: false
+
+
+
     clientUid:
       type: SEQ.STRING
       validate:
@@ -18,11 +58,23 @@ module.exports =
         notNull: true
 
   relations: [
-#    relation: 'belongsTo'
-#    model: 'client'
-#  ,
-#    relation: 'hasMany'
-#    model: 'dictionaryItem'
+    relation: 'belongsTo'
+    model: 'client'
+  ,
+    relation: 'belongsTo'
+    model: 'template'
+  ,
+    relation: 'belongsTo'
+    model: 'revision'
+  ,
+    relation: 'belongsTo'
+    model: 'dictionary'
+  ,
+    relation: 'belongsTo'
+    model: 'dictionaryItem'
+  ,
+    relation: 'belongsTo'
+    model: 'event'
   ]
   options:
     paranoid: true
