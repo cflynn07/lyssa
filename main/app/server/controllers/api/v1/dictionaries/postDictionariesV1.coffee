@@ -122,8 +122,10 @@ module.exports = (app) ->
                         uidMapping: mapObj
 
               }, (objects) ->
-
                 insertHelper 'dictionaries', clientUid, dictionary, objects, req, res, app, insertMethodCallback
+
+
+
 
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
@@ -138,13 +140,16 @@ module.exports = (app) ->
               insertMethod req.body, (uid) ->
                 console.log 'uid'
                 console.log uid
-                return
+                #return
+
                 activityInsert {
                   type:          'createDictionary'
                   dictionaryUid: uid
                   employeeUid:   employeeUid
                   clientUid:     clientUid
-                }
+                }, app, req
+
+
 
 
           when 'clientDelegate', 'clientAuditor'

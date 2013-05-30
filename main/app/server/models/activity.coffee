@@ -75,6 +75,9 @@ module.exports =
   ,
     relation: 'belongsTo'
     model: 'event'
+  ,
+    relation: 'belongsTo'
+    model: 'employee'
   ]
   options:
     paranoid: true

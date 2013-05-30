@@ -87,35 +87,35 @@ define [
         for obj in resources
           for propName, propValue of obj #HASH
 
-            propName2 = propName
-            propValue2 = propValue
+            if _.isObject(propValue) && !_.isArray(propValue) && !_.isUndefined(propValue.uid)
+              reconcileResultsWithPool(propValue)
 
-            #for propName2, propValue2 of propValue  #RESOURCE OBJECT
+            #for propName, propValue of propValue  #RESOURCE OBJECT
 
             #Does it end in "Uid"
-            if endsWith propName2, 'Uid'
+            if endsWith propName, 'Uid'
 
               #console.log 'p2'
-              #console.log propName2
+              #console.log propName
 
               objHashed = {}
               uid = obj.uid
               objHashed[uid] = obj
 
-              #Does the resource/hash (propValue2) exist in our pool?
-              if !_.isUndefined resourcePool[propValue2]
-                if !_.isUndefined resourcePool[propValue2][apiCollectionName]
-                  _.extend resourcePool[propValue2][apiCollectionName], objHashed
+              #Does the resource/hash (propValue) exist in our pool?
+              if !_.isUndefined resourcePool[propValue]
+                if !_.isUndefined resourcePool[propValue][apiCollectionName]
+                  _.extend resourcePool[propValue][apiCollectionName], objHashed
 
                   #console.log 'p1'
-                  #console.log resourcePool[propValue2][apiCollectionName]
+                  #console.log resourcePool[propValue][apiCollectionName]
 
                 else
 
                   #console.log 'p1a'
 
-                  resourcePool[propValue2][apiCollectionName] = {}
-                  _.extend resourcePool[propValue2][apiCollectionName], objHashed
+                  resourcePool[propValue][apiCollectionName] = {}
+                  _.extend resourcePool[propValue][apiCollectionName], objHashed
 
 
 
