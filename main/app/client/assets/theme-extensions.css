@@ -101,7 +101,18 @@ body {
   }
 
 }
-
+.header .nav > li.dropdown .dropdown-toggle .badge {
+  font-weight: 600;
+  background-color: #ED4F27 !important;
+}
+.feeds .col2 .date {
+  font-weight: 700;
+}
+.feeds li {
+  padding: 2px;
+  background-color: #EEE;
+  border: 2px solid #DDD;
+}
 
 /*
     Adding custom widget styles to theme for themis unique appearance & dynamic "fade-in and up" effect
@@ -469,6 +480,10 @@ ul.nav .dropdown-submenu > .dropdown-menu {
 
 .color-red {
   color: #e02222 !important;
+}
+
+.color-blue {
+  color: #4b8df8 !important;
 }
 
 .color-green {

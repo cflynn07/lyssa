@@ -1,16 +1,17 @@
 define [
   'angular'
+  'underscore'
   'jquery'
   'cs!utils/utilSoundManager'
   'text!views/viewWidgetCoreHeader.html'
 ], (
   angular
+  _
   $
   utilSoundManager
   viewWidgetCoreHeader
 ) ->
   (Module) ->
-
 
     Module.run ['$templateCache',
     ($templateCache) ->
@@ -20,21 +21,48 @@ define [
     Module.controller 'ControllerWidgetCoreHeader', ['$scope', '$rootScope', 'authenticate', 'apiRequest'
     ($scope, $rootScope, authenticate, apiRequest) ->
 
-      $scope.$on 'resourcePost', (e, data) ->
-        #console.log 'rpost'
-        #console.log arguments
+      $rootScope.rootActivityFeed   = {}
+      fetchActivity = (completedCallback = null) ->
+        apiRequest.get 'activity', [], {
+          expand: [
+            resource: 'employee'
+          ,
+            resource: 'template'
+          ,
+            resource: 'revision'
+          ,
+            resource: 'dictionary'
+          ,
+            resource: 'event'
+          ]
+        }, (response, rawResponse, fromCache) ->
+          if response.code == 200
+            $rootScope.rootActivityFeed = response.response.data
+          if _.isFunction(completedCallback) && (fromCache is false)
+            completedCallback()
+
+      gritterNotification = (data) ->
         utilSoundManager.alert.play()
-        $.gritter.add
-          title: 'Something Added - ' + data.resourceName
-        #data
-        # apiCollectionName
-        # resource
-        # resourceName
+
+        activityItem = $scope.resourcePool[data['resource'].uid]
+        switch activityItem.type
+          when 'createDictionary'
+            $.gritter.add
+              title: 'New Dictionary "' + activityItem.dictionary.name + '"'
+              text:  'Created by ' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName
+          when 'createEmployee'
+            $.gritter.add
+              title: 'New Employee "' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName + '"'
+              #text:  'Created by ' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName
 
 
-      $scope.$on 'resourcePut', (e, data) ->
-        console.log 'rput'
-        console.log arguments
+      $scope.$on 'resourcePost', (e, data) ->
+        if data['resourceName'] != 'activity'
+          return
+        fetchActivity () ->
+          gritterNotification data
+
+      fetchActivity()
 
       $scope.toggleTopBarOpen = () ->
         console.log 'top'

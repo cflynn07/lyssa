@@ -134,12 +134,14 @@ define [
             showAddNewEmployeeClose: () ->
               resetHelper()
             showAddNewEmployeeSubmit: () ->
+
               apiRequest.post 'employee', {
                 firstName: viewModel.newEmployeeManualAddForm.firstName
                 lastName:  viewModel.newEmployeeManualAddForm.lastName
                 email:     viewModel.newEmployeeManualAddForm.email
                 phone:     viewModel.newEmployeeManualAddForm.phone
               }, {}, (response) ->
+                console.log 'finished'
                 console.log response
               resetHelper()
 

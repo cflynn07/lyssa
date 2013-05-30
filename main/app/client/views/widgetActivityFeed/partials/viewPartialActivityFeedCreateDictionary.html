@@ -1,0 +1,29 @@
+<div class="col1">
+  <div class="cont">
+
+     <div class="cont-col1">
+        <div class="label label-success">
+           <i class="icon-list-ol"></i>
+        </div>
+     </div>
+
+     <div class="cont-col2">
+        <div class="desc">
+
+          <h4 style="margin-top:0; margin-bottom:5px;">New Dictionary</h4>
+
+          <div>
+            <a class="color-blue" href="#/admin/themis/settings/dictionaries/{{ value.dictionaryUid }}">{{ resourcePool[value.dictionaryUid].name }}</a> created by {{ resourcePool[value.employeeUid].firstName }} {{ resourcePool[value.employeeUid].lastName }}
+          </div>
+
+
+        </div>
+     </div>
+
+  </div>
+</div>
+<div class="col2">
+  <div class="date">
+     {{ resourcePool[value.uid].createdAt | date:'short' }}
+  </div>
+</div>

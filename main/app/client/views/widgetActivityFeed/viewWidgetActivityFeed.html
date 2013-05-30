@@ -3,16 +3,430 @@
   class              = "widget-themis-finish portlet box blue"
   data-ng-controller = "ControllerWidgetActivityFeed">
   <div class="portlet-title">
-    <h4><span>Activity</span></h4>
+    <h4><span>Recent Activity</span></h4>
   </div>
-  <div class="portlet-body light-grey">
+  <div
+    style = "max-height:400px; overflow-y:scroll;"
+    class = "portlet-body">
 
-    <br><br>
+    <ul class="feeds">
 
-    <ul>
-      <li
-        data-ng-repeat = "(key, value) in activities">{{value.readState}}</li>
     </ul>
 
-  </div>
+
+
+
+    <ul class="feeds">
+
+      <li
+        data-ng-repeat  = "(key, value) in rootActivityFeed | toArray | orderBy:'createdAt':true">
+        <div
+          data-ng-animate = "{show:'slideDown'}"
+          data-ng-show    = "value.type == 'createDictionary'"
+          data-ng-include = "'viewPartialActivityFeedCreateDictionary'"></div>
+        <div
+          data-ng-animate = "{show:'slideDown'}"
+          data-ng-show    = "value.type == 'createEmployee'"
+          data-ng-include = "'viewPartialActivityFeedCreateEmployee'"></div>
+      </li>
+
+    </ul>
+
+
+
+
+
+
+
+    <ul style="display:none;" class="feeds">
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-success">
+                     <i class="icon-bell"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     You have 4 pending tasks.
+                     <span class="label label-important label-mini">
+                     Take action
+                     <i class="icon-share-alt"></i>
+                     </span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               Just now
+            </div>
+         </div>
+      </li>
+
+
+      <li>
+         <a href="#">
+            <div class="col1">
+               <div class="cont">
+                  <div class="cont-col1">
+                     <div class="label label-success">
+                        <i class="icon-bell"></i>
+                     </div>
+                  </div>
+                  <div class="cont-col2">
+                     <div class="desc">
+                        New version v1.4 just lunched!
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="col2">
+               <div class="date">
+                  20 mins
+               </div>
+            </div>
+         </a>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-important">
+                     <i class="icon-bolt"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     Database server #12 overloaded. Please fix the issue.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               24 mins
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-info">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               30 mins
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-success">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               40 mins
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-warning">
+                     <i class="icon-plus"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New user registered.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               1.5 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-success">
+                     <i class="icon-bell-alt"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     Web server hardware needs to be upgraded.
+                     <span class="label label-inverse label-mini">Overdue</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               2 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               3 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-warning">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               5 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-info">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               18 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               21 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-info">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               22 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               21 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-info">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               22 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               21 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-info">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               22 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               21 hours
+            </div>
+         </div>
+      </li>
+      <li>
+         <div class="col1">
+            <div class="cont">
+               <div class="cont-col1">
+                  <div class="label label-info">
+                     <i class="icon-bullhorn"></i>
+                  </div>
+               </div>
+               <div class="cont-col2">
+                  <div class="desc">
+                     New order received. Please take care of it.
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col2">
+            <div class="date">
+               22 hours
+            </div>
+         </div>
+      </li>
+    </ul>
+
+  </div><!-- portlet-body -->
 </div>

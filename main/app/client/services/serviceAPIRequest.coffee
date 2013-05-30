@@ -311,7 +311,7 @@ define [
             if !_.isUndefined resourcePoolCollections[hashString]
               collectionHashSaved = true
               if _.isFunction callback
-                callback({code: 200, response: resourcePoolCollections[hashString].response}, resourcePoolCollections[hashString].responseRaw)
+                callback({code: 200, response: resourcePoolCollections[hashString].response}, resourcePoolCollections[hashString].responseRaw, true)
 
 
           #if !allUids and !collectionHashSaved
@@ -342,14 +342,14 @@ define [
 
                 if !allUids and !collectionHashSaved
                   if _.isFunction callback
-                    callback response, responseRaw
+                    callback response, responseRaw, false
 
                 #console.log 'x3'
 
               else
                 if !allUids and !collectionHashSaved
                   if _.isFunction callback
-                    callback response, responseRaw
+                    callback response, responseRaw, false
 
 
               ###

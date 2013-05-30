@@ -125,8 +125,6 @@ module.exports = (app) ->
                 insertHelper 'dictionaries', clientUid, dictionary, objects, req, res, app, insertMethodCallback
 
 
-
-
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
                 insertMethod item, (createdUid) ->
@@ -134,21 +132,28 @@ module.exports = (app) ->
               , (err, results) ->
                 config.apiSuccessPostResponse res, results
 
-                activityInsert
+
 
             else
               insertMethod req.body, (uid) ->
-                console.log 'uid'
-                console.log uid
+
+                #console.log 'uid'
+                #console.log uid
                 #return
 
-                activityInsert {
-                  type:          'createDictionary'
-                  dictionaryUid: uid
-                  employeeUid:   employeeUid
-                  clientUid:     clientUid
-                }, app, req
+                if _.isString(uid) && _.isUndefined(uid.code)
 
+                  config.apiSuccessPostResponse res, uid
+
+                  activityInsert {
+                    type:          'createDictionary'
+                    dictionaryUid: uid
+                    employeeUid:   employeeUid
+                    clientUid:     clientUid
+                  }, app, req
+
+                else
+                  res.jsonAPIRespond uid
 
 
 

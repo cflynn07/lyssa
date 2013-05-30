@@ -94,6 +94,7 @@ else
           'jqueryTouchPunch':         'vendor/jquery.touch.punch'
           'boostrapDateTimePicker':   'vendor/bootstrap-datetimepicker'
           'soundmanager2':            'vendor/soundmanager2'
+          'slimscroll':               'vendor/jquery.slimscroll'
         uglify:
           no_mangle: true
         hbs:
@@ -168,92 +169,8 @@ else
             deps:    ['jquery']
           soundmanager2:
             exports: 'soundManager'
-
-      ###
-
-      #OPTIMIZE JS
-      config =
-        baseUrl: __dirname + '/../client/'
-      #  name:    'vendor/almond'
-        name:    'vendor/require'
-        include: './client'
-     #   optimize: 'none' #'standard' #'none'
-        preserveLicenseComments: false
-        out:     __dirname + '/../client/assets/' + GLOBAL.assetHash + '.js'
-        paths:
-          text:                 'vendor/text'
-          'coffee-script':      'vendor/coffee-script'
-          cs:                   'vendor/cs'
-          hbs:                  'vendor/hbs'
-          Handlebars:           'vendor/Handlebars'
-          i18nprecompile:       'vendor/hbs/i18nprecompile'
-          json2:                'vendor/hbs/json2'
-          io:                   'vendor/socket.io'
-          underscore:           'vendor/underscore'
-          backbone:             'vendor/backbone'
-          jquery:               'vendor/jquery'
-          bootstrap:            'vendor/bootstrap'
-          bootstrapFileUpload:  'vendor/bootstrap-fileupload'
-          jqueryUniform:        'vendor/jquery.uniform'
-          jqueryBrowser:        'vendor/jquery.browser'
-          datatables:           'vendor/jquery-dataTables'
-          datatables_bootstrap: 'vendor/DT_bootstrap'
-          jqueryDateFormat:     'vendor/jquery-dateFormat'
-
-
-          #File-upload assets
-          jqueryFileUpload:       'vendor/file-upload/jquery.fileupload'
-          jqueryFileUploadFp:     'vendor/file-upload/jquery.fileupload-fp'
-          jqueryFileUploadUi:     'vendor/file-upload/jquery.fileupload-ui'
-          jqueryIframeTransport:  'vendor/file-upload/jquery.iframe-transport'
-          'jquery.ui.widget':     'vendor/file-upload/jquery.ui.widget'
-          tmplMin:                'tmpl.min'
-
-          jqueryAutoComplete:     'vendor/jquery-autocomplete/jquery-ui-1.10.2.custom'
-
-        hbs:
-          disableI18n: true
-          helperDirectory: 'views/helpers/'
-      #   templateExtension: 'hbs'
-
-        shim:
-          underscore:
-            exports: '_'
-          io:
-            exports: 'io'
-          cs:
-            deps:    ['coffee-script']
-          jquery:
-            exports: '$'
-          jqueryBrowser:
+          slimscroll:
             deps:    ['jquery']
-          jqueryUniform:
-            deps:    ['jqueryBrowser', 'jquery']
-          backbone:
-            deps:    ['underscore', 'jquery']
-            exports: 'Backbone'
-          bootstrap:
-            deps:    ['jquery']
-          datatables:
-            deps:    ['jquery']
-
-          #File-upload assets
-          jqueryFileUpload:
-            deps:    ['jquery']
-          jqueryFileUploadFp:
-            deps:    ['jquery']
-          jqueryFileUploadUi:
-            deps:    ['jquery']
-          jqueryIframeTransport:
-            deps:    ['jquery']
-          'jquery.ui.widget':
-            deps:    ['jquery']
-          tmplMin:
-            deps:    ['jquery']
-
-          jqueryAutoComplete:
-            deps:    ['jquery']
-      ###
 
       requirejs.optimize config,
         (buildResponse) ->

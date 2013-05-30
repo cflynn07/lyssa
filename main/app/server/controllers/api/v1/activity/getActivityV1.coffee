@@ -10,7 +10,7 @@ module.exports = (app) ->
 
   tempRespondHolder = () ->
   expandWithReadResult = (req, response) ->
-    if response.code == 200
+    if response.code == 200 && response.response.data.length > 0
       uids = []
       data = response.response.data
       if !_.isArray(data)

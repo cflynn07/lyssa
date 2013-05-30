@@ -50,6 +50,7 @@ requirejs.config
     'jqueryTouchPunch':         'vendor/jquery.touch.punch'
     'boostrapDateTimePicker':   'vendor/bootstrap-datetimepicker'
     'soundmanager2':            'vendor/soundmanager2'
+    'slimscroll':               'vendor/jquery.slimscroll'
   hbs:
     disableI18n:       true
     helperDirectory:   'views/helpers/'
@@ -122,6 +123,8 @@ requirejs.config
       deps:    ['jquery']
     soundmanager2:
       exports: 'soundManager'
+    slimscroll:
+      deps:    ['jquery']
 
 
 
@@ -264,27 +267,6 @@ require [
   FilterDeleted   CS
   FilterTelephone CS
 
-  #Routes
-  # Note: loads all application routes (for all usertypes)
-  # Function of controllerCoreWidget to determine if active route is valid
-  # given the authenticated user's type
-
-  ###
-  CS.config ($routeProvider) ->
-    for key, value of clientConfig.routes
-      $routeProvider.when key,
-        path: key
-        pathValue: value
-      if _.isArray value.subRoutes
-        for value2 in value.subRoutes
-          for objectKey, objectValue of value2
-            #console.log key + objectKey
-            $routeProvider.when key + objectKey,
-              path:      key + objectKey
-              pathValue: _.extend(value, objectValue)
-    $routeProvider.otherwise
-      invalid: true
-  ###
 
   CS.config ['$routeProvider', ($routeProvider) ->
     ClientRoutes $routeProvider
