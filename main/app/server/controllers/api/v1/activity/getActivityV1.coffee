@@ -34,7 +34,7 @@ module.exports = (app) ->
 
 
       #console.log "SELECT * FROM activitiesReadState WHERE activityUid in (" + uids.join(',') + ")"
-      sequelize.query("SELECT * FROM activitiesReadState WHERE activityUid in (" + uids.join(',') + ")", null, {raw:true}).done (err, queryReslts) ->
+      sequelize.query("SELECT * FROM activitiesReadState WHERE employeeUid = \'" + req.session.user.uid + "\' AND activityUid in (" + uids.join(',') + ")", null, {raw:true}).done (err, queryReslts) ->
         if _.isArray(response.response.data)
           for readStateItem in queryReslts
             for activityItem, key in response.response.data
