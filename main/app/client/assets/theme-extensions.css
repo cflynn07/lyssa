@@ -107,6 +107,7 @@ body {
 }
 .feeds .col2 .date {
   font-weight: 700;
+  color: #999;
 }
 .feeds li {
   padding: 2px;

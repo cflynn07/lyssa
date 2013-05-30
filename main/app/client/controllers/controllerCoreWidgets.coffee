@@ -25,7 +25,10 @@ define [
     Module.controller 'ControllerCoreWidgets', ['$scope', '$route', '$rootScope',
     ($scope, $route, $rootScope) ->
 
-      $scope.widgetRows   = [{widget: 'viewWidgetBreadCrumbs'}]
+      primaryWidgetRow = [{widget: 'viewWidgetBreadCrumbs', spanLength:'span12'}]
+
+      $scope.widgetRows   = []
+      $scope.widgetRows.push primaryWidgetRow
       previousRouteGroup  = ''
 
       isDerivativeRoute   = (newRouteTitle) ->
@@ -37,7 +40,8 @@ define [
         return result
 
       stripAllButBC = () ->
-        $scope.widgetRows.splice 0, 1
+        $scope.widgetRows = [primaryWidgetRow]
+
 
       trigger4oh4 = () ->
         widgets = stripAllButBC()
@@ -73,11 +77,22 @@ define [
           $('body').animate({scrollTop: 0}, 700)
 
           widgets = stripAllButBC()
-          addWidgets = []
 
-          for value in $route.current.$$route.widgetViews
-            addWidgets.push widget: value
-          $scope.widgetRows = widgets.concat addWidgets
+          for rowWidgets in $route.current.$$route.widgetViews
+
+            widgetObjects = []
+            for widget in rowWidgets
+
+              spanLength = 'span12'
+              if rowWidgets.length == 2
+                spanLength = 'span6'
+
+              widgetObjects.push {
+                spanLength: spanLength
+                widget: widget
+              }
+
+            $scope.widgetRows.push widgetObjects
 
           #Used by widgets for forming links
           $rootScope.viewRoot = $route.current.$$route.root

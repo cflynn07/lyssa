@@ -14,7 +14,8 @@ define [], () ->
       group: 'dashboard'
       subGroup: ''
       widgetViews: [
-        'viewWidgetActivityFeed'
+        ['viewWidgetActivityFeed', 'viewWidgetActivityFeed']
+        ['viewWidgetActivityFeed']
       ]
 
 
@@ -30,21 +31,21 @@ define [], () ->
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
-        'viewWidgetExerciseBuilder'
+        ['viewWidgetExerciseBuilder']
       ]
     $routeProvider.when '/admin/themis/templates/exercises/:templateUid',
       root: '/admin/themis/templates/exercises'
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
-        'viewWidgetExerciseBuilder'
+        ['viewWidgetExerciseBuilder']
       ]
     $routeProvider.when '/admin/themis/templates/exercises/:templateUid/:revisionUid',
       root: '/admin/themis/templates/exercises'
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
-        'viewWidgetExerciseBuilder'
+        ['viewWidgetExerciseBuilder']
       ]
 
 
@@ -54,21 +55,21 @@ define [], () ->
       group: 'templatesQuizes'
       subGroup: ''
       widgetViews: [
-        'viewWidgetExerciseBuilder'
+        ['viewWidgetExerciseBuilder']
       ]
     $routeProvider.when '/admin/themis/templates/quizes/:templateUid',
       root: '/admin/themis/templates/quizes'
       group: 'templatesQuizes'
       subGroup: ''
       widgetViews: [
-        'viewWidgetExerciseBuilder'
+        ['viewWidgetExerciseBuilder']
       ]
     $routeProvider.when '/admin/themis/templates/quizes/:templateUid/:revisionUid',
       root: '/admin/themis/templates/quizes'
       group: 'templatesQuizes'
       subGroup: ''
       widgetViews: [
-        'viewWidgetExerciseBuilder'
+        ['viewWidgetExerciseBuilder']
       ]
 
 
@@ -77,7 +78,7 @@ define [], () ->
       group: 'schedule'
       subGroup: ''
       widgetViews: [
-        'viewWidgetScheduler'
+        ['viewWidgetScheduler']
       ]
 
 
@@ -92,21 +93,21 @@ define [], () ->
       group: 'settingsDictionaries'
       subGroup: ''
       widgetViews: [
-        'viewWidgetDictionaryManager'
+        ['viewWidgetDictionaryManager']
       ]
     $routeProvider.when '/admin/themis/settings/dictionaries/:dictionaryUid',
       root: '/admin/themis/settings/dictionaries'
       group: 'settingsDictionaries'
       subGroup: ''
       widgetViews: [
-        'viewWidgetDictionaryManager'
+        ['viewWidgetDictionaryManager']
       ]
     $routeProvider.when '/admin/themis/settings/employees',
       root: '/admin/themis/settings/employees'
       group: 'settingsEmployees'
       subGroup: ''
       widgetViews: [
-        'viewWidgetEmployeeManager'
+        ['viewWidgetEmployeeManager']
       ]
 
     $routeProvider.otherwise
