@@ -43,6 +43,8 @@ body {
 
 .sidebar-closed > .page-sidebar > ul > li:hover > .sub-menu {
   background-color: #F1F1F1;
+  margin-left: 4px;
+  width: 185px;
 }
 .sidebar-closed > .page-sidebar > ul > li > a .selected {
   right: -7px !important;
@@ -147,7 +149,7 @@ body {
 }
 
 .widget-themis-finish .portlet.box.grey, .widget-themis-finish .portlet.box.green {
-  box-shadow: 1px 1px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px rgba(0,0,0,0.5);
 }
 
 ul.breadcrumb {

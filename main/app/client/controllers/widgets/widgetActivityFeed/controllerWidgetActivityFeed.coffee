@@ -7,7 +7,7 @@ define [
 ) ->
   (Module) ->
 
-    Module.run ['$templateCache', ($templateCache) ->
+    Module.run ['$templateCache', ($templateCache) ->-
       $templateCache.put 'viewWidgetActivityFeed', viewWidgetActivityFeed
     ]
 
@@ -19,7 +19,6 @@ define [
         console.log 'response'
         console.log response
         $scope.activities = response.response.data
-
 
 
     ]

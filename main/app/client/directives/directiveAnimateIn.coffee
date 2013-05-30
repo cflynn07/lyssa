@@ -22,7 +22,7 @@ define [
         $el.removeClass 'widget-themis-finish'
         $el.addClass    'widget-themis'
         $el.css 'position', 'relative'
-        $el.hide().fadeIn('fast')
+        $el.hide().fadeIn()
 
         #element.find('.loading-indicator').hide()#fadeOut('fast')
 

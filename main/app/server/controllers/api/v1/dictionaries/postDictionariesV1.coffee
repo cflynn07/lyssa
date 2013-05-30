@@ -7,6 +7,7 @@ ORM                       = require config.appRoot + 'server/components/oRM'
 sequelize                 = ORM.setup()
 _                         = require 'underscore'
 insertHelper              = require config.appRoot + 'server/components/insertHelper'
+activityInsert            = require config.appRoot + 'server/components/activityInsert'
 
 
 module.exports = (app) ->
@@ -130,8 +131,21 @@ module.exports = (app) ->
                   callback null, createdUid
               , (err, results) ->
                 config.apiSuccessPostResponse res, results
+
+                activityInsert
+
             else
-              insertMethod(req.body)
+              insertMethod req.body, (uid) ->
+                console.log 'uid'
+                console.log uid
+                return
+                activityInsert {
+                  type:          'createDictionary'
+                  dictionaryUid: uid
+                  employeeUid:   employeeUid
+                  clientUid:     clientUid
+                }
+
 
           when 'clientDelegate', 'clientAuditor'
             res.jsonAPIRespond config.errorResponse(401)
