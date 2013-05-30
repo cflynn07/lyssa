@@ -114,7 +114,9 @@ body {
   background-color: #EEE;
   border: 2px solid #DDD;
 }
-
+.feeds li .date-color {
+  color: #777;
+}
 /*
     Adding custom widget styles to theme for themis unique appearance & dynamic "fade-in and up" effect
     ---------------------------------------------------------------------------------------------------

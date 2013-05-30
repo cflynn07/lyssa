@@ -95,6 +95,7 @@ else
           'boostrapDateTimePicker':   'vendor/bootstrap-datetimepicker'
           'soundmanager2':            'vendor/soundmanager2'
           'slimscroll':               'vendor/jquery.slimscroll'
+          'moment':                   'vendor/moment'
         uglify:
           no_mangle: true
         hbs:

@@ -51,6 +51,7 @@ requirejs.config
     'boostrapDateTimePicker':   'vendor/bootstrap-datetimepicker'
     'soundmanager2':            'vendor/soundmanager2'
     'slimscroll':               'vendor/jquery.slimscroll'
+    'moment':                   'vendor/moment'
   hbs:
     disableI18n:       true
     helperDirectory:   'views/helpers/'
@@ -165,6 +166,7 @@ require [
   'cs!filters/filterToArray'
   'cs!filters/filterDeleted'
   'cs!filters/filterTelephone'
+  'cs!filters/filterFromNow'
   'cs!controllers/controllerApp'
   'cs!controllers/controllerCoreWidgets'
   'cs!controllers/controllerWidgetCoreLeftMenu'
@@ -217,6 +219,7 @@ require [
   FilterToArray
   FilterDeleted
   FilterTelephone
+  FilterFromNow
   ControllerApp
   ControllerCoreWidgets
   ControllerWidgetCoreLeftMenu
@@ -266,6 +269,7 @@ require [
   FilterToArray   CS
   FilterDeleted   CS
   FilterTelephone CS
+  FilterFromNow   CS
 
 
   CS.config ['$routeProvider', ($routeProvider) ->

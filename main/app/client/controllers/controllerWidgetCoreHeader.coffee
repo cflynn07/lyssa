@@ -54,6 +54,10 @@ define [
             $.gritter.add
               title: 'New Employee "' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName + '"'
               #text:  'Created by ' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName
+          when 'createEvent'
+            $.gritter.add
+              title: 'New Event "' + activityItem.event.name + '"'
+              text:  'Created by ' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName
 
 
       $scope.$on 'resourcePost', (e, data) ->

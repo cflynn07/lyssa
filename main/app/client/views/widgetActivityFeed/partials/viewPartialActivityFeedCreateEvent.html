@@ -3,17 +3,17 @@
 
      <div class="cont-col1">
         <div class="label label-success">
-           <i class="icon-user"></i>
+           <i class="icon-calendar"></i>
         </div>
      </div>
 
      <div class="cont-col2">
         <div class="desc">
 
-          <h4 style="margin:0;">New Employee</h4>
+          <h4 style="margin:0;">New Event</h4>
           <span class="date-color">{{ resourcePool[value.uid].createdAt | fromNow }}</span>
           <div style="margin-top:5px;">
-            {{ resourcePool[value.employee.uid].firstName }} {{ resourcePool[value.employee.uid].lastName }}
+            <a class="color-blue" href="#/admin/themis/schedule/{{ value.eventUid }}">{{ resourcePool[value.eventUid].name }}</a> created by {{ resourcePool[value.employeeUid].firstName }} {{ resourcePool[value.employeeUid].lastName }}
           </div>
 
         </div>

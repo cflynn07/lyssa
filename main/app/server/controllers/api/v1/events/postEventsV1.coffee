@@ -7,6 +7,7 @@ ORM                       = require config.appRoot + 'server/components/oRM'
 sequelize                 = ORM.setup()
 _                         = require 'underscore'
 insertHelper              = require config.appRoot + 'server/components/insertHelper'
+activityInsert            = require config.appRoot + 'server/components/activityInsert'
 
 
 redisClient  = require(config.appRoot + 'server/config/redis').createClient()
@@ -314,14 +315,11 @@ module.exports = (app) ->
                 #insertHelper.call(this, objects, res)
                 insertHelper 'events', clientUid, event, objects, req, res, app, (uid) ->
                   #hardwire in here
-                  console.log 'p1'
-                  console.log arguments
-                  console.log insertMethodCallback
 
                   redisClient.publish 'eventCronChannel', uid
 
                   if _.isFunction(insertMethodCallback)
-                    insertMethodCallback.call(this, arguments)
+                    insertMethodCallback.call(this, uid)
                   else
                     config.apiSuccessPostResponse res, uid
 
@@ -333,7 +331,22 @@ module.exports = (app) ->
               , (err, results) ->
                 config.apiSuccessPostResponse res, results
             else
-              insertMethod(req.body)
+              insertMethod req.body, (uid) ->
+                console.log 'does this poitn fire?'
+                console.log uid
+
+                if _.isString(uid) && _.isUndefined(uid.code)
+                  config.apiSuccessPostResponse res, uid
+
+                  activityInsert {
+                    type:        'createEvent'
+                    eventUid:    uid
+                    employeeUid: employeeUid
+                    clientUid:   clientUid
+                  }, app, req
+
+                else
+                  res.jsonAPIRespond uid
 
 
           when 'clientDelegate', 'clientAuditor'
