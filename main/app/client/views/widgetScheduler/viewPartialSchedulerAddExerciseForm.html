@@ -413,18 +413,21 @@
 
 
 
-            <div class="form-actions clearfix">
+            <div
+              data-ng-init = "viewModel.newEventForm.submitting = false"
+              class        = "form-actions clearfix">
 
               <a
+                data-ng-hide   = "viewModel.newEventForm.submitting"
                 data-ng-click  = "viewModel.closeAddNewExerciseForm()"
-                class         = "btn red">
+                class          = "btn red">
                 <i class="icon-remove"></i> Cancel
               </a>
 
 
               <a
                 data-ng-click = "viewModel.activeWizardStep = viewModel.activeWizardStep - 1"
-                data-ng-hide  = "viewModel.activeWizardStep == 0"
+                data-ng-hide  = "viewModel.activeWizardStep == 0 || viewModel.newEventForm.submitting"
                 class         = "btn button-previous">
                 <i class="m-icon-swapleft"></i> Back
               </a>
@@ -432,18 +435,26 @@
               <a
                 data-ng-disabled = "!viewModel.isStepValid()"
                 data-ng-click    = "viewModel.isStepValid() && (viewModel.activeWizardStep = viewModel.activeWizardStep + 1)"
-                data-ng-hide     = "viewModel.activeWizardStep == 2"
+                data-ng-hide     = "viewModel.activeWizardStep == 2 || viewModel.newEventForm.submitting"
                 class            = "btn blue">
                 Continue <i class="m-icon-swapright m-icon-white"></i>
               </a>
 
-              <a
-                data-ng-disabled = "!viewModel.isStepValid()"
+              <button
+                data-ng-class    = "{true:'black',false:'green'}[viewModel.newEventForm.submitting]"
+                data-ng-disabled = "!viewModel.isStepValid() || viewModel.newEventForm.submitting"
                 data-ng-show     = "viewModel.activeWizardStep == 2"
                 data-ng-click    = "viewModel.submitAddNewExercise()"
-                class            = "btn green button-submit">
-                Submit <i class="m-icon-swapright m-icon-white"></i>
-              </a>
+                class            = "btn button-submit">
+
+                <p data-ng-hide = "viewModel.newEventForm.submitting">
+                  Submit <i class="m-icon-swapright m-icon-white"></i>
+                </p>
+                <p data-ng-show = "viewModel.newEventForm.submitting">
+                  <i class="icon-cog icon-spin"></i> Saving...
+                </p>
+
+              </button>
 
             </div><!-- form-actions -->
 

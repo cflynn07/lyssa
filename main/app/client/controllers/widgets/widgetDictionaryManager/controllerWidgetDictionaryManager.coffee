@@ -200,14 +200,19 @@ define [
                 $scope.viewModel.closeAddNewDictionary()
 
 
+            closeAddNewDictionaryItem: () ->
+              $scope.newDictionaryItemForm.$setPristine()
+              $scope.viewModel.showAddDictionaryItems           = false
+              $scope.viewModel.newDictionaryItemForm            = {}
+              $scope.viewModel.newDictionaryItemForm.submitting = false
 
             postNewDictionaryItem: () ->
+              $scope.viewModel.newDictionaryItemForm.submitting = true
               apiRequest.post 'dictionaryItem', {
                 dictionaryUid: $scope.viewModel.currentDictionaryUid
                 name:          $scope.viewModel.newDictionaryItemForm.name
               }, {}, (response) ->
-                return
-              $scope.viewModel.newDictionaryItemForm = {}
+                $scope.viewModel.closeAddNewDictionaryItem()
 
 
           $scope.viewModel.deleteConfirmDialogDictionary = (dictionaryUid) ->

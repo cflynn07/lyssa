@@ -78,25 +78,21 @@ define [
 
           closeAddNewExerciseForm: () ->
            #console.log 'closeAddNewExerciseForm'
-            $scope.viewModel.newEventForm        = {}
-            $scope.viewModel.activeWizardStep    = 0
+            $scope.viewModel.newEventForm                = {}
+            $scope.viewModel.newEventForm.submitting     = false
+            $scope.viewModel.activeWizardStep            = 0
             $scope.$parent.viewModel.showNewExerciseForm = false
             $scope.newEventForm.$setPristine()
 
           submitAddNewExercise: () ->
-
+            $scope.viewModel.newEventForm.submitting = true
             form = viewModel.newEventForm
             apiRequest.post 'event', {
               name:        form.name
               dateTime:    (new Date(form.date).toISOString())
               revisionUid: form.revisionUid
             }, {}, (response) ->
-             #console.log 'response'
-             #console.log response
-
-            viewModel.closeAddNewExerciseForm()
-
-
+              $scope.viewModel.closeAddNewExerciseForm()
 
 
           templatesListDataTable:

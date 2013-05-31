@@ -134,6 +134,7 @@ define [
             showAddNewEmployeeClose: () ->
               resetHelper()
             showAddNewEmployeeSubmit: () ->
+              $scope.viewModel.newEmployeeManualAddForm.submitting = true
 
               apiRequest.post 'employee', {
                 firstName: viewModel.newEmployeeManualAddForm.firstName
@@ -143,7 +144,7 @@ define [
               }, {}, (response) ->
                 console.log 'finished'
                 console.log response
-              resetHelper()
+                resetHelper()
 
             employees: {}
             employeeListDT:
