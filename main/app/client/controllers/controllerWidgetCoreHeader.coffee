@@ -34,11 +34,18 @@ define [
             resource: 'dictionary'
           ,
             resource: 'event'
-            expand: [
+            expand: [{
               resource: 'revision'
-            ]
+            },{
+              resource: 'eventParticipants'
+            #  expand: [{
+            #    resource: 'employee'
+            #  }]
+            }]
           ]
         }, (response, rawResponse, fromCache) ->
+          console.log 'zis is the act'
+          console.log response
           if response.code == 200
             $rootScope.rootActivityFeed = response.response.data
           if _.isFunction(completedCallback) && (fromCache is false)

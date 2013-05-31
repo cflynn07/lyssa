@@ -11,9 +11,20 @@
         <div class="desc">
 
           <h4 style="margin:0;">New Exercise</h4>
+
           <span class="date-color">{{ resourcePool[value.uid].createdAt | fromNow }}</span>
           <div style="margin-top:5px;">
+
             <a class="color-blue" href="#/admin/themis/schedule/{{ value.eventUid }}">{{ resourcePool[value.eventUid].name }}</a> created by {{ resourcePool[value.employeeUid].firstName }} {{ resourcePool[value.employeeUid].lastName }}
+
+            <span data-ng-show="(resourcePool[value.uid].event.eventParticipants | toArray).length">
+              (
+              {{ (resourcePool[value.uid].event.eventParticipants | toArray).length }}
+              <span data-ng-show="(resourcePool[value.uid].event.eventParticipants | toArray).length > 1">Participants</span>
+              <span data-ng-show="(resourcePool[value.uid].event.eventParticipants | toArray).length == 1">Participant</span>
+              )
+            </span>
+
           </div>
 
         </div>
