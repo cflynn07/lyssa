@@ -58,7 +58,7 @@ define [
               step = viewModel.activeWizardStep
             step0Valid = (form.eventType.$valid && form.name.$valid && form.description.$valid && form.date.$valid)
             step1Valid = (form.templateUid.$valid && form.revisionUid.$valid)
-            step2Valid = true
+            step2Valid = form.employeeUids && form.employeeUids.length
             switch step
               when 2
                 result = step0Valid && step1Valid && step2Valid
@@ -91,8 +91,35 @@ define [
               name:        form.name
               dateTime:    (new Date(form.date).toISOString())
               revisionUid: form.revisionUid
-            }, {}, (response) ->
-              $scope.viewModel.closeAddNewExerciseForm()
+            }, {}, (eventResponse) ->
+
+              console.log 'eventResponse'
+              console.log eventResponse
+
+              if eventResponse.code != 201
+                $scope.viewModel.closeAddNewExerciseForm()
+                return
+
+              eventUid = ''
+              for key, value of eventResponse.uids
+                eventUid = value
+                break
+
+              insertObjects = []
+              for employeeUid in form.employeeUids
+                insertObjects.push {
+                  eventUid:    eventUid
+                  employeeUid: employeeUid
+                }
+
+              console.log 'insertObjects'
+              console.log insertObjects
+
+              apiRequest.post 'eventParticipant', insertObjects, {}, (eventParticipantResponse) ->
+                console.log 'eventParticipantResponse'
+                console.log eventParticipantResponse
+                $scope.viewModel.closeAddNewExerciseForm()
+
 
 
           templatesListDataTable:

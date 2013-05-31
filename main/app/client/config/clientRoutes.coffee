@@ -14,7 +14,7 @@ define [], () ->
       group: 'dashboard'
       subGroup: ''
       widgetViews: [
-        ['viewWidgetActivityFeed', 'viewWidgetActivityFeed']
+      #  ['viewWidgetActivityFeed', 'viewWidgetActivityFeed']
         ['viewWidgetActivityFeed']
       ]
 
