@@ -30,9 +30,17 @@
               <div id="pre_loading_bar" style="width: 100%;" class="bar"></div>
             </div>
             <h4><i
-              style         = "color: {{ loadingStatusColor }}"
-              data-ng-class = "loadingStatusIcon"
-              class         = "icon-cog"></i>&nbsp;<span data-ng-bind-template = "{{ loadingStatus }}">Loading...</span></h4>
+                data-ng-show  = "loadingStatusIcon != 'icon-lock'"
+                style         = "color: {{ loadingStatusColor }}"
+                class         = "icon-cog icon-spin"></i>
+              <i
+                data-ng-show  = "loadingStatusIcon == 'icon-lock'"
+                style         = "display:none; color: {{ loadingStatusColor }}"
+                class         = "icon-lock"></i>
+
+              &nbsp;
+              <span data-ng-bind-template = "{{ loadingStatus }}">Loading...</span></h4>
+
           </div>
         </div>
       </div>

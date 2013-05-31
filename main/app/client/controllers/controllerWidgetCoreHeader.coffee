@@ -34,6 +34,9 @@ define [
             resource: 'dictionary'
           ,
             resource: 'event'
+            expand: [
+              resource: 'revision'
+            ]
           ]
         }, (response, rawResponse, fromCache) ->
           if response.code == 200
@@ -56,9 +59,12 @@ define [
               #text:  'Created by ' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName
           when 'createEvent'
             $.gritter.add
-              title: 'New Event "' + activityItem.event.name + '"'
+              title: 'New ' + (if activityItem.event.type == 'full' then 'exercise' else 'quiz') + ' "' + activityItem.event.name + '"'
               text:  'Created by ' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName
-
+          when 'eventInitialized'
+            $.gritter.add
+              title: (if activityItem.event.type == 'full' then 'Exercise' else 'Quiz') + ' "' + activityItem.event.name + '" initiated'
+              text:  'Just now' #'Created by ' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName
 
       $scope.$on 'resourcePost', (e, data) ->
         if data['resourceName'] != 'activity'

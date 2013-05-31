@@ -5,6 +5,7 @@ define [
   'text!views/widgetActivityFeed/partials/viewPartialActivityFeedCreateDictionary.html'
   'text!views/widgetActivityFeed/partials/viewPartialActivityFeedCreateEmployee.html'
   'text!views/widgetActivityFeed/partials/viewPartialActivityFeedCreateEvent.html'
+  'text!views/widgetActivityFeed/partials/viewPartialActivityFeedEventInitialized.html'
 ], (
   angular
   $
@@ -12,6 +13,7 @@ define [
   viewPartialActivityFeedCreateDictionary
   viewPartialActivityFeedCreateEmployee
   viewPartialActivityFeedCreateEvent
+  viewPartialActivityFeedEventInitialized
 ) ->
   (Module) ->
 
@@ -25,6 +27,8 @@ define [
         viewPartialActivityFeedCreateEmployee
       $templateCache.put 'viewPartialActivityFeedCreateEvent',
         viewPartialActivityFeedCreateEvent
+      $templateCache.put 'viewPartialActivityFeedEventInitialized',
+        viewPartialActivityFeedEventInitialized
 
     ]
 

@@ -184,12 +184,22 @@ define [
                   viewRoot: viewRoot
             ]
 
+
+
+            closeAddNewDictionary: () ->
+              $scope.newDictionaryForm.$setPristine()
+              $scope.viewModel.showAddNewDictionary         = false
+              $scope.viewModel.newDictionaryForm            = {}
+              $scope.viewModel.newDictionaryForm.submitting = false
+
             postNewDictionary: () ->
+              $scope.viewModel.newDictionaryForm.submitting = true
               apiRequest.post 'dictionary', {
                 name: $scope.viewModel.newDictionaryForm.name
               }, {}, (response) ->
-                return
-              $scope.viewModel.newDictionaryForm = {}
+                $scope.viewModel.closeAddNewDictionary()
+
+
 
             postNewDictionaryItem: () ->
               apiRequest.post 'dictionaryItem', {

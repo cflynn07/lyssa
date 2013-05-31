@@ -47,8 +47,28 @@
         <div style="border:0; margin-bottom:0;">
 
           <div>
-            <button type="button" class="btn green pull-right" data-ng-click="authenticate()" data-ng-hide="submitting" >Login <i class="m-icon-swapright m-icon-white"></i></button>
-            <img class="pull-right" style="margin:2px 20px;" src="/assets/img/loaders/loader10.gif" data-ng-show="submitting" />
+
+
+
+            <button
+              data-ng-class    = "{true:'black',false:'green'}[submitting]"
+              type             = "button"
+              class            = "btn pull-right"
+              data-ng-click    = "!submitting && authenticate()"
+              data-ng-disabled = "submitting">
+
+              <p data-ng-hide = "submitting">
+                Login <i class="m-icon-swapright m-icon-white"></i>
+              </p>
+              <p data-ng-show = "submitting">
+                <i class="icon-cog icon-spin"></i> Authenticating...
+              </p>
+
+            </button>
+
+
+
+
           </div>
 
         </div>

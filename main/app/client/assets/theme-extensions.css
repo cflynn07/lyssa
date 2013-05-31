@@ -11,6 +11,16 @@ body {
     background-color: #F1F1F1 !important;
     overflow-y: scroll;
 }
+
+
+.btn .ng-pristine span, .btn .ng-pristine label, .btn .ng-pristine input, .btn .ng-pristine textarea, .btn .ng-pristine select {
+  color: #FFF !important;
+}
+.btn span, .btn p {
+  color: #FFF !important;
+}
+
+
 .page-content {
     background-color: #FFF;
     margin-left: 183px;

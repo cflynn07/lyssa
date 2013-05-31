@@ -16,8 +16,8 @@ module.exports = (insertObj, app, req) ->
   if _.isUndefined(insertObj['clientUid']) || !_.isString(insertObj['clientUid'])
     throw new Error('clientUid activity property requried')
 
-  if _.isUndefined(insertObj['employeeUid']) || !_.isString(insertObj['employeeUid'])
-    throw new Error('employeeUid activity property requried')
+  #if _.isUndefined(insertObj['employeeUid']) || !_.isString(insertObj['employeeUid'])
+  #  throw new Error('employeeUid activity property requried')
 
   asyncMethods = []
 
@@ -81,7 +81,7 @@ module.exports = (insertObj, app, req) ->
 
 
       sequelize.query("INSERT INTO activitiesReadState VALUES (NULL, \'" + activityObj.employeeUid + "\', \'" + activityObj.uid + "\', \'" + activityObj.clientUid + "\')", null, {raw:true}).done (err, queryResults) ->
-        if !_.isUndefined(req.io) and _.isFunction(req.io.join)
+        if !_.isUndefined(req) and !_.isUndefined(req.io) and _.isFunction(req.io.join)
           if !_.isUndefined(req.session) and !_.isUndefined(req.session.user) and !_.isUndefined(req.session.user.clientUid)
             req.io.join activityObj.uid
             req.io.join req.session.user.uid + '-' + activityObj.uid

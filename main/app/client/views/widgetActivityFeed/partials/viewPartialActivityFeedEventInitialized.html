@@ -10,10 +10,10 @@
      <div class="cont-col2">
         <div class="desc">
 
-          <h4 style="margin:0;">New Exercise</h4>
+          <h4 style="margin:0;">Exercise "{{ resourcePool[value.event.uid].name }}" began</h4>
           <span class="date-color">{{ resourcePool[value.uid].createdAt | fromNow }}</span>
           <div style="margin-top:5px;">
-            <a class="color-blue" href="#/admin/themis/schedule/{{ value.eventUid }}">{{ resourcePool[value.eventUid].name }}</a> created by {{ resourcePool[value.employeeUid].firstName }} {{ resourcePool[value.employeeUid].lastName }}
+            <a class="color-blue" href="#/admin/themis/schedule/{{ value.eventUid }}">{{ resourcePool[value.eventUid].name }}</a> began at {{ resourcePool[value.eventUid].dateTime | date:'short' }}
           </div>
 
         </div>

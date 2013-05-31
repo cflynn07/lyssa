@@ -1,12 +1,28 @@
 require('./config/envGlobals')(GLOBAL)
 
-twilioClient = require './config/twilioClient'
-redisClient  = require('./config/redis').createClient()
-ORM          = require('./components/oRM')
-sequelize    = ORM.setup()
-schedule     = require 'node-schedule'
-_            = require 'underscore'
+config         = require './config/config'
+twilioClient   = require './config/twilioClient'
+redisClient    = require('./config/redis').createClient()
+ORM            = require('./components/oRM')
+sequelize      = ORM.setup()
+schedule       = require 'node-schedule'
+_              = require 'underscore'
+activityInsert = require config.appRoot + 'server/components/activityInsert'
 
+
+express = require 'express.io'
+pub     = require('./config/redis').createClient()
+sub     = require('./config/redis').createClient()
+store   = require('./config/redis').createClient()
+redisStore = require('./config/redis').createStore()
+
+app = express().http().io()
+app.io.set 'store',
+  new express.io.RedisStore
+    redis: require 'redis'
+    redisPub: pub
+    redisSub: sub
+    redisClient: store
 
 
 
@@ -19,6 +35,12 @@ configureEventJob = (eventObj) ->
   events[eventObj.uid] = schedule.scheduleJob (new Date(eventObj.dateTime)), () ->
     console.log 'scheduleJob'
     console.log eventObj.name
+
+    activityInsert {
+      type:      'eventInitialized'
+      eventUid:  eventObj.uid
+      clientUid: eventObj.clientUid
+    }, app
 
     twilioClient.sendSms {
       to:   '7745734580'

@@ -15,6 +15,7 @@ module.exports =
       'editEvent'
       'viewQuizExercise'
       'completeQuizExercise'
+      'eventInitialized'
     ]
 
     #Optional stuff each may have
