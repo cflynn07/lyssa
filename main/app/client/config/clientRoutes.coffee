@@ -110,6 +110,43 @@ define [], () ->
         ['viewWidgetEmployeeManager']
       ]
 
+
+
+
+
+    $routeProvider.when '/quizes',
+      root: '/quizes'
+      group: 'quizSubmit'
+      subGroup: ''
+      widgetViews: [
+      #  ['viewWidgetScheduler']
+      ]
+    $routeProvider.when '/quizes/:eventParticipantUid',
+      root: '/quizes'
+      group: 'quizSubmit'
+      subGroup: ''
+      widgetViews: [
+        ['viewWidgetQuiz']
+      ]
+
+    $routeProvider.when '/exercises',
+      root: '/exercises'
+      group: 'exerciseSubmit'
+      subGroup: ''
+      widgetViews: [
+      #  ['viewWidgetScheduler']
+      ]
+    $routeProvider.when '/exercises/:eventParticipantUid',
+      root: '/exercises'
+      group: 'exerciseSubmit'
+      subGroup: ''
+      widgetViews: [
+
+      ]
+
+
+
+
     $routeProvider.otherwise
       invalid: true
 

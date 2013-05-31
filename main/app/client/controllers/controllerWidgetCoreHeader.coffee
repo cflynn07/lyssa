@@ -44,12 +44,12 @@ define [
             }]
           ]
         }, (response, rawResponse, fromCache) ->
-          console.log 'zis is the act'
-          console.log response
           if response.code == 200
             $rootScope.rootActivityFeed = response.response.data
           if _.isFunction(completedCallback) && (fromCache is false)
             completedCallback()
+
+      $rootScope.fetchActivity = fetchActivity
 
       gritterNotification = (data) ->
         utilSoundManager.alert.play()

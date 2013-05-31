@@ -20,4 +20,12 @@ define [
     Module.controller 'ControllerWidgetQuiz', ['$scope', '$route', '$routeParams', 'apiRequest'
     ($scope, $route, $routeParams, apiRequest) ->
 
+      console.log '$routeParams'
+      console.log $routeParams
+
+      viewModel =
+        getEventParticipant: () ->
+          apiRequest.get 'eventParticipant',
+
+
     ]

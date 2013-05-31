@@ -58,7 +58,7 @@ define [
               step = viewModel.activeWizardStep
             step0Valid = (form.eventType.$valid && form.name.$valid && form.description.$valid && form.date.$valid)
             step1Valid = (form.templateUid.$valid && form.revisionUid.$valid)
-            step2Valid = form.employeeUids && form.employeeUids.length
+            step2Valid = $scope.viewModel.newEventForm.employeeUids && $scope.viewModel.newEventForm.employeeUids.length
             switch step
               when 2
                 result = step0Valid && step1Valid && step2Valid
