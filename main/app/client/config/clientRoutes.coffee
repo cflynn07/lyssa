@@ -16,6 +16,7 @@ define [], () ->
       widgetViews: [
       #  ['viewWidgetActivityFeed', 'viewWidgetActivityFeed']
         ['viewWidgetActivityFeed', 'viewWidgetActivityExercisesQuizes']
+        ['viewWidgetQuarterlyTestingReport']
       ]
 
 

@@ -96,6 +96,7 @@ else
           'soundmanager2':            'vendor/soundmanager2'
           'slimscroll':               'vendor/jquery.slimscroll'
           'moment':                   'vendor/moment'
+          'highcharts':               'vendor/highcharts'
         uglify:
           no_mangle: true
         hbs:
@@ -153,6 +154,8 @@ else
           boostrapDateTimePicker:
             deps:    ['jquery', 'jquery-ui', 'bootstrap']
           gritter:
+            deps:    ['jquery']
+          highcharts:
             deps:    ['jquery']
 
           #File-upload assets

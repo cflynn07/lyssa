@@ -52,6 +52,7 @@ requirejs.config
     'soundmanager2':            'vendor/soundmanager2'
     'slimscroll':               'vendor/jquery.slimscroll'
     'moment':                   'vendor/moment'
+    'highcharts':               'vendor/highcharts'
   hbs:
     disableI18n:       true
     helperDirectory:   'views/helpers/'
@@ -107,6 +108,8 @@ requirejs.config
     boostrapDateTimePicker:
       deps:    ['jquery', 'jquery-ui', 'bootstrap']
     gritter:
+      deps:    ['jquery']
+    highcharts:
       deps:    ['jquery']
 
     #File-upload assets
@@ -183,6 +186,7 @@ require [
   'cs!controllers/widgets/widgetQuiz/controllerWidgetQuiz'
   'cs!controllers/widgets/widgetActivityFeed/controllerWidgetActivityFeed'
   'cs!controllers/widgets/widgetActivityExercisesQuizes/controllerWidgetActivityExercisesQuizes'
+  'cs!controllers/widgets/widgetQuarterlyTestingReport/controllerWidgetQuarterlyTestingReport'
 ], (
   $
   jqueryUi
@@ -237,6 +241,7 @@ require [
   ControllerWidgetQuiz
   ControllerWidgetActivityFeed
   ControllerWidgetActivityExercisesQuizes
+  ControllerWidgetQuarterlyTestingReport
 ) ->
 
   #Modules
@@ -295,6 +300,7 @@ require [
   ControllerWidgetQuiz                    CS
   ControllerWidgetActivityFeed            CS
   ControllerWidgetActivityExercisesQuizes CS
+  ControllerWidgetQuarterlyTestingReport  CS
 
   angular.bootstrap document, ['CS']
 
