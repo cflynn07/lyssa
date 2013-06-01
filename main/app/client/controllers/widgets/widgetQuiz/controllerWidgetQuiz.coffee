@@ -20,12 +20,21 @@ define [
     Module.controller 'ControllerWidgetQuiz', ['$scope', '$route', '$routeParams', 'apiRequest'
     ($scope, $route, $routeParams, apiRequest) ->
 
-      console.log '$routeParams'
-      console.log $routeParams
-
       viewModel =
+        routeParams: $routeParams
         getEventParticipant: () ->
-          apiRequest.get 'eventParticipant',
+          if !viewModel.routeParams.eventParticipantUid
+            return
+          apiRequest.get 'eventParticipant', [viewModel.routeParams.eventParticipantUid], {
+            expand: [{
+              resource: 'event'
+            }]
+          }, (response) ->
+            console.log 'eventParticipant'
+            console.log response
 
+      viewModel.getEventParticipant()
+
+      $scope.viewModel = viewModel
 
     ]
