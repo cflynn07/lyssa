@@ -36,5 +36,6 @@ define [
       $scope.title    = 'Themis'
       $scope.subtitle = 'by Cobar Systems LLC'
 
+      $scope.fetchActivity()
 
     ]

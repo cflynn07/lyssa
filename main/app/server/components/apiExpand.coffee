@@ -120,11 +120,14 @@ module.exports = (req, res, resource, resourceQueryParams) ->
   #Now we must clear out "id" and "password" props
   #NOTE: topResult should still be an array
   recursiveCleanProps = (arr) ->
-    for subResult in arr
 
+    objectPropStepper = (subResult) ->
       for subResultPropertyKey, subResultPropertyValue of subResult
         if _.isArray(subResultPropertyValue)
           recursiveCleanProps(subResultPropertyValue)
+
+        else if _.isObject(subResultPropertyValue) && !_.isArray(subResultPropertyValue)
+          objectPropStepper subResultPropertyValue
 
         else
 
@@ -133,6 +136,10 @@ module.exports = (req, res, resource, resourceQueryParams) ->
 
           if (subResultPropertyKey.indexOf('Id') > -1)
             delete subResult[subResultPropertyKey]
+
+    for subResult in arr
+      objectPropStepper subResult
+
 
 
 

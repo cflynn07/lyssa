@@ -10,6 +10,17 @@
 
 
 <li
+  data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/schedule') === 0]"
+  class         = "">
+  <a href="#/admin/themis/schedule">
+    <i class="icon-table"></i>
+    <span class="title">Schedule</span>
+    <span class="selected"></span>
+  </a>
+</li>
+
+
+<li
   data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/templates') === 0]"
   class         = "">
   <a href="#/admin/themis/templates">
@@ -35,17 +46,6 @@
         href          = "#/admin/themis/templates/quizes">Quizes</a>
     </li>
   </ul>
-</li>
-
-
-<li
-  data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/schedule') === 0]"
-  class         = "">
-  <a href="#/admin/themis/schedule">
-    <i class="icon-table"></i>
-    <span class="title">Schedule</span>
-    <span class="selected"></span>
-  </a>
 </li>
 
 
