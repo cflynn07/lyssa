@@ -1,0 +1,19 @@
+<div
+  data-animate-in
+  class              = "widget-themis-finish portlet box blue"
+  data-ng-controller = "ControllerWidgetActivityExercisesQuizes">
+  <div class="portlet-title">
+    <h4><span>My Exercises</span></h4>
+  </div>
+  <div
+    style = "max-height:400px; overflow-y:scroll;"
+    class = "portlet-body">
+
+    <ul>
+      <li
+        data-ng-repeat = "upcomingExercise in viewModel.upcomingQuizesExercises">
+        <a href="#/quizes/{{ upcomingExercise.uid }}">{{ upcomingExercise.uid }}</a>
+    </ul>
+
+  </div>
+</div>

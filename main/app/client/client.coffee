@@ -182,6 +182,7 @@ require [
   'cs!controllers/widgets/widgetEmployeeManager/controllerWidgetEmployeeManager'
   'cs!controllers/widgets/widgetQuiz/controllerWidgetQuiz'
   'cs!controllers/widgets/widgetActivityFeed/controllerWidgetActivityFeed'
+  'cs!controllers/widgets/widgetActivityExercisesQuizes/controllerWidgetActivityExercisesQuizes'
 ], (
   $
   jqueryUi
@@ -235,6 +236,7 @@ require [
   ControllerWidgetEmployeeManager
   ControllerWidgetQuiz
   ControllerWidgetActivityFeed
+  ControllerWidgetActivityExercisesQuizes
 ) ->
 
   #Modules
@@ -277,21 +279,22 @@ require [
   ]
 
 
-  ControllerApp                         CS
-  ControllerCoreWidgets                 CS
-  ControllerWidgetCoreLeftMenu          CS
-  ControllerWidgetCoreHeader            CS
-  ControllerWidgetBreadCrumbs           CS
-  ControllerWidgetExerciseBuilder       CS
-  ControllerWidgetCoreLogin             CS
-  ControllerWidgetDictionaryManager     CS
-  ControllerWidgetScheduler             CS
-  ControllerWidgetFullExerciseSubmitter CS
-  ControllerWidget4oh4                  CS
-  ControllerWidgetCoreFooter            CS
-  ControllerWidgetEmployeeManager       CS
-  ControllerWidgetQuiz                  CS
-  ControllerWidgetActivityFeed          CS
+  ControllerApp                           CS
+  ControllerCoreWidgets                   CS
+  ControllerWidgetCoreLeftMenu            CS
+  ControllerWidgetCoreHeader              CS
+  ControllerWidgetBreadCrumbs             CS
+  ControllerWidgetExerciseBuilder         CS
+  ControllerWidgetCoreLogin               CS
+  ControllerWidgetDictionaryManager       CS
+  ControllerWidgetScheduler               CS
+  ControllerWidgetFullExerciseSubmitter   CS
+  ControllerWidget4oh4                    CS
+  ControllerWidgetCoreFooter              CS
+  ControllerWidgetEmployeeManager         CS
+  ControllerWidgetQuiz                    CS
+  ControllerWidgetActivityFeed            CS
+  ControllerWidgetActivityExercisesQuizes CS
 
   angular.bootstrap document, ['CS']
 

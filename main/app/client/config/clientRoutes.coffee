@@ -15,7 +15,7 @@ define [], () ->
       subGroup: ''
       widgetViews: [
       #  ['viewWidgetActivityFeed', 'viewWidgetActivityFeed']
-        ['viewWidgetActivityFeed']
+        ['viewWidgetActivityFeed', 'viewWidgetActivityExercisesQuizes']
       ]
 
 
