@@ -38,8 +38,8 @@ define [
             if response.code != 200
               return
 
-            console.log '$scope.resourcePool[viewModel.routeParams.eventParticipantUid]'
-            console.log $scope.resourcePool[viewModel.routeParams.eventParticipantUid]
+            #console.log '$scope.resourcePool[viewModel.routeParams.eventParticipantUid]'
+            #console.log $scope.resourcePool[viewModel.routeParams.eventParticipantUid]
 
             eP = $scope.resourcePool[viewModel.routeParams.eventParticipantUid]
 
@@ -50,13 +50,12 @@ define [
               expand: [{
                 resource: 'groups'
                 expand: [{
-                  resource: 'items'
+                  resource: 'fields'
                 }]
               }]
             }, (revisionResponse) ->
               console.log 'revisionResponse'
               console.log revisionResponse
-
 
             #viewModel.eventParticipant = response.response.data
 

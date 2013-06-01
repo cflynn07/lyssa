@@ -8,225 +8,66 @@
   </div><!-- portlet-title -->
 
     <div class="portlet-body form">
+
+      <div class="box template-info-box fade in">
+         <h4><span>{{ resourcePool[viewModel.routeParams.eventParticipantUid].event.name }}</span></h4>
+         {{ resourcePool[viewModel.routeParams.eventParticipantUid].event.revision.uid }}
+
+      </div>
+
       <form action="#" class="form-horizontal">
          <div class="form-wizard">
+
             <div class="navbar steps">
                <div class="navbar-inner">
                   <ul class="row-fluid nav nav-pills">
-                     <li class="span3 active">
-                        <a href="#tab1" data-toggle="tab" class="step active">
+
+                     <li
+                        data-ng-repeat = "group in resourcePool[ resourcePool[viewModel.routeParams.eventParticipantUid].event.revision.uid ].groups | toArray | deleted | orderBy:'ordinal'"
+                        class          = "span3">
+                        <a href="#tab1" data-toggle="tab" class="step">
                         <span class="number">1</span>
-                        <span class="desc"><i class="icon-ok"></i> Account Setup</span>
-                        </a>
-                     </li>
-                     <li class="span3">
-                        <a href="#tab2" data-toggle="tab" class="step">
-                        <span class="number">2</span>
-                        <span class="desc"><i class="icon-ok"></i> Profile Setup</span>
-                        </a>
-                     </li>
-                     <li class="span3">
-                        <a href="#tab3" data-toggle="tab" class="step">
-                        <span class="number">3</span>
-                        <span class="desc"><i class="icon-ok"></i> Billing Setup</span>
-                        </a>
-                     </li>
-                     <li class="span3">
-                        <a href="#tab4" data-toggle="tab" class="step">
-                        <span class="number">4</span>
-                        <span class="desc"><i class="icon-ok"></i> Confirm</span>
+                        <span class="desc"><i class="icon-ok"></i> {{ group.name }}</span>
                         </a>
                      </li>
 
                   </ul>
-                  <ul class="row-fluid nav nav-pills">
-                    <li class="span3">
-                        <a href="#tab3" data-toggle="tab" class="step">
-                        <span class="number">3</span>
-                        <span class="desc"><i class="icon-ok"></i> Billing Setup</span>
-                        </a>
-                     </li>
-                     <li class="span3">
-                        <a href="#tab4" data-toggle="tab" class="step">
-                        <span class="number">4</span>
-                        <span class="desc"><i class="icon-ok"></i> Confirm</span>
-                        </a>
-                     </li>
-                  </ul>
                </div>
             </div>
-            <div id="bar" class="progress progress-success progress-striped">
+
+
+            <div class="progress progress-success progress-striped">
                <div class="bar" style="width: 25%;"></div>
             </div>
+
+
             <div class="tab-content">
-               <div class="tab-pane active" id="tab1">
-                  <h3 class="block">Provide your account details</h3>
-                  <div class="control-group">
-                     <label class="control-label">Username</label>
+
+
+               <div
+                  data-ng-repeat = "group in resourcePool[ resourcePool[viewModel.routeParams.eventParticipantUid].event.revision.uid ].groups | toArray | deleted | orderBy:'ordinal'"
+                  class          = "tab-pane active">
+
+                  <h3 class = "block">{{ group.name }}</h3>
+
+
+                  <div
+                     data-ng-repeat = "field in resourcePool[group.uid].fields | deleted | orderBy:'ordinal'"
+                     class          = "control-group">
+                     <label class="control-label">{{ field.name }}</label>
                      <div class="controls">
                         <input type="text" class="span6 m-wrap">
                         <span class="help-inline">Provide your username</span>
                      </div>
                   </div>
-                  <div class="control-group">
-                     <label class="control-label">Password</label>
-                     <div class="controls">
-                        <input type="password" class="span6 m-wrap">
-                        <span class="help-inline">Provide your username</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Confirm Password</label>
-                     <div class="controls">
-                        <input type="password" class="span6 m-wrap">
-                        <span class="help-inline">Confirm your password</span>
-                     </div>
-                  </div>
+
                </div>
-               <div class="tab-pane" id="tab2">
-                  <h3 class="block">Provide your profile details</h3>
-                  <div class="control-group">
-                     <label class="control-label">Fullname</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your fullname</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Email</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your email address</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Phone Number</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your phone number</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Gender</label>
-                     <div class="controls">
-                        <label class="radio">
-                        <div class="radio" id="uniform-optionsRadios1"><span class="checked"><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="" style="opacity: 0;"></span></div>
-                        Male
-                        </label>
-                        <div class="clearfix"></div>
-                        <label class="radio">
-                        <div class="radio" id="uniform-optionsRadios2"><span><input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" style="opacity: 0;"></span></div>
-                        Female
-                        </label>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Address</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your street address</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">City/Town</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline">Provide your city or town</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Remarks</label>
-                     <div class="controls">
-                        <textarea class="span6 m-wrap" rows="3"></textarea>
-                     </div>
-                  </div>
-               </div>
-               <div class="tab-pane" id="tab3">
-                  <h3 class="block">Provide your billing and credit card details</h3>
-                  <div class="control-group">
-                     <label class="control-label">Card Holder Name</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Bank Name</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Debit/Credit Card Number</label>
-                     <div class="controls">
-                        <input type="text" class="span6 m-wrap">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">CVC</label>
-                     <div class="controls">
-                        <input type="text" placeholder="" class="m-wrap">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Expiration Date(MM/YYYY)</label>
-                     <div class="controls">
-                        <input type="text" placeholder="MM" class="m-wrap small">
-                        <input type="text" placeholder="YYYY" class="m-wrap small">
-                        <span class="help-inline"></span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Payment Options</label>
-                     <div class="controls">
-                        <label class="checkbox line">
-                        <div class="checker" id="uniform-undefined"><span><input type="checkbox" value="" style="opacity: 0;"></span></div> Auto-Pay with this Credit Card
-                        </label>
-                        <label class="checkbox line">
-                        <div class="checker" id="uniform-undefined"><span><input type="checkbox" value="" style="opacity: 0;"></span></div> Email me monthly billing
-                        </label>
-                     </div>
-                  </div>
-               </div>
-               <div class="tab-pane" id="tab4">
-                  <h3 class="block">Confirm your account</h3>
-                  <div class="control-group">
-                     <label class="control-label">Fullname:</label>
-                     <div class="controls">
-                        <span class="text">Bob Nilson</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Email:</label>
-                     <div class="controls">
-                        <span class="text">bob@nilson.com</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Phone:</label>
-                     <div class="controls">
-                        <span class="text">101234023223</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label">Credit Card Number:</label>
-                     <div class="controls">
-                        <span class="text">*************1233</span>
-                     </div>
-                  </div>
-                  <div class="control-group">
-                     <label class="control-label"></label>
-                     <div class="controls">
-                        <label class="checkbox">
-                        <div class="checker" id="uniform-undefined"><span><input type="checkbox" value="" style="opacity: 0;"></span></div> I confirm my account
-                        </label>
-                     </div>
-                  </div>
-               </div>
+
+
             </div>
+
+
+
             <div class="form-actions clearfix">
                <a href="javascript:;" class="btn button-previous" style="display: none;">
                <i class="m-icon-swapleft"></i> Back

@@ -168,12 +168,7 @@ define [
       #Merge each result with resourcePool hash
       reconcileResultsWithPool = (results) ->
 
-        seen = []
-
         recursiveCallback = (passedValueObjOrArray) ->
-          #console.log 'p1'
-          #console.log 'seen'
-          #console.log seen
 
           responseHash = {}
 
@@ -183,7 +178,6 @@ define [
 
           for obj in passedValueObjOrArray #<-- At this point it's an array ^
 
-            seen.push obj
 
             if !_.isUndefined resourcePool[obj.uid]
               #We have it already
@@ -194,6 +188,16 @@ define [
               addPoolResource obj
               responseHash[obj.uid] = obj
 
+
+
+            for objKey, objValue of obj
+              if _.isObject(objValue) and !_.isUndefined(objValue.uid)
+
+                if !_.isUndefined(resourcePool[objValue.uid])
+                  _.extend resourcePool[objValue.uid], objValue
+                else
+                  resourcePool[objValue.uid] = objValue
+                objValue = resourcePool[objValue.uid]
 
 
             for objKey, objValue of obj
@@ -208,10 +212,7 @@ define [
                 else
                   updatePoolResource resourcePool[obj.uid], obj
 
-                if seen.indexOf(objValue) > -1
-                  continue
                 recursiveCallback(objValue)
-
 
           return responseHash
 
