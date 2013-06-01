@@ -127,7 +127,7 @@ define [], () ->
       group: 'quizSubmit'
       subGroup: ''
       widgetViews: [
-        ['viewWidgetQuiz']
+        ['viewWidgetQuizExerciseSubmitter']
       ]
 
     $routeProvider.when '/exercises',
@@ -142,7 +142,7 @@ define [], () ->
       group: 'exerciseSubmit'
       subGroup: ''
       widgetViews: [
-
+        ['viewWidgetQuizExerciseSubmitter']
       ]
 
 

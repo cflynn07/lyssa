@@ -180,10 +180,10 @@ require [
   'cs!controllers/widgets/widgetExerciseBuilder/controllerWidgetExerciseBuilder'
   'cs!controllers/widgets/widgetDictionaryManager/controllerWidgetDictionaryManager'
   'cs!controllers/widgets/widgetScheduler/controllerWidgetScheduler'
-  'cs!controllers/widgets/widgetFullExerciseSubmitter/controllerWidgetFullExerciseSubmitter'
+  #'cs!controllers/widgets/widgetFullExerciseSubmitter/controllerWidgetFullExerciseSubmitter'
   'cs!controllers/widgets/widget4oh4/controllerWidget4oh4'
   'cs!controllers/widgets/widgetEmployeeManager/controllerWidgetEmployeeManager'
-  'cs!controllers/widgets/widgetQuiz/controllerWidgetQuiz'
+  'cs!controllers/widgets/widgetQuizExerciseSubmitter/controllerWidgetQuizExerciseSubmitter'
   'cs!controllers/widgets/widgetActivityFeed/controllerWidgetActivityFeed'
   'cs!controllers/widgets/widgetActivityExercisesQuizes/controllerWidgetActivityExercisesQuizes'
   'cs!controllers/widgets/widgetQuarterlyTestingReport/controllerWidgetQuarterlyTestingReport'
@@ -235,10 +235,10 @@ require [
   ControllerWidgetExerciseBuilder
   ControllerWidgetDictionaryManager
   ControllerWidgetScheduler
-  ControllerWidgetFullExerciseSubmitter
+  #ControllerWidgetFullExerciseSubmitter
   ControllerWidget4oh4
   ControllerWidgetEmployeeManager
-  ControllerWidgetQuiz
+  ControllerWidgetQuizExerciseSubmitter
   ControllerWidgetActivityFeed
   ControllerWidgetActivityExercisesQuizes
   ControllerWidgetQuarterlyTestingReport
@@ -293,14 +293,15 @@ require [
   ControllerWidgetCoreLogin               CS
   ControllerWidgetDictionaryManager       CS
   ControllerWidgetScheduler               CS
-  ControllerWidgetFullExerciseSubmitter   CS
+  #ControllerWidgetFullExerciseSubmitter   CS
   ControllerWidget4oh4                    CS
   ControllerWidgetCoreFooter              CS
   ControllerWidgetEmployeeManager         CS
-  ControllerWidgetQuiz                    CS
+  #ControllerWidgetQuiz                    CS
   ControllerWidgetActivityFeed            CS
   ControllerWidgetActivityExercisesQuizes CS
   ControllerWidgetQuarterlyTestingReport  CS
+  ControllerWidgetQuizExerciseSubmitter   CS
 
   angular.bootstrap document, ['CS']
 
