@@ -22,9 +22,9 @@ define [
     ($scope, $rootScope, authenticate, apiRequest) ->
 
       $rootScope.rootActivityFeed   = false
-      fetchActivity = (completedCallback = null) ->
+      fetchActivity = (uid, completedCallback = null) ->
         #return
-        apiRequest.get 'activity', [], {
+        apiRequest.get 'activity', [uid], {
           limit: 50
           expand: [
             resource: 'employee'
@@ -57,6 +57,7 @@ define [
         utilSoundManager.alert.play()
 
         activityItem = $scope.resourcePool[data['resource'].uid]
+
         switch activityItem.type
           when 'createDictionary'
             $.gritter.add
@@ -78,7 +79,8 @@ define [
       $scope.$on 'resourcePost', (e, data) ->
         if data['resourceName'] != 'activity'
           return
-        fetchActivity () ->
+        uid = data['resource']['uid']
+        fetchActivity uid, () ->
           gritterNotification data
 
       fetchActivity()
