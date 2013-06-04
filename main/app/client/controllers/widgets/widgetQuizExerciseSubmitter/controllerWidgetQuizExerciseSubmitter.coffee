@@ -18,12 +18,27 @@ define [
         viewWidgetQuizExerciseSubmitter
     ]
 
-    Module.controller 'ControllerWidgetQuizExerciseSubmitter', ['$scope', '$route', '$routeParams', 'apiRequest'
-    ($scope, $route, $routeParams, apiRequest) ->
+    Module.controller 'ControllerWidgetQuizExerciseSubmitter', ['$scope', '$route', '$routeParams', 'apiRequest', '$filter'
+    ($scope, $route, $routeParams, apiRequest, $filter) ->
 
       viewModel =
-        routeParams: $routeParams
-        eventParticipant: {}
+
+        routeParams:         $routeParams
+        eventParticipant:    {}
+
+        revision:            {}
+        #Gets set to first group after load, incremented with steps
+        activeRevisionGroup: ''
+        setActiveRevisionGroup: (groupUid) ->
+          if viewModel.activeRevisionGroup is ''
+
+            groupsArray = $filter('deleted')(viewModel.revision.groups)
+            groupsArray = $filter('orderBy')(groupsArray, 'ordinal')
+
+            if groupsArray.length
+              viewModel.activeRevisionGroup = groupsArray[0].uid
+
+
         getEventParticipant: () ->
           if !viewModel.routeParams.eventParticipantUid
             return
@@ -32,18 +47,17 @@ define [
             expand: [{
               resource: 'event'
               expand: [{
+                resource: 'employee'
+              },{
                 resource: 'revision'
               }]
             }]
           }, (response) ->
+            console.log response
             if response.code != 200
               return
 
-            #console.log '$scope.resourcePool[viewModel.routeParams.eventParticipantUid]'
-            #console.log $scope.resourcePool[viewModel.routeParams.eventParticipantUid]
-
             eP = $scope.resourcePool[viewModel.routeParams.eventParticipantUid]
-
             if _.isUndefined(eP) || _.isUndefined(eP.event.revision) || _.isUndefined(eP.event.revision.uid)
               return
 
@@ -55,18 +69,20 @@ define [
                 }]
               }]
             }, (revisionResponse) ->
-              console.log 'revisionResponse'
-              console.log revisionResponse
+              if revisionResponse.code != 200
+                return
 
-            #viewModel.eventParticipant = response.response.data
+              for key, value of revisionResponse.response.data
+                viewModel.revision = value
+                break
 
-            #console.log 'eventParticipant'
-            #console.log response
+              viewModel.setActiveRevisionGroup()
 
+              console.log 'viewModel.revision'
+              console.log viewModel.revision
 
 
       viewModel.getEventParticipant()
       $scope.viewModel = viewModel
-
 
     ]

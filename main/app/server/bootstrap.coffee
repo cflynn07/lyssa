@@ -31,7 +31,7 @@ else
       requirejs.optimize
         cssIn:        __dirname + '/../client/assets/main.css'
         out:          __dirname + '/../client/assets/' + GLOBAL.assetHash + '.css'
-        optimizeCss: 'standard' #standard
+        optimizeCss: 'standard.keepLines' #standard
         preserveLicenseComments: false
         (buildResponse) ->
           cb()

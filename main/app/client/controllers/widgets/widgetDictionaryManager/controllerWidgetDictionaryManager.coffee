@@ -232,7 +232,7 @@ define [
                 $dialog.messageBox(title, msg, btns).open()
                   .then (result) ->
                     if result
-                      apiRequest.delete 'dictionary', dictionaryUid, (result) ->
+                      apiRequest.delete 'dictionary', dictionaryUid, {}, (result) ->
 
 
           $scope.viewModel.deleteConfirmDialogDictionaryItem = (dictionaryItemUid) ->
@@ -251,7 +251,7 @@ define [
               $dialog.messageBox(title, msg, btns).open()
                 .then (result) ->
                   if result
-                    apiRequest.delete 'dictionaryItem', dictionaryItemUid, (result) ->
+                    apiRequest.delete 'dictionaryItem', dictionaryItemUid, {}, (result) ->
 
 
           $scope.viewModel.cancelEditDictionaryItem = () ->

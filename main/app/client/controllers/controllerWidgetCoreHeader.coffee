@@ -21,9 +21,11 @@ define [
     Module.controller 'ControllerWidgetCoreHeader', ['$scope', '$rootScope', 'authenticate', 'apiRequest'
     ($scope, $rootScope, authenticate, apiRequest) ->
 
-      $rootScope.rootActivityFeed   = {}
+      $rootScope.rootActivityFeed   = false
       fetchActivity = (completedCallback = null) ->
+        #return
         apiRequest.get 'activity', [], {
+          limit: 50
           expand: [
             resource: 'employee'
           ,

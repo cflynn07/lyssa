@@ -30,7 +30,11 @@ module.exports = (resource, objects, req, res, app) ->
 
               if !silent
                 if !_.isUndefined(app.io) and _.isFunction(app.io.room)
-                  app.io.room(resultResource.uid).broadcast 'resourcePut', JSON.parse(JSON.stringify(resultResource))
+                  #console.log 'updateRP'
+                  app.io.room(resultResource.uid).broadcast 'resourcePut',
+                    apiCollectionName: ''
+                    resourceName:      resource.name
+                    resource:          JSON.parse(JSON.stringify(resultResource))
 
               callback()
           catch err

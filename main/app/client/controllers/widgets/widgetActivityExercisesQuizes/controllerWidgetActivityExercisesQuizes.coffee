@@ -14,16 +14,19 @@ define [
     Module.controller 'ControllerWidgetActivityExercisesQuizes', ['$scope', '$templateCache', 'socket', 'apiRequest', ($scope, $templateCache, socket, apiRequest) ->
 
       viewModel =
-        upcomingQuizesExercises: {}
+        upcomingQuizesExercises: false
         fetchUpcomingQuizesExercises: () ->
-          console.log 'fetchUpcomingQuizesExercises'
+          #console.log 'fetchUpcomingQuizesExercises'
           apiRequest.get 'eventParticipant', [], {
+            expand: [{
+              resource: 'event'
+            }]
             filter: [
               ['employeeUid', '=', $scope.rootUser.uid]
             ]
           }, (response) ->
-            console.log 'response'
-            console.log response
+            #console.log 'response'
+            #console.log response
             if response.code != 200
               return
             viewModel.upcomingQuizesExercises = response.response.data

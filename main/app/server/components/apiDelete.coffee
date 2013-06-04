@@ -18,7 +18,13 @@ module.exports = (resource, conditions, res) ->
       item.destroy().success () ->
 
         if !_.isUndefined(app.io) and _.isFunction(app.io.room)
-          app.io.room(item.uid).broadcast 'resourcePut', JSON.parse(JSON.stringify(item))
+          #app.io.room(item.uid).broadcast 'resourcePut', JSON.parse(JSON.stringify(item))
+
+          app.io.room(item.uid).broadcast 'resourcePut',
+            apiCollectionName: ''
+            resourceName:      resource.name
+            resource:          JSON.parse(JSON.stringify(item))
+
 
         callback()
 

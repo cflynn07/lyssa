@@ -182,10 +182,6 @@ define [
 
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'template', [], query, (response, responseRaw) ->
-                  console.log 'response'
-                  console.log response
-
-                  #console.log 'a2'
 
                   if response.code == 200
                     responseDataString = responseRaw #utilSafeStringify(response.response) #JSON.stringify(response.response)JSON.stringify(response.response)
@@ -265,8 +261,6 @@ define [
 
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'revision', [], query, (response, responseRaw) ->
-
-
 
                   if response.code == 200
                     responseDataString = responseRaw #utilSafeStringify(response.response) #JSON.stringify(response.response)
@@ -413,6 +407,7 @@ define [
             aTargets:  [0]
             bSortable: true
             mRender: (data, type, full) ->
+              #return ''
               resHtml = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
               if full.name
                 resHtml += '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + $scope.escapeHtml(full.name) + '</span>'
@@ -424,6 +419,7 @@ define [
             bSortable: true
             sWidth:    '100px'
             mRender: (data, type, full) ->
+              #return ''
               resHtml = '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].dateTime | date:\'short\'"></span>'
           ,
             mData:     null
@@ -431,6 +427,7 @@ define [
             bSortable: true
             sWidth:    '100px'
             mRender: (data, type, full) ->
+              #return ''
               resHtml = '<span data-ng-bind="resourcePool[resourcePool[\'' + full.revisionUid + '\'].templateUid].name"></span>'
           ]
           options:
@@ -454,19 +451,16 @@ define [
 
               cacheResponse   = ''
               oSettings.jqXHR = apiRequest.get 'event', [], query, (response, responseRaw) ->
-
                 if response.code == 200
-
                   responseDataString = responseRaw #utilSafeStringify(response.response) #JSON.stringify(response.response)
-
-                 #console.log 'utilSafeStringify'
-                 #console.log responseDataString
 
                   if cacheResponse == responseDataString
                     return
                   cacheResponse = responseDataString
 
+                  #tempData = _.extend {}, response.response.data
                   dataArr = _.toArray response.response.data
+
                   fnCallback
                     iTotalRecords:        response.response.length
                     iTotalDisplayRecords: response.response.length
