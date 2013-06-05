@@ -36,7 +36,7 @@ define [
           $scope.viewModel =
             dictionaries:               {}
 
-            currentDictionaryUid:        ''
+            currentDictionaryUid:       ''
             showAddNewDictionary:       false
             showAddDictionaryItems:     false
 
@@ -132,16 +132,16 @@ define [
                   name: name
                   uid:  uid
                   data: data
-            ,
-              mData:     null
-              aTargets:  [1]
-              mRender: (data, type, full) ->
-                return '0'
+            #,
+            #  mData:     null
+            #  aTargets:  [1]
+            #  mRender: (data, type, full) ->
+            #    return '0'
             ,
               mData:     null
               bSortable: false
-              sWidth:    '30%'
-              aTargets:  [2]
+              sWidth:    '10%'
+              aTargets:  [1]
               mRender: (data, type, full) ->
                 name = 'editDictionaryItemForm' + full.uid.replace /-/g, '_'
                 name = $scope.escapeHtml name

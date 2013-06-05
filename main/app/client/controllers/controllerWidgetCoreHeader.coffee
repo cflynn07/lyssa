@@ -25,7 +25,7 @@ define [
       fetchActivity = (uid, completedCallback = null) ->
         #return
         apiRequest.get 'activity', [uid], {
-          limit: 50
+          limit: 20
           expand: [
             resource: 'employee'
           ,
@@ -40,9 +40,6 @@ define [
               resource: 'revision'
             },{
               resource: 'eventParticipants'
-            #  expand: [{
-            #    resource: 'employee'
-            #  }]
             }]
           ]
         }, (response, rawResponse, fromCache) ->

@@ -184,6 +184,14 @@ ul.breadcrumb {
   margin: 0 !important;
 }
 
+div.button-group {
+  margin:0;
+}
+div.button-group > button {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
 /*
     Customizing login page & fixing css related bug with new login widget on mobile viewport widths
     -----------------------------------------------------------------------------------------------
