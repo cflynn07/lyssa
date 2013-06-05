@@ -13,18 +13,21 @@ module.exports =
       validate:
         isUUID: 4
         notNull: true
-    submissionGroupUid:
+
+    submissionUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
         notNull: true
 
   relations: [
+
     relation: 'belongsTo'
     model: 'client'
   ,
     relation: 'belongsTo'
-    model: 'submissionGroup'
+    model: 'submission'
+
   ]
   options:
     paranoid: true

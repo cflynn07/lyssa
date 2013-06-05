@@ -7,17 +7,20 @@ module.exports =
   model:
     id: SEQ.INTEGER
 
+    finalized: SEQ.BOOLEAN
+
+    finalizedDateTime:
+      type: SEQ.DATE
+      validate:
+        notNull: false
+
     clientUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
         notNull: true
-    eventUid:
-      type: SEQ.STRING
-      validate:
-        isUUID: 4
-        notNull: true
-    employeeUid:
+
+    eventParticipantUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
@@ -28,10 +31,7 @@ module.exports =
     model: 'client'
   ,
     relation: 'belongsTo'
-    model: 'event'
-  ,
-    relation: 'belongsTo'
-    model: 'employee'
+    model: 'eventParticipant'
   ]
   options:
     paranoid: true

@@ -80,7 +80,7 @@ define [
               }]
             }]
           }, (response) ->
-            console.log response
+            #console.log response
             if response.code != 200
               return
 
