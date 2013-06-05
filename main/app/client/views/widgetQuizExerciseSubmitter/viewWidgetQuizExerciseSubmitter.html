@@ -96,12 +96,24 @@
                             data-ng-switch-when = "openResponse"
                             data-ng-include     = "'viewPartialQuizExerciseSubmitterOpenResponse'"></div>
 
-                        </div>
-                        <input
-                          name  = "{{ field.uid }}"
-                          type  = "text"
-                          class = "span6 m-wrap">
+                          <div
+                            data-ng-switch-when = "selectIndividual"
+                            data-ng-include     = "'viewPartialQuizExerciseSubmitterSelectIndividual'"></div>
 
+                          <div
+                            data-ng-switch-when = "selectMultiple"
+                            data-ng-include     = "'viewPartialQuizExerciseSubmitterSelectMultiple'"></div>
+
+                          <div
+                            data-ng-switch-when = "yesNo"
+                            data-ng-include     = "'viewPartialQuizExerciseSubmitterYesNo'"></div>
+
+                          <div
+                            data-ng-switch-when = "slider"
+                            data-ng-include     = "'viewPartialQuizExerciseSubmitterSlider'"></div>
+
+
+                        </div><!-- data-ng-switch field.type -->
 
 
                      </div><!-- controls -->

@@ -32,9 +32,6 @@ module.exports =
   ,
     relation: 'belongsTo'
     model: 'employee'
-  ,
-    relation: 'hasMany'
-    model: 'submissionGroup'
   ]
   options:
     paranoid: true

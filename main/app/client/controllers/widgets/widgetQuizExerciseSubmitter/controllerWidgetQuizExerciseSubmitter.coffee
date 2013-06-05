@@ -4,12 +4,20 @@ define [
   'ejs'
   'text!views/widgetQuizExerciseSubmitter/viewWidgetQuizExerciseSubmitter.html'
   'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterOpenResponse.html'
+  'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterSelectIndividual.html'
+  'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterSelectMultiple.html'
+  'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterYesNo.html'
+  'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterSlider.html'
 ], (
   $
   angular
   EJS
   viewWidgetQuizExerciseSubmitter
   viewPartialQuizExerciseSubmitterOpenResponse
+  viewPartialQuizExerciseSubmitterSelectIndividual
+  viewPartialQuizExerciseSubmitterSelectMultiple
+  viewPartialQuizExerciseSubmitterYesNo
+  viewPartialQuizExerciseSubmitterSlider
 ) ->
 
   (Module) ->
@@ -22,6 +30,18 @@ define [
 
       $templateCache.put 'viewPartialQuizExerciseSubmitterOpenResponse',
         viewPartialQuizExerciseSubmitterOpenResponse
+
+      $templateCache.put 'viewPartialQuizExerciseSubmitterSelectIndividual',
+        viewPartialQuizExerciseSubmitterSelectIndividual
+
+      $templateCache.put 'viewPartialQuizExerciseSubmitterSelectMultiple',
+        viewPartialQuizExerciseSubmitterSelectMultiple
+
+      $templateCache.put 'viewPartialQuizExerciseSubmitterYesNo',
+        viewPartialQuizExerciseSubmitterYesNo
+
+      $templateCache.put 'viewPartialQuizExerciseSubmitterSlider',
+        viewPartialQuizExerciseSubmitterSlider
 
     ]
 
