@@ -83,8 +83,6 @@
               <h4><span>Edit Revision</span></h4>
             </div>
 
-
-
             <div
               style        = "margin:0;"
               class        = "tools pull-right">
@@ -105,9 +103,6 @@
                 </p>
               </a>
             </div>
-
-
-
 
             <div class="clearfix"></div>
 
@@ -249,30 +244,23 @@
               <div
                 data-ng-init = "editRevisionChangeSummary = false"
                 class="box template-info-box fade in">
-
                 <h4
                   style = "font-weight:600; margin-top:0;"><span>Revision Change Summary</span></h4>
-
                 <div
                   data-ng-show = "resourcePool[viewModel.routeParams.revisionUid].finalized">
-
                   <p
                     style        = "font-size:14px;"
                     data-ng-hide = "editRevisionChangeSummary">
                     {{resourcePool[viewModel.routeParams.revisionUid].changeSummary}}
                   </p>
-
                 </div><!-- finalized -->
-
                 <div
                   data-ng-hide = "resourcePool[viewModel.routeParams.revisionUid].finalized">
-
                   <p
                     style        = "font-size:14px;"
                     data-ng-hide = "editRevisionChangeSummary">
                     {{resourcePool[viewModel.routeParams.revisionUid].changeSummary}}
                   </p>
-
                   <form
                     data-ng-show = "editRevisionChangeSummary"
                     style        = "margin:0;"
@@ -292,7 +280,6 @@
                       </div>
                     </div>
                   </form>
-
                   <div
                     data-ng-show = "editRevisionChangeSummary"
                     style        = "margin-left:0;"
@@ -305,7 +292,6 @@
                       class            = "btn green btn-block span6">
                       <i class="icon-save m-icon-white"></i> Save
                     </button>
-
                     <button
                       data-ng-show  = "editRevisionChangeSummary"
                       style         = "margin-bottom: 5px; margin-top: 0;"
@@ -314,7 +300,6 @@
                       <i class="icon-remove m-icon-white"></i> Cancel
                     </button>
                   </div>
-
                   <div
                     data-ng-hide = "editRevisionChangeSummary"
                     style        = "margin-left:0;"
@@ -327,12 +312,8 @@
                       <i class="icon-pencil m-icon-white"></i> Edit
                     </button>
                   </div>
-
                   <div class="clearfix"></div>
                 </div><!-- not finalized -->
-
-
-
               </div><!-- template info box / change summary -->
 
 
@@ -343,6 +324,7 @@
                   <i class="icon-angle-right"></i>
                 </li>
               </ul>
+
 
               <!-- loading indicator, shown during groups loading -->
               <div

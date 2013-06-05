@@ -208,13 +208,15 @@ define [
                   resourcePool[objValue.uid] = objValue
                 objValue = resourcePool[objValue.uid]
 
-            ### Creates max call stack exceeded errors
+            # Creates max call stack exceeded errors
+
             for objKey, objValue of obj
               if _.isArray(objValue)
                 #We turn properties that are arrays of objects into hashes of objects indexed by Uid
                 obj[objKey] = recursiveCallback objValue
                 updatePoolResource resourcePool[obj.uid], obj
 
+              ###
               else if (_.isObject(objValue) && !_.isUndefined(objValue.uid))
                 if _.isUndefined resourcePool[obj.uid]
                   addPoolResource obj
@@ -222,7 +224,7 @@ define [
                   updatePoolResource resourcePool[obj.uid], obj
 
                 recursiveCallback(objValue)
-            ###
+              ###
 
           return responseHash
 

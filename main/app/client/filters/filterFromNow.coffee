@@ -11,4 +11,7 @@ define [
 
     Module.filter 'fromNow', () ->
       (dateString) ->
+        if !dateString
+          return ''
+
         moment(new Date(dateString)).fromNow()

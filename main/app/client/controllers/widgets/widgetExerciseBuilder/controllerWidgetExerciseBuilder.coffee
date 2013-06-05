@@ -481,7 +481,7 @@ define [
                 .then (result) ->
                   if result == 'cancel'
                     apiRequest.get 'group', [groupUid], {}, () ->
-                    $scope.nameEditing = false
+                      $scope.nameEditing = false
 
               return true
 
@@ -802,7 +802,12 @@ define [
 
 
           currentTemplateRevision: {}
+
+
+
+          ###
           fetchCurrentTemplateRevision: () ->
+
             if !$scope.viewModel.routeParams.templateUid
               $scope.viewModel.currentTemplateRevision = false
               return
@@ -811,17 +816,20 @@ define [
             if !$scope.viewModel.routeParams.templateUid
               return
             return
+
             $scope.resourcePool[$scope.viewModel.routeParams.templateUid]
 
             apiRequest.get 'revision', [], {}, (response) ->
 
-
             template = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
             $scope.viewModel.currentTemplateRevision = $scope.getLastObjectFromHash template.revisions
             #console.log $scope.viewModel.currentTemplateRevision
+          ###
+
 
           currentTemplate: false
           fetchCurrentTemplate: () ->
+
             if !$scope.viewModel.routeParams.templateUid
               $scope.viewModel.currentTemplate = false
               return
@@ -831,6 +839,7 @@ define [
                 expand: [{resource: 'groups'}]
               }]
             }, (response) ->
+
               if response.code == 200
 
                 #if !_.isUndefined $scope.resourcePool[$scope.viewModel.routeParams.revisionUid]

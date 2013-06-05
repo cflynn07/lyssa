@@ -9,13 +9,14 @@
 
     <div class="portlet-body form">
 
-      <div class="box template-info-box fade in">
 
+
+      <div class="box template-info-box fade in">
 
         <table class="detail-table">
           <tbody>
             <tr>
-              <td class="detail-head">Exercise Name</td>
+              <td class="detail-head">Exercise Name:</td>
               <td>{{ resourcePool[viewModel.routeParams.eventParticipantUid].event.name }}</td>
             </tr>
 
@@ -36,34 +37,8 @@
           </tbody>
         </table>
 
-        <div style="display:none;">
-          <div class="row-fluid">
-            <div class="span2">Exercise Name:</div>
-            <div class="span10">
-              {{ resourcePool[viewModel.routeParams.eventParticipantUid].event.name }}
-            </div>
-          </div><!-- row-fluid -->
-
-          <div class="row-fluid">
-            <div class="span2">Start Date/Time:</div>
-            <div class="span10">
-              {{ resourcePool[viewModel.routeParams.eventParticipantUid].event.dateTime | date:'short' }}
-              ({{ resourcePool[viewModel.routeParams.eventParticipantUid].event.dateTime | fromNow }})
-            </div>
-          </div><!-- row-fluid -->
-
-          <div class="row-fluid">
-            <div class="span2">Scheduled By:</div>
-            <div class="span10">
-              {{ resourcePool[resourcePool[viewModel.routeParams.eventParticipantUid].event.employee.uid].firstName }}&nbsp;{{ resourcePool[resourcePool[viewModel.routeParams.eventParticipantUid].event.employee.uid].lastName }}
-            </div>
-          </div><!-- row-fluid -->
-        </div>
-
-
-
-
       </div><!-- template-info-box -->
+
 
       <form
         name  = "exerciseQuizForm"
@@ -88,9 +63,15 @@
             </div><!-- navbar steps -->
 
 
+
+
+
             <div class="progress progress-success progress-striped">
                <div class="bar" style="width: 25%;"></div>
             </div>
+
+
+
 
 
             <div class="tab-content">
@@ -107,16 +88,29 @@
                      <label class="control-label">{{ field.name }}</label>
                      <div class="controls">
 
+
+                        <div
+                          data-ng-switch = "field.type">
+
+                          <div
+                            data-ng-switch-when = "openResponse"
+                            data-ng-include     = "'viewPartialQuizExerciseSubmitterOpenResponse'"></div>
+
+                        </div>
                         <input
                           name  = "{{ field.uid }}"
                           type  = "text"
                           class = "span6 m-wrap">
 
-                     </div>
+
+
+                     </div><!-- controls -->
                   </div><!-- control-group -->
 
                </div><!-- tab-pane -->
             </div><!-- tab-content -->
+
+
 
 
 

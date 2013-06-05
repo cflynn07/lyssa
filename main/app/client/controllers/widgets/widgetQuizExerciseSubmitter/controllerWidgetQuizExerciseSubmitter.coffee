@@ -3,19 +3,26 @@ define [
   'angular'
   'ejs'
   'text!views/widgetQuizExerciseSubmitter/viewWidgetQuizExerciseSubmitter.html'
+  'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterOpenResponse.html'
 ], (
   $
   angular
   EJS
   viewWidgetQuizExerciseSubmitter
+  viewPartialQuizExerciseSubmitterOpenResponse
 ) ->
 
   (Module) ->
 
     Module.run ['$templateCache',
     ($templateCache) ->
+
       $templateCache.put 'viewWidgetQuizExerciseSubmitter',
         viewWidgetQuizExerciseSubmitter
+
+      $templateCache.put 'viewPartialQuizExerciseSubmitterOpenResponse',
+        viewPartialQuizExerciseSubmitterOpenResponse
+
     ]
 
     Module.controller 'ControllerWidgetQuizExerciseSubmitter', ['$scope', '$route', '$routeParams', 'apiRequest', '$filter'
