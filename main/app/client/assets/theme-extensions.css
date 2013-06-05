@@ -624,3 +624,12 @@ ul.nav-pills span.number {
 .DTSelectedItemInfo > span {
   margin-bottom: 4px;
 }
+
+/**
+  Details tables styles
+  ---------------------
+*/
+table.detail-table td.detail-head {
+  font-weight: 600;
+  padding-right: 10px;
+}

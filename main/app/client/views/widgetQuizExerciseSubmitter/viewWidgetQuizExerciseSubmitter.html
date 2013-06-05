@@ -11,27 +11,57 @@
 
       <div class="box template-info-box fade in">
 
-        <div class="row-fluid">
-          <div class="span2">Exercise Name:</div>
-          <div class="span10">
-            {{ resourcePool[viewModel.routeParams.eventParticipantUid].event.name }}
-          </div>
-        </div><!-- row-fluid -->
 
-        <div class="row-fluid">
-          <div class="span2">Start Date/Time:</div>
-          <div class="span10">
-            {{ resourcePool[viewModel.routeParams.eventParticipantUid].event.dateTime | date:'short' }}
-            ({{ resourcePool[viewModel.routeParams.eventParticipantUid].event.dateTime | fromNow }})
-          </div>
-        </div><!-- row-fluid -->
+        <table class="detail-table">
+          <tbody>
+            <tr>
+              <td class="detail-head">Exercise Name</td>
+              <td>{{ resourcePool[viewModel.routeParams.eventParticipantUid].event.name }}</td>
+            </tr>
 
-        <div class="row-fluid">
-          <div class="span2">Scheduled By:</div>
-          <div class="span10">
-            {{ resourcePool[resourcePool[viewModel.routeParams.eventParticipantUid].event.employee.uid].firstName }}&nbsp;{{ resourcePool[resourcePool[viewModel.routeParams.eventParticipantUid].event.employee.uid].lastName }}
-          </div>
-        </div><!-- row-fluid -->
+            <tr>
+              <td class="detail-head">Start Date/Time:</td>
+              <td>
+                {{ resourcePool[viewModel.routeParams.eventParticipantUid].event.dateTime | date:'short' }}
+                ({{ resourcePool[viewModel.routeParams.eventParticipantUid].event.dateTime | fromNow }})
+              </td>
+            </tr>
+
+            <tr>
+              <td class="detail-head">Scheduled By:</td>
+              <td>
+                {{ resourcePool[resourcePool[viewModel.routeParams.eventParticipantUid].event.employee.uid].firstName }}&nbsp;{{ resourcePool[resourcePool[viewModel.routeParams.eventParticipantUid].event.employee.uid].lastName }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="display:none;">
+          <div class="row-fluid">
+            <div class="span2">Exercise Name:</div>
+            <div class="span10">
+              {{ resourcePool[viewModel.routeParams.eventParticipantUid].event.name }}
+            </div>
+          </div><!-- row-fluid -->
+
+          <div class="row-fluid">
+            <div class="span2">Start Date/Time:</div>
+            <div class="span10">
+              {{ resourcePool[viewModel.routeParams.eventParticipantUid].event.dateTime | date:'short' }}
+              ({{ resourcePool[viewModel.routeParams.eventParticipantUid].event.dateTime | fromNow }})
+            </div>
+          </div><!-- row-fluid -->
+
+          <div class="row-fluid">
+            <div class="span2">Scheduled By:</div>
+            <div class="span10">
+              {{ resourcePool[resourcePool[viewModel.routeParams.eventParticipantUid].event.employee.uid].firstName }}&nbsp;{{ resourcePool[resourcePool[viewModel.routeParams.eventParticipantUid].event.employee.uid].lastName }}
+            </div>
+          </div><!-- row-fluid -->
+        </div>
+
+
+
 
       </div><!-- template-info-box -->
 

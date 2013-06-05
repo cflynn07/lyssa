@@ -78,8 +78,8 @@ define [
 
               viewModel.setActiveRevisionGroup()
 
-              console.log 'viewModel.revision'
-              console.log viewModel.revision
+              #console.log 'viewModel.revision'
+              #console.log viewModel.revision
 
 
       viewModel.getEventParticipant()
