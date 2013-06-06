@@ -88,6 +88,12 @@ body {
 .header .nav .dropdown-toggle:hover, .header .nav .dropdown.open .dropdown-toggle {
   background-color: #094AB2 !important;
 }
+.page-sidebar > ul > li.has-sub.open >a, .page-sidebar > ul > li >a:hover, .page-sidebar > ul > li:hover>a {
+  background: #DDD;
+}
+.page-sidebar > ul > li a i {
+  color: #333 !important;
+}
 @media (max-width: 480px) {
 
   .header .nav > li.dropdown .dropdown-toggle {
