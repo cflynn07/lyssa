@@ -1,5 +1,7 @@
 <div class="navbar-inner">
-  <div class="container-fluid">
+  <div
+    style = "padding-left:0;"
+    class = "container-fluid">
     <!-- BEGIN LOGO -->
 
 
@@ -7,9 +9,9 @@
     <div style="margin-bottom:0px !important; margin-top:0px !important;" class="btn-group pull-left">
 
       <a
-        href="#/{{clientConfig.simplifiedUserCategories[rootUser.type]}}/themis"
-        style="min-height:23px; background-color:#2672EC; color: #FFF !important; min-width:141px; padding-top:12px; font-size:16px; padding-left:0; padding-right:0;"
-        class="btn detail header-product-button">Themis</a>
+        href  = "#/{{clientConfig.simplifiedUserCategories[rootUser.type]}}/themis"
+        style = "min-height:23px; min-width:161px !important; background-color:#2672EC; color:#FFF !important; min-width:141px; padding-top:12px; font-size:16px; padding-left:0; padding-right:0;"
+        class = "btn detail header-product-button">Themis</a>
 
       <a style="display:none;" data-ng-click="" class="btn detail blue">Other
         <i class="m-icon-swapright" style=""></i>
@@ -21,7 +23,9 @@
         data-toggle = "dropdown">
         <span style="border-top: 4px solid #FFF;" class="caret"></span>
       </button>
-      <ul class="dropdown-menu">
+      <ul
+        style = "min-width:158px !important;"
+        class = "dropdown-menu">
         <!-- dropdown menu links -->
         <li>
           <a class="" data-ng-click=""><i class="icon-trash"></i> Product A</a>

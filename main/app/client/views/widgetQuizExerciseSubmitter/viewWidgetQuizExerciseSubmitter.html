@@ -137,7 +137,7 @@
               </button>
 
               <button
-                data-ng-disabled = "viewModel.isGroupValidContinue(viewModel.activeRevisionGroupUid)"
+                data-ng-disabled = "!viewModel.isGroupValidContinue(viewModel.activeRevisionGroupUid)"
                 data-ng-click    = "viewModel.incrementActiveRevisionGroup()"
                 class            = "btn blue">
                 Continue <i class="m-icon-swapright m-icon-white"></i>

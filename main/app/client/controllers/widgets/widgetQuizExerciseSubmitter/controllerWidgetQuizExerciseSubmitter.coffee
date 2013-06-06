@@ -53,6 +53,8 @@ define [
       getGroupsArrayHelper = () ->
         groupsArray = $filter('deleted')(viewModel.revision.groups)
         groupsArray = $filter('orderBy')(groupsArray, 'ordinal')
+        return groupsArray
+
       moveRevisionGroupHelper = (direction) ->
         if viewModel.activeRevisionGroupUid is ''
             return
@@ -60,7 +62,7 @@ define [
         groupsArray = getGroupsArrayHelper()
 
         for value, key in groupsArray
-          if value.uid == viewModel.activeRevisionGroup
+          if value.uid == viewModel.activeRevisionGroupUid
             if !_.isUndefined(groupsArray[key + direction])
               viewModel.activeRevisionGroupUid = groupsArray[key + direction].uid
             break
@@ -69,7 +71,8 @@ define [
 
       viewModel =
 
-        fields: {}
+        #Dynamic fields & user-supplied data
+        fields:           {}
         exerciseQuizForm: {}
 
         routeParams:         $routeParams
@@ -84,15 +87,14 @@ define [
         isGroupValidContinue: (groupUid) ->
           if !groupUid || _.isUndefined(viewModel.revision.groups[groupUid])
             return
-          console.log $scope.exerciseQuizForm
-          console.log viewModel.fields
-          return
+
           groupFields = $filter('deleted')(viewModel.revision.groups[groupUid].fields)
+
           for value, key in groupFields
-            if !$scope.exerciseQuizForm[value.uid].$valid
-              console.log 'invalid'
+            if !$scope.viewModel.fields[value.uid]
               return false
-          console.log 'valid'
+            if !$scope.viewModel.fields[value.uid].$valid
+              return false
           return true
 
         incrementActiveRevisionGroup: () ->
