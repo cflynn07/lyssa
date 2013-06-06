@@ -51,7 +51,7 @@
                   <ul class="row-fluid nav nav-pills">
                      <li
                         data-ng-repeat = "(key, group) in viewModel.revision.groups | toArray | deleted | orderBy:'ordinal'"
-                        data-ng-class  = "{true:'active'}[viewModel.activeRevisionGroup == group.uid]"
+                        data-ng-class  = "{true:'active'}[viewModel.activeRevisionGroupUid == group.uid]"
                         class          = "span3">
                         <a href="#tab1" data-toggle="tab" class="step">
                         <span class="number">{{ key + 1 }}</span>
@@ -75,50 +75,50 @@
 
 
             <div class="tab-content">
-               <div
+              <div
                   data-ng-repeat = "group in viewModel.revision.groups | toArray | deleted | orderBy:'ordinal'"
-                  data-ng-class  = "{true:'active'}[viewModel.activeRevisionGroup == group.uid]"
+                  data-ng-class  = "{true:'active'}[viewModel.activeRevisionGroupUid == group.uid]"
                   class          = "tab-pane">
 
                   <h3 class = "block">{{ group.name }}</h3>
 
                   <div
-                     data-ng-repeat = "field in resourcePool[group.uid].fields | deleted | orderBy:'ordinal'"
-                     class          = "control-group">
-                     <label class="control-label">{{ field.name }}</label>
-                     <div class="controls">
+                    data-ng-repeat = "field in resourcePool[group.uid].fields | deleted | orderBy:'ordinal'"
+                    class          = "control-group">
+                    <label class="control-label">{{ field.name }} -- {{ viewModel.fields[field.uid].$valid }}</label>
+                    <div class="controls">
 
+
+                      <div
+                        data-ng-switch = "field.type">
 
                         <div
-                          data-ng-switch = "field.type">
+                          data-ng-switch-when = "openResponse"
+                          data-ng-include     = "'viewPartialQuizExerciseSubmitterOpenResponse'"></div>
 
-                          <div
-                            data-ng-switch-when = "openResponse"
-                            data-ng-include     = "'viewPartialQuizExerciseSubmitterOpenResponse'"></div>
+                        <div
+                          data-ng-switch-when = "selectIndividual"
+                          data-ng-include     = "'viewPartialQuizExerciseSubmitterSelectIndividual'"></div>
 
-                          <div
-                            data-ng-switch-when = "selectIndividual"
-                            data-ng-include     = "'viewPartialQuizExerciseSubmitterSelectIndividual'"></div>
+                        <div
+                          data-ng-switch-when = "selectMultiple"
+                          data-ng-include     = "'viewPartialQuizExerciseSubmitterSelectMultiple'"></div>
 
-                          <div
-                            data-ng-switch-when = "selectMultiple"
-                            data-ng-include     = "'viewPartialQuizExerciseSubmitterSelectMultiple'"></div>
+                        <div
+                          data-ng-switch-when = "yesNo"
+                          data-ng-include     = "'viewPartialQuizExerciseSubmitterYesNo'"></div>
 
-                          <div
-                            data-ng-switch-when = "yesNo"
-                            data-ng-include     = "'viewPartialQuizExerciseSubmitterYesNo'"></div>
+                        <div
+                          data-ng-switch-when = "slider"
+                          data-ng-include     = "'viewPartialQuizExerciseSubmitterSlider'"></div>
 
-                          <div
-                            data-ng-switch-when = "slider"
-                            data-ng-include     = "'viewPartialQuizExerciseSubmitterSlider'"></div>
-
-                        </div><!-- data-ng-switch field.type -->
+                      </div><!-- data-ng-switch field.type -->
 
 
-                     </div><!-- controls -->
+                    </div><!-- controls -->
                   </div><!-- control-group -->
 
-               </div><!-- tab-pane -->
+              </div><!-- tab-pane -->
             </div><!-- tab-content -->
 
 
@@ -129,20 +129,28 @@
 
             <div class="form-actions clearfix">
 
-              <button class="btn">
+
+              <button
+                data-ng-click = "viewModel.decrementActiveRevisionGroup()"
+                class         = "btn">
                 <i class="m-icon-swapleft"></i> Back
               </button>
-              <button class="btn blue">
+
+              <button
+                data-ng-disabled = "viewModel.isGroupValidContinue(viewModel.activeRevisionGroupUid)"
+                data-ng-click    = "viewModel.incrementActiveRevisionGroup()"
+                class            = "btn blue">
                 Continue <i class="m-icon-swapright m-icon-white"></i>
               </button>
+
               <button class="btn green">
                 Submit <i class="m-icon-swapright m-icon-white"></i>
               </button>
 
-
-            </div>
-         </div>
+            </div><!-- form-actions -->
+         </div><!-- form-wizard -->
       </form>
-    </div>
+
+    </div><!-- portlet-body -->
 
 </div>

@@ -1,4 +1,15 @@
-<input
-  name  = "{{ field.uid }}"
-  type  = "text"
-  class = "span6 m-wrap">
+<div data-ng-form name="subForm">
+
+  <input
+    data-ng-init    = "viewModel.fields[field.uid] = subForm"
+    name            = "subField"
+    data-ng-model   = "viewModel.exerciseQuizForm[field.uid]"
+    required
+    data-ng-minlength = "2"
+    data-ng-maxlength = "6"
+    type            = "text"
+    class           = "span6 m-wrap">
+
+  {{ field.uid }}
+
+</div>

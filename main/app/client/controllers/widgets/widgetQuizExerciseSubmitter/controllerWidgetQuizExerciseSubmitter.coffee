@@ -48,22 +48,65 @@ define [
     Module.controller 'ControllerWidgetQuizExerciseSubmitter', ['$scope', '$route', '$routeParams', 'apiRequest', '$filter'
     ($scope, $route, $routeParams, apiRequest, $filter) ->
 
+
+
+      getGroupsArrayHelper = () ->
+        groupsArray = $filter('deleted')(viewModel.revision.groups)
+        groupsArray = $filter('orderBy')(groupsArray, 'ordinal')
+      moveRevisionGroupHelper = (direction) ->
+        if viewModel.activeRevisionGroupUid is ''
+            return
+
+        groupsArray = getGroupsArrayHelper()
+
+        for value, key in groupsArray
+          if value.uid == viewModel.activeRevisionGroup
+            if !_.isUndefined(groupsArray[key + direction])
+              viewModel.activeRevisionGroupUid = groupsArray[key + direction].uid
+            break
+
+
+
       viewModel =
+
+        fields: {}
+        exerciseQuizForm: {}
 
         routeParams:         $routeParams
         eventParticipant:    {}
 
+
         revision:            {}
         #Gets set to first group after load, incremented with steps
-        activeRevisionGroup: ''
+        activeRevisionGroupUid: ''
+
+
+        isGroupValidContinue: (groupUid) ->
+          if !groupUid || _.isUndefined(viewModel.revision.groups[groupUid])
+            return
+          console.log $scope.exerciseQuizForm
+          console.log viewModel.fields
+          return
+          groupFields = $filter('deleted')(viewModel.revision.groups[groupUid].fields)
+          for value, key in groupFields
+            if !$scope.exerciseQuizForm[value.uid].$valid
+              console.log 'invalid'
+              return false
+          console.log 'valid'
+          return true
+
+        incrementActiveRevisionGroup: () ->
+          moveRevisionGroupHelper(1)
+        decrementActiveRevisionGroup: () ->
+          moveRevisionGroupHelper(-1)
+
         setActiveRevisionGroup: (groupUid) ->
-          if viewModel.activeRevisionGroup is ''
-
-            groupsArray = $filter('deleted')(viewModel.revision.groups)
-            groupsArray = $filter('orderBy')(groupsArray, 'ordinal')
-
+          if viewModel.activeRevisionGroupUid is ''
+            groupsArray = getGroupsArrayHelper()
             if groupsArray.length
-              viewModel.activeRevisionGroup = groupsArray[0].uid
+              viewModel.activeRevisionGroupUid = groupsArray[0].uid
+
+
 
 
         getEventParticipant: () ->
