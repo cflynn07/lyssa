@@ -30,6 +30,40 @@ module.exports = (app) ->
         clientUid   = req.session.user.clientUid
         employeeUid = req.session.user.uid
 
+
+        config.resourceModelUnknownFieldsExceptions['event'] = ['participantsUids']
+
+
+
+
+        checkParticipantsUidsHelper = (val, objectKey, object, callback) ->
+          if _.isUndefined val
+            callback null,
+              success: true
+            return
+
+          if !_.isArray(val) || _.isString(val)
+            callback null,
+              success: false
+              message:
+                participantsUids: 'invalid'
+            return
+
+          for uuid in val
+            if !config.isValidUUID(uuid)
+              callback null,
+                success: false
+                message:
+                  participantsUids: 'invalid'
+              return
+
+          callback null,
+            success: true
+
+
+
+
+
         switch userType
           when 'superAdmin'
 
@@ -153,6 +187,13 @@ module.exports = (app) ->
                         success: true
                         uidMapping: mapObj
                         transform: [objectKey, 'employeeUid', val]
+
+
+
+                  'participantsUids': (val, objectKey, object, callback) ->
+                    checkParticipantsUidsHelper(val, objectKey, object, callback)
+
+
 
 
               }, (objects) ->
@@ -310,6 +351,12 @@ module.exports = (app) ->
                         transform:  [objectKey, 'employeeUid', val]
 
 
+
+                  'participantsUids': (val, objectKey, object, callback) ->
+                    checkParticipantsUidsHelper(val, objectKey, object, callback)
+
+
+
               }, (objects) ->
 
                 #insertHelper.call(this, objects, res)
@@ -332,8 +379,7 @@ module.exports = (app) ->
                 config.apiSuccessPostResponse res, results
             else
               insertMethod req.body, (uid) ->
-                console.log 'does this poitn fire?'
-                console.log uid
+
 
                 if _.isString(uid) && _.isUndefined(uid.code)
                   config.apiSuccessPostResponse res, uid

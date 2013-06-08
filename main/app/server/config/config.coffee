@@ -2,6 +2,12 @@ _ = require 'underscore'
 
 module.exports =
 
+  isValidUUID: (uuid) ->
+    rgx = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+    return rgx.test(uuid)
+
+  resourceModelUnknownFieldsExceptions: {}
+
   apiSubDir: '/api'
   appRoot:   __dirname + '/../../'
   env:       (if GLOBAL.app? and GLOBAL.app.settings? and GLOBAL.app.settings.env then GLOBAL.app.settings.env else 'development')

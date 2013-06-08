@@ -27,10 +27,6 @@ module.exports = (app) ->
         uid       = req.session.user.uid
 
 
-
-
-
-
         insertChildRevisionAndGroupHelper = (uid, completeCallback) ->
           #Insert revision & 1st group
           template.find(
