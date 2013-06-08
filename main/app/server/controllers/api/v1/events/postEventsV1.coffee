@@ -35,50 +35,44 @@ module.exports = (app) ->
         config.resourceModelUnknownFieldsExceptions['event'] = ['participantsUids']
 
 
-
-
-
-
         insertEventParticipantsHelper = (uid, objects, completeCallback) ->
-          item = objects[0]
+          try
+            item = objects[0]
 
-          if _.isString(uid) && _.isUndefined(uid.code) && item.participantsUids
+            if _.isString(uid) && _.isUndefined(uid.code) && item.participantsUids
 
-            event.find(
-              where:
-                uid: uid
-            ).success (resultEvent) ->
+              event.find(
+                where:
+                  uid: uid
+              ).success (resultEvent) ->
 
-              async.map item.participantsUids, (item, callback) ->
+                async.map item.participantsUids, (item, callback) ->
 
-                insertUid = uuid.v4()
+                  insertUid = uuid.v4()
 
-                eventParticipant.create({
-                  uid:         insertUid
+                  eventParticipant.create({
+                    uid:         insertUid
 
-                  clientUid:   item.clientUid
-                  employeeUid: item.uid
-                  eventUid:    resultEvent.uid
+                    clientUid:   item.clientUid
+                    employeeUid: item.uid
+                    eventUid:    resultEvent.uid
 
-                  clientId:    item.clientId
-                  employeeId:  item.id
-                  eventId:     resultEvent.id
+                    clientId:    item.clientId
+                    employeeId:  item.id
+                    eventId:     resultEvent.id
 
-                }).success (resultEventParticipant) ->
-                  #console.log 'resultEventParticipant'
-                  #console.log resultEventParticipant
-                  callback(null)
+                  }).success (resultEventParticipant) ->
+                    #console.log 'resultEventParticipant'
+                    #console.log resultEventParticipant
+                    callback(null)
 
-              , (err, results) ->
-                completeCallback(uid)
+                , (err, results) ->
+                  completeCallback(uid)
 
-          else
-            completeCallback(uid)
-
-
-
-
-
+            else
+              completeCallback(uid)
+          catch error
+            console.log error
 
 
         checkParticipantsUidsHelper = (val, objectKey, object, callback) ->
@@ -256,11 +250,8 @@ module.exports = (app) ->
                         transform: [objectKey, 'employeeUid', val]
 
 
-
                   'participantsUids': (val, objectKey, object, callback) ->
                     checkParticipantsUidsHelper(val, objectKey, object, callback)
-
-
 
 
               }, (objects) ->
@@ -276,7 +267,6 @@ module.exports = (app) ->
                       insertMethodCallback.call(this, uid)
                     else
                       config.apiSuccessPostResponse res, uid
-
 
 
             if _.isArray req.body
@@ -442,9 +432,6 @@ module.exports = (app) ->
                       insertMethodCallback.call(this, uid)
                     else
                       config.apiSuccessPostResponse res, uid
-
-
-
 
 
 

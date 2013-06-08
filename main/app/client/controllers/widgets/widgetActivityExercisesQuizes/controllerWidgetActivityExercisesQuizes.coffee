@@ -25,8 +25,8 @@ define [
               ['employeeUid', '=', $scope.rootUser.uid]
             ]
           }, (response) ->
-            #console.log 'response'
-            #console.log response
+            console.log 'response'
+            console.log response
             if response.code != 200
               return
             viewModel.upcomingQuizesExercises = response.response.data
