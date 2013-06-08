@@ -83,11 +83,11 @@
                   <h3 class = "block">{{ group.name }}</h3>
 
                   <div
+                    data-ng-class  = "{success:viewModel.fields[field.uid].$valid, error:!viewModel.fields[field.uid].$valid, 'ng-pristine':viewModel.fields[field.uid].$pristine}"
                     data-ng-repeat = "field in resourcePool[group.uid].fields | deleted | orderBy:'ordinal'"
                     class          = "control-group">
-                    <label class="control-label">{{ field.name }} -- {{ viewModel.fields[field.uid].$valid }}</label>
+                    <label class="control-label">{{ field.name }}</label>
                     <div class="controls">
-
 
                       <div
                         data-ng-switch = "field.type">

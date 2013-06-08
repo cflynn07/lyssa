@@ -44,3 +44,34 @@
       rows          = "3"></textarea>
   </div>
 </div>
+
+
+<div
+  data-ng-class = "{success:formOpenResponseAdd.minLength.$valid, error:!formOpenResponseAdd.minLength.$valid, 'ng-pristine':formOpenResponseAdd.minLength.$pristine}"
+  class="control-group">
+  <label class="control-label">Minimum Response Character Length</label>
+  <div class="controls">
+    <input
+      required
+      type          = "text"
+      data-ng-model = "form.minLength"
+      name          = "minLength"
+      data-ui-mask  = "'9?9999'"
+      class         = "medium m-wrap"></input>
+  </div>
+</div>
+
+<div
+  data-ng-class = "{success:formOpenResponseAdd.maxLength.$valid, error:!formOpenResponseAdd.maxLength.$valid, 'ng-pristine':formOpenResponseAdd.maxLength.$pristine}"
+  class="control-group">
+  <label class="control-label">Maximum Response Character Length</label>
+  <div class="controls">
+    <input
+      required
+      type          = "text"
+      data-ng-model = "form.maxLength"
+      name          = "maxLength"
+      data-ui-mask  = "'9?9999'"
+      class         = "medium m-wrap"></input>
+  </div>
+</div>

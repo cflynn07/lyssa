@@ -29,6 +29,53 @@ module.exports = (app) ->
         clientUid = req.session.user.clientUid
         employeeUid = req.session.user.uid
 
+
+
+
+
+
+
+
+        minLengthCheckHelper = (val, objectKey, object, callback) ->
+          if !_.isUndefined val
+            intVal = parseInt val, 10
+            if _.isNaN(intVal) || intVal < 0
+              callback null,
+                success: false
+                message:
+                  openResponseMinLength: 'invalid'
+            else
+              callback null,
+                success: true
+                transform: [objectKey, 'openResponseMinLength', intVal]
+          else
+            callback null,
+              success: true
+              transform: [objectKey, 'openResponseMinLength', 0]
+
+        maxLengthCheckHelper = (val, objectKey, object, callback) ->
+          if !_.isUndefined val
+            intVal = parseInt val, 10
+            if _.isNaN(intVal) || intVal < 1
+              callback null,
+                success: false
+                message:
+                  openResponseMaxLength: 'invalid'
+            else
+              callback null,
+                success: true
+                transform: [objectKey, 'openResponseMaxLength', intVal]
+          else
+            callback null,
+              success: true
+              transform: [objectKey, 'openResponseMaxLength', 100]
+
+
+
+
+
+
+
         switch userType
           when 'superAdmin'
 
@@ -78,6 +125,18 @@ module.exports = (app) ->
                   'percentageSliderRight': (val, objectKey, object, callback) ->
                     callback null,
                       success: true
+
+
+                  'openResponseMinLength': (val, objectKey, object, callback) ->
+                    minLengthCheckHelper(val, objectKey, object, callback)
+
+
+                  'openResponseMaxLength': (val, objectKey, object, callback) ->
+                    maxLengthCheckHelper(val, objectKey, object, callback)
+
+
+
+
 
                   'clientUid': (val, objectKey, object, callback) ->
 
@@ -288,6 +347,18 @@ module.exports = (app) ->
                   'percentageSliderRight': (val, objectKey, object, callback) ->
                     callback null,
                       success: true
+
+
+
+                  'openResponseMinLength': (val, objectKey, object, callback) ->
+                    minLengthCheckHelper(val, objectKey, object, callback)
+
+
+                  'openResponseMaxLength': (val, objectKey, object, callback) ->
+                    maxLengthCheckHelper(val, objectKey, object, callback)
+
+
+
 
                   'clientUid': (val, objectKey, object, callback) ->
 

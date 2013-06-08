@@ -145,6 +145,8 @@ define [
             type:     'openResponse'
             groupUid: $scope.group.uid
             ordinal:  0
+            openResponseMaxLength: $scope.form.maxLength
+            openResponseMinLength: $scope.form.minLength
           }, {}, (response) ->
             console.log response
           $scope.cancelAddNewField()

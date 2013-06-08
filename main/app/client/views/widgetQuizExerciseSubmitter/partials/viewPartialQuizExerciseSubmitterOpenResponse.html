@@ -10,6 +10,19 @@
     type            = "text"
     class           = "span6 m-wrap">
 
-  {{ field.uid }}
+    <div class="clear"></div>
+
+
+    <span
+      data-ng-show = "viewModel.fields[field.uid].$error.minlength"
+      class        = "help-inline">
+        Answer must be longer than 2 characters
+    </span>
+    <span
+      data-ng-show = "viewModel.fields[field.uid].$error.maxlength"
+      class        = "help-inline">
+        Answer must be shorter than 6 characters
+    </span>
+
 
 </div>
