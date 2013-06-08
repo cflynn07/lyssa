@@ -27,7 +27,9 @@ module.exports =
   ,
     relation: 'belongsTo'
     model: 'submission'
-
+  ,
+    relation: 'hasMany'
+    model: 'submissionFieldDictionaryItem'
   ]
   options:
     paranoid: true
