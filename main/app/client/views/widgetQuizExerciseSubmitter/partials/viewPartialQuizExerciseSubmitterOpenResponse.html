@@ -5,23 +5,23 @@
     name            = "subField"
     data-ng-model   = "viewModel.exerciseQuizForm[field.uid]"
     required
-    data-ng-minlength = "2"
-    data-ng-maxlength = "6"
+    data-ng-minlength = "{{ field.openResponseMinLength || 0 }}"
+    data-ng-maxlength = "{{ field.openResponseMaxLength || 100 }}"
     type            = "text"
     class           = "span6 m-wrap">
 
-    <div class="clear"></div>
+    <div class="clearfix"></div>
 
 
     <span
       data-ng-show = "viewModel.fields[field.uid].$error.minlength"
       class        = "help-inline">
-        Answer must be longer than 2 characters
+        Answer must be longer than {{ field.openResponseMinLength || 0 }} characters
     </span>
     <span
       data-ng-show = "viewModel.fields[field.uid].$error.maxlength"
       class        = "help-inline">
-        Answer must be shorter than 6 characters
+        Answer must be shorter than {{ field.openResponseMaxLength || 100 }} characters
     </span>
 
 

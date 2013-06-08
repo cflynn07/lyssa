@@ -2,6 +2,7 @@ define [
   'jquery'
   'angular'
   'ejs'
+  'cs!utils/utilBuildDTQuery'
   'text!views/widgetQuizExerciseSubmitter/viewWidgetQuizExerciseSubmitter.html'
   'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterOpenResponse.html'
   'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterSelectIndividual.html'
@@ -12,6 +13,7 @@ define [
   $
   angular
   EJS
+  utilBuildDTQuery
   viewWidgetQuizExerciseSubmitter
   viewPartialQuizExerciseSubmitterOpenResponse
   viewPartialQuizExerciseSubmitterSelectIndividual
@@ -44,6 +46,84 @@ define [
         viewPartialQuizExerciseSubmitterSlider
 
     ]
+
+
+
+
+
+
+    ###
+      Helper controller for select individual form field elements
+    ###
+    Module.controller 'ControllerWidgetQuizExerciseSubmitter_SelectIndividualHelper', ['$scope', '$route', '$routeParams', 'apiRequest', '$filter'
+    ($scope, $route, $routeParams, apiRequest, $filter) ->
+
+      $scope.selectIndividualTable =
+        options:
+          bStateSave:      true
+          iCookieDuration: 2419200
+          bJQueryUI:       false
+          bPaginate:       true
+          bLengthChange:   true
+          bFilter:         true
+          bInfo:           true
+          bDestroy:        true
+          bServerSide:     true
+          bProcessing:     true
+          fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+            query = utilBuildDTQuery ['name'],
+              ['name'],
+              oSettings
+
+            console.log query
+
+            if !$scope.field.dictionaryUid
+              return
+
+            if query.filter.length > 0
+              query.filter[0].push 'and'
+
+            query.filter.push ['deletedAt', '=', 'null', 'and']
+            query.filter.push ['dictionaryUid', '=', $scope.field.dictionaryUid, 'and']
+
+            cacheResponse   = ''
+            oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response) ->
+              if response.code != 200
+                return
+
+              responseDataString = JSON.stringify(response.response)
+              if cacheResponse == responseDataString
+                return
+              cacheResponse = responseDataString
+
+              dataArr = _.toArray response.response.data
+
+              fnCallback
+                iTotalRecords:        response.response.length
+                iTotalDisplayRecords: response.response.length
+                aaData:               dataArr
+
+        columnDefs: [
+          mData: null
+          aTargets: [0]
+          mRender: (data, type, full) ->
+            return full.name
+        ,
+          mData: null
+          bSortable: false
+          aTargets: [1]
+          mRender: (data, type, full) ->
+            html  = '<button data-ng-click="viewModel.exerciseQuizForm[field.uid] = \'' + full.uid + '\'; viewModel.fields[field.uid].$pristine = false" class="btn blue">'
+            html += 'Select'
+            html += '</button>'
+        ]
+
+    ]
+
+
+
+
+
 
     Module.controller 'ControllerWidgetQuizExerciseSubmitter', ['$scope', '$route', '$routeParams', 'apiRequest', '$filter'
     ($scope, $route, $routeParams, apiRequest, $filter) ->
