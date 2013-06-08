@@ -15,10 +15,11 @@ redisClient  = require(config.appRoot + 'server/config/redis').createClient()
 
 module.exports = (app) ->
 
-  employee  = ORM.model 'employee'
-  client    = ORM.model 'client'
-  event     = ORM.model 'event'
-  revision  = ORM.model 'revision'
+  employee         = ORM.model 'employee'
+  client           = ORM.model 'client'
+  event            = ORM.model 'event'
+  revision         = ORM.model 'revision'
+  eventParticipant = ORM.model 'eventParticipant'
 
   app.post config.apiSubDir + '/v1/events', (req, res) ->
     async.series [
@@ -36,6 +37,50 @@ module.exports = (app) ->
 
 
 
+
+
+        insertEventParticipantsHelper = (uid, objects, completeCallback) ->
+          item = objects[0]
+
+          if _.isString(uid) && _.isUndefined(uid.code) && item.participantsUids
+
+            event.find(
+              where:
+                uid: uid
+            ).success (resultEvent) ->
+
+              async.map item.participantsUids, (item, callback) ->
+
+                insertUid = uuid.v4()
+
+                eventParticipant.create({
+                  uid:         insertUid
+
+                  clientUid:   item.clientUid
+                  employeeUid: item.uid
+                  eventUid:    resultEvent.uid
+
+                  clientId:    item.clientId
+                  employeeId:  item.id
+                  eventId:     resultEvent.id
+
+                }).success (resultEventParticipant) ->
+                  #console.log 'resultEventParticipant'
+                  #console.log resultEventParticipant
+                  callback(null)
+
+              , (err, results) ->
+                completeCallback(uid)
+
+          else
+            completeCallback(uid)
+
+
+
+
+
+
+
         checkParticipantsUidsHelper = (val, objectKey, object, callback) ->
           if _.isUndefined val
             callback null,
@@ -49,16 +94,38 @@ module.exports = (app) ->
                 participantsUids: 'invalid'
             return
 
-          for uuid in val
-            if !config.isValidUUID(uuid)
+          for tempUUID in val
+            if !config.isValidUUID(tempUUID)
               callback null,
                 success: false
                 message:
                   participantsUids: 'invalid'
               return
 
-          callback null,
-            success: true
+          async.map val, (item, callback) ->
+
+            employee.find(
+              where:
+                uid: item
+                clientUid: clientUid
+            ).success (resultEmployee) ->
+
+              if !resultEmployee
+                callback(new Error())
+              else
+                callback(null, resultEmployee)
+
+          , (err, results) ->
+
+            if err
+              callback null,
+                success: false
+                message:
+                  participantsUids: 'unknown employee uids'
+            else
+              callback null,
+                success: true
+                transform: [objectKey, 'participantsUids', results]
 
 
 
@@ -203,10 +270,14 @@ module.exports = (app) ->
 
                   redisClient.publish 'eventCronChannel', uid
 
-                  if _.isFunction(insertMethodCallback)
-                    insertMethodCallback.call(this, arguments)
-                  else
-                    config.apiSuccessPostResponse res, uid
+                  insertEventParticipantsHelper uid, objects, (uid) ->
+
+                    if _.isFunction(insertMethodCallback)
+                      insertMethodCallback.call(this, uid)
+                    else
+                      config.apiSuccessPostResponse res, uid
+
+
 
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
@@ -365,10 +436,16 @@ module.exports = (app) ->
 
                   redisClient.publish 'eventCronChannel', uid
 
-                  if _.isFunction(insertMethodCallback)
-                    insertMethodCallback.call(this, uid)
-                  else
-                    config.apiSuccessPostResponse res, uid
+                  insertEventParticipantsHelper uid, objects, (uid) ->
+
+                    if _.isFunction(insertMethodCallback)
+                      insertMethodCallback.call(this, uid)
+                    else
+                      config.apiSuccessPostResponse res, uid
+
+
+
+
 
 
             if _.isArray req.body
