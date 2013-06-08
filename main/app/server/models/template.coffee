@@ -9,7 +9,7 @@ module.exports =
     name:
       type:   SEQ.STRING
       validate:
-        isAlphanumeric: true
+        #isAlphanumeric: true
         len: [5, 100]
 
     type: SEQ.ENUM 'full', 'mini'

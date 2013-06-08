@@ -791,6 +791,13 @@ define [
               name:        $scope.viewModel.newTemplateForm.name
               type:        $scope.viewModel.newTemplateForm.type
             }, {}, (result) ->
+              console.log 'result'
+              console.log result
+              $scope.viewModel.clearNewTemplateForm()
+
+              ###
+
+              MODIFIED API TO IMPLICITLY CREATE FIRST REVISION AND GROUP
 
               #Create first revision
               apiRequest.post 'revision', {
@@ -801,7 +808,7 @@ define [
                 console.log result
                 $scope.viewModel.clearNewTemplateForm()
               #console.log result
-
+              ###
 
           currentTemplateRevision: {}
 

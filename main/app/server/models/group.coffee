@@ -17,12 +17,12 @@ module.exports =
 
     ordinal: SEQ.INTEGER
 
-
     clientUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
         notNull: true
+
     revisionUid:
       type: SEQ.STRING
       validate:

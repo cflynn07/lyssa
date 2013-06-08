@@ -13,7 +13,8 @@ module.exports = (app) ->
   template = ORM.model 'template'
   employee = ORM.model 'employee'
   client   = ORM.model 'client'
-
+  revision = ORM.model 'revision'
+  group    = ORM.model 'group'
 
   app.post config.apiSubDir + '/v1/templates', (req, res) ->
     async.series [
@@ -24,6 +25,57 @@ module.exports = (app) ->
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
         uid       = req.session.user.uid
+
+
+
+
+
+
+        insertChildRevisionAndGroupHelper = (uid, completeCallback) ->
+          #Insert revision & 1st group
+          template.find(
+            where:
+              uid: uid
+          ).success (resultTemplate) ->
+
+            revision.create({
+              uid:           uuid.v4()
+
+              changeSummary: ''
+              scope:         ''
+              finalized:     false
+
+              clientUid:     resultTemplate.clientUid
+              templateUid:   resultTemplate.uid
+              employeeUid:   resultTemplate.employeeUid
+
+              clientId:      resultTemplate.clientId
+              templateId:    resultTemplate.id
+              employeeId:    resultTemplate.employeeId
+
+            }).success (resultRevision) ->
+
+              group.create({
+                uid:         uuid.v4()
+
+                name:        'First Exercise Group'
+                description: ''
+                ordinal:     0
+
+                clientUid:   resultRevision.clientUid
+                revisionUid: resultRevision.uid
+
+                clientId:    resultRevision.clientId
+                revisionId:  resultRevision.id
+
+              }).success (resultGroup) ->
+
+                completeCallback(uid)
+
+
+
+
+
 
         #console.log req.session
         #console.log uid
@@ -36,7 +88,7 @@ module.exports = (app) ->
                 requiredProperties:
                   'name':        (val, objectKey, object, callback) ->
 
-                    if val
+                    if !_.isUndefined(val)
                       callback null,
                         success: true
                     else
@@ -129,17 +181,28 @@ module.exports = (app) ->
               }, (objects) ->
 
                 #insertHelper.call(this, objects, res)
-                insertHelper 'templates', clientUid, template, objects, req, res, app
+                insertHelper 'templates', clientUid, template, objects, req, res, app, insertMethodCallback
 
 
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
                 insertMethod item, (createdUid) ->
-                  callback null, createdUid
+
+                  insertChildRevisionAndGroupHelper createdUid, (uid) ->
+                    callback null, uid
+
               , (err, results) ->
                 config.apiSuccessPostResponse res, results
             else
-              insertMethod(req.body)
+              insertMethod req.body, (uid) ->
+
+                if _.isString(uid) && _.isUndefined(uid.code)
+
+                  insertChildRevisionAndGroupHelper uid, (uid) ->
+                    config.apiSuccessPostResponse res, uid
+
+                else
+                  res.jsonAPIRespond uid
 
 
           when 'clientSuperAdmin', 'clientAdmin'
@@ -148,15 +211,25 @@ module.exports = (app) ->
                   requiredProperties:
                     'name':        (val, objectKey, object, callback) ->
 
-                      #no special checks
-                      callback null,
-                        success: true
+                      if !_.isUndefined(val)
+                        callback null,
+                          success: true
+                      else
+                        callback null,
+                          success: false
+                          message:
+                            name: 'required'
 
                     'type':        (val, objectKey, object, callback) ->
 
-                      #no special checks
-                      callback null,
-                        success: true
+                      if val
+                        callback null,
+                          success: true
+                      else
+                        callback null,
+                          success: false
+                          message:
+                            type: 'required'
 
                     'employeeUid': (val, objectKey, object, callback) ->
 
@@ -216,11 +289,22 @@ module.exports = (app) ->
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
                 insertMethod item, (createdUid) ->
-                  callback null, createdUid
+
+                  insertChildRevisionAndGroupHelper createdUid, (uid) ->
+                    callback null, uid
+
               , (err, results) ->
                 config.apiSuccessPostResponse res, results
             else
-              insertMethod(req.body)
+              insertMethod req.body, (uid) ->
+
+                if _.isString(uid) && _.isUndefined(uid.code)
+
+                  insertChildRevisionAndGroupHelper uid, (uid) ->
+                    config.apiSuccessPostResponse res, uid
+
+                else
+                  res.jsonAPIRespond uid
 
 
           when 'clientDelegate', 'clientAuditor'
