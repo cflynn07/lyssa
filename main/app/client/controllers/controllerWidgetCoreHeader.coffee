@@ -26,6 +26,7 @@ define [
         #return
         apiRequest.get 'activity', [uid], {
           limit: 20
+          order: [['createdAt', 'desc']]
           expand: [
             resource: 'employee'
           ,
