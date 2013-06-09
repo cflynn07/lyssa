@@ -60,9 +60,6 @@ module.exports =
     model: 'employee'
   ,
     relation: 'hasMany'
-    model: 'template'
-  ,
-    relation: 'hasMany'
     model: 'dictionary'
   ,
     relation: 'hasMany'
@@ -72,6 +69,15 @@ module.exports =
     model: 'event'
   ,
     relation: 'hasMany'
+    model: 'eventParticipant'
+  ,
+    relation: 'hasMany'
+    model: 'submissionField'
+  ,
+    relation: 'hasMany'
+    model: 'template'
+  ,
+    relation: 'hasMany'
     model: 'revision'
   ,
     relation: 'hasMany'
@@ -79,15 +85,6 @@ module.exports =
   ,
     relation: 'hasMany'
     model: 'field'
-  ,
-    relation: 'hasMany'
-    model: 'submission'
-  ,
-    relation: 'hasMany'
-    model: 'submissionGroup'
-  ,
-    relation: 'hasMany'
-    model: 'submissionField'
   ]
   options:
     paranoid: true

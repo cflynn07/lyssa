@@ -113,6 +113,8 @@ exportObj =
     fs.writeFileSync config.appRoot + 'client/config/clientOrmShare.json', JSON.stringify(exportModels)
 
     for modelName, relations of @relationships
+      #console.log 'modelName'
+      #console.log modelName
       for relObject in relations
 
         if !_.isObject relObject.options

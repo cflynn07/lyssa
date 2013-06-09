@@ -192,11 +192,11 @@ define [
             if !_.isUndefined resourcePool[obj.uid]
               #We have it already
               updatePoolResource resourcePool[obj.uid], obj
-              responseHash[obj.uid] = resourcePool[obj.uid]
+              #responseHash[obj.uid] = resourcePool[obj.uid]
             else
               #It's new
               addPoolResource obj
-              responseHash[obj.uid] = obj
+              #responseHash[obj.uid] = obj
 
 
             for objKey, objValue of obj
@@ -226,7 +226,7 @@ define [
                 recursiveCallback(objValue)
               ###
 
-          return responseHash
+          return passedValueObjOrArray #responseHash
 
         responseHash = recursiveCallback results
         return responseHash

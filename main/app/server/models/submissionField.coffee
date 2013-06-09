@@ -14,13 +14,13 @@ module.exports =
         isUUID: 4
         notNull: true
 
-    submissionUid:
+    fieldUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
         notNull: true
 
-    fieldUid:
+    eventParticipantUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
@@ -32,13 +32,14 @@ module.exports =
     model: 'client'
   ,
     relation: 'belongsTo'
-    model: 'submission'
+    model: 'field'
   ,
     relation: 'belongsTo'
-    model: 'field'
+    model: 'eventParticipant'
   ,
     relation: 'hasMany'
     model: 'submissionFieldDictionaryItem'
+
   ]
   options:
     paranoid: true

@@ -7,6 +7,11 @@ module.exports =
   model:
     id:       SEQ.INTEGER
 
+    finalizedDateTime:
+      type: SEQ.DATE
+      validate:
+        notNull: false
+
     clientUid:
       type: SEQ.STRING
       validate:
@@ -25,8 +30,10 @@ module.exports =
         isUUID: 4
         notNull: true
 
-
   relations: [
+    relation: 'hasMany'
+    model: 'submissionField'
+  ,
     relation: 'belongsTo'
     model: 'client'
   ,

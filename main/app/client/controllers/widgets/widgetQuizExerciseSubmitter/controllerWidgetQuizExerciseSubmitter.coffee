@@ -197,6 +197,8 @@ define [
 
           apiRequest.get 'eventParticipant', [viewModel.routeParams.eventParticipantUid], {
             expand: [{
+              resource: 'submissionFields'
+            },{
               resource: 'event'
               expand: [{
                 resource: 'employee'
@@ -205,7 +207,7 @@ define [
               }]
             }]
           }, (response) ->
-            #console.log response
+            console.log response
             if response.code != 200
               return
 

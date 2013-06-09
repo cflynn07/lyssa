@@ -6,6 +6,7 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id:       SEQ.INTEGER
+
     name:
       type:   SEQ.STRING
       validate:
@@ -19,6 +20,7 @@ module.exports =
       validate:
         isUUID: 4
         notNull: true
+
     employeeUid:
       type: SEQ.STRING
       validate:
