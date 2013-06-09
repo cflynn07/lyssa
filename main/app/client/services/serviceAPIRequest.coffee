@@ -16,251 +16,46 @@ define [
     Module.factory 'apiRequest', ['socket', '$rootScope',
     (socket, $rootScope) ->
 
-      #Hash of all ORM resources
       resourcePool = {}
-
-      #Make available...
       $rootScope.resourcePool = resourcePool
-
-      #Store results from open-ended (no specified uids) GET requests to resources
-      resourcePoolCollections = {}
-
-      #Store all eager-loaded child resources for each open-ended query
-      resourcePoolCollectionsExpands = {}
-
-
-      #TODO: Account for parent/child relationship changes
-      socket.on 'resourcePut', (data) ->
-        #console.log 'resourcePut'
-        #console.log data
-        $rootScope.$broadcast 'resourcePut', data #['uid']
-
-        #if !_.isUndefined data['uid'] and !_.isUndefined resourcePool[data['uid']]
-        #  updatePoolResource resourcePool[data['uid']], data
-
-        if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])
-          obj = {}
-          uid = data['resource']['uid']
-          obj[uid] = data['resource']
-
-          _.extend resourcePool, obj
-
-
-      socket.on 'resourcePost', (data) ->
-
-        #console.log 'resourcePost'
-        #console.log data
-
-        $rootScope.$broadcast 'resourcePost', data #['uid']
-
-        if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid']) and !_.isUndefined(data['resourceName']) and !_.isUndefined(data['apiCollectionName'])   # and !_.isUndefined(resourcePoolCollections[data['resourceName']])
-          #resourcePoolCollections[data['resourceName']][data['resource']['uid']] = data['resource']
-
-          #turn it into a hash obj on uid
-          obj = {}
-          uid = data['resource']['uid']
-          obj[uid] = data['resource']
-
-          #Add in to resourcePool also (this might be happening twice)
-          _.extend resourcePool, obj
-
-          #data['resource'] = resourcePool[obj.uid]
-
-          #attach to parent resources if exist
-          attachResourcesToParentsInPool data['apiCollectionName'], data['resource']
-
-
-          #addResourcesToOpenEndedGet data['apiCollectionName'],
-          #  data['resourceName'],
-          #  data['resource'],
-          #  {},
-          #  false
-
-
-
-
-      #
-      # MSC Helpers
-      attachResourcesToParentsInPool = (apiCollectionName, resources) ->
-
-        #console.log 'p3'
-        #console.log arguments
-
-        if !_.isArray resources
-          resources = [resources]
-
-        #Helper
-        endsWith = (string, suffix) ->
-          return string.indexOf(suffix, string.length - suffix.length) != -1
-
-
-        for obj in resources
-          for propName, propValue of obj #HASH
-
-            if _.isObject(propValue) && !_.isArray(propValue) && !_.isUndefined(propValue.uid)
-              reconcileResultsWithPool(propValue)
-
-            #for propName, propValue of propValue  #RESOURCE OBJECT
-
-            #Does it end in "Uid"
-            if endsWith propName, 'Uid'
-
-              #console.log 'p2'
-              #console.log propName
-
-              objHashed = {}
-              uid = obj.uid
-              objHashed[uid] = obj
-
-              #Does the resource/hash (propValue) exist in our pool?
-              if !_.isUndefined resourcePool[propValue]
-                if !_.isUndefined resourcePool[propValue][apiCollectionName]
-                  _.extend resourcePool[propValue][apiCollectionName], objHashed
-
-                  #console.log 'p1'
-                  #console.log resourcePool[propValue][apiCollectionName]
-
-                else
-
-                  #console.log 'p1a'
-
-                  resourcePool[propValue][apiCollectionName] = {}
-                  _.extend resourcePool[propValue][apiCollectionName], objHashed
-
-
-
-      addResourcesToOpenEndedGet = (apiCollectionName, resourceName, resources, expand, cacheSyncRequest) ->
-
-        if _.isUndefined resourcePoolCollections[apiCollectionName]
-          resourcePoolCollections[apiCollectionName] = resources
-        else
-          _.extend resourcePoolCollections[apiCollectionName], resources
-
-        presentExpand = resourcePoolCollectionsExpands[apiCollectionName]
-
-        #First load, we don't need this
-        if _.isUndefined presentExpand
-          resourcePoolCollectionsExpands[apiCollectionName] = expand
-          return
-
-        #TODO: This runs more than it has to, fix
-        #console.log '---'
-        #console.log JSON.stringify presentExpand
-        #console.log JSON.stringify expand
-
-        if JSON.stringify(presentExpand) != JSON.stringify(expand)
-
-          _.extend resourcePoolCollectionsExpands[apiCollectionName], expand
-
-          if !cacheSyncRequest
-            #We must execute a GET to load the nested resources
-
-            factory.get resourceName, [], resourcePoolCollectionsExpands[apiCollectionName], (response) ->
-              return
-
-              #console.log 'updated eager associations'
-              #console.log resourcePoolCollectionsExpands[apiCollectionName]
-              #console.log response
-
-            , true #Don't run again
-
-      updatePoolResource = (poolResource, updatedResource) ->
-        _.extend poolResource, updatedResource, true
-        poolResource.isFresh = true
-
-      addPoolResource = (resource) ->
-        resourcePool[resource.uid] = resource
-        resourcePool[resource.uid].isFresh = true
-
-
-
-
-      #Merge each result with resourcePool hash
-      reconcileResultsWithPool = (results) ->
-
-        recursiveCallback = (passedValueObjOrArray) ->
-
-          responseHash = {}
-
-          #Temporary convert to array
-          if !_.isArray passedValueObjOrArray
-            passedValueObjOrArray = [passedValueObjOrArray]
-
-          for obj in passedValueObjOrArray #<-- At this point it's an array ^
-
-
-            if !_.isUndefined resourcePool[obj.uid]
-              #We have it already
-              updatePoolResource resourcePool[obj.uid], obj
-              #responseHash[obj.uid] = resourcePool[obj.uid]
-            else
-              #It's new
-              addPoolResource obj
-              #responseHash[obj.uid] = obj
-
-
-            for objKey, objValue of obj
-              if _.isObject(objValue) and !_.isUndefined(objValue.uid)
-
-                if !_.isUndefined(resourcePool[objValue.uid])
-                  _.extend resourcePool[objValue.uid], objValue
-                else
-                  resourcePool[objValue.uid] = objValue
-                objValue = resourcePool[objValue.uid]
-
-            # Creates max call stack exceeded errors
-
-            for objKey, objValue of obj
-              if _.isArray(objValue)
-                #We turn properties that are arrays of objects into hashes of objects indexed by Uid
-                obj[objKey] = recursiveCallback objValue
-                updatePoolResource resourcePool[obj.uid], obj
-
-              ###
-              else if (_.isObject(objValue) && !_.isUndefined(objValue.uid))
-                if _.isUndefined resourcePool[obj.uid]
-                  addPoolResource obj
-                else
-                  updatePoolResource resourcePool[obj.uid], obj
-
-                recursiveCallback(objValue)
-              ###
-
-          return passedValueObjOrArray #responseHash
-
-        responseHash = recursiveCallback results
-        return responseHash
-
-
-
-
-      validateResource = (resourceName) ->
+      window.resourcePool     = $rootScope.resourcePool
+
+      #Cache of results in resourcePool based on query parameters
+      resourcePoolResultCache = {}
+
+      ###
+      #  Helpers
+      ###
+      helperMeshResourceWithPool = (data) ->
+        if !_.isUndefined(data['resource']) and !_.isUndefined(data['resource']['uid'])
+
+          if !_.isUndefined resourcePool[data['resource']['uid']]
+            _.extend resourcePool[data['resource']['uid']], data['resource']
+          else
+            resourcePool[data['resource']['uid']] = data['resource']
+
+      helperValidateResource = (resourceName) ->
         if _.isUndefined clientOrmShare[resourceName]
-          throw new Error resourceName + ' unknown'
+          throw new Error resourceName + ' is unknown'
           return false
         return true
 
-      getCollectionName = (resourceName) ->
+      helperGetCollectionName = (resourceName) ->
         apiCollectionName = resourceName + 's'
-        #One exception to pluralization for dictionary
+        #exception to pluralization rules
         if resourceName == 'dictionary'
           apiCollectionName = 'dictionaries'
         if resourceName == 'activity'
           apiCollectionName = 'activity'
-
         return apiCollectionName
 
-
-
       #To assist with caching API results by 4 params (offset, limit, filter, order)
-      cacheHashIdentifier = (resourceName, options) ->
-
+      helperHashApiRequests = (resourceName, options) ->
         defaultOptions =
           offset: 0
           limit:  300 #API DEF
           filter: []
           order:  []
-
         _.extend defaultOptions, options
 
         #Flatten arrays to aid in creating simple hash string
@@ -276,151 +71,100 @@ define [
         hashString = resourceName + defaultOptions.offset + defaultOptions.limit + JSON.stringify(filter) + JSON.stringify(order)
         return hashString
 
+      #Merges new values of objects pulled from server with cache-pool present on the client
+      helperUpdateResourcePool = (resourcesArrayOrObject) ->
+
+        mergeObjectWithRP = (object) ->
+          if _.isString(object['uid'])
+            if !_.isUndefined(resourcePool[object['uid']])
+              _.extend resourcePool[object['uid']], object
+            else
+              resourcePool[object['uid']] = object
+            #Replace original object with object in resourcePool
+            object = resourcePool[object['uid']]
+
+        if _.isArray(resourcesArrayOrObject) && !_.isString(resourcesArrayOrObject)
+          for item in resourcesArrayOrObject
+            helperUpdateResourcePool item
+
+        else if _.isObject(resourcesArrayOrObject)
+          mergeObjectWithRP resourcesArrayOrObject
+
+          for property, value of resourcesArrayOrObject
+            if (_.isArray(value) || _.isObject(value)) && !_.isString(value)
+              helperUpdateResourcePool value
 
 
+      socket.on 'resourcePut', (data) ->
+        helperMeshResourceWithPool data
+        $rootScope.$broadcast 'resourcePut', data
 
-      #
+      socket.on 'resourcePost', (data) ->
+        helperMeshResourceWithPool data
+        $rootScope.$broadcast 'resourcePost', data
+
+
+      ###
       # Response Object
-      #
+      ###
       factory =
+        get: (resourceName, uids = [], query = {}, callback = null) ->
 
-        get: (resourceName, uids = [], expand = {}, callback = null, cacheSyncRequest = false) ->
-
-          if !validateResource resourceName
+          if !helperValidateResource resourceName
             return
+          apiCollectionName = helperGetCollectionName resourceName
 
-          apiCollectionName = getCollectionName resourceName
+          hashString = helperHashApiRequests apiCollectionName,
+            offset: if query.offset then query.offset else 0
+            limit:  if query.limit  then query.limit  else 300
+            filter: if query.filter then query.filter else []
+            order:  if query.order  then query.order  else []
 
-          hashString = cacheHashIdentifier apiCollectionName,
-            offset: if expand.offset then expand.offset else 0
-            limit:  if expand.limit  then expand.limit  else 300
-            filter: if expand.filter then expand.filter else []
-            order:  if expand.order  then expand.order  else []
+          if !_.isUndefined(resourcePoolResultCache[hashString])
+            callback resourcePoolResultCache[hashString].response, resourcePoolResultCache[hashString].responseRaw, true
 
-          #console.log hashString
-
-          #Opportunity to return from cache, then update cache if
-          #we have all of the specified uids in the resourcePool
-          ###
-          allUids = true
-          if uids.length > 0
-            respObj = {}
-            for uid in uids
-              if _.isUndefined resourcePool[uid]
-                allUids = false
-                break
-              else
-                respObj[uid] = resourcePool[uid]
-            if allUids
-              callback({code: 200, response: respObj})
-          else
-          ###
-          allUids = false
-
-
-          if uids.length == 0
-            collectionHashSaved = false
-            #if !_.isUndefined resourcePoolCollections[apiCollectionName]
-            if !_.isUndefined resourcePoolCollections[hashString]
-              collectionHashSaved = true
-              if _.isFunction callback
-                callback({code: 200, response: resourcePoolCollections[hashString].response}, resourcePoolCollections[hashString].responseRaw, true)
-
-
-          #if !allUids and !collectionHashSaved
           socket.apiRequest 'GET',
             '/' + apiCollectionName + '/' + uids.join(','),
-            expand, #query
-            {},     #data
+            query, #query
+            {},    #data
             (response) ->
-
               responseRaw = JSON.stringify(response)
 
-              #console.log 'x1'
+              if !_.isObject(response) || _.isUndefined(response.code) || response.code != 200
+                callback response, responseRaw, false
+                return
 
-              if response.code == 200
+              #Always return results in array format if no uids specified
+              if (uids.length is 0) and !_.isArray(response.response.data) && _.isObject(response.response.data)
+                response.response.data = [response.response.data]
 
-                #HERE we turn array into hash indexed by uids
-                response.response.data = reconcileResultsWithPool response.response.data
-                collectionHashSaved    = false
+              #Replaces each object in data with object from resourcePool
+              helperUpdateResourcePool response.response.data
 
-                #console.log 'x2'
+              resourcePoolResultCache[hashString] =
+                response: response
+                responseRaw: responseRaw
 
-                if uids.length == 0
-                  #This was open-ended GET request. Store it.
-                  resourcePoolCollections[hashString] =
-                    response:    response.response
-                    responseRaw: responseRaw
-                  #addResourcesToOpenEndedGet apiCollectionName, resourceName, response.response.data, expand, cacheSyncRequest
-
-                if !allUids and !collectionHashSaved
-                  if _.isFunction callback
-                    callback response, responseRaw, false
-
-                #console.log 'x3'
-
-              else
-                if !allUids and !collectionHashSaved
-                  if _.isFunction callback
-                    callback response, responseRaw, false
-
-
-              ###
-              console.log '----'
-              console.log 'resourcePool'
-              console.log resourcePool
-              console.log '----'
-              console.log 'resourcePoolCollections'
-              console.log resourcePoolCollections
-              console.log '----'
-              ###
+              callback response, responseRaw, false
 
         post: (resourceName, objects, query, callback) ->
-          if !validateResource resourceName
+          if !helperValidateResource resourceName
             return
-
-          apiCollectionName = getCollectionName resourceName
-
-          ###
-          if !_.isArray objects
-            objects = [objects]
-          for obj in objects
-            obj.tempUid = uuid.v4()
-          ###
+          apiCollectionName = helperGetCollectionName resourceName
 
           socket.apiRequest 'POST',
             '/' + apiCollectionName,
             query,   #query
             objects, #data
             (response) ->
-              #console.log 'response'
-              #console.log response
-              #console.log callback
               callback(response)
 
-          ###
-          for obj in objects
-            obj.uid = obj.tempUid
-
-          #attachResourcesToParentsInPool apiCollectionName, objects
-          addResourcesToOpenEndedGet apiCollectionName, resourceName, objects, {}, false
-
-          if !$rootScope.$$phase
-            $rootScope.$apply()
-          ###
-
-          #helper
-
-
         put: (resourceName, uid, properties, query, callback) ->
-          if !validateResource resourceName
+          if !helperValidateResource resourceName
             return
+          apiCollectionName = helperGetCollectionName resourceName
 
-          apiCollectionName = getCollectionName resourceName
-          properties['uid'] = uid
-
-          if !_.isUndefined resourcePool[uid]
-            resourcePool[uid].isFresh = false
+          if !_.isUndefined(resourcePool[uid])
             _.extend resourcePool[uid], properties
 
           socket.apiRequest 'PUT',
@@ -428,31 +172,21 @@ define [
             query,
             properties, #data
             (response) ->
-
-              if response.code == 202
-                if !_.isUndefined resourcePool[uid]
-                  updatePoolResource resourcePool[uid], properties
-
               callback(response)
 
 
         delete: (resourceName, uid, query, callback) ->
-          if !validateResource resourceName
+          if !helperValidateResource resourceName
             return
-
-          apiCollectionName = getCollectionName resourceName
+          apiCollectionName = helperGetCollectionName resourceName
 
           if !_.isUndefined resourcePool[uid]
-            resourcePool[uid].isFresh   = false
             resourcePool[uid].deletedAt = (new Date()).toString()
 
           socket.apiRequest 'DELETE',
             '/' + apiCollectionName,
             query #query
-            uid, #data
+            uid,  #data
             (response) ->
-
               callback response
-
     ]
-

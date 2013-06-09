@@ -84,6 +84,8 @@ define [
             $scope.$parent.viewModel.showNewExerciseForm = false
             $scope.newEventForm.$setPristine()
 
+            $scope.$parent.viewModel.fullCalendarOptions.changeIncrementor++
+
           submitAddNewExercise: () ->
             $scope.viewModel.newEventForm.submitting = true
             form = viewModel.newEventForm
@@ -94,8 +96,8 @@ define [
               participantsUids: form.employeeUids
             }, {}, (eventResponse) ->
 
-              console.log 'eventResponse'
-              console.log eventResponse
+              #console.log 'eventResponse'
+              #console.log eventResponse
 
               $scope.viewModel.closeAddNewExerciseForm()
               return
@@ -117,8 +119,8 @@ define [
                   employeeUid: employeeUid
                 }
 
-              console.log 'insertObjects'
-              console.log insertObjects
+              #console.log 'insertObjects'
+              #console.log insertObjects
 
               apiRequest.post 'eventParticipant', insertObjects, {}, (eventParticipantResponse) ->
                 console.log 'eventParticipantResponse'
@@ -481,32 +483,34 @@ define [
         fullCalendarOptions:
           header:
             right: 'today month,agendaWeek,agendaDay,prev,next'
-          eventsResultCache: {}
+          eventsResultCache: ''
+          changeIncrementor: 0
           events: (start, end, callback) ->
             #console.log 'fetching events...'
-
 
             filter  = [['dateTime', '>', (new Date(start).toISOString()), 'and'], ['dateTime', '<', (new Date(end).toISOString())]]
             curDate = new Date()
 
             apiRequest.get 'event', [], {
               filter: filter
-            }, (response, responseRaw) ->
-             #console.log response
+            }, (response, responseRaw, fromCache) ->
+
+              if response.code != 200
+                return
 
               eventsArr = []
-              if response.code == 200
-                for key, eventObj of response.response.data
-                  FCEventObj =
-                    title: eventObj.name
-                    start: new Date(eventObj.dateTime)
-                    className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
-                  eventsArr.push FCEventObj
 
+              for key, eventObj of response.response.data
+                FCEventObj =
+                  title: eventObj.name
+                  start: new Date(eventObj.dateTime)
+                  className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
+                eventsArr.push FCEventObj
 
-
+              console.log 'raw check'
               if responseRaw != $scope.viewModel.fullCalendarOptions.eventsResultCache
                 $scope.viewModel.fullCalendarOptions.eventsResultCache = responseRaw    #utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)
+                console.log 'raw pass'
                 callback eventsArr
 
 
@@ -524,15 +528,17 @@ define [
               filter: filter
             }, (response, responseRaw) ->
               #console.log response
+              if response.code != 200
+                return
 
               eventsArr = []
-              if response.code == 200
-                for key, eventObj of response.response.data
-                  FCEventObj =
-                    title: eventObj.name
-                    start: new Date(eventObj.dateTime)
-                    className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
-                  eventsArr.push FCEventObj
+
+              for key, eventObj of response.response.data
+                FCEventObj =
+                  title: eventObj.name
+                  start: new Date(eventObj.dateTime)
+                  className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
+                eventsArr.push FCEventObj
 
               if responseRaw != $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache
                 $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache = responseRaw #utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)

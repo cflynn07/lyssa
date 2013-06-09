@@ -14,9 +14,9 @@ define [
 
           apiRequest.get 'employee', [user.uid], {}, (response) ->
             if response.code == 200
-              for uid, user of response.response.data
-                $rootScope.rootEmployee = user
-                return
+              $rootScope.rootEmployee = response.response.data
+                #$rootScope.rootEmployee = user
+                #return
 
         unauthenticate: () ->
 
