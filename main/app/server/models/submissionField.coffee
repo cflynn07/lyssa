@@ -26,6 +26,11 @@ module.exports =
         isUUID: 4
         notNull: true
 
+
+    openResponseValue: SEQ.STRING
+    sliderValue:       SEQ.INTEGER
+    yesNoValue:        SEQ.BOOLEAN
+
   relations: [
 
     relation: 'belongsTo'

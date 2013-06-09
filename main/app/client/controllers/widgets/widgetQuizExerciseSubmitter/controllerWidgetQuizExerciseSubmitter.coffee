@@ -188,52 +188,55 @@ define [
             if groupsArray.length
               viewModel.activeRevisionGroupUid = groupsArray[0].uid
 
-
-
+        ###
+          Idea here is to get all submissionFields for this EventParticipant and
+          return them as a hash, with the index of the hash being the "Field" uid
+          that each submissionField is associated with
+        ###
+        getSubissionFields: () ->
+          eP = $scope.resourcePool[viewModel.routeParams.eventParticipantUid]
+          console.log 'eP.submissionFields'
+          console.log eP.submissionFields
 
         getEventParticipant: () ->
           if !viewModel.routeParams.eventParticipantUid
             return
 
           apiRequest.get 'eventParticipant', [viewModel.routeParams.eventParticipantUid], {
-            expand: [{
+            expand: [
               resource: 'submissionFields'
-            },{
+            ,
               resource: 'event'
-              expand: [{
+              expand: [
                 resource: 'employee'
-              },{
+              ,
                 resource: 'revision'
-              }]
-            }]
+              ]
+            ]
           }, (response) ->
-            console.log response
             if response.code != 200
               return
-
             eP = $scope.resourcePool[viewModel.routeParams.eventParticipantUid]
             if _.isUndefined(eP) || _.isUndefined(eP.event.revision) || _.isUndefined(eP.event.revision.uid)
               return
 
             apiRequest.get 'revision', [eP.event.revision.uid], {
-              expand: [{
+              expand: [
                 resource: 'groups'
-                expand: [{
+                expand: [
                   resource: 'fields'
-                }]
-              }]
+                ]
+              ]
             }, (revisionResponse) ->
               if revisionResponse.code != 200
                 return
 
-              for key, value of revisionResponse.response.data
-                viewModel.revision = value
-                break
-
+              viewModel.getSubissionFields()
+              viewModel.revision = revisionResponse.response.data
               viewModel.setActiveRevisionGroup()
 
-              #console.log 'viewModel.revision'
-              #console.log viewModel.revision
+
+
 
 
       viewModel.getEventParticipant()
