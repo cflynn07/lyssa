@@ -20,6 +20,12 @@ module.exports =
         isUUID: 4
         notNull: true
 
+    fieldUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: true
+
   relations: [
 
     relation: 'belongsTo'
@@ -27,6 +33,9 @@ module.exports =
   ,
     relation: 'belongsTo'
     model: 'submission'
+  ,
+    relation: 'belongsTo'
+    model: 'field'
   ,
     relation: 'hasMany'
     model: 'submissionFieldDictionaryItem'
