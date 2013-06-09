@@ -145,6 +145,8 @@ define [
             type:     'openResponse'
             groupUid: $scope.group.uid
             ordinal:  0
+            openResponseMaxLength: $scope.form.maxLength
+            openResponseMinLength: $scope.form.minLength
           }, {}, (response) ->
             console.log response
           $scope.cancelAddNewField()
@@ -789,6 +791,13 @@ define [
               name:        $scope.viewModel.newTemplateForm.name
               type:        $scope.viewModel.newTemplateForm.type
             }, {}, (result) ->
+              console.log 'result'
+              console.log result
+              $scope.viewModel.clearNewTemplateForm()
+
+              ###
+
+              MODIFIED API TO IMPLICITLY CREATE FIRST REVISION AND GROUP
 
               #Create first revision
               apiRequest.post 'revision', {
@@ -799,7 +808,7 @@ define [
                 console.log result
                 $scope.viewModel.clearNewTemplateForm()
               #console.log result
-
+              ###
 
           currentTemplateRevision: {}
 
@@ -840,22 +849,24 @@ define [
               }]
             }, (response) ->
 
-              if response.code == 200
+              if response.code != 200
+                return
 
-                #if !_.isUndefined $scope.resourcePool[$scope.viewModel.routeParams.revisionUid]
-                #  $scope.viewModel.revisionChangeSummary = $scope.resourcePool[$scope.viewModel.routeParams.revisionUid].changeSummary
+              #if !_.isUndefined $scope.resourcePool[$scope.viewModel.routeParams.revisionUid]
+              #  $scope.viewModel.revisionChangeSummary = $scope.resourcePool[$scope.viewModel.routeParams.revisionUid].changeSummary
 
-                groupUids = []
-                for prop1, template of response.response.data
-                  for prop2, revision of template.revisions
-                    for prop3, group of revision.groups
-                      groupUids.push group.uid
+              groupUids = []
+              for template in response.response.data
+                for revision in template.revisions
+                  for group in revision.groups
+                    groupUids.push group.uid
 
-                apiRequest.get 'group', groupUids, {
-                  expand: [{resource: 'fields'}]
-                }, (response) ->
-                  #console.log 'groups'
-                  #console.log response
+
+              apiRequest.get 'group', groupUids, {
+                expand: [{resource: 'fields'}]
+              }, (response) ->
+                console.log 'groups'
+                console.log response
 
 
             #$scope.viewModel.currentTemplate = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]

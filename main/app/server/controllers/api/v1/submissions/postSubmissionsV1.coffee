@@ -20,8 +20,9 @@ module.exports = (app) ->
   event            = ORM.model 'event'
   revision         = ORM.model 'revision'
   eventParticipant = ORM.model 'eventParticipant'
+  submission       = ORM.model 'submission'
 
-  app.post config.apiSubDir + '/v1/events', (req, res) ->
+  app.post config.apiSubDir + '/v1/submissions', (req, res) ->
     async.series [
       (callback) ->
         apiAuth req, res, callback
@@ -32,94 +33,15 @@ module.exports = (app) ->
         employeeUid = req.session.user.uid
 
 
-        config.resourceModelUnknownFieldsExceptions['event'] = ['participantsUids']
+      #  config.resourceModelUnknownFieldsExceptions['submission'] = ['submissionFields']
 
 
-        insertEventParticipantsHelper = (uid, objects, completeCallback) ->
-          try
-            item = objects[0]
-
-            if _.isString(uid) && _.isUndefined(uid.code) && item.participantsUids
-
-              event.find(
-                where:
-                  uid: uid
-              ).success (resultEvent) ->
-
-                async.map item.participantsUids, (item, callback) ->
-
-                  insertUid = uuid.v4()
-
-                  eventParticipant.create({
-                    uid:         insertUid
-
-                    clientUid:   item.clientUid
-                    employeeUid: item.uid
-                    eventUid:    resultEvent.uid
-
-                    clientId:    item.clientId
-                    employeeId:  item.id
-                    eventId:     resultEvent.id
-
-                  }).success (resultEventParticipant) ->
-                    #console.log 'resultEventParticipant'
-                    #console.log resultEventParticipant
-                    callback(null)
-
-                , (err, results) ->
-                  completeCallback(uid)
-
-            else
-              completeCallback(uid)
-          catch error
-            console.log error
 
 
-        checkParticipantsUidsHelper = (val, objectKey, object, callback) ->
-          if _.isUndefined val
-            callback null,
-              success: true
-            return
 
-          if !_.isArray(val) || _.isString(val)
-            callback null,
-              success: false
-              message:
-                participantsUids: 'invalid'
-            return
 
-          for tempUUID in val
-            if !config.isValidUUID(tempUUID)
-              callback null,
-                success: false
-                message:
-                  participantsUids: 'invalid'
-              return
 
-          async.map val, (item, callback) ->
 
-            employee.find(
-              where:
-                uid: item
-                clientUid: clientUid
-            ).success (resultEmployee) ->
-
-              if !resultEmployee
-                callback(new Error())
-              else
-                callback(null, resultEmployee)
-
-          , (err, results) ->
-
-            if err
-              callback null,
-                success: false
-                message:
-                  participantsUids: 'unknown employee uids'
-            else
-              callback null,
-                success: true
-                transform: [objectKey, 'participantsUids', results]
 
 
 
@@ -129,7 +51,7 @@ module.exports = (app) ->
           when 'superAdmin'
 
             insertMethod = (item, insertMethodCallback = false) ->
-              apiVerifyObjectProperties this, event, item, req, res, insertMethodCallback, {
+              apiVerifyObjectProperties this, submission, item, req, res, insertMethodCallback, {
                 requiredProperties:
                   'name': (val, objectKey, object, callback) ->
 
@@ -279,10 +201,21 @@ module.exports = (app) ->
               insertMethod(req.body)
 
 
-          when 'clientSuperAdmin', 'clientAdmin'
+
+
+
+
+
+
+
+
+
+
+
+          when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 
             insertMethod = (item, insertMethodCallback = false) ->
-              apiVerifyObjectProperties this, event, item, req, res, insertMethodCallback, {
+              apiVerifyObjectProperties this, submission, item, req, res, insertMethodCallback, {
                 requiredProperties:
                   'name': (val, objectKey, object, callback) ->
 
@@ -457,9 +390,5 @@ module.exports = (app) ->
 
                 else
                   res.jsonAPIRespond uid
-
-
-          when 'clientDelegate', 'clientAuditor'
-            res.jsonAPIRespond config.errorResponse(401)
 
     ]

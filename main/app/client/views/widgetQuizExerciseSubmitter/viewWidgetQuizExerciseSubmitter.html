@@ -42,7 +42,7 @@
 
       <form
         name  = "exerciseQuizForm"
-        class = "form-horizontal"
+        class = "form-horizontal form-bordered form-row-stripped"
         novalidate>
          <div class="form-wizard">
 
@@ -74,20 +74,24 @@
 
 
 
-            <div class="tab-content">
+            <div
+              style = "border:1px solid #CCC; margin-bottom:10px;"
+              class = "tab-content">
               <div
                   data-ng-repeat = "group in viewModel.revision.groups | toArray | deleted | orderBy:'ordinal'"
                   data-ng-class  = "{true:'active'}[viewModel.activeRevisionGroupUid == group.uid]"
                   class          = "tab-pane">
 
-                  <h3 class = "block">{{ group.name }}</h3>
+                  <h3
+                    style = "padding-left:10px;"
+                    class = "block">{{ group.name }}</h3>
 
                   <div
+                    data-ng-class  = "{success:viewModel.fields[field.uid].$valid, error:!viewModel.fields[field.uid].$valid, 'ng-pristine':viewModel.fields[field.uid].$pristine}"
                     data-ng-repeat = "field in resourcePool[group.uid].fields | deleted | orderBy:'ordinal'"
                     class          = "control-group">
-                    <label class="control-label">{{ field.name }} -- {{ viewModel.fields[field.uid].$valid }}</label>
+                    <label class="control-label">{{ field.name }}</label>
                     <div class="controls">
-
 
                       <div
                         data-ng-switch = "field.type">
@@ -114,6 +118,7 @@
 
                       </div><!-- data-ng-switch field.type -->
 
+                      <div class="clearfix"></div>
 
                     </div><!-- controls -->
                   </div><!-- control-group -->

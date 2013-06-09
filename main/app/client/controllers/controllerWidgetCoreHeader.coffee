@@ -22,11 +22,13 @@ define [
     ($scope, $rootScope, authenticate, apiRequest) ->
 
       $rootScope.rootActivityFeed   = false
-      fetchActivity = (uid, completedCallback = null) ->
+      fetchActivity = (uid = null, completedCallback = null) ->
         #return
         apiRequest.get 'activity', [uid], {
           limit: 20
-          order: [['createdAt', 'desc']]
+          order:  [
+            ['createdAt', 'desc']
+          ]
           expand: [
             resource: 'employee'
           ,
@@ -44,9 +46,10 @@ define [
             }]
           ]
         }, (response, rawResponse, fromCache) ->
+
           if response.code == 200
             $rootScope.rootActivityFeed = response.response.data
-          if _.isFunction(completedCallback) && (fromCache is false)
+          if _.isFunction(completedCallback) #&& (fromCache is false)
             completedCallback()
 
       $rootScope.fetchActivity = fetchActivity
@@ -54,7 +57,7 @@ define [
       gritterNotification = (data) ->
         utilSoundManager.alert.play()
 
-        activityItem = $scope.resourcePool[data['resource'].uid]
+        activityItem = data #$scope.resourcePool[data['resource'].uid]
 
         switch activityItem.type
           when 'createDictionary'
@@ -74,12 +77,18 @@ define [
               title: (if activityItem.event.type == 'full' then 'Exercise' else 'Quiz') + ' "' + activityItem.event.name + '" initiated'
               text:  'Just now' #'Created by ' + activityItem.employee.firstName + ' ' + activityItem.employee.lastName
 
+
       $scope.$on 'resourcePost', (e, data) ->
         if data['resourceName'] != 'activity'
           return
         uid = data['resource']['uid']
-        fetchActivity uid, () ->
-          gritterNotification data
+
+        fetchActivity null, () ->
+          item = $scope.resourcePool[uid]
+          if !_.isUndefined(item.employee) && !_.isUndefined(item.template) && !_.isUndefined(item.revision) && !_.isUndefined(item.dictionary) && !_.isUndefined(item.event)
+
+            gritterNotification $scope.resourcePool[uid]
+
 
       fetchActivity()
 

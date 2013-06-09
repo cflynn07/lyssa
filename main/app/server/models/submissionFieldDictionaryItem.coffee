@@ -6,7 +6,6 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id:   SEQ.INTEGER
-    name: SEQ.STRING
 
     clientUid:
       type: SEQ.STRING
@@ -14,13 +13,13 @@ module.exports =
         isUUID: 4
         notNull: true
 
-    fieldUid:
+    submissionFieldUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
         notNull: true
 
-    eventParticipantUid:
+    dictionaryItemUid:
       type: SEQ.STRING
       validate:
         isUUID: 4
@@ -32,13 +31,10 @@ module.exports =
     model: 'client'
   ,
     relation: 'belongsTo'
-    model: 'field'
+    model: 'submissionField'
   ,
     relation: 'belongsTo'
-    model: 'eventParticipant'
-  ,
-    relation: 'hasMany'
-    model: 'submissionFieldDictionaryItem'
+    model: 'dictionaryItem'
 
   ]
   options:

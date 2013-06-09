@@ -31,6 +31,16 @@ module.exports =
       validate:
         len: [1, 100]
 
+    openResponseMinLength:
+      type: SEQ.INTEGER
+      validate:
+        notNull: false
+
+    openResponseMaxLength:
+      type: SEQ.INTEGER
+      validate:
+        notNull: false
+
     clientUid:
       type: SEQ.STRING
       validate:

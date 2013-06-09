@@ -90,14 +90,19 @@ define [
             $scope.viewModel.newEventForm.submitting = true
             form = viewModel.newEventForm
             apiRequest.post 'event', {
-              name:        form.name
-              dateTime:    (new Date(form.date).toISOString())
-              revisionUid: form.revisionUid
+              name:             form.name
+              dateTime:         (new Date(form.date).toISOString())
+              revisionUid:      form.revisionUid
+              participantsUids: form.employeeUids
             }, {}, (eventResponse) ->
 
               #console.log 'eventResponse'
               #console.log eventResponse
 
+              $scope.viewModel.closeAddNewExerciseForm()
+              return
+
+              ###
               if eventResponse.code != 201
                 $scope.viewModel.closeAddNewExerciseForm()
                 return
@@ -121,7 +126,7 @@ define [
                 console.log 'eventParticipantResponse'
                 console.log eventParticipantResponse
                 $scope.viewModel.closeAddNewExerciseForm()
-
+              ###
 
 
           templatesListDataTable:

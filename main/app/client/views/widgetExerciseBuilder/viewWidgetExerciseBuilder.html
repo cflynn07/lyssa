@@ -328,7 +328,7 @@
 
               <!-- loading indicator, shown during groups loading -->
               <div
-                data-ng-hide = "resourcePool[viewModel.routeParams.templateUid].revisions[viewModel.routeParams.revisionUid].groups">
+                data-ng-hide = "resourcePool[viewModel.routeParams.revisionUid].groups">
                 <div class="progress progress-striped active">
                    <div style="width: 100%;" class="bar"></div>
                 </div>
@@ -336,7 +336,7 @@
 
 
               <div
-                data-ng-repeat = "group in resourcePool[viewModel.routeParams.templateUid].revisions[viewModel.routeParams.revisionUid].groups | toArray | deleted | orderBy:'ordinal':false"
+                data-ng-repeat = "group in resourcePool[viewModel.routeParams.revisionUid].groups | toArray | deleted | orderBy:'ordinal':false"
                 data-ng-init   = "nameEditing=false;"
                 data-group-uid = "{{ group.uid }}">
 

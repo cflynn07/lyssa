@@ -61,9 +61,6 @@ module.exports =
   ,
     relation: 'hasMany'
     model: 'eventParticipant'
-  ,
-    relation: 'hasMany'
-    model: 'submission'
   ]
   options:
     paranoid: true

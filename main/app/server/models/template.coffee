@@ -6,10 +6,11 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id:       SEQ.INTEGER
+
     name:
       type:   SEQ.STRING
       validate:
-        isAlphanumeric: true
+        #isAlphanumeric: true
         len: [5, 100]
 
     type: SEQ.ENUM 'full', 'mini'
@@ -19,6 +20,7 @@ module.exports =
       validate:
         isUUID: 4
         notNull: true
+
     employeeUid:
       type: SEQ.STRING
       validate:
