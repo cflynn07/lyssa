@@ -19,6 +19,7 @@ define [
       resourcePool = {}
       $rootScope.resourcePool = resourcePool
       window.resourcePool     = $rootScope.resourcePool
+      window.rootScope        = $rootScope
 
       #Cache of results in resourcePool based on query parameters
       resourcePoolResultCache = {}
@@ -80,8 +81,6 @@ define [
               _.extend resourcePool[object['uid']], object
             else
               resourcePool[object['uid']] = object
-            #Replace original object with object in resourcePool
-            object = resourcePool[object['uid']]
 
         if _.isArray(resourcesArrayOrObject) && !_.isString(resourcesArrayOrObject)
           for item in resourcesArrayOrObject
@@ -166,6 +165,8 @@ define [
 
           if !_.isUndefined(resourcePool[uid])
             _.extend resourcePool[uid], properties
+
+          properties['uid'] = uid
 
           socket.apiRequest 'PUT',
             '/' + apiCollectionName,

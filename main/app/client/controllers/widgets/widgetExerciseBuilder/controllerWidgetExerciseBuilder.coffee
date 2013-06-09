@@ -149,7 +149,14 @@ define [
             openResponseMinLength: $scope.form.minLength
           }, {}, (response) ->
             console.log response
-          $scope.cancelAddNewField()
+
+            apiRequest.get 'group', [$scope.group.uid], {expand:[{
+              resource: 'fields'
+            }]}, (response) ->
+              console.log 'updated group'
+              console.log response
+
+            $scope.cancelAddNewField()
 
 
         $scope.isFormInvalid = () ->

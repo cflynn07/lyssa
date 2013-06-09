@@ -493,7 +493,7 @@
                         data-ui-sortable = "fieldsSortableOptions">
 
                         <div
-                          data-ng-repeat = "field in group.fields | toArray | orderBy:'ordinal'"
+                          data-ng-repeat = "field in resourcePool[group.uid].fields | orderBy:'ordinal'"
                           data-field-uid = "{{field.uid}}">
                           <div
                             data-ng-switch = "field.type">
