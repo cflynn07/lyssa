@@ -6,7 +6,10 @@ SEQ = orm.SEQ
 module.exports =
   model:
     id:   SEQ.INTEGER
-    name: SEQ.STRING
+
+    openResponseValue: SEQ.STRING
+    sliderValue:       SEQ.INTEGER
+    yesNoValue:        SEQ.BOOLEAN
 
     clientUid:
       type: SEQ.STRING
@@ -25,11 +28,6 @@ module.exports =
       validate:
         isUUID: 4
         notNull: true
-
-
-    openResponseValue: SEQ.STRING
-    sliderValue:       SEQ.INTEGER
-    yesNoValue:        SEQ.BOOLEAN
 
   relations: [
 
