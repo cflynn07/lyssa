@@ -21,6 +21,9 @@ module.exports = (app) ->
   revision         = ORM.model 'revision'
   eventParticipant = ORM.model 'eventParticipant'
   submission       = ORM.model 'submission'
+  submissionField  = ORM.model 'submissionField'
+  field            = ORM.model 'field'
+  group            = ORM.model 'group'
 
   app.put config.apiSubDir + '/v1/submissionfields', (req, res) ->
     async.series [
@@ -32,22 +35,137 @@ module.exports = (app) ->
         clientUid   = req.session.user.clientUid
         employeeUid = req.session.user.uid
 
-
       #  config.resourceModelUnknownFieldsExceptions['submission'] = ['submissionFields']
+
+        helperCheckFieldUid = (val, objectKey, object, callback) ->
+          eventParticipantUid = object['eventParticipantUid']
+          fieldUid            = val
+
+          if _.isUndefined(fieldUid)
+            callback null,
+              success: false
+              message:
+                fieldUid: 'required'
+            return
+
+          if _.isUndefined(eventParticipantUid)
+            callback null,
+              success: false
+            return
+
+          async.parallel [
+            (subCallback) ->
+
+              eventParticipant.find(
+                where:
+                  uid:         eventParticipantUid
+                  clientUid:   clientUid
+                  employeeUid: employeeUid
+              ).success (resultEventParticipant) ->
+
+                if !resultEventParticipant
+                  subCallback null, [resultEventParticipant]
+                  return
+
+                event.find(
+                  where:
+                    uid: resultEventParticipant.eventUid
+                    clientUid: clientUid
+                ).success (resultEvent) ->
+                  subCallback null, [resultEventParticipant, resultEvent]
+
+            (subCallback) ->
+              field.find(
+                where:
+                  uid: fieldUid
+                  clientUid: clientUid
+              ).success (resultField) ->
+
+                if !resultField
+                  subCallback null, [resultField]
+                  return
+
+                group.find(
+                  where:
+                    uid:       resultField.groupUid
+                    clientUid: clientUid
+                ).success (resultGroup) ->
+
+                  if !resultGroup
+                    subCallback null, [resultGroup]
+                    return
+
+                  revision.find(
+                    where:
+                      uid:       resultGroup.revisionUid
+                      clientUid: clientUid
+                  ).success (resultRevision) ->
+
+                    if !resultRevision
+                      subCallback null, [resultRevision]
+                      return
+
+                    subCallback null, [resultField, resultGroup, resultRevision]
+
+          ], (err, results) ->
+            resultEventParticipant = results[0][0]
+            resultField            = results[1][0]
+            if resultEventParticipant
+              resultEvent            = results[0][1]
+
+            if resultField
+              resultGroup            = results[1][1]
+              resultRevision         = results[1][2]
+
+            messages = {}
+
+            if !resultField
+              messages.resultField = 'unknown'
+
+            if !resultEventParticipant
+              messages.resultEventParticipant = 'unknown'
+
+            if !(resultEvent) || !(resultRevision) || (resultRevision.uid != resultEvent.revisionUid)
+              messages.resultEventParticipant = 'unknown'
+              messages.resultField            = 'unknown'
+
+            if Object.keys(messages).length > 0
+
+              callback null,
+                success: false
+                message: messages
+
+            else
+              mapObj = {}
+              mapObj[resultEventParticipant.uid] = resultEventParticipant
+              mapObj[resultField.uid]            = resultField
+              mapObj[resultGroup.uid]            = resultGroup
+              mapObj[resultRevision.uid]         = resultRevision
+              mapObj[resultEvent.uid]            = resultEvent
+              callback null,
+                success: true
+                uidMapping: mapObj
+
+        helperCheckEventParticipantUid = (val, objectKey, object, callback) ->
+          if _.isUndefined(val)
+            callback null,
+              success: false
+              message:
+                eventParticipantUid: 'required'
+            return
+          callback null,
+            success: true
+          return
+
 
 
         switch userType
           when 'superAdmin'
 
-
-
-
-
             insertMethod = (item, insertMethodCallback = false) ->
-              apiVerifyObjectProperties this, submission, item, req, res, insertMethodCallback, {
+              apiVerifyObjectProperties this, submissionField, item, req, res, insertMethodCallback, {
                 requiredProperties:
-                  'name': (val, objectKey, object, callback) ->
-
+                  'openResponseValue': (val, objectKey, object, callback) ->
                     if !_.isUndefined val
                       callback null,
                         success: true
@@ -55,134 +173,49 @@ module.exports = (app) ->
                       callback null,
                         success: false
                         message:
-                          name: 'required'
+                          openResponseValue: 'required'
 
-                  'dateTime': (val, objectKey, object, callback) ->
-
+                  'sliderValue': (val, objectKey, object, callback) ->
                     if !_.isUndefined val
                       callback null,
                         success: true
-                        transform: [objectKey, 'dateTime', (new Date(val))]
                     else
                       callback null,
                         success: false
                         message:
-                          dateTime: 'required'
+                          sliderValue: 'required'
 
-                  'revisionUid': (val, objectKey, object, callback) ->
-
-                    if _.isUndefined val
+                  'yesNoValue': (val, objectKey, object, callback) ->
+                    if !_.isUndefined val
+                      callback null,
+                        success: true
+                    else
                       callback null,
                         success: false
                         message:
-                          revisionUid: 'required'
-                      return
-
-                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                    revision.find(
-                      where:
-                        uid: val
-                        clientUid: testClientUid
-                    ).success (resultRevision) ->
-                      if !resultRevision
-                        callback null,
-                          success: false
-                          message:
-                            revisionUid: 'unknown'
-                      else
-                        mapObj = {}
-                        mapObj[resultRevision.uid]  = resultRevision
-                        callback null,
-                          success: true
-                          uidMapping: mapObj
-                          transform: [objectKey, 'revisionUid', val]
+                          yesNoValue: 'required'
 
                   'clientUid': (val, objectKey, object, callback) ->
-
-                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
+                    if !_.isUndefined(val)
+                      callback null,
+                        success: false
+                        message:
+                          clientUid: 'invalid'
+                      return
 
                     callback null,
-                      success:   true
-                      transform: [objectKey, 'clientUid', testClientUid]
+                      success: true
 
-                  'employeeUid': (val, objectKey, object, callback) ->
+                  'fieldUid': (val, objectKey, object, callback) ->
+                    helperCheckFieldUid val, objectKey, object, callback
 
-                    if _.isUndefined val
-                      val = employeeUid
-
-                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                    async.parallel [
-                      (callback) ->
-                        client.find(
-                          where:
-                            uid: testClientUid
-                        ).success (resultClient) ->
-                          callback null, resultClient
-
-                      (callback) ->
-                        employee.find(
-                          where:
-                            clientUid: testClientUid
-                            uid:       val
-                        ).success (resultEmployee) ->
-                          callback null, resultEmployee
-
-                    ], (error, results) ->
-
-                      resultClient      = results[0]
-                      resultEmployee  = results[1]
-
-                      if !resultEmployee
-                        callback null,
-                          success: false
-                          message:
-                            employeeUid: 'unknown'
-                        return
-
-                      if !resultClient
-                        callback null,
-                          success: false
-                          message:
-                            clientUid: 'unknown'
-                        return
-
-                      #IF we do find the employee, but it doesn't belong to the same client...
-                      if resultEmployee.clientUid != resultClient.uid
-                        callback null,
-                          success: false
-                          message:
-                            employeeUid: 'unknown'
-                        return
-
-                      mapObj = {}
-                      mapObj[resultEmployee.uid]  = resultEmployee
-                      mapObj[resultClient.uid]      = resultClient
-                      callback null,
-                        success: true
-                        uidMapping: mapObj
-                        transform: [objectKey, 'employeeUid', val]
-
-
-                  'participantsUids': (val, objectKey, object, callback) ->
-                    checkParticipantsUidsHelper(val, objectKey, object, callback)
-
+                  'eventParticipantUid': (val, objectKey, object, callback) ->
+                    helperCheckEventParticipantUid val, objectKey, object, callback
 
               }, (objects) ->
 
-                #insertHelper.call(this, objects, res)
-                insertHelper 'events', clientUid, event, objects, req, res, app, (uid) ->
-
-                  redisClient.publish 'eventCronChannel', uid
-
-                  insertEventParticipantsHelper uid, objects, (uid) ->
-
-                    if _.isFunction(insertMethodCallback)
-                      insertMethodCallback.call(this, uid)
-                    else
-                      config.apiSuccessPostResponse res, uid
-
+                console.log 'objects'
+                console.log objects
 
             if _.isArray req.body
               async.mapSeries req.body, (item, callback) ->
@@ -190,27 +223,16 @@ module.exports = (app) ->
                   callback null, createdUid
               , (err, results) ->
                 config.apiSuccessPostResponse res, results
+
             else
               insertMethod(req.body)
-
-
-
-
-
-
-
-
-
-
-
-
 
           when 'clientSuperAdmin', 'clientAdmin', 'clientDelegate', 'clientAuditor'
 
             insertMethod = (item, insertMethodCallback = false) ->
-              apiVerifyObjectProperties this, submission, item, req, res, insertMethodCallback, {
+              apiVerifyObjectProperties this, submissionField, item, req, res, insertMethodCallback, {
                 requiredProperties:
-                  'name': (val, objectKey, object, callback) ->
+                  'openResponseValue': (val, objectKey, object, callback) ->
 
                     if !_.isUndefined val
                       callback null,
@@ -219,146 +241,49 @@ module.exports = (app) ->
                       callback null,
                         success: false
                         message:
-                          name: 'required'
+                          openResponseValue: 'required'
 
-                  'dateTime': (val, objectKey, object, callback) ->
-
+                  'sliderValue': (val, objectKey, object, callback) ->
                     if !_.isUndefined val
                       callback null,
                         success: true
-                        transform: [objectKey, 'dateTime', (new Date(val))]
                     else
                       callback null,
                         success: false
                         message:
-                          dateTime: 'required'
+                          sliderValue: 'required'
 
-                  'revisionUid': (val, objectKey, object, callback) ->
-
-                    if _.isUndefined val
+                  'yesNoValue': (val, objectKey, object, callback) ->
+                    if !_.isUndefined val
+                      callback null,
+                        success: true
+                    else
                       callback null,
                         success: false
                         message:
-                          revisionUid: 'required'
-                      return
-
-                    #testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                    testClientUid = clientUid
-
-                    revision.find(
-                      where:
-                        uid: val
-                        clientUid: testClientUid
-                    ).success (resultRevision) ->
-                      if !resultRevision
-                        callback null,
-                          success: false
-                          message:
-                            revisionUid: 'unknown'
-                      else
-                        mapObj = {}
-                        mapObj[resultRevision.uid]  = resultRevision
-                        callback null,
-                          success: true
-                          uidMapping: mapObj
-                          transform: [objectKey, 'revisionUid', val]
+                          yesNoValue: 'required'
 
                   'clientUid': (val, objectKey, object, callback) ->
-
-                    if !_.isUndefined val
+                    if !_.isUndefined(val)
                       callback null,
                         success: false
                         message:
-                          clientUid: 'unknown'
+                          clientUid: 'invalid'
                       return
 
-                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
                     callback null,
-                      success:   true
-                      transform: [objectKey, 'clientUid', testClientUid]
+                      success: true
 
-                  'employeeUid': (val, objectKey, object, callback) ->
+                  'fieldUid': (val, objectKey, object, callback) ->
+                    helperCheckFieldUid val, objectKey, object, callback
 
-                    if _.isUndefined val
-                      val = employeeUid
-
-                    testClientUid = if (!_.isUndefined object['clientUid']) then object['clientUid'] else clientUid
-
-                    async.parallel [
-                      (callback) ->
-                        client.find(
-                          where:
-                            uid: testClientUid
-                        ).success (resultClient) ->
-                          callback null, resultClient
-
-                      (callback) ->
-                        employee.find(
-                          where:
-                            clientUid: testClientUid
-                            uid:       val
-                        ).success (resultEmployee) ->
-                          callback null, resultEmployee
-
-                    ], (error, results) ->
-
-                      resultClient   = results[0]
-                      resultEmployee = results[1]
-
-                      if !resultEmployee
-                        callback null,
-                          success: false
-                          message:
-                            employeeUid: 'unknown'
-                        return
-
-                      if !resultClient
-                        callback null,
-                          success: false
-                          message:
-                            clientUid: 'unknown'
-                        return
-
-                      #IF we do find the employee, but it doesn't belong to the same client...
-                      if resultEmployee.clientUid != resultClient.uid
-                        callback null,
-                          success: false
-                          message:
-                            employeeUid: 'unknown'
-                        return
-
-                      mapObj = {}
-                      mapObj[resultEmployee.uid]  = resultEmployee
-                      mapObj[resultClient.uid]      = resultClient
-                      callback null,
-                        success:    true
-                        uidMapping: mapObj
-                        transform:  [objectKey, 'employeeUid', val]
-
-
-
-                  'participantsUids': (val, objectKey, object, callback) ->
-                    checkParticipantsUidsHelper(val, objectKey, object, callback)
-
-
+                  'eventParticipantUid': (val, objectKey, object, callback) ->
+                    helperCheckEventParticipantUid val, objectKey, object, callback
 
               }, (objects) ->
 
-                #insertHelper.call(this, objects, res)
-                insertHelper 'events', clientUid, event, objects, req, res, app, (uid) ->
-                  #hardwire in here
-
-                  redisClient.publish 'eventCronChannel', uid
-
-                  insertEventParticipantsHelper uid, objects, (uid) ->
-
-                    if _.isFunction(insertMethodCallback)
-                      insertMethodCallback.call(this, uid)
-                    else
-                      config.apiSuccessPostResponse res, uid
-
+                console.log 'objects'
+                console.log objects
 
 
             if _.isArray req.body
@@ -367,21 +292,8 @@ module.exports = (app) ->
                   callback null, createdUid
               , (err, results) ->
                 config.apiSuccessPostResponse res, results
+
             else
-              insertMethod req.body, (uid) ->
-
-
-                if _.isString(uid) && _.isUndefined(uid.code)
-                  config.apiSuccessPostResponse res, uid
-
-                  activityInsert {
-                    type:        'createEvent'
-                    eventUid:    uid
-                    employeeUid: employeeUid
-                    clientUid:   clientUid
-                  }, app, req
-
-                else
-                  res.jsonAPIRespond uid
+              insertMethod(req.body)
 
     ]
