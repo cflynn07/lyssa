@@ -144,6 +144,7 @@ module.exports = (app) ->
               mapObj[resultEvent.uid]            = resultEvent
               callback null,
                 success: true
+                transform: [objectKey, 'uidMapping', mapObj]
                 uidMapping: mapObj
 
         helperCheckEventParticipantUid = (val, objectKey, object, callback) ->
@@ -289,8 +290,47 @@ module.exports = (app) ->
 
               }, (objects) ->
 
-                console.log 'objects'
-                console.log objects
+                object = objects[0]
+
+                insertObj =
+                  uid:                 uuid.v4()
+                  fieldUid:            object.fieldUid
+                  eventParticipantUid: object.eventParticipantUid
+
+                if !_.isUndefined(object.openResponseValue)
+                  insertObj.openResponseValue = object.openResponseValue
+
+                if !_.isUndefined(object.sliderValue)
+                  insertObj.sliderValue = object.sliderValue
+
+                if !_.isUndefined(object.yesNoValue)
+                  insertObj.yesNoValue = object.yesNoValue
+
+                insertObj.fieldId            = object.uidMapping[object.fieldUid].id
+                insertObj.eventParticipantId = object.uidMapping[object.eventParticipantUid].id
+                insertObj.clientUid          = object.uidMapping[object.eventParticipantUid].clientUid
+                insertObj.clientId           = object.uidMapping[object.eventParticipantUid].clientId
+
+                #If exists, update -- else insert
+                submissionField.find(
+                  where:
+                    eventParticipantUid: object.eventParticipantUid
+                    fieldUid:            object.fieldUid
+                    clientUid:           clientUid
+                ).success (resultSubmissionField) ->
+
+                  if !resultSubmissionField
+                    submissionField.create(insertObj).success (resultSubmissionField) ->
+                      res.jsonAPIRespond(foo:'created')
+                  else
+                    resultSubmissionField.updateAttributes(insertObj).success (resultSubmissionField) ->
+                      res.jsonAPIRespond(foo:'updated')
+
+                    insertObj = null
+                    object    = null
+
+
+
 
 
             if _.isArray req.body
