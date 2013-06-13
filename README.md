@@ -54,7 +54,11 @@ Development:
 - 1: `./main/app/server/server.js`
   - Serves uncombined & unminified files via require.js. Browser refreshes pull latest files for development convenience.
 
+Credits
+-------
+Contributors: [cflynn07](https://github.com/cflynn07)
+Boston, MA, United States
 
-
-
-
+Documentation
+-------------
+- [CONTRIBUTING](CONTRIBUTING.md)
