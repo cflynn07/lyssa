@@ -44,7 +44,11 @@
     "node-uuid":     "*",
     "validator":     "*",
     "twilio":        "*",
-    "node-schedule": "*"
+    "node-schedule": "*",
+    "jade":          "*",
+    "less" :         "*",
+    "marked":        "*",
+    "sass":          "*"
   },
   "devDependencies": {
     "mocha": 					        "1.8.2",
