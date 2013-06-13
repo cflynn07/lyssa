@@ -1,8 +1,8 @@
-Sequelize = require 'sequelize'
-fs        = require 'fs'
-_         = require 'underscore'
-modelsPath    = __dirname + '/../models'
-config    = require '../config/config'
+Sequelize  = require 'sequelize'
+fs         = require 'fs'
+_          = require 'underscore'
+modelsPath = __dirname + '/../models'
+config     = require '../config/config'
 
 exportObj =
   setup: (mode = 'standard') ->

@@ -31,6 +31,7 @@ module.exports =
     'yesNo'
     'slider'
   ]
+
   apiResponseErrors:
     'nestedTooDeep':
       code: 400
