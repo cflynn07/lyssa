@@ -39,7 +39,7 @@ Development Initialization
 - In directory `main/app` run `nodefront compile -w -r`
   - nodefront will compile (1)jade and (2)coffee-script files, and will alert you whenever you run into a syntax error
 
-Differences Between Production & Development
+Notes on Differences Between Production & Development
 --------------------------------------------
 Production:
 - 1: `./postinstall.sh`
