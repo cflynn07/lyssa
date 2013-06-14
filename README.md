@@ -21,6 +21,8 @@ Development Environment Setup
   sudo npm install -g coffee-script
   sudo npm install -g nodefront
   sudo npm install -g hbs
+  sudo npm install -g marked
+  sudo npm install -g sass
 </pre>
 - MySQL development connection parmeters
 <pre>
