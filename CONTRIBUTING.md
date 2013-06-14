@@ -1,1 +1,3 @@
-CONTRIBUTING.md
+Contributing Guide
+==================
+
