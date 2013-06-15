@@ -1,0 +1,37 @@
+li(data-ng-class="{true:'active'}[locationHash == '/admin/themis']")
+  a(href="#/admin/themis")
+    i.icon-home
+    span.title Dashboard
+    span.selected
+li(data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/schedule') === 0]")
+  a(href="#/admin/themis/schedule")
+    i.icon-table
+    span.title Schedule
+    span.selected
+li(data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/templates') === 0]")
+  a(href="#/admin/themis/templates")
+    i.icon-cogs
+    span.title Templates
+    span.arrow(data-ng-class="{true:'open'}[locationHash.indexOf('/admin/themis/templates') === 0]")
+    span.selected
+  ul.sub-menu(data-ng-show="locationHash.indexOf('/admin/themis/templates') === 0", data-ng-animate="{show:'slideDown', hide:'slideUp'}")
+    li
+      a(data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/templates/exercises') === 0]", href="#/admin/themis/templates/exercises") Exercises
+    li
+      a(data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/templates/quizes') === 0]", href="#/admin/themis/templates/quizes") Quizes
+li(data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/settings') === 0]")
+  a(href="#/admin/themis/settings")
+    i.icon-user
+    span.title Settings
+    span.arrow(data-ng-class="{true:'open'}[locationHash.indexOf('/admin/themis/settings') === 0]")
+    span.selected
+  ul.sub-menu(data-ng-show="locationHash.indexOf('/admin/themis/settings') === 0", data-ng-animate="{show:'slideDown', hide:'slideUp'}")
+    li
+      a(data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/settings/dictionaries') === 0]", href="#/admin/themis/settings/dictionaries") Dictionaries
+    li
+      a(data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/settings/employees') === 0]", href="#/admin/themis/settings/employees") Employees
+li
+  // BEGIN SIDEBAR TOGGLER BUTTON
+  .sidebar-toggler.hidden-phone(data-ng-click="sidebarClosedToggle()")
+  // BEGIN SIDEBAR TOGGLER BUTTON
+  br

@@ -1,113 +1,51 @@
-div.widget-themis-finish.portlet.box.blue(
-  data-animate-in
-  data-ng-controller = "ControllerWidgetScheduler")
-
-  div.portlet-title
+.widget-themis-finish.portlet.box.blue(data-animate-in="data-animate-in", data-ng-controller="ControllerWidgetScheduler")
+  .portlet-title
     h4
       span Exercise Schedule
-
-  div.portlet-body.light-grey
-
-    div.row-fluid
-
-      div.span5.responsive.span8(
-        data-ng-hide = "viewModel.exerciseListCollapsed")
-
-        div#listPortlet.portlet.box.grey(
-          data-ng-hide = "viewModel.exerciseListCollapsed")
-
-          div.portlet-title
+  .portlet-body.light-grey
+    .row-fluid
+      .span5.responsive.span8(data-ng-hide="viewModel.exerciseListCollapsed")
+        #listPortlet.portlet.box.grey(data-ng-hide="viewModel.exerciseListCollapsed")
+          .portlet-title
             h4
               span Upcoming Exercises
-
-          div.portlet-body
-
+          .portlet-body
             button.btn.green.btn-block
               | Add Exercise
               i.m-icon-swapright.m-icon-white
-
-            table.table.table-striped.table-hover.table-bordered.dataTable(
-              style           = "margin-bottom:20px;"
-              data-ng-hide    = "viewModel.showNewExerciseForm"
-              data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
-              data-ng-click   = "viewModel.showNewExerciseForm = true")
+            table.table.table-striped.table-hover.table-bordered.dataTable(style="margin-bottom:20px;", data-ng-hide="viewModel.showNewExerciseForm", data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}", data-ng-click="viewModel.showNewExerciseForm = true")
               thead
                 tr
                   th.sorting Name
                   th.sorting Date
                   th.sorting_disabled Type
-
-        div.portlet.box.grey(
-          data-ng-show = "viewModel.routeParams.eventUid || viewModel.showNewExerciseForm")
-          div.portlet-title
+        .portlet.box.grey(data-ng-show="viewModel.routeParams.eventUid || viewModel.showNewExerciseForm")
+          .portlet-title
             h4
               span Calendar
-
-          div.portlet-body
-
-            div(
-              data-calendar
-              data-activate-watch  = "viewModel.routeParams.eventUid || viewModel.showNewExerciseForm"
-              data-options         = "viewModel.fullCalendarOptionsSecondary"
-              data-refetch-on-post = "event"
-              data-refetch-on-put  = "event")
-
-      div(data-ng-class = "{true:'span12 no-second-box-margin', false:'span7'}[viewModel.exerciseListCollapsed]")
-        div.row-fluid(
-          style           = "display:none;"
-          data-ng-animate = "{show:'slideDown'}"
-          data-ng-show    = "viewModel.showNewExerciseForm"
-          data-ng-include = "'viewPartialSchedulerAddExerciseForm'")
-
-        div.portlet.box.grey(
-          data-ng-hide = "viewModel.routeParams.eventUid || viewModel.showNewExerciseForm")
-          div.portlet-title
-
-            div.caption.pull-left
+          .portlet-body
+            div(data-calendar="data-calendar", data-activate-watch="viewModel.routeParams.eventUid || viewModel.showNewExerciseForm", data-options="viewModel.fullCalendarOptionsSecondary", data-refetch-on-post="event", data-refetch-on-put="event")
+      div(data-ng-class="{true:'span12 no-second-box-margin', false:'span7'}[viewModel.exerciseListCollapsed]")
+        .row-fluid(style="display:none;", data-ng-animate="{show:'slideDown'}", data-ng-show="viewModel.showNewExerciseForm", data-ng-include="'viewPartialSchedulerAddExerciseForm'")
+        .portlet.box.grey(data-ng-hide="viewModel.routeParams.eventUid || viewModel.showNewExerciseForm")
+          .portlet-title
+            .caption.pull-left
               h4
                 span Calendar
-
-            div.tools.pull-right(
-              style = "margin:0;")
-
-              a(
-                data-ng-click = "viewModel.toggleExerciseListCollapsed()"
-                class         = "btn mini blue")
-                p(
-                  data-ng-hide = "viewModel.exerciseListCollapsed"
-                  style        = "margin:0;")
-
-                  i.halflings-icon.white.chevron-left(style = "width:11px;")
-                  span(style = "vertical-align:bottom; font-size:14px;")
-
-                p(
-                  data-ng-show = "viewModel.exerciseListCollapsed"
-                  style        = "margin:0;")
-
-                  span(style = "vertical-align:bottom; font-size:14px;")
-                  i.halflings-icon.white.chevron-right(style = "width:11px;")
-
-            div.clearfix
-
-          div.portlet-body
-
-            div(
-              data-calendar
-              data-activate-watch  = "!(viewModel.routeParams.eventUid || viewModel.showNewExerciseForm)"
-              data-options         = "viewModel.fullCalendarOptions"
-              data-refetch-on-post = "event"
-              data-refetch-on-put  = "event"
-              data-update-on-change = "viewModel.fullCalendarOptions.changeIncrementor")
-
-        div.portlet.box.grey(
-          data-ng-show    = "viewModel.routeParams.eventUid"
-          data-ng-animate = "{show:'fadeIn'}")
-
-          div.portlet-title
+            .tools.pull-right(style="margin:0;")
+              a.btn.mini.blue(data-ng-click="viewModel.toggleExerciseListCollapsed()")
+                p(data-ng-hide="viewModel.exerciseListCollapsed", style="margin:0;")
+                  i.halflings-icon.white.chevron-left(style="width:11px;")
+                  span(style="vertical-align:bottom; font-size:14px;")
+                p(data-ng-show="viewModel.exerciseListCollapsed", style="margin:0;")
+                  span(style="vertical-align:bottom; font-size:14px;")
+                  i.halflings-icon.white.chevron-right(style="width:11px;")
+            .clearfix
+          .portlet-body
+            div(data-calendar="data-calendar", data-activate-watch="!(viewModel.routeParams.eventUid || viewModel.showNewExerciseForm)", data-options="viewModel.fullCalendarOptions", data-refetch-on-post="event", data-refetch-on-put="event", data-update-on-change="viewModel.fullCalendarOptions.changeIncrementor")
+        .portlet.box.grey(data-ng-show="viewModel.routeParams.eventUid", data-ng-animate="{show:'fadeIn'}")
+          .portlet-title
             h4
               span Exercise Detail
-
-          div.portlet-boxy
-
+          .portlet-boxy
             h3 Exercise Detail
-

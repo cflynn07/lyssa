@@ -1,0 +1,18 @@
+.inline-content.inline-content-responsive(style="text-align:center;")
+  .btn-group(style="margin-bottom:0px !important; text-align:left;")
+    button.btn.green.detail
+      i.m-icon-swapup.m-icon-white(style="display:none;")
+      i.m-icon-swapdown.m-icon-white
+      | Edit
+    a.btn.detail(style="display:none;", data-ng-click="$parent.viewModel.editEmployee('<%= uid%>')", data-ng-class="{true:'black', false:'blue'}[viewModel.currentTemplate.uid == '<%= uid %>']")
+      | Edit
+      i.m-icon-swapright.m-icon-white(data-ng-hide="viewModel.currentEmployee.uid == '<%= uid %>'")
+      i.m-icon-swapleft.m-icon-white(data-ng-show="viewModel.currentEmployee.uid == '<%= uid %>'")
+    button.btn.dropdown-toggle(data-toggle="dropdown")
+      span.caret
+    ul.dropdown-menu.pull-right
+      // dropdown menu links
+      li
+        a.color-red(data-ng-click="$parent.viewModel.deleteConfirmDialogEmployee('<%= uid %>')")
+          i.icon-trash
+          | Archive Employee
