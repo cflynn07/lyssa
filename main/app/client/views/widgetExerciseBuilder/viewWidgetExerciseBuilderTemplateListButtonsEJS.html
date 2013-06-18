@@ -1,1 +1,12 @@
-<div style="text-align:center;" class="inline-content inline-content-responsive"><div style="margin-bottom:0px !important; text-align:left;" class="btn-group"><button data-ng-class="{true:'black', false:'blue'}[viewModel.routeParams.templateUid == '&lt;%= templateUid %&gt;']" class="btn detail"><i style="display:none;" class="m-icon-swapup m-icon-white"></i><i class="m-icon-swapdown m-icon-white"></i>Revisions ({{ (resourcePool['</button><button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button><ul class="dropdown-menu pull-right"><!-- dropdown menu links--><li><a data-ng-click=""><i class="icon-plus"></i>New Revision</a></li><li><a data-ng-click="$parent.viewModel.deleteConfirmDialogTemplate('&lt;%= templateUid %&gt;')" class="color-red"><i class="icon-trash"></i>Archive Template</a></li></ul></div></div>
+
+<div style="text-align:center;" class="inline-content inline-content-responsive">
+  <div style="margin-bottom:0px !important; text-align:left;" class="btn-group">
+    <button data-ng-class="{true:'black', false:'blue'}[viewModel.routeParams.templateUid == '&lt;%= templateUid %&gt;']" class="btn detail"><i style="display:none;" class="m-icon-swapup m-icon-white"></i><i class="m-icon-swapdown m-icon-white"></i>Revisions ({{ (resourcePool['</button>
+    <button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
+    <ul class="dropdown-menu pull-right">
+      <!-- dropdown menu links-->
+      <li><a data-ng-click=""><i class="icon-plus"></i>New Revision</a></li>
+      <li><a data-ng-click="$parent.viewModel.deleteConfirmDialogTemplate('&lt;%= templateUid %&gt;')" class="color-red"><i class="icon-trash"></i>Archive Template</a></li>
+    </ul>
+  </div>
+</div>

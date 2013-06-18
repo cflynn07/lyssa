@@ -1,1 +1,11 @@
-<div style="text-align:center;" class="inline-content inline-content-responsive"><div style="margin-bottom:0px !important; text-align:left;" class="btn-group"><button class="btn green detail"><i style="display:none;" class="m-icon-swapup m-icon-white"></i><i class="m-icon-swapdown m-icon-white"></i>Edit</button><a style="display:none;" data-ng-click="$parent.viewModel.editEmployee('&lt;%= uid%&gt;')" data-ng-class="{true:'black', false:'blue'}[viewModel.currentTemplate.uid == '&lt;%= uid %&gt;']" class="btn detail">Edit<i data-ng-hide="viewModel.currentEmployee.uid == '&lt;%= uid %&gt;'" class="m-icon-swapright m-icon-white"></i><i data-ng-show="viewModel.currentEmployee.uid == '&lt;%= uid %&gt;'" class="m-icon-swapleft m-icon-white"></i></a><button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button><ul class="dropdown-menu pull-right"><!-- dropdown menu links--><li><a data-ng-click="$parent.viewModel.deleteConfirmDialogEmployee('&lt;%= uid %&gt;')" class="color-red"><i class="icon-trash"></i>Archive Employee</a></li></ul></div></div>
+
+<div style="text-align:center;" class="inline-content inline-content-responsive">
+  <div style="margin-bottom:0px !important; text-align:left;" class="btn-group">
+    <button class="btn green detail"><i style="display:none;" class="m-icon-swapup m-icon-white"></i><i class="m-icon-swapdown m-icon-white"></i>Edit</button><a style="display:none;" data-ng-click="$parent.viewModel.editEmployee('&lt;%= uid%&gt;')" data-ng-class="{true:'black', false:'blue'}[viewModel.currentTemplate.uid == '&lt;%= uid %&gt;']" class="btn detail">Edit<i data-ng-hide="viewModel.currentEmployee.uid == '&lt;%= uid %&gt;'" class="m-icon-swapright m-icon-white"></i><i data-ng-show="viewModel.currentEmployee.uid == '&lt;%= uid %&gt;'" class="m-icon-swapleft m-icon-white"></i></a>
+    <button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
+    <ul class="dropdown-menu pull-right">
+      <!-- dropdown menu links-->
+      <li><a data-ng-click="$parent.viewModel.deleteConfirmDialogEmployee('&lt;%= uid %&gt;')" class="color-red"><i class="icon-trash"></i>Archive Employee</a></li>
+    </ul>
+  </div>
+</div>
