@@ -22,13 +22,15 @@
         div
           button.btn.pull-right(data-ng-class="{true:'black',false:'green'}[submitting]", type="button", data-ng-click="!submitting && authenticate()", data-ng-disabled="submitting")
             p(data-ng-hide="submitting")
-              | Login
+              |Login&nbsp;
               i.m-icon-swapright.m-icon-white
-            p(data-ng-show="submitting")
+            p.activity(data-ng-show = "submitting")
               i.icon-cog.icon-spin
-              | Authenticating...
+              |&nbsp;Authenticating...
       .clearfix
-      .alert.alert-error(style="margin-top: 10px; margin-bottom: 0;", data-ng-show="errorMessage", data-ng-animate="{enter: 'slide-down'}")
+      .alert.alert-error(style           = "margin-top: 10px; margin-bottom: 0;"
+                         data-ng-show    = "errorMessage"
+                         data-ng-animate = "{show: 'slide-down'}")
         strong Error!
         br
         span {{errorMessage}}

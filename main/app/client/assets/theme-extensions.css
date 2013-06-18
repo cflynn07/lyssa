@@ -8,7 +8,7 @@
     -------------------
 */
 body {
-    background-color: #F1F1F1 !important;
+    background-color: #F1F1F1;
     overflow-y: scroll;
 }
 
@@ -18,8 +18,11 @@ body {
 }
 .btn span, .btn p {
   color: #FFF !important;
+  font-weight: 300;
 }
-
+.btn span.activity, .btn p.activity {
+  font-style: italic;
+}
 
 .page-content {
     background-color: #FFF;
@@ -203,7 +206,8 @@ div.button-group > button {
     -----------------------------------------------------------------------------------------------
 */
 .login {
-    background-color: #F1F1F1 !important;
+//  background-color: #F1F1F1;
+  background-color: #444;
 }
 .login .content input.m-wrap {
     width:229px;

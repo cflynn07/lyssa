@@ -64,6 +64,7 @@ define [
 
       #quick hack
       $('body').removeClass 'login'
+      $('body').css('background-color', '#444').animate({'background-color':'#F1F1F1'}, 'slow')
 
       $rootScope.clientOrmShare = clientOrmShare
 

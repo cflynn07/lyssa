@@ -3767,7 +3767,7 @@ Login page
 
 /* logo page */
 .login {
-  background-color: #444 !important;
+  background-color: #444;
 }
 
 .login .logo {
