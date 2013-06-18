@@ -1,18 +1,20 @@
-.inline-content.inline-content-responsive(style="text-align:center;")
-  .btn-group(style="margin-bottom:0px !important; text-align:left;")
-    a.btn(data-ng-class="{true:'black', false:'blue'}[viewModel.currentDictionaryUid == '<%= uid %>']", href="#<%= viewRoot %>/<%= uid %>")
+.inline-content.inline-content-responsive(style = "text-align:center;")
+  .btn-group(style = "margin-bottom:0px !important; text-align:left;")
+
+    a.btn(data-ng-class = "{true:'black', false:'blue'}[viewModel.currentDictionaryUid == '<%= uid %>']"
+                  href != "#<%= viewRoot %>/<%= uid %>")
       | Edit
-      i.m-icon-swapright.m-icon-white(data-ng-hide="viewModel.currentDictionaryUid == '<%= uid %>'")
-      i.m-icon-swapleft.m-icon-white(data-ng-show="viewModel.currentDictionaryUid == '<%= uid %>'")
-    button.btn.dropdown-toggle(data-toggle="dropdown")
+      i.m-icon-swapright.m-icon-white(data-ng-hide != "viewModel.currentDictionaryUid == '<%= uid %>'")
+      i.m-icon-swapleft.m-icon-white(data-ng-show  != "viewModel.currentDictionaryUid == '<%= uid %>'")
+
+    button.btn.dropdown-toggle(data-toggle = "dropdown")
       span.caret
     ul.dropdown-menu.pull-right
-      // dropdown menu links
       li
-        a(href="#")
+        a(href = "#")
           i.icon-pencil
           | Rename
       li
-        a(data-ng-click="$parent.viewModel.deleteConfirmDialogDictionary('<%= uid %>')")
+        a(data-ng-click != "$parent.viewModel.deleteConfirmDialogDictionary('<%= uid %>')")
           i.icon-trash
           | Archive

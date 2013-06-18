@@ -35,17 +35,23 @@
               .control-group(data-ng-class="{success:newDictionaryForm.name.$valid, error:!newDictionaryForm.name.$valid, 'ng-pristine':newDictionaryForm.name.$pristine}")
                 label.control-label Name
                 .controls.input-icon
-                  input.span11.m-wrap(type="text", name="name", data-ng-model="viewModel.newDictionaryForm.name", data-ng-minlength="{{clientOrmShare.dictionary.model.name.validate.len[0]}}", data-ng-maxlength="{{clientOrmShare.dictionary.model.name.validate.len[1]}}", data-unique-field="{\"resource\": \"dictionary\", \"property\": \"name\"}", data-required="")
+                  input.span11.m-wrap(type              = "text"
+                                      name              = "name"
+                                      data-ng-model     = "viewModel.newDictionaryForm.name"
+                                      data-ng-minlength = "{{clientOrmShare.dictionary.model.name.validate.len[0]}}"
+                                      data-ng-maxlength = "{{clientOrmShare.dictionary.model.name.validate.len[1]}}"
+                                      data-unique-field = "{\"resource\": \"dictionary\", \"property\": \"name\"}"
+                                      data-required)
                   span.input-success
                     i.icon-ok
                   span.input-error
                     i.icon-exclamation-sign
                   .clear
-                  span.help-inline(data-ng-show="newDictionaryForm.name.$error.minlength")
+                  span.help-inline(data-ng-show = "newDictionaryForm.name.$error.minlength")
                     | Name must be longer than {{clientOrmShare.dictionary.model.name.validate.len[0]}} characters
-                  span.help-inline(data-ng-show="newDictionaryForm.name.$error.maxlength")
+                  span.help-inline(data-ng-show = "newDictionaryForm.name.$error.maxlength")
                     | Name must be shorter than {{clientOrmShare.dictionary.model.name.validate.len[1]}} characters
-                  span.help-inline(data-ng-show="newDictionaryForm.name.$error.uniqueField") A dictionary with the name "{{viewModel.newDictionaryForm.name}}" already exists
+                  span.help-inline(data-ng-show = "newDictionaryForm.name.$error.uniqueField") A dictionary with the name "{{viewModel.newDictionaryForm.name}}" already exists
               .row-fluid
                 .span6.responsive.span8
                   button.btn.red.btn-block(data-ng-hide="!!viewModel.newDictionaryForm.submitting", data-ng-click="viewModel.closeAddNewDictionary();")
@@ -93,7 +99,7 @@
                     .control-group(data-ng-class="{success:newDictionaryItemForm.$valid, error:!newDictionaryItemForm.$valid, 'ng-pristine':newDictionaryItemForm.$pristine}")
                       label.control-label Item Name
                       .controls.input-icon
-                        input.span11.m-wrap(type="text", name="name", data-ng-model="viewModel.newDictionaryItemForm.name", data-ng-minlength="{{clientOrmShare.dictionaryItem.model.name.validate.len[0]}}", data-ng-maxlength="{{clientOrmShare.dictionaryItem.model.name.validate.len[1]}}", data-unique-field="{'resource': 'dictionary', 'uids':'{{viewModel.dictionaries[viewModel.currentDictionaryUid].uid}}', 'property': 'dictionarItems', 'subProperty':'name'}", data-required="")
+                        input.span11.m-wrap(type="text", name="name", data-ng-model="viewModel.newDictionaryItemForm.name", data-ng-minlength="{{clientOrmShare.dictionaryItem.model.name.validate.len[0]}}", data-ng-maxlength="{{clientOrmShare.dictionaryItem.model.name.validate.len[1]}}", data-unique-field = "{\"resource\": \"dictionary\", \"uids\":\"{{viewModel.dictionaries[viewModel.currentDictionaryUid].uid}}\", \"property\":\"dictionarItems\", \"subProperty\":\"name\"}", data-required="")
                         span.input-success
                           i.icon-ok
                         span.input-error

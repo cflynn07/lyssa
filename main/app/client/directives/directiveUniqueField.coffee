@@ -12,8 +12,8 @@ define [], () ->
         scope:    true
         link: (scope, elm, attrs, ctrl) ->
 
-          console.log 'attrs.uniqueField'
-          console.log attrs.uniqueField
+          #console.log 'attrs.uniqueField'
+          #console.log attrs.uniqueField
 
           ctrl.$setValidity 'uniqueField', true
           attrData = JSON.parse attrs.uniqueField

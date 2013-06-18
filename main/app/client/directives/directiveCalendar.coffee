@@ -37,14 +37,14 @@ define [
           $scope.$on 'resourcePost', (e, data) ->
             if data['resourceName'] == $scope.refetchOnPost
               calendarElem.fullCalendar 'refetchEvents'
-              console.log 'refetchEvents'
+              #console.log 'refetchEvents'
 
           $scope.$on 'resourcePut', (e, data) ->
             if data['resourceName'] == $scope.refetchOnPut
               calendarElem.fullCalendar 'refetchEvents'
 
           $scope.$watch 'updateOnChange', () ->
-            console.log 'change'
+            #console.log 'change'
             calendarElem.fullCalendar 'redrawEvents'
             calendarElem.fullCalendar 'refetchEvents'
 

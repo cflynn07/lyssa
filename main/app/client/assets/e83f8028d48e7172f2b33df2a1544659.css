@@ -10184,7 +10184,7 @@ form legend1,
   color: #fff !important;
 }
 .login {
-  background-color: #444 !important;
+  background-color: #444;
 }
 .login .logo {
   width: 247px;
@@ -11389,7 +11389,7 @@ div.tagsinput .not_valid {
 }
 
 body {
-  background-color:#3d3d3d !important;
+  background-color: #3d3d3d;
 }
 .header .navbar-inner {
   filter:none !important;
@@ -19291,7 +19291,7 @@ body .ui-tooltip {
 }
 
 body {
-  background-color:#fafafa !important;
+  background-color:#fafafa;
 }
 .header .navbar-inner {
   filter:none !important;
@@ -19733,7 +19733,7 @@ body {
   width: 225px;
 }
 body {
-    background-color: #F1F1F1 !important;
+    background-color: #F1F1F1;
     overflow-y: scroll;
 }
 .btn .ng-pristine span, .btn .ng-pristine label, .btn .ng-pristine input, .btn .ng-pristine textarea, .btn .ng-pristine select {
@@ -19741,6 +19741,10 @@ body {
 }
 .btn span, .btn p {
   color: #FFF !important;
+  font-weight: 300;
+}
+.btn span.activity, .btn p.activity {
+  font-style: italic;
 }
 .page-content {
     background-color: #FFF;
@@ -19805,6 +19809,12 @@ body {
 .header .nav .dropdown-toggle:hover, .header .nav .dropdown.open .dropdown-toggle {
   background-color: #094AB2 !important;
 }
+.page-sidebar > ul > li.has-sub.open >a, .page-sidebar > ul > li >a:hover, .page-sidebar > ul > li:hover>a {
+  background: #DDD;
+}
+.page-sidebar > ul > li a i {
+  color: #333 !important;
+}
 @media (max-width: 480px) {
   .header .nav > li.dropdown .dropdown-toggle {
     margin-top: 6px !important;
@@ -19830,7 +19840,7 @@ body {
 }
 .feeds .col2 .date {
   font-weight: 700;
-  color: #999;
+  color: #333;
 }
 .feeds li {
   padding: 2px;
@@ -19885,8 +19895,16 @@ ul.breadcrumb {
 .no-second-box-margin {
   margin: 0 !important;
 }
+div.button-group {
+  margin:0;
+}
+div.button-group > button {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
 .login {
-    background-color: #F1F1F1 !important;
+//  background-color: #F1F1F1;
+  background-color: #444;
 }
 .login .content input.m-wrap {
     width:229px;
@@ -20169,4 +20187,8 @@ ul.nav-pills span.number {
 }
 .DTSelectedItemInfo > span {
   margin-bottom: 4px;
+}
+table.detail-table td.detail-head {
+  font-weight: 600;
+  padding-right: 10px;
 }

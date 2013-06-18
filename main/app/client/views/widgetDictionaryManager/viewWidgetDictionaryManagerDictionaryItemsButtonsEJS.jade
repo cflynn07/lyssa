@@ -1,14 +1,19 @@
-.inline-content.inline-content-responsive(style="text-align:center;")
+.inline-content.inline-content-responsive(style = "text-align:center;")
   .button-group
-    button.btn.red(data-ng-hide="$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'", data-ng-click="$parent.viewModel.deleteConfirmDialogDictionaryItem('<%= full.uid %>')")
+    button.btn.red(data-ng-hide  != "$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'"
+                   data-ng-click != "$parent.viewModel.deleteConfirmDialogDictionaryItem('<%= full.uid %>')")
       i.icon-trash.m-icon-white
       | Archive
-    button.btn.blue(data-ng-hide="$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'", data-ng-click="$parent.viewModel.editDictionaryItem('<%= full.uid %>')")
+    button.btn.blue(data-ng-hide != "$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'"
+                   data-ng-click != "$parent.viewModel.editDictionaryItem('<%= full.uid %>')")
       i.icon-pencil.m-icon-white
       | Edit
-    button.btn.green(data-ng-show="$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'", data-ng-disabled="<%= name %>.$invalid", data-ng-click="$parent.viewModel.saveEditingDictionaryItem(<%= name %>.$invalid)")
+    button.btn.green(data-ng-show   != "$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'"
+                   data-ng-disabled != "<%= name %>.$invalid"
+                   data-ng-click    != "$parent.viewModel.saveEditingDictionaryItem(<%= name %>.$invalid)")
       i.icon-save.m-icon-white
       | Save
-    button.btn.red(data-ng-show="$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'", data-ng-click="$parent.viewModel.cancelEditDictionaryItem()")
+    button.btn.red(data-ng-show  != "$parent.viewModel.editingDictionaryItemUid == '<%= full.uid %>'"
+                   data-ng-click  = "$parent.viewModel.cancelEditDictionaryItem()")
       i.icon-remove.m-icon-white
       | Cancel

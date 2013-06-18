@@ -507,10 +507,10 @@ define [
                   className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
                 eventsArr.push FCEventObj
 
-              console.log 'raw check'
+              #console.log 'raw check'
               if responseRaw != $scope.viewModel.fullCalendarOptions.eventsResultCache
                 $scope.viewModel.fullCalendarOptions.eventsResultCache = responseRaw    #utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)
-                console.log 'raw pass'
+                #console.log 'raw pass'
                 callback eventsArr
 
 
