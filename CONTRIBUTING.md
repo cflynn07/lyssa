@@ -36,5 +36,5 @@ Contributing Guide
       
       [jade]
       div.class1.class2(style         = "color:blue;"
-                        data-ng-click = "alert('hi');")
+                          data-ng-click = "alert('hi');")
     </pre>
