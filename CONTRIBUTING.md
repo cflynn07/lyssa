@@ -20,7 +20,7 @@ Contributing Guide
           wildWildWest: 'fest'
       
       [jade]
-      div.class1.class2(style="color:blue;", data-ng-click="alert('hi');")
+      div.class1.class2(style="color:blue;", data-ng-show="true", data-ng-click="alert('hi');")
     </pre>
   - <b>GOOD</b>
     <pre>
@@ -36,5 +36,6 @@ Contributing Guide
       
       [jade]
       div.class1.class2(style         = "color:blue;"
+                          data-ng-show  = "true"
                           data-ng-click = "alert('hi');")
     </pre>
