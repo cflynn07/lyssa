@@ -33,7 +33,7 @@ form.horizontal-form(name="newEmployeeManualAddForm", novalidate="")
       .control-group(data-ng-class="{success:newEmployeeManualAddForm.email.$valid, error:!newEmployeeManualAddForm.email.$valid, 'ng-pristine':newEmployeeManualAddForm.email.$pristine}")
         label.control-label(for="email") Email
         .controls.input-icon
-          input.m-wrap.span10(type="email", data-required="", data-ng-model="viewModel.newEmployeeManualAddForm.email", data-unique-field="{'resource': 'employee', 'property': 'email'}", name="email", placeholder="jane@company.com")
+          input.m-wrap.span10(type="email", data-required="", data-ng-model="viewModel.newEmployeeManualAddForm.email", data-unique-field="{\"resource\": \"employee\", \"property\": \"email\"}", name="email", placeholder="jane@company.com")
           span.input-success(data-ng-show="newEmployeeManualAddForm.email.$dirty && newEmployeeManualAddForm.email.$valid")
             i.icon-ok
           span.input-error(data-ng-show="newEmployeeManualAddForm.email.$dirty && newEmployeeManualAddForm.email.$invalid")
@@ -47,7 +47,7 @@ form.horizontal-form(name="newEmployeeManualAddForm", novalidate="")
       .control-group(data-ng-class="{success:newEmployeeManualAddForm.phone.$valid, error:!newEmployeeManualAddForm.phone.$valid, 'ng-pristine':newEmployeeManualAddForm.phone.$pristine}")
         label.control-label(for="phone") Phone Number
         .controls.input-icon
-          input.m-wrap.span10(type="text", data-required="", data-unique-field="{'resource': 'employee', 'property': 'phone'}", data-ui-mask="'999-999-9999'", data-ng-model="viewModel.newEmployeeManualAddForm.phone", name="phone", placeholder="999-999-9999")
+          input.m-wrap.span10(type="text", data-required="", data-unique-field="{\"resource\": \"employee\", \"property\": \"phone\"}", data-ui-mask="'999-999-9999'", data-ng-model="viewModel.newEmployeeManualAddForm.phone", name="phone", placeholder="999-999-9999")
           span.input-success(data-ng-show="newEmployeeManualAddForm.phone.$dirty && newEmployeeManualAddForm.phone.$valid")
             i.icon-ok
           span.input-error(data-ng-show="newEmployeeManualAddForm.phone.$dirty && newEmployeeManualAddForm.phone.$invalid")

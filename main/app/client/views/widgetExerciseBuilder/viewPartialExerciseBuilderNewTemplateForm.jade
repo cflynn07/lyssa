@@ -8,7 +8,7 @@
       .control-group(data-ng-class="{success:newTemplateForm.name.$valid, error:!newTemplateForm.name.$valid, 'ng-pristine':newTemplateForm.name.$pristine}")
         label.control-label Name
         .controls.input-icon
-          input.large.m-wrap(type="text", name="name", data-ng-model="viewModel.newTemplateForm.name", data-ng-minlength="{{clientOrmShare.template.model.name.validate.len[0]}}", data-ng-maxlength="{{clientOrmShare.template.model.name.validate.len[1]}}", data-unique-field="{'resource': 'template', 'property': 'name'}", data-required="")
+          input.large.m-wrap(type="text", name="name", data-ng-model="viewModel.newTemplateForm.name", data-ng-minlength="{{clientOrmShare.template.model.name.validate.len[0]}}", data-ng-maxlength="{{clientOrmShare.template.model.name.validate.len[1]}}", data-unique-field="{\"resource\": \"template\", \"property\": \"name\"}", data-required="")
           span.input-success
             i.icon-ok
           span.input-error

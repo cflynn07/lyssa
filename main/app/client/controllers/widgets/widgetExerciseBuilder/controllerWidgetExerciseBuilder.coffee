@@ -633,7 +633,15 @@ define [
           templatesListDataTable:
             detailRow: (obj) ->
               uid = $scope.escapeHtml obj.uid
-              return new EJS(text: viewWidgetExerciseBuilderDetailsEJS).render({templateUid: uid})
+
+              html = new EJS( text: viewWidgetExerciseBuilderDetailsEJS ).render
+                templateUid: uid
+
+              #console.log 'html1'
+              #console.log html
+
+              return html
+
             columnDefs: [
               mData:     null
               aTargets:  [0]

@@ -3,11 +3,15 @@ define [
   'angular'
   'datatables'
   'datatables_bootstrap'
+  'underscore'
+  'underscore_string'
 ], (
   $
   angular
   dataTables
   dataTables_bootstrap
+  _
+  underscore_string
 ) ->
 
   (Module) ->
@@ -45,14 +49,20 @@ define [
                 $(this).removeClass 'blue'
                 $(this).addClass 'black'
 
+
                 data     = dataTable.fnGetData el
                 html     = scope.$parent.viewModel[attrs['parentDataTableViewModelProp']].detailRow(data)
                 accessor = 'detailRow' + data.uid
                 dataTable.fnOpen el, '', accessor + ' details'
 
+                #trim it
+                #If there's any white space around the HTML this causes a nasty error
+                html = _.str.trim(html)
+
                 accessor   = '.' + accessor
                 newElement = element.find accessor
                 newElement.html $compile(html)(scope)
+
                 newElement.find('> div').hide().slideDown 'fast'
                 scope.$apply()
 

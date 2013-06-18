@@ -3,7 +3,7 @@
     button.btn.detail(data-ng-class="{true:'black', false:'blue'}[viewModel.routeParams.templateUid == '<%= templateUid %>']")
       i.m-icon-swapup.m-icon-white(style="display:none;")
       i.m-icon-swapdown.m-icon-white
-      | Revisions ({{ (resourcePool['
+      |&nbsp;Revisions ({{ (resourcePool['<%= templateUid %>'].revisions | toArray).length }})
     button.btn.dropdown-toggle(data-toggle="dropdown")
       span.caret
     ul.dropdown-menu.pull-right

@@ -35,7 +35,7 @@
               .control-group(data-ng-class="{success:newDictionaryForm.name.$valid, error:!newDictionaryForm.name.$valid, 'ng-pristine':newDictionaryForm.name.$pristine}")
                 label.control-label Name
                 .controls.input-icon
-                  input.span11.m-wrap(type="text", name="name", data-ng-model="viewModel.newDictionaryForm.name", data-ng-minlength="{{clientOrmShare.dictionary.model.name.validate.len[0]}}", data-ng-maxlength="{{clientOrmShare.dictionary.model.name.validate.len[1]}}", data-unique-field="{'resource': 'dictionary', 'property': 'name'}", data-required="")
+                  input.span11.m-wrap(type="text", name="name", data-ng-model="viewModel.newDictionaryForm.name", data-ng-minlength="{{clientOrmShare.dictionary.model.name.validate.len[0]}}", data-ng-maxlength="{{clientOrmShare.dictionary.model.name.validate.len[1]}}", data-unique-field="{\"resource\": \"dictionary\", \"property\": \"name\"}", data-required="")
                   span.input-success
                     i.icon-ok
                   span.input-error
