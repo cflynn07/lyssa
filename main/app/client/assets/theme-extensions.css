@@ -94,6 +94,24 @@ body {
 .page-sidebar > ul > li.has-sub.open >a, .page-sidebar > ul > li >a:hover, .page-sidebar > ul > li:hover>a {
   background: #DDD;
 }
+
+
+
+.page-sidebar > ul > li.open, .page-sidebar > ul > li.open:hover {
+  background: #FFF !important;
+}
+.page-sidebar > ul > li.has-sub.open >a, .page-sidebar > ul > li.open:hover>a {
+  background: #FFF !important;
+}
+.page-sidebar > ul > li > ul.sub-menu {
+  margin: 8px 0 0 0;
+}
+.page-sidebar > ul > li.active {
+  background-color: #FFF;
+}
+
+
+
 .page-sidebar > ul > li a i {
   color: #333 !important;
 }
@@ -250,7 +268,7 @@ div.controls .dataTables_filter input[type=text] {
     font-size: 14px;
     font-weight: 500;
 }
-.page-sidebar > ul > li.active > a {
+.page-sidebar > ul > li.active > a, .page-sidebar > ul > li.active.open > a {
     background: #4b8df8 !important;
 }
 .page-sidebar > ul > li > ul.sub > li.active > a, .page-sidebar > ul > li > ul.sub > li > a:hover {

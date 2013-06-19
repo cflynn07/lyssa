@@ -40,6 +40,14 @@ define [
 
       $scope.menuChoices = []
 
+      $scope.currentActiveMenuItem = ''
+      $scope.setCurrentActiveMenuItem = (item) ->
+        if $scope.currentActiveMenuItem == item
+          $scope.currentActiveMenuItem = ''
+        else
+          $scope.currentActiveMenuItem = item
+
+
       ###
       for key, value of clientConfig.routes
         if clientConfig.routeMatchClientType(key, $scope.rootUser.type)

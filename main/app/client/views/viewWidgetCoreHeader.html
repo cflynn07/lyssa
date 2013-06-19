@@ -10,7 +10,7 @@
       </ul>
     </div>
     <!-- END LOGO-->
-    <!-- BEGIN RESPONSIVE MENU TOGGLER--><a data-ng-click="toggleTopBarOpen()" href="href" data-action="expand-main-menu" class="btn-navbar collapsed"><img src="assets/img/menu-toggler.png" alt=""/></a>
+    <!-- BEGIN RESPONSIVE MENU TOGGLER--><a data-ng-click="toggleTopBarOpen()" data-action="expand-main-menu" class="btn-navbar collapsed"><img src="assets/img/menu-toggler.png" alt=""/></a>
     <!-- END RESPONSIVE MENU TOGGLER-->
     <!-- BEGIN TOP NAVIGATION MENU-->
     <ul class="nav pull-right">
@@ -36,7 +36,7 @@
       </li>
       <!-- END INBOX DROPDOWN-->
       <!-- BEGIN USER LOGIN DROPDOWN-->
-      <li data-ng-show="rootEmployee &amp;&amp; rootUser" style="min-height: 42px;" class="dropdown user"><a data-action="toggle-user-menu" href="href" data-toggle="dropdown" class="dropdown-toggle"><span style="color: #FFF !important;" class="username">{{rootEmployee.firstName}} {{rootEmployee.lastName}}</span><i style="color: #FFF !important;" class="icon-angle-down"></i></a>
+      <li data-ng-show="rootEmployee &amp;&amp; rootUser" style="min-height: 42px;" class="dropdown user"><a data-action="toggle-user-menu" data-toggle="dropdown" class="dropdown-toggle"><span style="color: #FFF !important;" class="username">{{rootEmployee.firstName}} {{rootEmployee.lastName}}</span><i style="color: #FFF !important;" class="icon-angle-down"></i></a>
         <ul class="dropdown-menu slide down">
           <li><a href="#/profile"><i class="icon-user"></i>&nbsp;My Profile</a></li>
           <li><a href="#"><i class="icon-calendar"></i>&nbsp;My Calendar</a></li>
