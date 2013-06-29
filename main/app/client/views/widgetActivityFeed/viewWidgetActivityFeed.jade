@@ -1,4 +1,4 @@
-.widget-themis-finish.portlet.box.blue(data-animate-in
+.widget-themis-finish.portlet.box.blue(class              = "animated fadeInRightBig"
                                        data-ng-controller = "ControllerWidgetActivityFeed")
   .portlet-title
     h4
@@ -7,21 +7,22 @@
     .progress.progress-striped.active(data-ng-hide = "rootActivityFeed !== false")
       .bar(style = "width: 100%;")
     ul.feeds
-      li(data-ng-repeat = "(key, value) in rootActivityFeed | toArray | orderBy:'createdAt':true")
+      li(data-ng-repeat = "(key, value) in rootActivityFeed | toArray | orderBy:'createdAt':true"
+         class          = "animated fadeInDown")
 
-        div(data-ng-animate = "{show:'slideDown'}"
+        div(data-ng-animate = ""            
             data-ng-show    = "value.type == 'createDictionary'"
             data-ng-include = "'viewPartialActivityFeedCreateDictionary'")
 
-        div(data-ng-animate = "{show:'slideDown'}"
+        div(data-ng-animate = ""
             data-ng-show    = "value.type == 'createEmployee'"
             data-ng-include = "'viewPartialActivityFeedCreateEmployee'")
 
-        div(data-ng-animate = "{show:'slideDown'}"
+        div(data-ng-animate = ""
             data-ng-show    = "value.type == 'createEvent'"
             data-ng-include = "'viewPartialActivityFeedCreateEvent'")
 
-        div(data-ng-animate = "{show:'slideDown'}"
+        div(data-ng-animate = ""
             data-ng-show    = "value.type == 'eventInitialized'"
             data-ng-include = "'viewPartialActivityFeedEventInitialized'")
         

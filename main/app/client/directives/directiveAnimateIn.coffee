@@ -8,6 +8,12 @@ define [
 
     Module.directive 'animateIn', () ->
       (scope, element, attrs) ->
+
+        element.addClass 'animated fadeInRightBig'
+
+        return
+
+
         #console.log 'p1'
         loadingHTML = "<div class=\"loading-indicator\">
           <div class=\"progress progress-striped active\">
@@ -21,9 +27,9 @@ define [
 
         $el.removeClass 'widget-themis-finish'
         $el.addClass    'widget-themis'
-        $el.css 'position', 'relative'
-        $el.hide().fadeIn()
+        $el.css         'position', 'relative'
 
+        #$el.hide().fadeIn()
         #element.find('.loading-indicator').hide()#fadeOut('fast')
 
         timer = setInterval(() ->
@@ -36,10 +42,10 @@ define [
             #setTimeout(() ->
             #  $el.find('.loading-indicator').remove()
             #, 100)
-            clearTimeout timer
+            clearTimeout    timer
             $el.removeClass 'widget-themis'
             $el.addClass    'widget-themis-finish'
-            $el.css 'position', ''
+            $el.css         'position', ''
             return
 
           #$el.find('.loading-indicator').css
@@ -47,9 +53,9 @@ define [
 
           $el.css
             'border-right': '0px !important'
-            'box-shadow': num + 'px ' + num + 'px 0 0 rgba(0,0,0,0.35)'
-            top: (4 - num) + 'px'
-            left: (4 - num) + 'px'
+            'box-shadow':   num + 'px ' + num + 'px 0 0 rgba(0,0,0,0.35)'
+            top:            (4 - num) + 'px'
+            left:           (4 - num) + 'px'
           #  opacity: init_opacity + ((1.0 - init_opacity) * (num / max))
 
         , 50)

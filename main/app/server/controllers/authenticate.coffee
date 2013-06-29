@@ -47,15 +47,15 @@ module.exports = (app) ->
         bcrypt.compare req.data.password, user.password, (err, res) ->
           if res
 
-            respClient  = user.client.selectedValues
-            user        = user.selectedValues
-            user.client = respClient
+            respClient        = user.client.selectedValues
+            userValues        = user.selectedValues
+            userValues.client = respClient
 
             #dont send hashed password
-            delete user.password
+            delete userValues.password
 
             #req.session.user = JSON.parse JSON.stringify user
-            req.session.user = user.values
+            req.session.user = userValues
 
             #Hang out with the other cool super admins if you're a super admin
          #   if user.super_admin
@@ -67,7 +67,7 @@ module.exports = (app) ->
             req.session.save () ->
               req.io.respond 
                 success: true
-                user:    user
+                user:    userValues
           else
             req.io.respond success: false
 

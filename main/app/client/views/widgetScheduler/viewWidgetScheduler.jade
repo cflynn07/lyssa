@@ -1,4 +1,4 @@
-.widget-themis-finish.portlet.box.blue(data-animate-in    = "data-animate-in"
+.widget-themis-finish.portlet.box.blue(class              = "animated fadeInRightBig"
                                        data-ng-controller = "ControllerWidgetScheduler")
   .portlet-title
     h4
@@ -29,11 +29,11 @@
               span Calendar
           .portlet-body
 
-            div(data-calendar      = "data-calendar"
-              data-activate-watch  = "viewModel.routeParams.eventUid || viewModel.showNewExerciseForm"
-              data-options         = "viewModel.fullCalendarOptionsSecondary"
-              data-refetch-on-post = "event"
-              data-refetch-on-put  = "event")
+            div(data-calendar        = "data-calendar"
+                data-activate-watch  = "viewModel.routeParams.eventUid || viewModel.showNewExerciseForm"
+                data-options         = "viewModel.fullCalendarOptionsSecondary"
+                data-refetch-on-post = "event"
+                data-refetch-on-put  = "event")
 
       div(data-ng-class = "{true:'span12 no-second-box-margin', false:'span7'}[viewModel.exerciseListCollapsed]")
 

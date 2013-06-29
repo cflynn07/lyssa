@@ -29,6 +29,8 @@ define [
       #primaryWidgetRow    = [{widget: 'viewWidgetBreadCrumbs', spanLength:'span12'}]
       primaryWidgetRow    = []
       $scope.widgetRows   = [primaryWidgetRow]
+
+
       previousRouteGroup  = ''
 
 
@@ -48,6 +50,14 @@ define [
         widgets.push widget:'viewWidget4oh4'
         $scope.widgetRows = widgets
         previousRouteGroup = ''
+
+
+
+
+
+
+
+
 
       loadNewRoute = () ->
 
@@ -98,14 +108,18 @@ define [
           $rootScope.viewRoot = $route.current.$$route.root
 
 
+
+
+
+
+
+
+
+
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
         loadNewRoute()
 
       loadNewRoute()
-
-
-
-
 
 
     ]
