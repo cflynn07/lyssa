@@ -25,11 +25,12 @@ define [
     Module.controller 'ControllerCoreWidgets', ['$scope', '$route', '$rootScope',
     ($scope, $route, $rootScope) ->
 
-      primaryWidgetRow = [{widget: 'viewWidgetBreadCrumbs', spanLength:'span12'}]
 
-      $scope.widgetRows   = []
-      $scope.widgetRows.push primaryWidgetRow
+      #primaryWidgetRow    = [{widget: 'viewWidgetBreadCrumbs', spanLength:'span12'}]
+      primaryWidgetRow    = []
+      $scope.widgetRows   = [primaryWidgetRow]
       previousRouteGroup  = ''
+
 
       isDerivativeRoute   = (newRouteTitle) ->
         result = true
@@ -41,7 +42,6 @@ define [
 
       stripAllButBC = () ->
         $scope.widgetRows = [primaryWidgetRow]
-
 
       trigger4oh4 = () ->
         widgets = stripAllButBC()
@@ -102,4 +102,10 @@ define [
         loadNewRoute()
 
       loadNewRoute()
+
+
+
+
+
+
     ]

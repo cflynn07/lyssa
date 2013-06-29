@@ -15,6 +15,7 @@ define [], () ->
       subGroup: ''
       widgetViews: [
       #  ['viewWidgetActivityFeed', 'viewWidgetActivityFeed']
+        ['viewWidgetBreadCrumbs']
         ['viewWidgetActivityFeed', 'viewWidgetActivityExercisesQuizes']
         ['viewWidgetQuarterlyTestingReport']
       ]
@@ -32,6 +33,7 @@ define [], () ->
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
     $routeProvider.when '/admin/themis/templates/exercises/:templateUid',
@@ -39,6 +41,7 @@ define [], () ->
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
     $routeProvider.when '/admin/themis/templates/exercises/:templateUid/:revisionUid',
@@ -46,6 +49,7 @@ define [], () ->
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
 
@@ -56,6 +60,7 @@ define [], () ->
       group: 'templatesQuizes'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
     $routeProvider.when '/admin/themis/templates/quizes/:templateUid',
@@ -63,6 +68,7 @@ define [], () ->
       group: 'templatesQuizes'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
     $routeProvider.when '/admin/themis/templates/quizes/:templateUid/:revisionUid',
@@ -70,6 +76,7 @@ define [], () ->
       group: 'templatesQuizes'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
 
@@ -79,6 +86,7 @@ define [], () ->
       group: 'schedule'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetScheduler']
       ]
 
@@ -94,6 +102,7 @@ define [], () ->
       group: 'settingsDictionaries'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetDictionaryManager']
       ]
     $routeProvider.when '/admin/themis/settings/dictionaries/:dictionaryUid',
@@ -101,6 +110,7 @@ define [], () ->
       group: 'settingsDictionaries'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetDictionaryManager']
       ]
     $routeProvider.when '/admin/themis/settings/employees',
@@ -108,6 +118,7 @@ define [], () ->
       group: 'settingsEmployees'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetEmployeeManager']
       ]
 
@@ -127,6 +138,7 @@ define [], () ->
       group: 'quizSubmit'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetQuizExerciseSubmitter']
       ]
 
@@ -142,6 +154,7 @@ define [], () ->
       group: 'exerciseSubmit'
       subGroup: ''
       widgetViews: [
+        ['viewNoBreadCrumbs']
         ['viewWidgetQuizExerciseSubmitter']
       ]
 
