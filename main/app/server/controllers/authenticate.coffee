@@ -1,5 +1,6 @@
 ###
   Handles authenticate / unauthenticate session operations
+  via socket.io & (TODO) http
 ###
 
 
@@ -16,8 +17,6 @@ client    = ORM.model 'client'
 
 
 module.exports = (app) ->
-
-
 
   status = (req) ->
     if !_.isUndefined(req.session.user)

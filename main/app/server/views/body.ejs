@@ -30,9 +30,11 @@
             <i data-ng-show = "loadingStatusIcon != 'icon-lock'"
                style        = "color: {{ loadingStatusColor }}"
                class        = "icon-cog icon-spin"></i>
-            <i data-ng-show  = "loadingStatusIcon == 'icon-lock'"
-               style         = "display:none; color: {{ loadingStatusColor }}"
-               class         = "icon-lock"></i>
+
+            <i data-ng-show = "loadingStatusIcon == 'icon-lock'"
+               style        = "display:none; color: {{ loadingStatusColor }}"
+               class        = "icon-lock"></i>
+               
             &nbsp;<span data-ng-bind-template = "{{ loadingStatus }}">Loading...</span>
           </h4>
           

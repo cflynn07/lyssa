@@ -7,21 +7,10 @@ config  = require './config/config'
 if !GLOBAL.assetHash
   GLOBAL.assetHash = 'client'
 
-require('./config/envGlobals')(GLOBAL)
 
-#set up orm
+require('./config/envGlobals')(GLOBAL)
 require('./components/oRM').setup()
 
-###
-if GLOBAL.env
-  require('nodetime').profil e
-    accountKey: '3e685ab0740eddb9a958f950a66bd728df2f1cca'
-    appName:    'Lyssa - Production'
-else
-  require('nodetime').profile
-    accountKey: '3e685ab0740eddb9a958f950a66bd728df2f1cca'
-    appName:    'Lyssa - Development'
-###
 
 #redis clients
 pub        = require('./config/redis').createClient()
@@ -31,6 +20,7 @@ redisStore = require('./config/redis').createStore()
 app        = express().http().io()
 GLOBAL.app = app
 
+
 app.io.set 'store',
   new express.io.RedisStore
     redis:       require 'redis'
@@ -39,7 +29,7 @@ app.io.set 'store',
     redisClient: store
 
 
-#app.io.enable('browser client etag')
+#Socket.io configuration
 app.io.set 'log level', 3
 app.io.set 'transports', [
 # 'websocket'
@@ -65,11 +55,14 @@ app.configure () ->
     secret: 'c9d7732c0de118325e6de4582b37a4e9'
     store:  redisStore
 
-  #Route parrot middleware
-  #match api requests from socket.io & http to same handlers by modifying
-  #req & res objects
+  ###
+    Route parrot middleware
+    match api requests from socket.io & http to same handlers by modifying
+    req & res objects
+  ###
   app.use require('./components/routeParrot').http
   app.use app.router
+
 
   app.configure 'production', () ->
     maxAge = 31536000000
@@ -80,6 +73,7 @@ app.configure () ->
     app.use express.static path.join(__dirname, '../client'), { maxAge: maxAge }
     app.use express.errorHandler()
 
+
 #Authentication module
 require('./controllers/authenticate')(app)
 
@@ -89,12 +83,14 @@ app.io.route 'apiRequest', (req) ->
     {},
     (req, res) ->
       app.router req, res, () ->
-        req.io.respond
-          code: 404
-          error: 'not found'
+        req.io.respond config.errorResponse(404)
+
 
 #Mount all controllers (API & Regular)
 require('./components/controllers')(app)
+
+
+
 
 ###
 test = require('./config/redis').createClient()
@@ -102,6 +98,8 @@ setInterval () ->
   test.publish 'eventsUpdated', 'test message'
 , 1000
 ###
+
+
 
 app.listen app.get 'port'
 console.log 'server listening on port: ' + app.get 'port'

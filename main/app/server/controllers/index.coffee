@@ -1,3 +1,7 @@
+###
+  Serves up the HTML skeleton of our SPA
+###
+
 async          = require 'async'
 html_minifier  = require 'html-minifier'
 config         = require '../config/config'

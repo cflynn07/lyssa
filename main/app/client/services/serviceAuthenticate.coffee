@@ -15,14 +15,13 @@ define [
           apiRequest.get 'employee', [user.uid], {}, (response) ->
             if response.code == 200
               $rootScope.rootEmployee = response.response.data
-                #$rootScope.rootEmployee = user
-                #return
 
         unauthenticate: () ->
-
           socket.emit 'authenticate:unauthenticate', {}, () ->
-            $rootScope.rootStatus = 'login'
-            $rootScope.rootUser   = {}
+            $rootScope.rootStatus   = 'login'
+            $rootScope.rootUser     = {}
+            $rootScope.rootEmployee = {}
             #$rootScope.resourcePool           = {}
             #$rootScope.resourceCollectionPool = {}
+
     ]
