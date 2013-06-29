@@ -1,3 +1,8 @@
+###
+  Handles authenticate / unauthenticate session operations
+###
+
+
 config    = require '../config/config'
 bcrypt    = require 'bcrypt'
 ORM       = require config.appRoot + 'server/components/oRM'
@@ -5,16 +10,20 @@ sequelize = ORM.setup()
 async     = require 'async'
 _         = require 'underscore'
 
-employee = ORM.model 'employee'
-client   = ORM.model 'client'
+
+employee  = ORM.model 'employee'
+client    = ORM.model 'client'
+
 
 module.exports = (app) ->
 
+
+
   status = (req) ->
-    if req.session.user?
+    if !_.isUndefined(req.session.user)
       req.io.respond _.extend
         authenticated: true,
-        user: req.session.user
+        user:          req.session.user
     else
       req.io.respond
         authenticated: false
@@ -38,18 +47,16 @@ module.exports = (app) ->
       else
         bcrypt.compare req.data.password, user.password, (err, res) ->
           if res
-            #Dont send hashed password
-          #  delete user.password
 
             respClient  = user.client.selectedValues
             user        = user.selectedValues
             user.client = respClient
 
-            #user.client = user.client.selectedValues
+            #dont send hashed password
             delete user.password
 
-            #user.client = user.client
-            req.session.user = JSON.parse JSON.stringify user
+            #req.session.user = JSON.parse JSON.stringify user
+            req.session.user = user.values
 
             #Hang out with the other cool super admins if you're a super admin
          #   if user.super_admin
@@ -59,7 +66,9 @@ module.exports = (app) ->
          #   req.io.room('super_admins').broadcast 'user_authenticate', user
 
             req.session.save () ->
-              req.io.respond success: true, user: user
+              req.io.respond 
+                success: true
+                user:    user
           else
             req.io.respond success: false
 
@@ -76,11 +85,11 @@ module.exports = (app) ->
     req.session.save () ->
       req.io.respond true
 
+
+  #Bind methods to routes
   app.io.route 'authenticate',
     status:         status
     authenticate:   authenticate
     unauthenticate: unauthenticate
-
-
 
 

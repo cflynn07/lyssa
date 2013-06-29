@@ -24,19 +24,20 @@ else
 ###
 
 #redis clients
-pub   = require('./config/redis').createClient()
-sub   = require('./config/redis').createClient()
-store = require('./config/redis').createClient()
+pub        = require('./config/redis').createClient()
+sub        = require('./config/redis').createClient()
+store      = require('./config/redis').createClient()
 redisStore = require('./config/redis').createStore()
-app = express().http().io()
+app        = express().http().io()
 GLOBAL.app = app
 
 app.io.set 'store',
   new express.io.RedisStore
-    redis: require 'redis'
-    redisPub: pub
-    redisSub: sub
+    redis:       require 'redis'
+    redisPub:    pub
+    redisSub:    sub
     redisClient: store
+
 
 #app.io.enable('browser client etag')
 app.io.set 'log level', 3
@@ -47,6 +48,7 @@ app.io.set 'transports', [
   'xhr-polling'
   'jsonp-polling'
 ]
+
 
 app.configure () ->
 

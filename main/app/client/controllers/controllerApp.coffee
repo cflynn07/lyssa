@@ -3,6 +3,7 @@ define [
   'underscore'
   'angular'
   'cs!config/clientConfig'
+  'cs!config/clientConfigHelperMethods'
   'text!views/viewCore.html'
   'text!config/clientOrmShare.json'
 ], (
@@ -10,10 +11,12 @@ define [
   _
   angular
   clientConfig
+  clientConfigHelperMethods
   viewCore
   clientOrmShare
 ) ->
 
+  #Server dumps out JSON of ORM objects in a text file. Parse it to get object literal.
   clientOrmShare = JSON.parse clientOrmShare
 
   (Module) ->
@@ -27,65 +30,32 @@ define [
     ($rootScope, $route, $routeParams, socket, authenticate) ->
 
 
-      #Global Helpers
-      $rootScope.getKeysLength = (obj) ->
-        length = 0
-        for key, value of obj
-          if !_.isUndefined(value['uid']) and _.isNull(value['deletedAt'])
-            length++
-        return length
+      #Attach some helper methods to the rootScope to be used in views throughout
+      #the application
+      clientConfigHelperMethods $rootScope
 
-      $rootScope.escapeHtml = (str) ->
-        div = document.createElement 'div'
-        div.appendChild(document.createTextNode(str))
-        div.innerHTML
-
-      helperSortHash = (hash, timeProp = 'createdAt') ->
-        hashArray       = _.toArray hash
-        sortedHashArray = _.sortBy hashArray, (obj) ->
-          new Date obj[timeProp]
-
-      $rootScope.getLastObjectFromHash = (hash, timeProp = 'createdAt') ->
-        sortedHashArray = helperSortHash hash, timeProp
-        _.last sortedHashArray
-
-      $rootScope.getFirstObjectFromHash = (hash, timeProp = 'createdAt') ->
-        sortedHashArray = helperSortHash hash, timeProp
-        _.first sortedHashArray
-
-      $rootScope.getArrayFromHash = (hash) ->
-        resArray = []
-        for prop, val of hash
-          resArray.push val
-        #Sorting?
-        return resArray
-
+      #routes and other configurable values
       $rootScope.clientConfig = clientConfig
+
+      #ORM objects properties/validation rules
+      $rootScope.clientOrmShare = clientOrmShare
+
+
+
 
       #quick hack
       $('body').removeClass 'login'
       $('body').css('background-color', '#444').animate({'background-color':'#F1F1F1'}, 'slow')
 
-      $rootScope.clientOrmShare = clientOrmShare
-
-      #temp
-      $rootScope.rootStatus    = 'loading'
-
+      $rootScope.rootStatus         = 'loading'
       $rootScope.loadingStatus      = 'Connecting...'
       $rootScope.loadingStatusColor = '#35aa47 !important'
       $rootScope.loadingStatusIcon  = 'icon-lock'
+      $rootScope.routeParams        = $routeParams
 
-      $rootScope.routeParams = $routeParams
-
-      #QuizMode
       $rootScope.$on '$routeChangeSuccess', (event, current, previous) ->
         $rootScope.routeParams = $routeParams
 
-        if clientConfig.isRouteQuiz($route.current.path)
-          $rootScope.quizMode = true
-          return
-        else
-          $rootScope.quizMode = false
 
 
 

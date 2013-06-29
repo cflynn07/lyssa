@@ -60,7 +60,7 @@
       </div>
       <!-- row-fluid-->
       <div class="form-actions">
-        <button data-ng-disabled="editEmployeeForm.$invalid || updateInProgress || updateActionComplete" data-ng-click="subViewModel.updateEmployee()" type="submit" class="btn green pull-right"><i class="icon-pencil m-icon-white"></i><span style="color:#FFF !important;" data-ng-hide="updateActionComplete">Update Employee</span><span style="color:#FFF !important;" data-ng-show="updateActionComplete">Update Complete</span></button>
+        <button data-ng-disabled="editEmployeeForm.$invalid || updateInProgress || dataIsSynced" data-ng-click="subViewModel.updateEmployee()" type="submit" class="btn green pull-right"><i class="icon-pencil m-icon-white"></i><span style="color:#FFF !important;" data-ng-show="dataIsSynced">Update Employee</span><span style="color:#FFF !important;" data-ng-hide="!dataIsSynced">Update Employee</span><span style="color:#FFF !important;" data-ng-show="dataIsSynced &amp;&amp; updateActionComplete">Update Complete</span></button>
       </div>
     </form>
   </div>

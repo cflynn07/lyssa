@@ -31,15 +31,13 @@ define [
 ) ->
   (Module) ->
 
+
+
     Module.run ['$templateCache', ($templateCache) ->
-      $templateCache.put 'viewWidgetEmployeeManager',
-        viewWidgetEmployeeManager
 
-      $templateCache.put 'viewPartialEmployeeManagerAddManualForm',
-        viewPartialEmployeeManagerAddManualForm
-
-      $templateCache.put 'viewPartialEmployeeManagerAddCSVForm',
-        viewPartialEmployeeManagerAddCSVForm
+      $templateCache.put 'viewWidgetEmployeeManager',               viewWidgetEmployeeManager
+      $templateCache.put 'viewPartialEmployeeManagerAddManualForm', viewPartialEmployeeManagerAddManualForm
+      $templateCache.put 'viewPartialEmployeeManagerAddCSVForm',    viewPartialEmployeeManagerAddCSVForm
 
     ]
 

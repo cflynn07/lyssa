@@ -6,24 +6,24 @@ if !window.console.log?
 requirejs.config
   baseUrl: '/'
   paths:
-    'angular':              'vendor/angular'
-    'angular-ui':           'vendor/angular-ui'
-    'angular-bootstrap':    'vendor/angular-bootstrap'
-    'text':                 'vendor/text'
-    'coffee-script':        'vendor/coffee-script'
-    'cs':                   'vendor/cs'
-    'hbs':                  'vendor/hbs'
-    'Handlebars':           'vendor/Handlebars'
-    'i18nprecompile':       'vendor/hbs/i18nprecompile'
-    'json2':                'vendor/hbs/json2'
-    'io':                   'vendor/socket.io'
-    'underscore':           'vendor/underscore'
-    'underscore_string':    'vendor/underscore.string'
-    'backbone':             'vendor/backbone'
-    'jquery':               'vendor/jquery'
-    'jquery-ui':            'vendor/jquery-ui'
-    'bootstrap':            'vendor/bootstrap'
-    'gritter':              'vendor/jquery.gritter'
+    'angular':                  'vendor/angular'
+    'angular-ui':               'vendor/angular-ui'
+    'angular-bootstrap':        'vendor/angular-bootstrap'
+    'text':                     'vendor/text'
+    'coffee-script':            'vendor/coffee-script'
+    'cs':                       'vendor/cs'
+    'hbs':                      'vendor/hbs'
+    'Handlebars':               'vendor/Handlebars'
+    'i18nprecompile':           'vendor/hbs/i18nprecompile'
+    'json2':                    'vendor/hbs/json2'
+    'io':                       'vendor/socket.io'
+    'underscore':               'vendor/underscore'
+    'underscore_string':        'vendor/underscore.string'
+    'backbone':                 'vendor/backbone'
+    'jquery':                   'vendor/jquery'
+    'jquery-ui':                'vendor/jquery-ui'
+    'bootstrap':                'vendor/bootstrap'
+    'gritter':                  'vendor/jquery.gritter'
 
 
     'bootstrapFileUpload':      'vendor/bootstrap-fileupload'
@@ -278,11 +278,9 @@ require [
   FilterTelephone CS
   FilterFromNow   CS
 
-
   CS.config ['$routeProvider', ($routeProvider) ->
     ClientRoutes $routeProvider
   ]
-
 
   ControllerApp                           CS
   ControllerCoreWidgets                   CS
@@ -303,8 +301,10 @@ require [
   ControllerWidgetQuarterlyTestingReport  CS
   ControllerWidgetQuizExerciseSubmitter   CS
 
+  #Start the party!
   angular.bootstrap document, ['CS']
 
+  #Helper to remove 300ms delay from touch events on iOS devices
   window.addEventListener 'load', () ->
     FastClick.attach document.body
   false

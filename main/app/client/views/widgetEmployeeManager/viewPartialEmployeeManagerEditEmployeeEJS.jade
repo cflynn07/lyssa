@@ -70,15 +70,26 @@
               .controls
                 label.checkbox.line
                   .checker
-                    span(data-ng-class="{checked: subViewModel.editEmployeeForm.delegate}", data-ng-click="subViewModel.editEmployeeForm.delegate = !subViewModel.editEmployeeForm.delegate")
+                    span(data-ng-class = "{checked: subViewModel.editEmployeeForm.delegate}"
+                         data-ng-click = "subViewModel.editEmployeeForm.delegate = !subViewModel.editEmployeeForm.delegate")
                       input(type="checkbox", data-ng-model="subViewModel.editEmployeeForm.delegate", name="delegate")
                   | This employee is a delegate
                 span.help-inline This will create an account for your delegate to log-in and submit exercises
       // row-fluid
       .form-actions
-        button.btn.green.pull-right(data-ng-disabled="editEmployeeForm.$invalid || updateInProgress || updateActionComplete", data-ng-click="subViewModel.updateEmployee()", type="submit")
+        button.btn.green.pull-right(data-ng-disabled = "editEmployeeForm.$invalid || updateInProgress || dataIsSynced"
+                                    data-ng-click    = "subViewModel.updateEmployee()"
+                                    type             = "submit")
           i.icon-pencil.m-icon-white
-          span(style="color:#FFF !important;", data-ng-hide="updateActionComplete") Update Employee
-          span(style="color:#FFF !important;", data-ng-show="updateActionComplete") Update Complete
+
+          span(style        = "color:#FFF !important;"
+               data-ng-show = "dataIsSynced") Update Employee
+
+          span(style        = "color:#FFF !important;"
+               data-ng-hide = "!dataIsSynced") Update Employee
+
+          span(style        = "color:#FFF !important;"
+               data-ng-show = "dataIsSynced && updateActionComplete") Update Complete
+
   // portlet-body
 // portlet-box
