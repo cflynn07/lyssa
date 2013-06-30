@@ -61,53 +61,70 @@ define [
 
       loadNewRoute = () ->
 
-        #console.log $route
-        #Determine if this is a valid application route
-        if _.isUndefined($route.current.$$route)
-          if previousRouteGroup == '' && $scope.rootUser
-            window.location.hash = '/' + clientConfig.simplifiedUserCategories[$scope.rootUser.type] + '/themis'
-            return
-          else
-            trigger4oh4()
-            return
+        existingFadeIns = $('.animated.fadeInRightBig')
 
 
-        #if !clientConfig.isRouteQuiz($route.current.path)
-          #Determine if this is a valid route for the given user-type
-          #console.log 'routeMatchClientType'
-          #if !clientConfig.routeMatchClientType($route.current.path, $scope.rootUser.type)
-          #  trigger4oh4()
-          #  return
-
-        #if !isDerivativeRoute($route.current.pathValue.title)
-
-        if $route.current.$$route.group != previousRouteGroup
-          previousRouteGroup = $route.current.$$route.group
-
-          $('body').animate({scrollTop: 0}, 700)
-
-          widgets = stripAllButBC()
-
-          for rowWidgets in $route.current.$$route.widgetViews
-
-            widgetObjects = []
-            for widget in rowWidgets
-
-              spanLength = 'span12'
-              if rowWidgets.length == 2
-                spanLength = 'span6'
-
-              widgetObjects.push {
-                spanLength: spanLength
-                widget: widget
-              }
-
-            $scope.widgetRows.push widgetObjects
-
-          #Used by widgets for forming links
-          $rootScope.viewRoot = $route.current.$$route.root
+        loadNewRouteChangeCallback = ->
+          #console.log $route
+          #Determine if this is a valid application route
+          if _.isUndefined($route.current.$$route)
+            if previousRouteGroup == '' && $scope.rootUser
+              window.location.hash = '/' + clientConfig.simplifiedUserCategories[$scope.rootUser.type] + '/themis'
+              return
+            else
+              trigger4oh4()
+              return
 
 
+          #if !clientConfig.isRouteQuiz($route.current.path)
+            #Determine if this is a valid route for the given user-type
+            #console.log 'routeMatchClientType'
+            #if !clientConfig.routeMatchClientType($route.current.path, $scope.rootUser.type)
+            #  trigger4oh4()
+            #  return
+
+          #if !isDerivativeRoute($route.current.pathValue.title)
+
+          if $route.current.$$route.group != previousRouteGroup
+            previousRouteGroup = $route.current.$$route.group
+
+            $('body').animate({scrollTop: 0}, 700)
+
+            widgets = stripAllButBC()
+
+            for rowWidgets in $route.current.$$route.widgetViews
+
+              widgetObjects = []
+              for widget in rowWidgets
+
+                spanLength = 'span12'
+                if rowWidgets.length == 2
+                  spanLength = 'span6'
+
+                widgetObjects.push {
+                  spanLength: spanLength
+                  widget: widget
+                }
+
+              $scope.widgetRows.push widgetObjects
+
+            #Used by widgets for forming links
+            $rootScope.viewRoot = $route.current.$$route.root
+
+
+        ###
+        if existingFadeIns.length
+          existingFadeIns.addClass 'fadeOutDownBig'
+          setTimeout () ->
+            loadNewRouteChangeCallback()
+            $scope.$apply()
+          , 200
+        else 
+        ###
+
+        loadNewRouteChangeCallback()
+
+        
 
 
 

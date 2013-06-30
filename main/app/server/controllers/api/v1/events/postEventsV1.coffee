@@ -52,18 +52,18 @@ module.exports = (app) ->
 
                   eventParticipant.create({
                     uid:         insertUid
-
+                    
                     clientUid:   item.clientUid
                     employeeUid: item.uid
                     eventUid:    resultEvent.uid
-
+                    
                     clientId:    item.clientId
                     employeeId:  item.id
                     eventId:     resultEvent.id
 
-                  }).success (resultEventParticipant) ->
+                  }).success (resultEventParticipant) ->                    
                     #console.log 'resultEventParticipant'
-                    #console.log resultEventParticipant
+                    #console.log resultEventParticipant                    
                     callback(null)
 
                 , (err, results) ->
@@ -404,8 +404,8 @@ module.exports = (app) ->
                         return
 
                       mapObj = {}
-                      mapObj[resultEmployee.uid]  = resultEmployee
-                      mapObj[resultClient.uid]      = resultClient
+                      mapObj[resultEmployee.uid] = resultEmployee
+                      mapObj[resultClient.uid]   = resultClient
                       callback null,
                         success:    true
                         uidMapping: mapObj

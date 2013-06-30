@@ -10,20 +10,30 @@ _              = require 'underscore'
 activityInsert = require config.appRoot + 'server/components/activityInsert'
 
 
-express = require 'express.io'
-pub     = require('./config/redis').createClient()
-sub     = require('./config/redis').createClient()
-store   = require('./config/redis').createClient()
+
+#Hash of all events stored in memory
+events = {}
+
+
+
+express    = require 'express.io'
+pub        = require('./config/redis').createClient()
+sub        = require('./config/redis').createClient()
+store      = require('./config/redis').createClient()
 redisStore = require('./config/redis').createStore()
+
+event            = ORM.model 'event'
+eventParticipant = ORM.model 'eventParticipant'
+employee         = ORM.model 'employee'
+
 
 app = express().http().io()
 app.io.set 'store',
   new express.io.RedisStore
-    redis: require 'redis'
-    redisPub: pub
-    redisSub: sub
+    redis:       require 'redis'
+    redisPub:    pub
+    redisSub:    sub
     redisClient: store
-
 
 
 configureEventJob = (eventObj) ->
@@ -32,36 +42,52 @@ configureEventJob = (eventObj) ->
   console.log eventObj.name
   console.log eventObj.dateTime
 
-  events[eventObj.uid] = schedule.scheduleJob (new Date(eventObj.dateTime)), () ->
-    console.log 'scheduleJob'
-    console.log eventObj.name
 
-    activityInsert {
-      type:      'eventInitialized'
-      eventUid:  eventObj.uid
-      clientUid: eventObj.clientUid
-    }, app
 
-    twilioClient.sendSms {
-      to:   '7745734580'
-      from: '6172507514'
-      body: 'Scheduler Test Fire: ' + eventObj.name
-    }, (error, message) ->
-      #console.log arguments
 
-    delete events[eventObj.uid]
-    console.log 'events.length == ' + Object.getOwnPropertyNames(events).length
+  ((eventObj) ->
+    events[eventObj.uid] = schedule.scheduleJob (new Date(eventObj.dateTime)), () ->
+
+      #console.log 'scheduleJob'
+      #console.log eventObj.name
+
+      activityInsert {
+        type:      'eventInitialized'
+        eventUid:  eventObj.uid
+        clientUid: eventObj.clientUid
+      }, app
+
+
+
+      eventParticipant.findAll(
+        where:
+          eventUid: eventObj.uid
+        include: [employee]
+      ).success (resultEventParticipants) ->                
+        resultEventParticipants
+
+
+      twilioClient.sendSms {
+        to:   '7745734580'
+        from: '6172507514'
+        body: 'Scheduler Test Fire: ' + eventObj.name
+      }, (error, message) ->
+        #console.log arguments
+
+      delete events[eventObj.uid]
+      console.log 'events.length == ' + Object.getOwnPropertyNames(events).length
+  )(eventObj)
+
+
+
 
   console.log 'events.length == ' + Object.getOwnPropertyNames(events).length
 
 
 
-#Hash of all events stored in memory
-events = {}
 
 
 #When initializing, iterate over all events and set up timers for them
-event = ORM.model 'event'
 event.findAll(
   where: ['dateTime >= NOW()']
 ).success (events) ->

@@ -9,9 +9,8 @@ define [
     Module.directive 'animateIn', () ->
       (scope, element, attrs) ->
 
-        element.addClass 'animated fadeInRightBig'
-
-        return
+        element.addClass 'animated fadeIn'
+        #return
 
 
         #console.log 'p1'
