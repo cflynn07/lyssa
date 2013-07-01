@@ -152,29 +152,29 @@
 
 
             a.btn.red.btn-inline(data-ng-hide  = "viewModel.newEventForm.submitting"
-                      data-ng-click = "viewModel.closeAddNewExerciseForm()")
+                                 data-ng-click = "viewModel.closeAddNewExerciseForm()")
               i.icon-remove
               |&nbsp;Cancel
 
 
 
             a.btn.button-previous.btn-inline(data-ng-click = "viewModel.activeWizardStep = viewModel.activeWizardStep - 1"
-                                  data-ng-hide  = "viewModel.activeWizardStep == 0 || viewModel.newEventForm.submitting")
+                                             data-ng-hide  = "viewModel.activeWizardStep == 0 || viewModel.newEventForm.submitting")
               i.m-icon-swapleft
               |&nbsp;Back
 
 
             a.btn.blue.btn-inline(data-ng-disabled = "!viewModel.isStepValid()"
-                       data-ng-click    = "viewModel.isStepValid() && (viewModel.activeWizardStep = viewModel.activeWizardStep + 1)"
-                       data-ng-hide     = "viewModel.activeWizardStep == 2 || viewModel.newEventForm.submitting")
+                                  data-ng-click    = "viewModel.isStepValid() && (viewModel.activeWizardStep = viewModel.activeWizardStep + 1)"
+                                  data-ng-hide     = "viewModel.activeWizardStep == 2 || viewModel.newEventForm.submitting")
               | Continue&nbsp;
               i.m-icon-swapright.m-icon-white
 
 
             button.btn.button-submit.btn-inline(data-ng-class    = "{true:'black',false:'green'}[viewModel.newEventForm.submitting]"
-                                     data-ng-disabled = "!viewModel.isStepValid() || viewModel.newEventForm.submitting"
-                                     data-ng-show     = "viewModel.activeWizardStep == 2"
-                                     data-ng-click    = "viewModel.submitAddNewExercise()")
+                                                data-ng-disabled = "!viewModel.isStepValid() || viewModel.newEventForm.submitting"
+                                                data-ng-show     = "viewModel.activeWizardStep == 2"
+                                                data-ng-click    = "viewModel.submitAddNewExercise()")
               p(data-ng-hide = "viewModel.newEventForm.submitting")
                 | Submit&nbsp;
                 i.m-icon-swapright.m-icon-white
