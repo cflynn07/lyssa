@@ -9,9 +9,17 @@ module.exports =
     name:
       type:   SEQ.STRING
       validate:
-        isAlphanumeric: true
+      #  isAlphanumeric: true
         len: [5, 50]
     dateTime: SEQ.DATE
+
+
+    cronDaemonUid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: true
+
 
     clientUid:
       type: SEQ.STRING

@@ -13,8 +13,11 @@ define [
         setup: (element) ->
           #element.css display: 'none'
         start: (element, done) ->
-          element.fadeOut 'fast', () ->
-            done()
+          element.removeClass 'fadeIn'
+          element.show().addClass 'animated fadeOut' 
+          done()
+          #element.fadeOut 'fast', () ->
+          #  done()
     ]
 
     Module.animation 'fade-in', ['$rootScope', ($rootScope) ->
@@ -23,7 +26,10 @@ define [
         setup: (element) ->
           element.css display: 'none'
         start: (element, done, memo) ->
-          element.fadeIn 'fast', () ->
-            done()
+          element.removeClass 'fadeOut'
+          element.show().addClass 'animated fadeIn' 
+          done()
+          #element.fadeIn 'fast', () ->
+          #  done()
     ]
 

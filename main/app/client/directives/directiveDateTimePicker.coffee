@@ -8,6 +8,8 @@ define [
 
   (Module) ->
 
+    #http://www.malot.fr/bootstrap-datetimepicker
+
     Module.directive 'dateTimePicker', () ->
       directive =
         restrict:   'A'
@@ -21,6 +23,7 @@ define [
             showMeridian: true
             startDate:    new Date()
             autoclose:    true
+            minuteStep:   1
             format:       'dd MM yyyy - HH:ii P'
           }).on 'changeDate', (e) ->
 

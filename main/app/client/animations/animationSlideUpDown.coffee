@@ -13,7 +13,7 @@ define [
         setup: (element) ->
           #element.css display: 'none'
         start: (element, done) ->
-          element.slideUp 'fast', () ->
+          element.slideUp 'normal', () ->
             done()
     ]
 
@@ -23,6 +23,6 @@ define [
         setup: (element) ->
           element.css display: 'none'
         start: (element, done, memo) ->
-          element.slideDown 'fast', () ->
+          element.slideDown 'normal', () ->
             done()
     ]

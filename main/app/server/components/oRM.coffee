@@ -14,12 +14,12 @@ exportObj =
       maxConcurrentQueries: 100
       pool:
         maxConnections: 5
-        maxIdleTime: 30
+        maxIdleTime:    30
       define:
         underscored: false
       syncOnAssociation: false
       paranoid: true
-      logging: false #console.log
+      logging:  false #console.log
 
     if process.env.CIRCLECI
 

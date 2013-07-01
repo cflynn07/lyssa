@@ -11,13 +11,14 @@
             h4
               span Upcoming Exercises
           .portlet-body
-            button.btn.green.btn-block
+            button.btn.green.btn-block(style           = "margin-bottom:20px;"
+                                       data-ng-hide    = "viewModel.showNewExerciseForm"
+                                       data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
+                                       data-ng-click   = "viewModel.showNewExerciseForm = true")
               | Add Exercise
               i.m-icon-swapright.m-icon-white
-            table.table.table-striped.table-hover.table-bordered.dataTable(style           = "margin-bottom:20px;"
-                                                                           data-ng-hide    = "viewModel.showNewExerciseForm"
-                                                                           data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
-                                                                           data-ng-click   = "viewModel.showNewExerciseForm = true")
+
+            table.table.table-striped.table-hover.table-bordered.dataTable
               thead
                 tr
                   th.sorting Name
@@ -38,7 +39,7 @@
       div(data-ng-class = "{true:'span12 no-second-box-margin', false:'span7'}[viewModel.exerciseListCollapsed]")
 
         .row-fluid(style           = "display:none;"
-                   data-ng-animate = "{show:'slideDown'}"
+                   data-ng-animate = "{show:'fadeIn'}"
                    data-ng-show    = "viewModel.showNewExerciseForm"
                    data-ng-include = "'viewPartialSchedulerAddExerciseForm'")
 
