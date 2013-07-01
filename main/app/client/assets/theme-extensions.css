@@ -23,6 +23,9 @@ body {
 .btn span.activity, .btn p.activity {
   font-style: italic;
 }
+.btn.btn-inline {
+  margin-right: 4px;
+}
 
 .page-content {
     background-color: #FFF;
