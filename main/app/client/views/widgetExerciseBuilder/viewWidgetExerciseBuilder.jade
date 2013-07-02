@@ -3,11 +3,14 @@
   .portlet-title
     h4
       span Template Manager
-  .portlet-body.light-grey(data-ng-init="viewModel.templatesListCollapsed = false")
+  .portlet-body.light-grey(data-ng-init = "viewModel.templatesListCollapsed = false")
     .row-fluid
+
+
+
       // Templates list
-      #templatesListPortlet.span5.responsive.span8(data-ng-hide="viewModel.templatesListCollapsed && viewModel.routeParams.revisionUid")
-        .portlet.box.grey(data-ng-show="!viewModel.templatesListCollapsed")
+      #templatesListPortlet.span5.responsive.span8(data-ng-hide = "viewModel.templatesListCollapsed && viewModel.routeParams.revisionUid")
+        .portlet.box.grey(data-ng-show = "!viewModel.templatesListCollapsed")
           .portlet-title
             h4
               span Templates
@@ -27,8 +30,12 @@
               i.m-icon-swapdown
           // /portlet body
       // /Templates list
-      div(data-ng-class="{true:'span12 no-second-box-margin', false:'span7'}[(viewModel.templatesListCollapsed && viewModel.routeParams.revisionUid)]")
-        div(data-ng-include="'viewPartialExerciseBuilderNewTemplateForm'")
+
+
+
+
+      div(data-ng-class = "{true:'span12 no-second-box-margin', false:'span7'}[(viewModel.templatesListCollapsed && viewModel.routeParams.revisionUid)]")
+        div(data-ng-include = "'viewPartialExerciseBuilderNewTemplateForm'")
         .portlet.box.grey
           .portlet-title
             .caption.pull-left
