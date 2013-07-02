@@ -12,15 +12,21 @@ define [
   'cs!controllers/widgets/widgetExerciseBuilder/groupFieldAddFormControllers/controllerWidgetExerciseBuilderGroupFieldYesNo'
   'cs!controllers/widgets/widgetExerciseBuilder/groupFieldAddFormControllers/controllerWidgetExerciseBuilderGroupFieldPercentageSlider'
 
+  'cs!controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageOpenResponse'
+  'cs!controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageSelectIndividual'
+  'cs!controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageSelectMultiple'
+  'cs!controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageYesNo'
+  'cs!controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageSlider'
+
+  'cs!controllers/widgets/widgetExerciseBuilder/controllerWidgetExerciseBuilderGroupEdit'
+
 
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilder.html'
-
 
   'text!views/widgetExerciseBuilder/fields/viewPartialExerciseBuilderFieldOpenResponse.html'
   'text!views/widgetExerciseBuilder/fields/viewPartialExerciseBuilderFieldSelectIndividual.html'
   'text!views/widgetExerciseBuilder/fields/viewPartialExerciseBuilderFieldSlider.html'
   'text!views/widgetExerciseBuilder/fields/viewWidgetExerciseBuilderFieldButtons.html'
-
 
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderDetailsEJS.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderTemplateListButtonsEJS.html'
@@ -40,11 +46,23 @@ define [
   _string
   utilBuildDTQuery
 
+  #Field add controllers
   ControllerWidgetExerciseBuilderGroupFieldOpenResponse
   ControllerWidgetExerciseBuilderGroupFieldSelectIndividual
   ControllerWidgetExerciseBuilderGroupFieldSelectMultiple
   ControllerWidgetExerciseBuilderGroupFieldYesNo
   ControllerWidgetExerciseBuilderGroupFieldPercentageSlider
+
+  #Field manage controllers
+  ControllerWidgetExerciseBuilderFieldManageOpenResponse
+  ControllerWidgetExerciseBuilderFieldManageSelectIndividual
+  ControllerWidgetExerciseBuilderFieldManageSelectMultiple
+  ControllerWidgetExerciseBuilderFieldManageYesNo
+  ControllerWidgetExerciseBuilderFieldManageSlider
+
+  ControllerWidgetExerciseBuilderGroupEdit
+
+
 
   viewWidgetExerciseBuilder
 
@@ -126,6 +144,8 @@ define [
         topCallback()
 
 
+
+
     #Add Field Form Controllers
     ControllerWidgetExerciseBuilderGroupFieldOpenResponse     Module
     ControllerWidgetExerciseBuilderGroupFieldSelectIndividual Module
@@ -134,214 +154,14 @@ define [
     ControllerWidgetExerciseBuilderGroupFieldPercentageSlider Module
 
 
-    ###
-    #
-    #   GROUP CONTROLLER
-    #
-    ###
-    Module.controller 'ControllerWidgetExerciseBuilderGroupEdit', ['$scope', '$routeParams', 'apiRequest', '$dialog',
-      ($scope, $routeParams, apiRequest, $dialog) ->
-
-        fieldTypes = [
-          'OpenResponse'
-          'SelectIndividual'
-          'SelectMultiple'
-          'YesNo'
-          'PercentageSlider'
-        ]
-
-        $scope.viewModel =
-          showAddNewField_OpenType: ''
-
-          cancelAddNewField: () ->
-            for type in fieldTypes
-              $scope.viewModel.showAddNewField_OpenType = ''
-
-          moveGroup: (dir) ->
-            newOrdinal   = $scope.group.ordinal
-
-            if !$routeParams.revisionUid
-              return
-
-            groupsLength = _.filter(_.toArray($scope.resourcePool[$routeParams.revisionUid].groups), (item) -> !item.deletedAt).length
-
-            if dir == 'down'
-              newOrdinal++
-            else
-              newOrdinal--
-
-            if newOrdinal < 0
-              return
-            if (newOrdinal + 1) > groupsLength
-              return
-
-            _$scope = $scope
-            helperReorderGroupOrdinals $scope,
-              apiRequest,
-              $scope.resourcePool[$routeParams.revisionUid].groups,
-              newOrdinal,
-              $scope.group.uid,
-              () ->
-                apiRequest.put 'group', [$scope.group.uid], {
-                  ordinal: newOrdinal
-                }, {}, (response) ->
-                  console.log response
+    ControllerWidgetExerciseBuilderFieldManageOpenResponse     Module
+    ControllerWidgetExerciseBuilderFieldManageSelectIndividual Module
+    ControllerWidgetExerciseBuilderFieldManageSelectMultiple   Module 
+    ControllerWidgetExerciseBuilderFieldManageYesNo            Module
+    ControllerWidgetExerciseBuilderFieldManageSlider           Module
 
 
-          deleteGroup: (groupUid) ->
-
-            title = 'Delete Dialog'
-            msg   = 'Dire Consequences...'
-            btns  = [
-              result:   false
-              label:    'Cancel'
-              cssClass: 'red'
-            ,
-              result:   true
-              label:    'Confirm'
-              cssClass: 'green'
-            ]
-
-            $dialog.messageBox(title, msg, btns).open()
-              .then (result) ->
-                if result
-                  apiRequest.delete 'group', [groupUid], {}, (result) ->
-                    #console.log result
-
-                    helperReorderGroupOrdinals $scope,
-                      apiRequest,
-                      $scope.resourcePool[$routeParams.revisionUid].groups,
-                      _.toArray($scope.resourcePool[$routeParams.revisionUid].groups).length,
-                      false,
-                      () ->
-                        console.log 'groups reindexed'
-
-          putGroup: (groupUid) ->
-            console.log 'groupUid'
-            console.log groupUid
-
-            name = $scope.resourcePool[groupUid].name
-
-            if (name.length < $scope.clientOrmShare.group.model.name.validate.len[0]) || (name.length > $scope.clientOrmShare.group.model.name.validate.len[1])
-
-              title = 'Invalid name'
-              msg   = 'Group name length must be between ' + $scope.clientOrmShare.group.model.name.validate.len[0] + ' and ' + $scope.clientOrmShare.group.model.name.validate.len[1] + ' characters'
-              btns  = [
-                result:   'cancel'
-                label:    'Cancel'
-                cssClass: 'red'
-              ,
-                result:   'ok'
-                label:    'OK'
-                cssClass: 'green'
-              ]
-
-              $dialog.messageBox(title, msg, btns)
-                .open()
-                .then (result) ->
-                  if result == 'cancel'
-                    apiRequest.get 'group', [groupUid], {}, () ->
-                      $scope.nameEditing = false
-
-              return true
-
-            else
-
-              apiRequest.put 'group', groupUid, {
-                name: $scope.resourcePool[groupUid].name
-              }, {}, (response) ->
-                console.log response
-              return false
-    ]
-    ######
-
-
-    ###
-    #
-    #  FIELDS CONTROLLERS
-    #
-    ###
-    Module.controller 'ControllerWidgetExerciseBuilderFieldManageOpenResponse', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
-    ]
-    Module.controller 'ControllerWidgetExerciseBuilderFieldManageSelectIndividual', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
-
-        #console.log $scope.field
-
-        $scope.dictionaryItemsDT =
-          columnDefs: [
-            mData:    null
-            aTargets: [0]
-            mRender: (data, type, full) ->
-              return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + full.name + '</span>'
-          ]
-          options:
-            bStateSave:      true
-            iCookieDuration: 2419200
-            bJQueryUI:       false
-            bPaginate:       true
-            bLengthChange:   false
-            bFilter:         true
-            bInfo:           true
-            bDestroy:        true
-            bServerSide:     true
-            bProcessing:     true
-            fnServerData: (sSource, aoData, fnCallback, oSettings) ->
-              query = utilBuildDTQuery ['name'],
-                ['name'],
-                oSettings
-
-              if query.filter and !_.isUndefined(query.filter[0])
-                query.filter[0][3] = 'and'
-
-              query.filter.push ['deletedAt', '=', 'null', 'and']
-              query.filter.push ['dictionaryUid', '=', $scope.field.dictionaryUid, 'and']
-
-              cacheResponse   = ''
-              oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response, responseRaw) ->
-                if response.code == 200
-
-                  responseDataString = responseRaw #JSON.stringify(response.response)
-                  if cacheResponse == responseDataString
-                    return
-                  cacheResponse = responseDataString
-
-                  dataArr = _.toArray response.response.data
-
-                  fnCallback
-                    iTotalRecords:        response.response.length
-                    iTotalDisplayRecords: response.response.length
-                    aaData:               dataArr
-
-    ]
-    Module.controller 'ControllerWidgetExerciseBuilderFieldManageSelectMultiple', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
-    ]
-    Module.controller 'ControllerWidgetExerciseBuilderFieldManageYesNo', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
-    ]
-    Module.controller 'ControllerWidgetExerciseBuilderFieldManageSlider', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
-
-        $scope.slider =
-          value: 50
-          step:  5
-
-        #setInterval () ->
-        #  console.log $scope.slider
-        #, 500
-
-
-    ]
-    ###
-    #
-    #  END FIELDS CONTROLLERS
-    #
-    ###
-
-
-
+    ControllerWidgetExerciseBuilderGroupEdit                   Module
 
 
     ###
