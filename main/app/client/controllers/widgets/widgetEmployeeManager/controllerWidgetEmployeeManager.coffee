@@ -31,20 +31,21 @@ define [
 ) ->
   (Module) ->
 
-
-
     Module.run ['$templateCache', ($templateCache) ->
-
       $templateCache.put 'viewWidgetEmployeeManager',               viewWidgetEmployeeManager
       $templateCache.put 'viewPartialEmployeeManagerAddManualForm', viewPartialEmployeeManagerAddManualForm
       $templateCache.put 'viewPartialEmployeeManagerAddCSVForm',    viewPartialEmployeeManagerAddCSVForm
-
     ]
-
-
 
     Module.controller 'ControllerWidgetEmployeeManagerCSVUpload', ['$scope', 'apiRequest',
     ($scope, apiRequest) ->
+
+
+
+
+
+
+
 
 
       $scope.viewModel =

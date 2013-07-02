@@ -51,13 +51,20 @@
           .control-group(data-ng-class="{success:editEmployeeForm.phone.$valid, error:!editEmployeeForm.phone.$valid, 'ng-pristine':editEmployeeForm.phone.$pristine}")
             label.control-label(for="phone") Phone Number
             .controls.input-icon
-              input.m-wrap.span10(type="text", data-ng-disabled="updateInProgress", data-required="", data-unique-field="{\"resource\": \"employee\", \"property\": \"phone\"}", data-ui-mask="'999-999-9999'", data-ng-model="subViewModel.editEmployeeForm.phone", name="phone", placeholder="999-999-9999")
-              span.input-success(data-ng-show="editEmployeeForm.phone.$dirty && editEmployeeForm.phone.$valid")
+              input.m-wrap.span10(type = "text"
+                                  data-required
+                                  data-ng-disabled  = "updateInProgress"
+                                  data-unique-field = "{\"resource\": \"employee\", \"property\": \"phone\"}"
+                                  data-ui-mask      = "'999-999-9999'"
+                                  data-ng-model     = "subViewModel.editEmployeeForm.phone"
+                                  name              = "phone"
+                                  placeholder       = "999-999-9999")
+              span.input-success(data-ng-show = "editEmployeeForm.phone.$dirty && editEmployeeForm.phone.$valid")
                 i.icon-ok
-              span.input-error(data-ng-show="editEmployeeForm.phone.$dirty && editEmployeeForm.phone.$invalid")
+              span.input-error(data-ng-show = "editEmployeeForm.phone.$dirty && editEmployeeForm.phone.$invalid")
                 i.icon-exclamation-sign
-              span.help-inline(data-ng-show="editEmployeeForm.phone.$error") Enter a valid phone number
-              span.help-inline(data-ng-show="editEmployeeForm.phone.$error.uniqueField")
+              span.help-inline(data-ng-show = "editEmployeeForm.phone.$error") Enter a valid phone number
+              span.help-inline(data-ng-show = "editEmployeeForm.phone.$error.uniqueField")
                 | Another employee with the phone number
                 strong {{subViewModel.editEmployeeForm.phone}}
                 | already exists
