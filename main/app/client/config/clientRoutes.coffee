@@ -125,22 +125,24 @@ define [], () ->
 
 
 
-
-    $routeProvider.when '/quizes',
-      root: '/quizes'
+    ###
+    $routeProvider.when '/quizzes',
+      root: '/quizzes'
       group: 'quizSubmit'
       subGroup: ''
       widgetViews: [
       #  ['viewWidgetScheduler']
       ]
-    $routeProvider.when '/quizes/:eventParticipantUid',
-      root: '/quizes'
+    $routeProvider.when '/quizzes/:eventParticipantUid',
+      root: '/quizzes'
       group: 'quizSubmit'
       subGroup: ''
       widgetViews: [
         ['viewNoBreadCrumbs']
         ['viewWidgetQuizExerciseSubmitter']
       ]
+    ###
+
 
     $routeProvider.when '/exercises',
       root: '/exercises'
@@ -156,6 +158,16 @@ define [], () ->
       widgetViews: [
         ['viewNoBreadCrumbs']
         ['viewWidgetQuizExerciseSubmitter']
+      ]
+
+
+
+    $routeProvider.when '/admin/themis/reports/timeline',
+      root: '/admin/themis/reports/timeline'
+      group: 'reportsTimeline'
+      subGroup: ''
+      widgetViews: [
+        ['viewNoBreadCrumbs']
       ]
 
 

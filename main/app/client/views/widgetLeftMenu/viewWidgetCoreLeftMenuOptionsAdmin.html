@@ -15,6 +15,11 @@
     <li><a data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/settings/employees') === 0]" data-ng-click="setCurrentActiveMenuItem('settings')" href="#/admin/themis/settings/employees">Employees</a></li>
   </ul>
 </li>
+<li data-ng-class="{ 'active':(locationHash.indexOf('/admin/themis/reports') === 0), 'open':(currentActiveMenuItem == 'reports') }" data-ng-click="setCurrentActiveMenuItem('reports')"><a><i class="icon-bar-chart"></i><span class="title">Reports</span><span data-ng-class="{true:'open'}[currentActiveMenuItem == 'reports' || locationHash.indexOf('/admin/themis/reports') === 0]" class="arrow"></span><span class="selected"></span></a>
+  <ul data-ng-show="locationHash.indexOf('/admin/themis/reports') === 0 || currentActiveMenuItem == 'reports'" data-ng-animate="{show:'slideDown', hide:'slideUp'}" class="sub-menu">
+    <li><a data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/reports/timeline') === 0]" data-ng-click="setCurrentActiveMenuItem('reports')" href="#/admin/themis/reports/timeline">Timeline</a></li>
+  </ul>
+</li>
 <li>
   <!-- BEGIN SIDEBAR TOGGLER BUTTON-->
   <div data-ng-click="sidebarClosedToggle()" class="sidebar-toggler hidden-phone"></div>
