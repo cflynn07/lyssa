@@ -43,8 +43,8 @@ define [
 
             viewModel.newEventForm.doneCheckingTemplatesForType = true          
             viewModel.newEventForm.templatesForType             = if (response.response.length > 0) then true else false
-            console.log 'viewModel.newEventForm.templatesForType'
-            console.log viewModel.newEventForm.templatesForType
+            #console.log 'viewModel.newEventForm.templatesForType'
+            #console.log viewModel.newEventForm.templatesForType
 
         , true
 
