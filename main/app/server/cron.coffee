@@ -105,37 +105,41 @@ configureEventCronJob = (eventObj) ->
             bodyMessage = 'Business Continuity Test ' + "\n" + '"' + resultEventObj.name + '" @ ' + (new Date (resultEventObj.dateTime)).toGMTString()
 
             for eP in resultEventParticipants
+              ((participant) ->
+                #Send email
+                
+                mandrill '/messages/send',
+                  message:
+                    to: [
+                      name:  participant.employee.firstName + ' ' + participant.employee.lastName
+                      email: participant.employee.email
+                    ]
+                    from_email: 'no-reply@cobarsystems.com'
+                    from_name:  'Cobar Systems'
+                    subject:    bodyMessage
+                    text:      'http://lyssa.cobarsystems.com/#/quizes/' + participant.uid
+                , (error, response) ->
+                  #console.log arguments
+                  #console.log response
+                
 
-              #Send email
-              mandrill '/messages/send',
-                message:
-                  to: [
-                    name:  eP.employee.firstName + ' ' + eP.employee.lastName
-                    email: eP.employee.email
-                  ]
-                  from_email: 'no-reply@cobarsystems.com'
-                  from_name:  'Cobar Systems'
-                  subject:    bodyMessage
-                  text:      'http://lyssa.cobarsystems.com/#/quizes/' + eP.uid
-              , (error, response) ->
-                console.log arguments
-                console.log response
-
-
-              #Send text message in two parts
-              twilioClient.sendSms {
-                to:   eP.employee.phone
-                from: '6172507514'
-                body: bodyMessage
-              }, (error, message) ->
+                #Send text message in two parts
 
                 twilioClient.sendSms {
-                  to:   eP.employee.phone
+                  to:   participant.employee.phone
                   from: '6172507514'
-                  body: 'http://lyssa.cobarsystems.com/#/quizes/' + eP.uid
+                  body: bodyMessage
                 }, (error, message) ->
                   
-                  #console.log arguments
+                  twilioClient.sendSms {
+                    to:   participant.employee.phone
+                    from: '6172507514'
+                    body: 'http://lyssa.cobarsystems.com/#/quizes/' + participant.uid
+                  }, (error, message) ->
+                    
+                    #console.log arguments
+              )(eP)
+
 
           delete events[resultEventObj.uid]
           console.log 'events.length == ' + Object.getOwnPropertyNames(events).length
