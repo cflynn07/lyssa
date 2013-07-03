@@ -21,8 +21,9 @@ define [
     Module.controller 'ControllerWidgetSchedulerAddExerciseForm', ['$scope', '$route', '$routeParams', 'apiRequest'
       ($scope, $route, $routeParams, apiRequest) ->
 
-        #Every time event type field is changed,
-        #check to make sure we have templates of this type
+
+
+
 
         $scope.$watch 'viewModel.newEventForm.eventType', (newVal, oldVal) ->
           
@@ -32,6 +33,8 @@ define [
           viewModel.newEventForm.doneCheckingTemplatesForType = false
 
           query = 
+            limit:  1
+            offset: 0
             filter: [
               ['deletedAt', '=', 'null',                             'and']
               ['type',      '=', viewModel.newEventForm.eventType,   'and']
@@ -44,6 +47,10 @@ define [
             console.log viewModel.newEventForm.templatesForType
 
         , true
+
+
+
+
 
 
 
