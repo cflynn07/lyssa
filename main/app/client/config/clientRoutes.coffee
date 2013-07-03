@@ -28,24 +28,24 @@ define [], () ->
       subGroup: ''
       widgetViews: [
       ]
-    $routeProvider.when '/admin/themis/templates/exercises',
-      root: '/admin/themis/templates/exercises'
+    $routeProvider.when '/admin/themis/templates/full',
+      root: '/admin/themis/templates/full'
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
         ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
-    $routeProvider.when '/admin/themis/templates/exercises/:templateUid',
-      root: '/admin/themis/templates/exercises'
+    $routeProvider.when '/admin/themis/templates/full/:templateUid',
+      root: '/admin/themis/templates/full'
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
         ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
-    $routeProvider.when '/admin/themis/templates/exercises/:templateUid/:revisionUid',
-      root: '/admin/themis/templates/exercises'
+    $routeProvider.when '/admin/themis/templates/full/:templateUid/:revisionUid',
+      root: '/admin/themis/templates/full'
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
@@ -55,24 +55,24 @@ define [], () ->
 
 
 
-    $routeProvider.when '/admin/themis/templates/quizes',
-      root: '/admin/themis/templates/quizes'
+    $routeProvider.when '/admin/themis/templates/mini',
+      root: '/admin/themis/templates/mini'
       group: 'templatesQuizes'
       subGroup: ''
       widgetViews: [
         ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
-    $routeProvider.when '/admin/themis/templates/quizes/:templateUid',
-      root: '/admin/themis/templates/quizes'
+    $routeProvider.when '/admin/themis/templates/mini/:templateUid',
+      root: '/admin/themis/templates/mini'
       group: 'templatesQuizes'
       subGroup: ''
       widgetViews: [
         ['viewNoBreadCrumbs']
         ['viewWidgetExerciseBuilder']
       ]
-    $routeProvider.when '/admin/themis/templates/quizes/:templateUid/:revisionUid',
-      root: '/admin/themis/templates/quizes'
+    $routeProvider.when '/admin/themis/templates/mini/:templateUid/:revisionUid',
+      root: '/admin/themis/templates/mini'
       group: 'templatesQuizes'
       subGroup: ''
       widgetViews: [

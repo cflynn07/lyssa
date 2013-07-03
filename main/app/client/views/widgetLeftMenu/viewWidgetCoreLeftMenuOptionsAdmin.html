@@ -4,8 +4,8 @@
 <li data-ng-class="{ 'active':(locationHash.indexOf('/admin/themis/templates') === 0), 'open':(currentActiveMenuItem == 'templates') }" data-ng-click="setCurrentActiveMenuItem('templates')">
   <!--a(href = "#/admin/themis/templates")--><a><i class="icon-cogs"></i><span class="title">Templates</span><span data-ng-class="{true:'open'}[currentActiveMenuItem == 'templates' || locationHash.indexOf('/admin/themis/templates') === 0]" class="arrow"></span><span class="selected"></span></a>
   <ul data-ng-show="locationHash.indexOf('/admin/themis/templates') === 0 || currentActiveMenuItem == 'templates'" data-ng-animate="{show:'slideDown', hide:'slideUp'}" class="sub-menu">
-    <li><a data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/templates/exercises') === 0]" data-ng-click="setCurrentActiveMenuItem('templates')" href="#/admin/themis/templates/exercises">Exercises</a></li>
-    <li><a data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/templates/quizes') === 0]" data-ng-click="setCurrentActiveMenuItem('templates')" href="#/admin/themis/templates/quizes">Quizes</a></li>
+    <li><a data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/templates/full') === 0]" data-ng-click="setCurrentActiveMenuItem('templates')" href="#/admin/themis/templates/full">Full Exercises</a></li>
+    <li><a data-ng-class="{true:'active'}[locationHash.indexOf('/admin/themis/templates/mini') === 0]" data-ng-click="setCurrentActiveMenuItem('templates')" href="#/admin/themis/templates/mini">Mini Exercises</a></li>
   </ul>
 </li>
 <li data-ng-class="{ 'active':(locationHash.indexOf('/admin/themis/settings') === 0), 'open':(currentActiveMenuItem == 'settings') }" data-ng-click="setCurrentActiveMenuItem('settings')">

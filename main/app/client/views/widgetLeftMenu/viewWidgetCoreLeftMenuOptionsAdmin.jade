@@ -27,13 +27,13 @@ li(data-ng-class = "{ 'active':(locationHash.indexOf('/admin/themis/templates') 
   ul.sub-menu(data-ng-show    = "locationHash.indexOf('/admin/themis/templates') === 0 || currentActiveMenuItem == 'templates'"
               data-ng-animate = "{show:'slideDown', hide:'slideUp'}")
     li
-      a(data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/templates/exercises') === 0]"
+      a(data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/templates/full') === 0]"
         data-ng-click = "setCurrentActiveMenuItem('templates')"
-        href          = "#/admin/themis/templates/exercises") Exercises
+        href          = "#/admin/themis/templates/full") Full Exercises
     li
-      a(data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/templates/quizes') === 0]"
+      a(data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/templates/mini') === 0]"
         data-ng-click = "setCurrentActiveMenuItem('templates')"
-        href          = "#/admin/themis/templates/quizes") Quizes
+        href          = "#/admin/themis/templates/mini") Mini Exercises
 
 
 
