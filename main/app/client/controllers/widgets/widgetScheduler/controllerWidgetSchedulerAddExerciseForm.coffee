@@ -21,11 +21,37 @@ define [
     Module.controller 'ControllerWidgetSchedulerAddExerciseForm', ['$scope', '$route', '$routeParams', 'apiRequest'
       ($scope, $route, $routeParams, apiRequest) ->
 
+        #Every time event type field is changed,
+        #check to make sure we have templates of this type
+
+        $scope.$watch 'viewModel.newEventForm.eventType', (newVal, oldVal) ->
+          
+          if _.isUndefined(newVal)
+            return
+
+          viewModel.newEventForm.doneCheckingTemplatesForType = false
+
+          query = 
+            filter: [
+              ['deletedAt', '=', 'null',                             'and']
+              ['type',      '=', viewModel.newEventForm.eventType,   'and']
+            ]
+          apiRequest.get 'template', [], query, (response, responseRaw) ->
+
+            viewModel.newEventForm.doneCheckingTemplatesForType = true          
+            viewModel.newEventForm.templatesForType             = if (response.response.length > 0) then true else false
+            console.log 'viewModel.newEventForm.templatesForType'
+            console.log viewModel.newEventForm.templatesForType
+
+        , true
+
+
 
         viewModel =
           clientTimeZone:   utilParseClientTimeZone()
           newEventForm:     {}
           activeWizardStep: 0
+
 
           isStepValid: (step = false) ->
             if !$scope.newEventForm
@@ -33,7 +59,7 @@ define [
             form = $scope.newEventForm
             if step is false
               step = viewModel.activeWizardStep
-            step0Valid = (form.eventType.$valid && form.name.$valid && form.description.$valid && form.date.$valid)
+            step0Valid = (form.eventType.$valid && form.name.$valid && form.description.$valid && form.date.$valid && viewModel.newEventForm.templatesForType && viewModel.newEventForm.doneCheckingTemplatesForType)
             step1Valid = (form.templateUid.$valid && form.revisionUid.$valid)
             step2Valid = $scope.viewModel.newEventForm.employeeUids && $scope.viewModel.newEventForm.employeeUids.length
             switch step
@@ -44,6 +70,7 @@ define [
               when 0
                 result = step0Valid
             return result
+
 
           addEmployeeToEvent: (employeeUid) ->
 
@@ -65,7 +92,7 @@ define [
 
           submitAddNewExercise: () ->
             $scope.viewModel.newEventForm.submitting = true
-            form = viewModel.newEventForm
+            form                                     = viewModel.newEventForm
             apiRequest.post 'event', {
               name:             form.name
               dateTime:         (new Date(form.date).toISOString())

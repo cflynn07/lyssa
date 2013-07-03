@@ -35,13 +35,22 @@
                   <select data-ng-click="viewModel.newEventForm.templateUid = false; viewModel.newEventForm.revisionUid = false;" data-ng-model="viewModel.newEventForm.eventType" name="eventType">
                     <option value="mini">Employee Quiz</option>
                     <option value="full">Full Exercise</option>
-                  </select>
+                  </select><span data-ng-show="viewModel.newEventForm.doneCheckingTemplatesForType === false" class="field-async-checking"><i class="icon-cog icon-spin"></i></span>
+                </div>
+              </div>
+              <div style="margin-bottom:0;" data-ng-show="viewModel.newEventForm.templatesForType === false" class="control-group">
+                <div class="controls">
+                  <div class="alert alert-block alert-error large m-wrap"><i style="font-size:25px; margin-right:5px; vertical-align:top;" class="icon-remove icon-white"></i>{{rootUser.firstName}}, you don't have any templates for
+                    <span data-ng-show = "(viewModel.newEventForm.eventType == 'mini')">a Quiz</span>
+                    <span data-ng-show = "(viewModel.newEventForm.eventType == 'full')">an Excercise</span>
+                    yet. Click on <a href="#/admin/themis/templates/exercises/">here</a> to create one.
+                  </div>
                 </div>
               </div>
               <div data-ng-class="{success:newEventForm.name.$valid, error:!newEventForm.name.$valid, 'ng-pristine':newEventForm.name.$pristine}" class="control-group">
                 <label class="control-label">Name</label>
                 <div class="controls">
-                  <input type="text" data-required="" data-ng-minlength="{{clientOrmShare.event.model.name.validate.len[0]}}" data-ng-maxlength="{{clientOrmShare.event.model.name.validate.len[1]}}" data-ng-model="viewModel.newEventForm.name" name="name" class="medium m-wrap"/>
+                  <input type="text" required="" data-ng-minlength="{{clientOrmShare.event.model.name.validate.len[0]}}" data-ng-maxlength="{{clientOrmShare.event.model.name.validate.len[1]}}" data-ng-model="viewModel.newEventForm.name" name="name" class="medium m-wrap"/>
                   <div class="clear"></div><span data-ng-show="newEventForm.name.$error.minlength" class="help-inline">Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters</span><span data-ng-show="newEventForm.name.$error.maxlength" class="help-inline">Name must be shorter than {{clientOrmShare.event.model.name.validate.len[1]}} characters</span>
                 </div>
               </div>
@@ -56,12 +65,11 @@
                 <div class="controls">
                   <input type="text" required="" name="date" data-ng-model="viewModel.newEventForm.date" data-ng-bind="viewModel.newEventForm.date" data-ng-show="false"/>
                   <div class="input-append bootstrap-timepicker-component">
-                    <input type="text" data-date-time-picker="" style="cursor:pointer;" readonly="readonly" data-form="newEventForm.date" data-model="viewModel.newEventForm.date" class="m-wrap m-ctrl-small timepicker-default"/><span class="add-on"><i style="display:inline-block !important;" class="icon-time"></i></span>
+                    <input type="text" data-date-time-picker="data-date-time-picker" style="cursor:pointer;" readonly="readonly" data-form="newEventForm.date" data-model="viewModel.newEventForm.date" class="m-wrap m-ctrl-small timepicker-default"/><span class="add-on"><i style="display:inline-block !important;" class="icon-time"></i></span>
                   </div><span style="display:inline-block !important;" class="help-inline">TimeZone: {{viewModel.clientTimeZone}}</span>
                 </div>
               </div>
             </div>
-            <!-- tab-pane-->
             <div data-ng-show="viewModel.activeWizardStep == 1" data-ng-animate="{show:'fade-in'}" data-ng-class="{'active':(viewModel.activeWizardStep == 1)}" class="tab-pane">
               <h3 class="block">Choose a template & revision</h3>
               <div data-ng-class="{success:newEventForm.templateUid.$valid, error:!newEventForm.templateUid.$valid, 'ng-pristine':newEventForm.templateUid.$pristine}" class="control-group">
@@ -81,9 +89,7 @@
                     </table>
                   </div>
                 </div>
-                <!-- controls-->
               </div>
-              <!-- tab-pane-->
               <div data-ng-class="{success:newEventForm.revisionUid.$valid, error:!newEventForm.revisionUid.$valid, 'ng-pristine':newEventForm.revisionUid.$pristine}" class="control-group">
                 <label class="control-label">Revision</label>
                 <div class="controls">

@@ -378,6 +378,12 @@ div.header span.username {
     the individual input elements
     ----------------------------------------------
 */
+span.field-async-checking {
+  margin-left: 10px;
+  font-size: 20px;
+  vertical-align: middle;
+  color: #555 !important;
+}
 .ng-pristine span, .ng-pristine label, .ng-pristine input, .ng-pristine textarea, .ng-pristine select {
   color: #333333 !important;
 }

@@ -92,11 +92,14 @@ define [
 
             widgets = stripAllButBC()
 
+            if !$route.current.$$route.widgetViews || !$route.current.$$route.widgetViews.length
+              return
+
             for rowWidgets in $route.current.$$route.widgetViews
 
               widgetObjects = []
               for widget in rowWidgets
-
+        
                 spanLength = 'span12'
                 if rowWidgets.length == 2
                   spanLength = 'span6'
