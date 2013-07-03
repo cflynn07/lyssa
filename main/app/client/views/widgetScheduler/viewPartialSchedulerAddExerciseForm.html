@@ -38,7 +38,7 @@
                   </select><span data-ng-show="viewModel.newEventForm.doneCheckingTemplatesForType === false" class="field-async-checking"><i class="icon-cog icon-spin"></i></span>
                 </div>
               </div>
-              <div style="margin-bottom:0;" data-ng-show="viewModel.newEventForm.templatesForType === false" class="control-group">
+              <div style="margin-bottom:0;" data-ng-show="viewModel.newEventForm.templatesForType === false &amp;&amp; viewModel.newEventForm.doneCheckingTemplatesForType" class="control-group">
                 <div class="controls">
                   <div class="alert alert-block alert-error large m-wrap"><i style="font-size:25px; margin-right:5px; vertical-align:top;" class="icon-remove icon-white"></i>{{rootUser.firstName}}, you don't have any templates for
                     <span data-ng-show = "(viewModel.newEventForm.eventType == 'mini')">a Quiz</span>
