@@ -18,18 +18,11 @@ define [
   (Module) ->
 
     Module.run ['$templateCache', ($templateCache) ->
-
-      $templateCache.put 'viewWidgetActivityFeed',
-        viewWidgetActivityFeed
-      $templateCache.put 'viewPartialActivityFeedCreateDictionary',
-        viewPartialActivityFeedCreateDictionary
-      $templateCache.put 'viewPartialActivityFeedCreateEmployee',
-        viewPartialActivityFeedCreateEmployee
-      $templateCache.put 'viewPartialActivityFeedCreateEvent',
-        viewPartialActivityFeedCreateEvent
-      $templateCache.put 'viewPartialActivityFeedEventInitialized',
-        viewPartialActivityFeedEventInitialized
-
+      $templateCache.put 'viewWidgetActivityFeed',                  viewWidgetActivityFeed
+      $templateCache.put 'viewPartialActivityFeedCreateDictionary', viewPartialActivityFeedCreateDictionary
+      $templateCache.put 'viewPartialActivityFeedCreateEmployee',   viewPartialActivityFeedCreateEmployee
+      $templateCache.put 'viewPartialActivityFeedCreateEvent',      viewPartialActivityFeedCreateEvent
+      $templateCache.put 'viewPartialActivityFeedEventInitialized', viewPartialActivityFeedEventInitialized
     ]
 
     Module.controller 'ControllerWidgetActivityFeed', ['$scope', '$templateCache', 'socket', 'apiRequest', ($scope, $templateCache, socket, apiRequest) ->
@@ -37,5 +30,4 @@ define [
       $scope.subtitle = 'by Cobar Systems LLC'
 
       $scope.fetchActivity()
-
     ]

@@ -4,21 +4,29 @@
     h4
       span Employee Manager
   .portlet-body.light-grey
-    .row-fluid(data-ng-animate="{show: 'fadeIn'}", data-ng-hide="viewModel.showAddNewEmployee")
+    .row-fluid(data-ng-animate = "{show: 'fadeIn'}"
+               data-ng-hide    = "viewModel.showAddNewEmployee")
       .span6
       .span6
-        button.btn.green.btn-block(style="margin-bottom: 5px;", data-ng-click="viewModel.showAddNewEmployeeOpen()")
+        button.btn.green.btn-block(style         = "margin-bottom: 5px;"
+                                   data-ng-click = "viewModel.showAddNewEmployeeOpen()")
           | Add Employees
           i.m-icon-swapright.m-icon-white
     .clearfix
     .row-fluid
-      div(data-ng-class="{span12: !viewModel.showAddNewEmployee, span6:viewModel.showAddNewEmployee}")
+      div(data-ng-class = "{span12: !viewModel.showAddNewEmployee, span6:viewModel.showAddNewEmployee}")
         .portlet.box.grey
           .portlet-title
             h4
               span Employees
           .portlet-body
-            table.table.table-striped.table-hover.table-bordered.dataTable(data-data-table="viewModel.employeeListDT.options", ao-column-defs="viewModel.employeeListDT.columnDefs", data-parent-model="viewModel.employeeListDT", aa-data="viewModel.employees", data-parent-data-table-view-model-prop="employeeListDT", update-on-resource-post="employee", fn-row-callback="")
+            table.table.table-striped.table-hover.table-bordered.dataTable(data-data-table                        = "viewModel.employeeListDT.options"
+                                                                           ao-column-defs                         = "viewModel.employeeListDT.columnDefs"
+                                                                           data-parent-model                      = "viewModel.employeeListDT"
+                                                                           aa-data                                = "viewModel.employees"
+                                                                           data-parent-data-table-view-model-prop = "employeeListDT"
+                                                                           update-on-resource-post                = "employee"
+                                                                           fn-row-callback)
               thead
                 tr
                   th.sorting First Name
