@@ -104,6 +104,11 @@ define [
           else
             options["fnRowCallback"] = () ->
 
+
+          if attrs.aaSorting
+            options['aaSorting'] = scope.$eval(attrs.aaSorting)
+
+
           if options
             options['fnCreatedRow'] = (nRow, aData, iDataIndex) ->
               return

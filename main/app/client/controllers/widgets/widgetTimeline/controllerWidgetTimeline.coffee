@@ -23,7 +23,7 @@ define [
           options:
             bProcessing:     true
             bStateSave:      true
-            iCookieDuration: 2419200 # 1 month
+            iCookieDuration: 0 #2419200 # 1 month
             bPaginate:       true
             bLengthChange:   true
             bFilter:         true
@@ -38,7 +38,7 @@ define [
                 oSettings
 
               query.expand = [{resource: 'eventParticipants', expand: [{resource: 'employee'}]}]
-              console.log query
+
               cacheResponse   = ''
               oSettings.jqXHR = apiRequest.get 'event', [], query, (response, responseRaw) ->
                 if response.code != 200
