@@ -68,7 +68,7 @@ event.findAll(
 configureEventCronJob = (eventObj) ->
   ((eventObj) ->
 
-    events[eventObj.uid] = schedule.scheduleJob (new Date()), () ->  #(new Date(eventObj.dateTime)), () ->
+    events[eventObj.uid] = schedule.scheduleJob (new Date(eventObj.dateTime)), () ->
 
       sequelize.query("UPDATE events SET cronDaemonUid = '" + cronDaemonUid + "' WHERE uid = '" + eventObj.uid + "' AND cronDaemonUid is null").success () ->
 
