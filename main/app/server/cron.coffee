@@ -103,7 +103,7 @@ configureEventCronJob = (eventObj) ->
 
 
 
-          config.apiBroadcastPut(event, resultEventObj, app, req, res)
+          config.apiBroadcastPut(event, resultEventObj, app, {}, {})
 
 
 
@@ -130,7 +130,7 @@ configureEventCronJob = (eventObj) ->
                     from_email: 'no-reply@cobarsystems.com'
                     from_name:  'Cobar Systems'
                     subject:    bodyMessage
-                    text:      'http://lyssa.cobarsystems.com/#/quizes/' + participant.uid
+                    text:      'http://lyssa.cobarsystems.com/#/exercises/' + participant.uid
                 , (error, response) ->
                   #console.log arguments
                   #console.log response
@@ -147,7 +147,7 @@ configureEventCronJob = (eventObj) ->
                   twilioClient.sendSms {
                     to:   participant.employee.phone
                     from: '6172507514'
-                    body: 'http://lyssa.cobarsystems.com/#/quizes/' + participant.uid
+                    body: 'http://lyssa.cobarsystems.com/#/exercises/' + participant.uid
                   }, (error, message) ->
 
                     #console.log arguments
