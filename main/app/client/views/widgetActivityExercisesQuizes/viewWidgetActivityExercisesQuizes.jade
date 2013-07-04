@@ -8,7 +8,7 @@
       .bar(style="width: 100%;")
     .box.template-info-box(data-ng-repeat="upcomingExercise in viewModel.upcomingQuizesExercises")
       .pull-left
-        a(href="#/quizes/{{ upcomingExercise.uid }}") {{ resourcePool[upcomingExercise.event.uid].name }}
+        a(href="#/exercises/{{ upcomingExercise.uid }}") {{ resourcePool[upcomingExercise.event.uid].name }}
         p
           | {{ resourcePool[upcomingExercise.event.uid].dateTime | date:'short' }} ({{ resourcePool[upcomingExercise.event.uid].dateTime | fromNow }})
       a.btn.green.pull-right(href="#/quizes/{{ upcomingExercise.uid }}") View

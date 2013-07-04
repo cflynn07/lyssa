@@ -63,6 +63,26 @@ define [
             else
               $(nRow).addClass 'upcomingEvent'
 
+          # Compute the percentage of eventParticipants that have viewed the exercise
+          getInitialViewDateTimePercentage: (uid) ->
+            if _.isUndefined($scope.resourcePool[uid]) || _.isUndefined($scope.resourcePool[uid].eventParticipants)
+              return '0'
+
+            epReadCount = 0
+            for eP in $scope.resourcePool[uid].eventParticipants
+              if !_.isNull(eP.initialViewDateTime)
+                epReadCount++
+
+            if epReadCount is 0 || $scope.resourcePool[uid].eventParticipants.length is 0
+              return '0'
+
+            return (epReadCount / $scope.resourcePool[uid].eventParticipants.length * 1.0) * 100 + ''
+
+          # Compute the percentage of eventParticipants that have completed the exercise
+          getfinalizedDateTimePercentage: (uid) ->
+            return '0'
+
+
           columnDefs: [
               mData:     null
               bSortable: true
@@ -92,10 +112,11 @@ define [
               aTargets:  [3]
               sWidth:    '20%'
               mRender: (data, type, full) ->
+
                 return '<div class="progress progress-success" style="margin-bottom:0;">
-                          <div style="width: 60%;" class="bar"></div>
+                          <div style="width: {{ $parent.viewModel.eventListDT.getInitialViewDateTimePercentage(\'' + full.uid + '\') }}%;" class="bar"></div>
                         </div>
-                        <span>(60% Participants Viewed)</span>'
+                        <span>({{ $parent.viewModel.eventListDT.getInitialViewDateTimePercentage(\'' + full.uid + '\') }}% Participants Viewed)</span>'
             ,
               mData:     null
               bSortable: true
@@ -103,9 +124,9 @@ define [
               sWidth:    '20%'
               mRender: (data, type, full) ->
                 return '<div class="progress progress-success" style="margin-bottom:0;">
-                          <div style="width: 20%;" class="bar"></div>
+                          <div style="width: {{ $parent.viewModel.eventListDT.getfinalizedDateTimePercentage(\'' + full.uid + '\') }}%;" class="bar"></div>
                         </div>
-                        <span>(20% Participants Completed)</span>'
+                        <span>({{ $parent.viewModel.eventListDT.getfinalizedDateTimePercentage(\'' + full.uid + '\') }}% Participants Completed)</span>'
             ,
               mData:     null
               bSortable: true

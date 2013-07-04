@@ -97,6 +97,7 @@ else
           'slimscroll':               'vendor/jquery.slimscroll'
           'moment':                   'vendor/moment'
           'highcharts':               'vendor/highcharts'
+          'spacetree':                'vendor/spacetree'
         uglify:
           no_mangle: true
         hbs:
@@ -175,6 +176,8 @@ else
             exports: 'soundManager'
           slimscroll:
             deps:    ['jquery']
+          spacetree:
+            exports: '$jit'
 
       requirejs.optimize config,
         (buildResponse) ->

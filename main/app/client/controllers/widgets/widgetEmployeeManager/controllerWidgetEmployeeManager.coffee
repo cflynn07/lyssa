@@ -8,6 +8,7 @@ define [
   'bootstrap'
   'underscore'
   'cs!utils/utilBuildDTQuery'
+  'spacetree'
   'text!views/widgetEmployeeManager/viewWidgetEmployeeManager.html'
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerAddManualForm.html'
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerAddCSVForm.html'
@@ -23,6 +24,7 @@ define [
   bootstrap
   _
   utilBuildDTQuery
+  $jit
   viewWidgetEmployeeManager
   viewPartialEmployeeManagerAddManualForm
   viewPartialEmployeeManagerAddCSVForm
@@ -113,122 +115,121 @@ define [
 
 
 
-    Module.controller 'ControllerWidgetEmployeeManager',
-      ['$scope', '$route', '$routeParams', 'socket', 'apiRequest', '$filter', '$dialog',
-        ($scope, $route, $routeParams, socket, apiRequest, $filter, $dialog) ->
+    Module.controller 'ControllerWidgetEmployeeManager', ['$scope', '$route', '$routeParams', 'socket', 'apiRequest', '$filter', '$dialog',
+      ($scope, $route, $routeParams, socket, apiRequest, $filter, $dialog) ->
 
 
 
-          resetHelper = () ->
-            viewModel.showAddNewEmployee = false
-            viewModel.addNewEmployeeMode = false
-            viewModel.newEmployeeManualAddForm = {}
+        resetHelper = () ->
+          viewModel.showAddNewEmployee = false
+          viewModel.addNewEmployeeMode = false
+          viewModel.newEmployeeManualAddForm = {}
 
-          viewModel =
-            showAddNewEmployee: false
-            addNewEmployeeMode: false #Manual || CSV
-            showAddNewEmployeeOpen: () ->
+        viewModel =
+          showAddNewEmployee: false
+          addNewEmployeeMode: false #Manual || CSV
+          showAddNewEmployeeOpen: () ->
+            resetHelper()
+            viewModel.showAddNewEmployee = true
+          showAddNewEmployeeClose: () ->
+            resetHelper()
+          showAddNewEmployeeSubmit: () ->
+            $scope.viewModel.newEmployeeManualAddForm.submitting = true
+
+            apiRequest.post 'employee', {
+              firstName: viewModel.newEmployeeManualAddForm.firstName
+              lastName:  viewModel.newEmployeeManualAddForm.lastName
+              email:     viewModel.newEmployeeManualAddForm.email
+              phone:     viewModel.newEmployeeManualAddForm.phone
+            }, {}, (response) ->
+              console.log 'finished'
+              console.log response
               resetHelper()
-              viewModel.showAddNewEmployee = true
-            showAddNewEmployeeClose: () ->
-              resetHelper()
-            showAddNewEmployeeSubmit: () ->
-              $scope.viewModel.newEmployeeManualAddForm.submitting = true
 
-              apiRequest.post 'employee', {
-                firstName: viewModel.newEmployeeManualAddForm.firstName
-                lastName:  viewModel.newEmployeeManualAddForm.lastName
-                email:     viewModel.newEmployeeManualAddForm.email
-                phone:     viewModel.newEmployeeManualAddForm.phone
-              }, {}, (response) ->
-                console.log 'finished'
-                console.log response
-                resetHelper()
+          employees: {}
+          employeeListDT:
+            detailRow: (obj) ->
+              #return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
+              return '<div data-edit-employee data-client-orm-share="clientOrmShare" data-resource-pool="resourcePool" data-employee-uid="' + obj.uid + '"></div>'
 
-            employees: {}
-            employeeListDT:
-              detailRow: (obj) ->
-                #return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
-                return '<div data-edit-employee data-client-orm-share="clientOrmShare" data-resource-pool="resourcePool" data-employee-uid="' + obj.uid + '"></div>'
+            options:
+              bProcessing:  true
+              bStateSave:      true
+              iCookieDuration: 2419200 # 1 month
+              bPaginate:       true
+              bLengthChange:   true
+              bFilter:         true
+              bInfo:           true
+              bDestroy:        true
+              bServerSide:     true
+              sAjaxSource:     '/'
+              fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                #return
+                query = utilBuildDTQuery ['firstName', 'lastName', 'email', 'phone'],
+                                         ['firstName', 'lastName', 'email', 'phone'],
+                                         oSettings
 
-              options:
-                bProcessing:  true
-                bStateSave:      true
-                iCookieDuration: 2419200 # 1 month
-                bPaginate:       true
-                bLengthChange:   true
-                bFilter:         true
-                bInfo:           true
-                bDestroy:        true
-                bServerSide:     true
-                sAjaxSource:     '/'
-                fnServerData: (sSource, aoData, fnCallback, oSettings) ->
-                  #return
-                  query = utilBuildDTQuery ['firstName', 'lastName', 'email', 'phone'],
-                                           ['firstName', 'lastName', 'email', 'phone'],
-                                           oSettings
+                cacheResponse   = ''
+                oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
+                  if response.code == 200
 
-                  cacheResponse   = ''
-                  oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
-                    if response.code == 200
+                    responseDataString = JSON.stringify(response.response)
+                    if cacheResponse == responseDataString
+                      return
+                    cacheResponse = responseDataString
+                    empArr = _.toArray response.response.data
 
-                      responseDataString = JSON.stringify(response.response)
-                      if cacheResponse == responseDataString
-                        return
-                      cacheResponse = responseDataString
-                      empArr = _.toArray response.response.data
+                    fnCallback
+                      iTotalRecords:        response.response.length
+                      iTotalDisplayRecords: response.response.length
+                      aaData:               empArr
 
-                      fnCallback
-                        iTotalRecords:        response.response.length
-                        iTotalDisplayRecords: response.response.length
-                        aaData:               empArr
-
-              columnDefs: [
-                mData:     null
-                bSortable: true
-                aTargets:  [0]
-                mRender: (data, type, full) ->
-                  #console.log 'colrender1'
-                  #console.log arguments
-                  #return full.firstName
-                  return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].firstName">' + full.firstName + '</span>'
-              ,
-                mData:     null
-                bSortable: true
-                aTargets:  [1]
-                mRender: (data, type, full) ->
-                  return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].lastName">' + full.lastName + '</span>'
-              ,
-                mData:     null
-                bSortable: true
-                aTargets:  [2]
-                mRender: (data, type, full) ->
-                  return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].email">' + full.email + '</span>'
-              ,
-                mData:     null
-                bSortable: true
-                aTargets:  [3]
-                mRender: (data, type, full) ->
-                  return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].phone | tel">' + full.phone + '</span>'
-              ,
-                mData:     null
-                bSortable: false
-                aTargets:  [4]
-                mRender: (data, type, full) ->
-                  return '' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
-              ,
-                mData:     null
-                bSortable: false
-                aTargets:  [5]
-                mRender: (data, type, full) ->
-                  return new EJS({text: viewPartialEmployeeManagerListButtonsEJS}).render(full)
-              ]
+            columnDefs: [
+              mData:     null
+              bSortable: true
+              aTargets:  [0]
+              mRender: (data, type, full) ->
+                #console.log 'colrender1'
+                #console.log arguments
+                #return full.firstName
+                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].firstName">' + full.firstName + '</span>'
+            ,
+              mData:     null
+              bSortable: true
+              aTargets:  [1]
+              mRender: (data, type, full) ->
+                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].lastName">' + full.lastName + '</span>'
+            ,
+              mData:     null
+              bSortable: true
+              aTargets:  [2]
+              mRender: (data, type, full) ->
+                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].email">' + full.email + '</span>'
+            ,
+              mData:     null
+              bSortable: true
+              aTargets:  [3]
+              mRender: (data, type, full) ->
+                return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].phone | tel">' + full.phone + '</span>'
+            ,
+              mData:     null
+              bSortable: false
+              aTargets:  [4]
+              mRender: (data, type, full) ->
+                return '' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
+            ,
+              mData:     null
+              bSortable: false
+              aTargets:  [5]
+              mRender: (data, type, full) ->
+                return new EJS({text: viewPartialEmployeeManagerListButtonsEJS}).render(full)
+            ]
 
 
-          #apiRequest.get 'employee', [], {}, (response) ->
-          #  viewModel.employees = response.response
+        #apiRequest.get 'employee', [], {}, (response) ->
+        #  viewModel.employees = response.response
 
-          $scope.viewModel = viewModel
+        $scope.viewModel = viewModel
 
-      ]
+    ]
 

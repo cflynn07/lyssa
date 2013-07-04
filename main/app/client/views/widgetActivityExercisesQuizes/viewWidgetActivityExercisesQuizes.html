@@ -8,7 +8,7 @@
       <div style="width: 100%;" class="bar"></div>
     </div>
     <div data-ng-repeat="upcomingExercise in viewModel.upcomingQuizesExercises" class="box template-info-box">
-      <div class="pull-left"><a href="#/quizes/{{ upcomingExercise.uid }}">{{ resourcePool[upcomingExercise.event.uid].name }}</a>
+      <div class="pull-left"><a href="#/exercises/{{ upcomingExercise.uid }}">{{ resourcePool[upcomingExercise.event.uid].name }}</a>
         <p>{{ resourcePool[upcomingExercise.event.uid].dateTime | date:'short' }} ({{ resourcePool[upcomingExercise.event.uid].dateTime | fromNow }})</p>
       </div><a href="#/quizes/{{ upcomingExercise.uid }}" class="btn green pull-right">View</a>
       <div class="clearfix"></div>

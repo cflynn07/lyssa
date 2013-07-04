@@ -53,6 +53,7 @@ requirejs.config
     'slimscroll':               'vendor/jquery.slimscroll'
     'moment':                   'vendor/moment'
     'highcharts':               'vendor/highcharts'
+    'spacetree':                'vendor/spacetree'
   hbs:
     disableI18n:       true
     helperDirectory:   'views/helpers/'
@@ -129,6 +130,8 @@ requirejs.config
       exports: 'soundManager'
     slimscroll:
       deps:    ['jquery']
+    spacetree:
+      exports: '$jit'
 
 
 
@@ -162,6 +165,7 @@ require [
   'cs!directives/directiveCalendar'
   'cs!directives/directiveEditEmployee'
   'cs!directives/directiveDateTimePicker'
+  'cs!directives/directiveSpaceTree'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
@@ -218,6 +222,7 @@ require [
   DirectiveCalendar
   DirectiveEditEmployee
   DirectiveDateTimePicker
+  DirectiveSpaceTree
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
@@ -267,6 +272,7 @@ require [
   DirectiveCalendar           CS
   DirectiveEditEmployee       CS
   DirectiveDateTimePicker     CS
+  DirectiveSpaceTree          CS
 
   #Services
   ServiceSocket       CS

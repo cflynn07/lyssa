@@ -4,6 +4,8 @@
     h4
       span Employee Manager
   .portlet-body.light-grey
+
+
     .row-fluid(data-ng-animate = "{show: 'fadeIn'}"
                data-ng-hide    = "viewModel.showAddNewEmployee")
       .span6
@@ -12,7 +14,21 @@
                                    data-ng-click = "viewModel.showAddNewEmployeeOpen()")
           | Add Employees
           i.m-icon-swapright.m-icon-white
+
     .clearfix
+
+    .row-fluid
+      .portlet.box.grey
+        .portlet-title
+          h4
+            span Organization Structure
+        .portlet-body
+          div(data-space-tree
+              style           = "height:400px; background-image:url('/assets/img/tiny_grid.png');"
+              data-values     = "")
+
+    .clearfix
+
     .row-fluid
       div(data-ng-class = "{span12: !viewModel.showAddNewEmployee, span6:viewModel.showAddNewEmployee}")
         .portlet.box.grey
