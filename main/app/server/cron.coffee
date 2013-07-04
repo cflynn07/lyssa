@@ -68,21 +68,20 @@ event.findAll(
 configureEventCronJob = (eventObj) ->
   ((eventObj) ->
 
-
-    events[eventObj.uid] = schedule.scheduleJob (new Date()), () ->  #(new Date(eventObj.dateTime)), () ->
+    events[eventObj.uid] = schedule.scheduleJob (new Date(eventObj.dateTime)), () ->
 
       sequelize.query("UPDATE events SET cronDaemonUid = '" + cronDaemonUid + "' WHERE uid = '" + eventObj.uid + "' AND cronDaemonUid is null").success () ->
 
         event.find(
           where:
-            uid:           eventObj.uid 
+            uid:           eventObj.uid
             cronDaemonUid: cronDaemonUid
         ).success (resultEventObj) ->
 
           if !resultEventObj
             delete events[eventObj.uid]
             console.log 'events.length == ' + Object.getOwnPropertyNames(events).length
-            return        
+            return
 
           console.log 'EVENT: ' + resultEventObj.name + ' | Handled By: ' + cronDaemonUid
 
@@ -107,7 +106,7 @@ configureEventCronJob = (eventObj) ->
             for eP in resultEventParticipants
               ((participant) ->
                 #Send email
-                
+
                 mandrill '/messages/send',
                   message:
                     to: [
@@ -121,7 +120,7 @@ configureEventCronJob = (eventObj) ->
                 , (error, response) ->
                   #console.log arguments
                   #console.log response
-                
+
 
                 #Send text message in two parts
 
@@ -130,13 +129,13 @@ configureEventCronJob = (eventObj) ->
                   from: '6172507514'
                   body: bodyMessage
                 }, (error, message) ->
-                  
+
                   twilioClient.sendSms {
                     to:   participant.employee.phone
                     from: '6172507514'
                     body: 'http://lyssa.cobarsystems.com/#/quizes/' + participant.uid
                   }, (error, message) ->
-                    
+
                     #console.log arguments
               )(eP)
 
