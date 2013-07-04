@@ -187,6 +187,7 @@ require [
   'cs!controllers/widgets/widgetActivityFeed/controllerWidgetActivityFeed'
   'cs!controllers/widgets/widgetActivityExercisesQuizes/controllerWidgetActivityExercisesQuizes'
   'cs!controllers/widgets/widgetQuarterlyTestingReport/controllerWidgetQuarterlyTestingReport'
+  'cs!controllers/widgets/widgetTimeline/controllerWidgetTimeline'
 ], (
   $
   jqueryUi
@@ -242,6 +243,7 @@ require [
   ControllerWidgetActivityFeed
   ControllerWidgetActivityExercisesQuizes
   ControllerWidgetQuarterlyTestingReport
+  ControllerWidgetTimeline
 ) ->
 
   #Modules
@@ -291,15 +293,16 @@ require [
   ControllerWidgetCoreLogin               CS
   ControllerWidgetDictionaryManager       CS
   ControllerWidgetScheduler               CS
-  #ControllerWidgetFullExerciseSubmitter   CS
+ #ControllerWidgetFullExerciseSubmitter   CS
   ControllerWidget4oh4                    CS
   ControllerWidgetCoreFooter              CS
   ControllerWidgetEmployeeManager         CS
-  #ControllerWidgetQuiz                    CS
+ #ControllerWidgetQuiz                    CS
   ControllerWidgetActivityFeed            CS
   ControllerWidgetActivityExercisesQuizes CS
   ControllerWidgetQuarterlyTestingReport  CS
   ControllerWidgetQuizExerciseSubmitter   CS
+  ControllerWidgetTimeline                CS
 
   #Start the party!
   angular.bootstrap document, ['CS']

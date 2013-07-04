@@ -168,6 +168,7 @@ define [], () ->
       subGroup: ''
       widgetViews: [
         ['viewNoBreadCrumbs']
+        ['viewWidgetTimeline']
       ]
 
 

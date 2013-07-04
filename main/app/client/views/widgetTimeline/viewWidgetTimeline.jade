@@ -1,0 +1,18 @@
+.widget-themis-finish.portlet.box.blue(data-animate-in    = ""
+                                       data-ng-controller = "ControllerWidgetTimeline")
+  .portlet-title
+    h4
+      span Timeline
+  .portlet-body.light-grey
+
+    table.table.table-striped.table-hover.table-bordered.dataTable(data-data-table                        = "viewModel.eventListDT.options"
+                                                                   ao-column-defs                         = "viewModel.eventListDT.columnDefs"
+                                                                   data-parent-model                      = "viewModel.eventListDT"
+                                                                   data-parent-data-table-view-model-prop = "eventListDT"
+                                                                   update-on-resource-post                = "event"
+                                                                   fn-row-callback)
+      thead
+        tr
+          th.sorting Name
+          th.sorting Date
+          th.sorting-disabled # Participants
