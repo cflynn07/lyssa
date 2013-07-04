@@ -27,23 +27,12 @@ define [
     Module.run ['$templateCache',
     ($templateCache) ->
 
-      $templateCache.put 'viewWidgetQuizExerciseSubmitter',
-        viewWidgetQuizExerciseSubmitter
-
-      $templateCache.put 'viewPartialQuizExerciseSubmitterOpenResponse',
-        viewPartialQuizExerciseSubmitterOpenResponse
-
-      $templateCache.put 'viewPartialQuizExerciseSubmitterSelectIndividual',
-        viewPartialQuizExerciseSubmitterSelectIndividual
-
-      $templateCache.put 'viewPartialQuizExerciseSubmitterSelectMultiple',
-        viewPartialQuizExerciseSubmitterSelectMultiple
-
-      $templateCache.put 'viewPartialQuizExerciseSubmitterYesNo',
-        viewPartialQuizExerciseSubmitterYesNo
-
-      $templateCache.put 'viewPartialQuizExerciseSubmitterSlider',
-        viewPartialQuizExerciseSubmitterSlider
+      $templateCache.put 'viewWidgetQuizExerciseSubmitter',                  viewWidgetQuizExerciseSubmitter
+      $templateCache.put 'viewPartialQuizExerciseSubmitterOpenResponse',     viewPartialQuizExerciseSubmitterOpenResponse
+      $templateCache.put 'viewPartialQuizExerciseSubmitterSelectIndividual', viewPartialQuizExerciseSubmitterSelectIndividual
+      $templateCache.put 'viewPartialQuizExerciseSubmitterSelectMultiple',   viewPartialQuizExerciseSubmitterSelectMultiple
+      $templateCache.put 'viewPartialQuizExerciseSubmitterYesNo',            viewPartialQuizExerciseSubmitterYesNo
+      $templateCache.put 'viewPartialQuizExerciseSubmitterSlider',           viewPartialQuizExerciseSubmitterSlider
 
     ]
 
