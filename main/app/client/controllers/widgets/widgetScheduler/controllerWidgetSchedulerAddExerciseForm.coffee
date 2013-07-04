@@ -15,7 +15,7 @@ define [
   utilSafeStringify
   _
 ) ->
-  
+
   (Module) ->
 
     Module.controller 'ControllerWidgetSchedulerAddExerciseForm', ['$scope', '$route', '$routeParams', 'apiRequest'
@@ -24,15 +24,14 @@ define [
 
 
 
-
         $scope.$watch 'viewModel.newEventForm.eventType', (newVal, oldVal) ->
-          
+
           if _.isUndefined(newVal)
             return
 
           viewModel.newEventForm.doneCheckingTemplatesForType = false
 
-          query = 
+          query =
             limit:  1
             offset: 0
             filter: [
@@ -41,15 +40,10 @@ define [
             ]
           apiRequest.get 'template', [], query, (response, responseRaw) ->
 
-            viewModel.newEventForm.doneCheckingTemplatesForType = true          
+            viewModel.newEventForm.doneCheckingTemplatesForType = true
             viewModel.newEventForm.templatesForType             = if (response.response.length > 0) then true else false
-            #console.log 'viewModel.newEventForm.templatesForType'
-            #console.log viewModel.newEventForm.templatesForType
 
         , true
-
-
-
 
 
 
@@ -79,13 +73,17 @@ define [
             return result
 
 
-          addEmployeeToEvent: (employeeUid) ->
+          toggleEmployeeToEvent: (employeeUid) ->
 
             if !_.isArray(viewModel.newEventForm.employeeUids)
               viewModel.newEventForm.employeeUids = []
 
-            if viewModel.newEventForm.employeeUids.indexOf(employeeUid) == -1
+            empIndex = viewModel.newEventForm.employeeUids.indexOf(employeeUid)
+            if empIndex == -1
               viewModel.newEventForm.employeeUids.push employeeUid
+            else
+              viewModel.newEventForm.employeeUids.splice empIndex, 1
+
 
           closeAddNewExerciseForm: () ->
            #console.log 'closeAddNewExerciseForm'
@@ -371,10 +369,14 @@ define [
               sWidth: '70px'
               aTargets:  [5]
               mRender: (data, type, full) ->
-                html  = '<div class="inline-content">'
-                html += '<button class="btn blue" data-ng-disabled="($parent.viewModel.newEventForm.employeeUids.length && $parent.viewModel.newEventForm.employeeUids.indexOf(\'' + full.uid + '\') != -1)" data-ng-click="$parent.viewModel.addEmployeeToEvent(\'' + full.uid + '\'); $parent.newEventForm.employeeUids.$pristine = false;">'
-                html += '<span style="color:#FFF !important;" data-ng-hide="($parent.viewModel.newEventForm.employeeUids.length && $parent.viewModel.newEventForm.employeeUids.indexOf(\'' + full.uid + '\') != -1)">Select</span>'
-                html += '<span style="color:#FFF !important;" data-ng-show="($parent.viewModel.newEventForm.employeeUids.length && $parent.viewModel.newEventForm.employeeUids.indexOf(\'' + full.uid + '\') != -1)">Selected</span>'
+                html  = '<div class="inline-content" style = "width:100%; text-align:center;">'
+                html += '<button class         = "btn"
+                                 data-ng-class = "{true:\'blue\', false:\'red\'}[($parent.viewModel.newEventForm.employeeUids === undefined || $parent.viewModel.newEventForm.employeeUids.indexOf(\'' + full.uid + '\') === -1)]"
+                                 data-ng-click = "$parent.viewModel.toggleEmployeeToEvent(\'' + full.uid + '\'); $parent.newEventForm.employeeUids.$pristine = false;">'
+                html += '<span style        = "color:#FFF !important;"
+                               data-ng-hide = "($parent.viewModel.newEventForm.employeeUids.length && $parent.viewModel.newEventForm.employeeUids.indexOf(\'' + full.uid + '\') != -1)"><i style = "display:inline !important;" class="icon-plus"></i> Select</span>'
+                html += '<span style        = "color:#FFF !important;"
+                               data-ng-show = "($parent.viewModel.newEventForm.employeeUids.length && $parent.viewModel.newEventForm.employeeUids.indexOf(\'' + full.uid + '\') != -1)"><i style = "display:inline !important;" class="icon-minus"></i> Remove</span>'
                 html += '</button>'
                 html += '</div>'
             ]
