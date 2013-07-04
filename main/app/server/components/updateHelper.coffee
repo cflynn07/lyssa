@@ -16,25 +16,7 @@ module.exports = (resource, objects, req, res, app) ->
 
           try
             resultResource.updateAttributes(item).success () ->
-
-              if !_.isUndefined req.query.silent
-                if req.query.silent == 'true'
-                  silent = true
-                else
-                  silent = false
-              else
-                if req.requestType == 'http'
-                  silent = true
-                else
-                  silent = false
-
-              if !silent
-                if !_.isUndefined(app.io) and _.isFunction(app.io.room)
-                  #console.log 'updateRP'
-                  app.io.room(resultResource.uid).broadcast 'resourcePut',
-                    apiCollectionName: ''
-                    resourceName:      resource.name
-                    resource:          resultResource.values #JSON.parse(JSON.stringify(resultResource))
+              config.apiBroadcastPut(resource, resultResource, app, req, res)
 
               callback()
           catch err

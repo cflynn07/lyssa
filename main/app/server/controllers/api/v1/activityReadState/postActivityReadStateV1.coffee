@@ -51,6 +51,10 @@ module.exports = (app) ->
                       activityResult.readState = true
 
                       app.io.room(employeeUid + '-' + activityResult.uid).broadcast 'resourcePut', {uid: activityResult.uid, readState: true}
+
+                      #Wont quite work yet for ^
+                      #config.apiBroadcastPut(resource, resultResource, app, req, res)
+
                 )(activityUid)
 
             catch e

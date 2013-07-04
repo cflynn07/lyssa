@@ -101,12 +101,10 @@ configureEventCronJob = (eventObj) ->
             clientUid: resultEventObj.clientUid
           }, app
 
-          #Alert clients event has been updated
-          if !_.isUndefined(app.io) and _.isFunction(app.io.room)
-            app.io.room(resultEventObj.uid).broadcast 'resourcePut',
-              apiCollectionName: ''
-              resourceName:      'event'
-              resource:          resultEventObj.values
+
+
+          config.apiBroadcastPut(event, resultEventObj, app, req, res)
+
 
 
           eventParticipant.findAll(

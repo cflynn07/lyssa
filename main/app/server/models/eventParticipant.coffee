@@ -7,6 +7,11 @@ module.exports =
   model:
     id:       SEQ.INTEGER
 
+    initialViewDateTime:
+      type: SEQ.DATE
+      validate:
+        notNull: false
+
     finalizedDateTime:
       type: SEQ.DATE
       validate:

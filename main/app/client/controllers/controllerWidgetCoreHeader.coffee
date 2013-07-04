@@ -79,6 +79,7 @@ define [
 
 
       $scope.$on 'resourcePost', (e, data) ->
+
         if data['resourceName'] != 'activity'
           return
         uid = data['resource']['uid']

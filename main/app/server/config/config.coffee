@@ -123,6 +123,28 @@ module.exports =
 
     res.jsonAPIRespond finalResponseObj
 
+  apiBroadcastPut: (resource, resultResource, app, req, res) ->
+
+    if !_.isUndefined(req.query) && !_.isUndefined(req.query.silent)
+      if req.query.silent == 'true'
+        silent = true
+      else
+        silent = false
+    else
+      if req.requestType == 'http'
+        silent = true
+      else
+        silent = false
+
+    if !silent
+      if !_.isUndefined(app.io) and _.isFunction(app.io.room)
+        #console.log 'updateRP'
+        #console.log resultResource.uid
+
+        app.io.room(resultResource.uid).broadcast 'resourcePut',
+          apiCollectionName: ''
+          resourceName:      resource.name
+          resource:          resultResource.values
 
 
 

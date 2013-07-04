@@ -50,7 +50,7 @@ define [
       $scope.selectIndividualTable =
         options:
           bStateSave:      true
-          iCookieDuration: 2419200
+          iCookieDuration: 0 #2419200
           bJQueryUI:       false
           bPaginate:       true
           bLengthChange:   true
@@ -64,7 +64,7 @@ define [
               ['name'],
               oSettings
 
-            console.log query
+            #console.log query
 
             if !$scope.field.dictionaryUid
               return
@@ -184,8 +184,8 @@ define [
         ###
         getSubissionFields: () ->
           eP = $scope.resourcePool[viewModel.routeParams.eventParticipantUid]
-          console.log 'eP.submissionFields'
-          console.log eP.submissionFields
+          #console.log 'eP.submissionFields'
+          #console.log eP.submissionFields
 
         getEventParticipant: () ->
           if !viewModel.routeParams.eventParticipantUid

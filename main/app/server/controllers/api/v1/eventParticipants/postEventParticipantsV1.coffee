@@ -40,6 +40,17 @@ module.exports = (app) ->
                       success:   true
                       transform: [objectKey, 'clientUid', testClientUid]
 
+                  'finalizedDateTime': (val, objectKey, object, callback) ->
+                    callback null,
+                      success: true
+
+
+                  'initialViewDateTime': (val, objectKey, object, callback) ->
+                    callback null,
+                      success: true
+
+
+
                   'employeeUid': (val, objectKey, object, callback) ->
 
                     if _.isUndefined val
@@ -223,6 +234,19 @@ module.exports = (app) ->
                     callback null,
                       success:   true
                       transform: [objectKey, 'clientUid', testClientUid]
+
+
+
+                  'finalizedDateTime': (val, objectKey, object, callback) ->
+                    callback null,
+                      success: true
+
+
+                  'initialViewDateTime': (val, objectKey, object, callback) ->
+                    callback null,
+                      success: true
+
+
 
                   'employeeUid': (val, objectKey, object, callback) ->
 
