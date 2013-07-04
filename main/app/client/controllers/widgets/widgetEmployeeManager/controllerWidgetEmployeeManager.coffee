@@ -165,8 +165,8 @@ define [
                 fnServerData: (sSource, aoData, fnCallback, oSettings) ->
                   #return
                   query = utilBuildDTQuery ['firstName', 'lastName', 'email', 'phone'],
-                    ['firstName', 'lastName', 'email', 'phone'],
-                    oSettings
+                                           ['firstName', 'lastName', 'email', 'phone'],
+                                           oSettings
 
                   cacheResponse   = ''
                   oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->

@@ -60,6 +60,7 @@ redisClient.on 'message', (channel, message) ->
 event.findAll(
   where: ['(dateTime >= NOW() and cronDaemonUid is NULL) or (dateTime < NOW() and cronDaemonUid is NULL)']
 ).success (resultEvents) ->
+
   for resultEvent in resultEvents
     configureEventCronJob(resultEvent)
 
@@ -68,7 +69,14 @@ event.findAll(
 configureEventCronJob = (eventObj) ->
   ((eventObj) ->
 
-    events[eventObj.uid] = schedule.scheduleJob (new Date(eventObj.dateTime)), () ->
+
+    #If this is a past event have it fire immediately.
+    eventDate = new Date(eventObj.dateTime)
+    if eventDate < (new Date())
+      eventDate = new Date()
+
+
+    events[eventObj.uid] = schedule.scheduleJob eventDate, () ->
 
       sequelize.query("UPDATE events SET cronDaemonUid = '" + cronDaemonUid + "' WHERE uid = '" + eventObj.uid + "' AND cronDaemonUid is null").success () ->
 
@@ -85,12 +93,20 @@ configureEventCronJob = (eventObj) ->
 
           console.log 'EVENT: ' + resultEventObj.name + ' | Handled By: ' + cronDaemonUid
 
+
           #Create an activity item to let the user know that the event initiated
           activityInsert {
             type:      'eventInitialized'
             eventUid:  resultEventObj.uid
             clientUid: resultEventObj.clientUid
           }, app
+
+          #Alert clients event has been updated
+          if !_.isUndefined(app.io) and _.isFunction(app.io.room)
+            app.io.room(resultEventObj.uid).broadcast 'resourcePut',
+              apiCollectionName: ''
+              resourceName:      'event'
+              resource:          resultEventObj.values
 
 
           eventParticipant.findAll(

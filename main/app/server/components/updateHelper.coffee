@@ -34,7 +34,7 @@ module.exports = (resource, objects, req, res, app) ->
                   app.io.room(resultResource.uid).broadcast 'resourcePut',
                     apiCollectionName: ''
                     resourceName:      resource.name
-                    resource:          JSON.parse(JSON.stringify(resultResource))
+                    resource:          resultResource.values #JSON.parse(JSON.stringify(resultResource))
 
               callback()
           catch err

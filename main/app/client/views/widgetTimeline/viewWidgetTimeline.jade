@@ -10,9 +10,13 @@
                                                                    data-parent-model                      = "viewModel.eventListDT"
                                                                    data-parent-data-table-view-model-prop = "eventListDT"
                                                                    update-on-resource-post                = "event"
+                                                                   update-on-resource-put                 = "event"
                                                                    data-fn-row-callback                   = "viewModel.eventListDT.fnRowCallback")
       thead
         tr
-          th.sorting Name
           th.sorting Date
+          th.sorting Name
           th.sorting-disabled # Participants
+          th.sorting-disabled Viewed
+          th.sorting-disabled Completed
+          th.sorting-disabled

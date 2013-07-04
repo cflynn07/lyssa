@@ -634,6 +634,7 @@ div.controls .required {
 }
 .pastEvent, .pastEvent > td {
   background-color: #555555 !important;
+  color: #FFF;
 }
 .upcomingEvent, .upcomingEvent > td {
   background-color: #4b8df8 !important;
