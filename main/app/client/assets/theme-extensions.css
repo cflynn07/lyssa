@@ -632,11 +632,11 @@ div.controls .required {
 .event {
   border: 1px solid #FFF;
 }
-.pastEvent {
-  background-color: #555555;
+.pastEvent, .pastEvent > td {
+  background-color: #555555 !important;
 }
-.upcomingEvent {
-  background-color: #4b8df8;
+.upcomingEvent, .upcomingEvent > td {
+  background-color: #4b8df8 !important;
 }
 
 

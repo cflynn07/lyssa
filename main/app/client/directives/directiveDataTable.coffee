@@ -98,8 +98,12 @@ define [
           # aoColumnDefs is dataTables way of providing fine control over column config
           if attrs.aoColumnDefs
             options["aoColumnDefs"] = scope.$eval(attrs.aoColumnDefs)
+
           if attrs.fnRowCallback
             options["fnRowCallback"] = scope.$eval(attrs.fnRowCallback)
+          else
+            options["fnRowCallback"] = () ->
+
           if options
             options['fnCreatedRow'] = (nRow, aData, iDataIndex) ->
               return
@@ -110,8 +114,7 @@ define [
             $compile($(data.nTable).find('tbody'))(scope)
             if !scope.$$phase
               scope.$apply()
-          options['fnRowCallback'] = () ->
-            return
+
 
           # apply the plugin
           dataTable  = element.dataTable(options)

@@ -1,8 +1,10 @@
 define [
+  'jquery'
   'underscore'
   'cs!utils/utilBuildDTQuery'
   'text!views/widgetTimeline/viewWidgetTimeline.html'
 ], (
+  $
   _
   utilBuildDTQuery
   viewWidgetTimeline
@@ -52,6 +54,14 @@ define [
                   iTotalRecords:        response.response.length
                   iTotalDisplayRecords: response.response.length
                   aaData:               empArr
+          fnRowCallback: (nRow, aData, iDisplayIndex) ->
+            nowDate   = (new Date()).getTime()
+            eventDate = (new Date(aData.dateTime)).getTime()
+
+            if nowDate > eventDate
+              $(nRow).addClass 'pastEvent'
+            else
+              $(nRow).addClass 'upcomingEvent'
 
           columnDefs: [
               mData:     null
