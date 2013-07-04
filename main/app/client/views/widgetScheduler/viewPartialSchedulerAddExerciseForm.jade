@@ -45,13 +45,13 @@
                       i.icon-ok
                       | Participants
           // navbar steps
-          
+
           #bar.progress.progress-success.progress-striped
             .bar(style = "width: {{ (viewModel.activeWizardStep+1) / 3.0 * 100 }}%;")
 
           .tab-content
 
-          
+
             .tab-pane(data-ng-show    = "viewModel.activeWizardStep == 0"
                       data-ng-animate = "{show:'fade-in'}"
                       data-ng-class   = "{'active':(viewModel.activeWizardStep == 0)}")
@@ -97,7 +97,7 @@
                     | Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters
                   span.help-inline(data-ng-show = "newEventForm.name.$error.maxlength")
                     | Name must be shorter than {{clientOrmShare.event.model.name.validate.len[1]}} characters
-              
+
               .control-group(data-ng-class = "{success:newEventForm.description.$valid, error:!newEventForm.description.$valid, 'ng-pristine':newEventForm.description.$pristine}")
                 label.control-label Description
                 .controls
@@ -107,15 +107,15 @@
               .control-group(data-ng-class = "{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}")
                 label.control-label Start Date & Time
                 .controls
-                  
+
                   input(type          = "text"
                         required      = ""
                         name          = "date"
                         data-ng-model = "viewModel.newEventForm.date"
                         data-ng-bind  = "viewModel.newEventForm.date"
                         data-ng-show  = "false")
-                  
-                  .input-append.bootstrap-timepicker-component
+
+                  .input-append.bootstrap-timepicker-component(style = "vertical-align:bottom;")
                     input.m-wrap.m-ctrl-small.timepicker-default(type                  = "text"
                                                                  data-date-time-picker
                                                                  style                 = "cursor:pointer;"
@@ -125,7 +125,7 @@
                     span.add-on
                       i.icon-time(style = "display:inline-block !important;")
                   span.help-inline(style = "display:inline-block !important;") TimeZone: {{viewModel.clientTimeZone}}
-            
+
 
 
             .tab-pane(data-ng-show="viewModel.activeWizardStep == 1", data-ng-animate="{show:'fade-in'}", data-ng-class="{'active':(viewModel.activeWizardStep == 1)}")
@@ -141,7 +141,7 @@
                       | {{resourcePool[viewModel.newEventForm.templateUid].name}}
                     br
                     a.btn.red.mini(data-ng-click="viewModel.newEventForm.templateUid = false; viewModel.newEventForm.revisionUid = false;") Cancel Selection
-                  
+
                   .condensed-data-table(style        = "width:100%;"
                                         data-ng-hide = "viewModel.newEventForm.templateUid")
                     table.table.table-striped.table-hover.table-bordered.dataTable(data-data-table                        = "viewModel.templatesListDataTable.options"
