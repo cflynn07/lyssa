@@ -48,10 +48,18 @@ module.exports =
         isUUID: 4
         notNull: true
 
+    businessDivision0Uid:
+      type: SEQ.STRING
+      validate:
+        isUUID: 4
+        notNull: false
 
   relations: [
     relation: 'belongsTo'
     model: 'client'
+  ,
+    relation: 'belongsTo'
+    model: 'businessDivision0'
   ,
     relation: 'hasMany'
     model: 'template'

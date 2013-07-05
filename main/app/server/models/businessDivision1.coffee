@@ -24,8 +24,8 @@ module.exports =
     relation: 'belongsTo'
     model: 'client'
   ,
-    relation: 'hasMany'
-    model: 'employee'
+    relation: 'belongsTo'
+    model: 'businessDivision0'
   ]
   options:
     paranoid: true

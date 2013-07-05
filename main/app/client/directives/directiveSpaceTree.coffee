@@ -20,6 +20,8 @@ define [
         scope: 'isolate'
         link: (scope, element, attrs) ->
 
+
+
           json =
             id: 'node02'
             name: 'Acme Corporation'
@@ -28,18 +30,31 @@ define [
               id: 'node03'
               name: 'Accounting'
               data: {}
-              children: []
+              children: [
+                id:       'nodea1'
+                name:     'brazin'
+                data:     {}
+                children: []
+              ]
             },{
               id: 'node04'
               name: 'Manufacturing Ops'
               data: {}
-              children: []
+              children: [
+                id:       'nodea1'
+                name:     'brazin'
+                data:     {}
+                children: []
+              ]
             },{
               id: 'node05'
               name: 'Sales'
               data: {}
               children: []
             }]
+
+
+
 
           id = 'food' #'spacetree_' + Math.random(1000)
           element.attr 'id', id
