@@ -90,6 +90,7 @@ form.horizontal-form(name       = "newEmployeeManualAddForm"
         label.control-label(for = "email") Business Division 0
         .controls.input-icon
           input.m-wrap.span10(type              = "text"
+                              data-jquery-auto-complete
                               required
                               data-ng-model     = "viewModel.newEmployeeManualAddForm.businessDivision0"
                               data-unique-field = "{\"resource\": \"employee\", \"property\": \"email\"}"

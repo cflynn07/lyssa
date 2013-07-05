@@ -166,6 +166,7 @@ require [
   'cs!directives/directiveEditEmployee'
   'cs!directives/directiveDateTimePicker'
   'cs!directives/directiveSpaceTree'
+  'cs!directives/directiveJqueryAutoComplete'
   'cs!services/serviceSocket'
   'cs!services/servicePubSub'
   'cs!services/serviceAuthenticate'
@@ -223,6 +224,7 @@ require [
   DirectiveEditEmployee
   DirectiveDateTimePicker
   DirectiveSpaceTree
+  DirectiveJqueryAutoComplete
   ServiceSocket
   ServicePubSub
   ServiceAuthenticate
@@ -259,20 +261,21 @@ require [
   AnimationFadeInOut   CS
 
   #Directives
-  DirectiveCollapseWidget     CS
-  DirectiveAnimateIn          CS
-  DirectiveAnimateRouteChange CS
-  DirectiveDatePicker         CS
-  DirectiveToggleButton       CS
-  DirectiveInlineEdit         CS
-  DirectiveUniqueField        CS
-  DirectiveDataTable          CS
-  DirectiveFileUpload         CS
-  DirectiveSlider             CS
-  DirectiveCalendar           CS
-  DirectiveEditEmployee       CS
-  DirectiveDateTimePicker     CS
-  DirectiveSpaceTree          CS
+  DirectiveCollapseWidget       CS
+  DirectiveAnimateIn            CS
+  DirectiveAnimateRouteChange   CS
+  DirectiveDatePicker           CS
+  DirectiveToggleButton         CS
+  DirectiveInlineEdit           CS
+  DirectiveUniqueField          CS
+  DirectiveDataTable            CS
+  DirectiveFileUpload           CS
+  DirectiveSlider               CS
+  DirectiveCalendar             CS
+  DirectiveEditEmployee         CS
+  DirectiveDateTimePicker       CS
+  DirectiveSpaceTree            CS
+  DirectiveJqueryAutoComplete   CS
 
   #Services
   ServiceSocket       CS
