@@ -103,6 +103,16 @@ module.exports = (app) ->
                   callback null,
                     success: true
 
+                'businessDivision0Name': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+                'businessDivision1Name': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+                'businessDivision2Name': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
             }, (objects) ->
 
               #updateHelper objects, res

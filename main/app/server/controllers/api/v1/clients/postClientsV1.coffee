@@ -138,6 +138,16 @@ module.exports = (app) ->
                         message:
                           fax: 'required'
 
+                  'businessDivision0Name': (val, objectKey, object, callback) ->
+                    callback null,
+                      success: true
+                  'businessDivision1Name': (val, objectKey, object, callback) ->
+                    callback null,
+                      success: true
+                  'businessDivision2Name': (val, objectKey, object, callback) ->
+                    callback null,
+                      success: true
+
               }, (objects) ->
 
                 #insertHelper.call(this, objects, res)

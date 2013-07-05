@@ -55,6 +55,30 @@ module.exports =
         isAlphanumeric: true
         len: [5, 100]
 
+
+
+
+    businessDivision0Name:
+      type: SEQ.STRING
+      validate:
+        isAlphanumeric: true
+        len: [3, 100]
+
+    businessDivision1Name:
+      type: SEQ.STRING
+      validate:
+        isAlphanumeric: true
+        len: [3, 100]
+
+    businessDivision2Name:
+      type: SEQ.STRING
+      validate:
+        isAlphanumeric: true
+        len: [3, 100]
+
+
+
+
   relations: [
     relation: 'hasMany'
     model: 'employee'

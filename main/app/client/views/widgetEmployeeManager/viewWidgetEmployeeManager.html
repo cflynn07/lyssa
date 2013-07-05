@@ -24,7 +24,7 @@
           </div>
           <div class="portlet-body">
             <div data-ng-animate="{show: 'fadeIn'}" data-ng-hide="viewModel.showAddNewEmployee" class="row-fluid">
-              <div class="span6"></div>
+              <div class="span6">&nbsp;</div>
               <div class="span6">
                 <button style="margin-bottom: 5px;" data-ng-click="viewModel.showAddNewEmployeeOpen()" class="btn green btn-block">Add Employees<i class="m-icon-swapright m-icon-white"></i></button>
               </div>
@@ -37,9 +37,9 @@
                   <th class="sorting">Email</th>
                   <th class="sorting">Phone Number</th>
                   <th class="sorting_disabled">Type</th>
-                  <th class="sorting_disabled">businessDivision0</th>
-                  <th class="sorting_disabled">businessDivision1</th>
-                  <th class="sorting_disabled">businessDivision2</th>
+                  <th class="sorting_disabled">{{ rootClient.businessDivision0Name }}</th>
+                  <th class="sorting_disabled">{{ rootClient.businessDivision1Name }}</th>
+                  <th class="sorting_disabled">{{ rootClient.businessDivision2Name }}</th>
                   <th class="sorting_disabled"></th>
                 </tr>
               </thead>

@@ -31,6 +31,7 @@
             .row-fluid(data-ng-animate = "{show: 'fadeIn'}"
                        data-ng-hide    = "viewModel.showAddNewEmployee")
               .span6
+                |&nbsp;
               .span6
                 button.btn.green.btn-block(style         = "margin-bottom: 5px;"
                                            data-ng-click = "viewModel.showAddNewEmployeeOpen()")
@@ -53,9 +54,9 @@
                   th.sorting Email
                   th.sorting Phone Number
                   th.sorting_disabled Type
-                  th.sorting_disabled businessDivision0
-                  th.sorting_disabled businessDivision1
-                  th.sorting_disabled businessDivision2
+                  th.sorting_disabled {{ rootClient.businessDivision0Name }}
+                  th.sorting_disabled {{ rootClient.businessDivision1Name }}
+                  th.sorting_disabled {{ rootClient.businessDivision2Name }}
                   th.sorting_disabled
 
 

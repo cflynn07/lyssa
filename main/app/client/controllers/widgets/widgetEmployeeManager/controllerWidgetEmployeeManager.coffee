@@ -188,6 +188,7 @@ define [
               mData:     null
               bSortable: true
               aTargets:  [0]
+              sWidth:    '8%'
               mRender: (data, type, full) ->
                 #console.log 'colrender1'
                 #console.log arguments
@@ -197,6 +198,7 @@ define [
               mData:     null
               bSortable: true
               aTargets:  [1]
+              sWidth:    '8%'
               mRender: (data, type, full) ->
                 return '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].lastName">' + full.lastName + '</span>'
             ,
