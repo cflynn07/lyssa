@@ -5,18 +5,6 @@
       span Employee Manager
   .portlet-body.light-grey
 
-
-    .row-fluid(data-ng-animate = "{show: 'fadeIn'}"
-               data-ng-hide    = "viewModel.showAddNewEmployee")
-      .span6
-      .span6
-        button.btn.green.btn-block(style         = "margin-bottom: 5px;"
-                                   data-ng-click = "viewModel.showAddNewEmployeeOpen()")
-          | Add Employees
-          i.m-icon-swapright.m-icon-white
-
-    .clearfix
-
     .row-fluid(data-ng-hide = "viewModel.showAddNewEmployee")
       .portlet.box.grey
         .portlet-title
@@ -37,6 +25,20 @@
             h4
               span Employees
           .portlet-body
+
+
+
+            .row-fluid(data-ng-animate = "{show: 'fadeIn'}"
+                       data-ng-hide    = "viewModel.showAddNewEmployee")
+              .span6
+              .span6
+                button.btn.green.btn-block(style         = "margin-bottom: 5px;"
+                                           data-ng-click = "viewModel.showAddNewEmployeeOpen()")
+                  | Add Employees
+                  i.m-icon-swapright.m-icon-white
+
+
+
             table.table.table-striped.table-hover.table-bordered.dataTable(data-data-table                        = "viewModel.employeeListDT.options"
                                                                            ao-column-defs                         = "viewModel.employeeListDT.columnDefs"
                                                                            data-parent-model                      = "viewModel.employeeListDT"
@@ -59,7 +61,7 @@
 
 
     .row-fluid
-      .span12(style           = "display:none;"
+      .span12(style          = "display:none;"
              data-ng-animate = "{show:'slideDown'}"
              data-ng-show    = "viewModel.showAddNewEmployee")
         .portlet.box.grey
@@ -73,6 +75,7 @@
 
           .portlet-body.light-grey.form
             div(data-ng-show = "viewModel.addNewEmployeeMode === false")
+
               p(style = "width:100%;text-align:center;")
                 a.btn.green.big.span6(style         = "min-height:55px;"
                                       data-ng-click = "viewModel.addNewEmployeeMode = 'manual'")
@@ -82,11 +85,14 @@
                                      data-ng-click = "viewModel.addNewEmployeeMode = 'csv'")
                   | CSV Upload
                   i.m-icon-big-swapright.m-icon-white
+
               .clearfix
 
             div(data-ng-switch = "viewModel.addNewEmployeeMode")
+
               div(data-ng-include     = "'viewPartialEmployeeManagerAddManualForm'"
                   data-ng-switch-when = "manual")
+
               div(data-ng-include     = "'viewPartialEmployeeManagerAddCSVForm'"
                   data-ng-switch-when = "csv")
 
