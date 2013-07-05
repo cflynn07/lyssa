@@ -17,7 +17,7 @@
 
     .clearfix
 
-    .row-fluid
+    .row-fluid(data-ng-hide = "viewModel.showAddNewEmployee")
       .portlet.box.grey
         .portlet-title
           h4
@@ -29,8 +29,9 @@
 
     .clearfix
 
-    .row-fluid
-      div(data-ng-class = "{span12: !viewModel.showAddNewEmployee, span6:viewModel.showAddNewEmployee}")
+    .row-fluid(data-ng-hide = "viewModel.showAddNewEmployee")
+      .span12
+        // data-ng-class = "{span12: !viewModel.showAddNewEmployee, span6:viewModel.showAddNewEmployee}")
         .portlet.box.grey
           .portlet-title
             h4
@@ -50,38 +51,45 @@
                   th.sorting Email
                   th.sorting Phone Number
                   th.sorting_disabled Type
+                  th.sorting_disabled businessDivision0
+                  th.sorting_disabled businessDivision1
+                  th.sorting_disabled businessDivision2
                   th.sorting_disabled
-          // portlet body
-        // portlet box
-      // span12
-      .span6(style="display:none;", data-ng-animate="{show:'slideDown'}", data-ng-show="viewModel.showAddNewEmployee")
+
+
+
+    .row-fluid
+      .span12(style           = "display:none;"
+             data-ng-animate = "{show:'slideDown'}"
+             data-ng-show    = "viewModel.showAddNewEmployee")
         .portlet.box.grey
           .portlet-title
             h4
               span Add Employees
             .actions
-              a.btn.red(data-ng-click="viewModel.showAddNewEmployeeClose()")
+              a.btn.red(data-ng-click = "viewModel.showAddNewEmployeeClose()")
                 i.icon-remove
                 | Cancel
-          // portlet-title
+
           .portlet-body.light-grey.form
-            div(data-ng-show="viewModel.addNewEmployeeMode === false")
-              p(style="width:100%;text-align:center;")
-                a.btn.green.big.span6(style="min-height:55px;", data-ng-click="viewModel.addNewEmployeeMode = 'manual'")
+            div(data-ng-show = "viewModel.addNewEmployeeMode === false")
+              p(style = "width:100%;text-align:center;")
+                a.btn.green.big.span6(style         = "min-height:55px;"
+                                      data-ng-click = "viewModel.addNewEmployeeMode = 'manual'")
                   | Add Manually
                   i.m-icon-big-swapright.m-icon-white
-                a.btn.blue.big.span6(style="min-height:55px;", data-ng-click="viewModel.addNewEmployeeMode = 'csv'")
+                a.btn.blue.big.span6(style         = "min-height:55px;"
+                                     data-ng-click = "viewModel.addNewEmployeeMode = 'csv'")
                   | CSV Upload
                   i.m-icon-big-swapright.m-icon-white
               .clearfix
-            // data-ng-show
-            div(data-ng-switch="viewModel.addNewEmployeeMode")
-              div(data-ng-include="'viewPartialEmployeeManagerAddManualForm'", data-ng-switch-when="manual")
-              // data-ng-switch-when="manual"
-              div(data-ng-include="'viewPartialEmployeeManagerAddCSVForm'", data-ng-switch-when="csv")
-              // data-ng-switch-when="csv"
-          // portlet-body
-        // portlet
-      // span6
-    // row-fluid
-  // portlet-body
+
+            div(data-ng-switch = "viewModel.addNewEmployeeMode")
+              div(data-ng-include     = "'viewPartialEmployeeManagerAddManualForm'"
+                  data-ng-switch-when = "manual")
+              div(data-ng-include     = "'viewPartialEmployeeManagerAddCSVForm'"
+                  data-ng-switch-when = "csv")
+
+
+
+

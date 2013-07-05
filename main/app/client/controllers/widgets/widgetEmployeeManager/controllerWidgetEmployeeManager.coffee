@@ -216,11 +216,34 @@ define [
               bSortable: false
               aTargets:  [4]
               mRender: (data, type, full) ->
-                return '' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
+                return 'Delegate' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
+
+
+
             ,
               mData:     null
               bSortable: false
               aTargets:  [5]
+              mRender: (data, type, full) ->
+                return 'bd0' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
+            ,
+              mData:     null
+              bSortable: false
+              aTargets:  [6]
+              mRender: (data, type, full) ->
+                return 'bd1' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
+            ,
+              mData:     null
+              bSortable: false
+              aTargets:  [7]
+              mRender: (data, type, full) ->
+                return 'bd2' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
+
+
+            ,
+              mData:     null
+              bSortable: false
+              aTargets:  [8]
               mRender: (data, type, full) ->
                 return new EJS({text: viewPartialEmployeeManagerListButtonsEJS}).render(full)
             ]
