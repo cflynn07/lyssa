@@ -46,9 +46,21 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="row-fluid">
     <div class="span6">
       <div data-ng-class="{success:newEmployeeManualAddForm.businessDivision1.$valid, error:!newEmployeeManualAddForm.businessDivision1.$valid, 'ng-pristine':newEmployeeManualAddForm.businessDivision1.$pristine}" class="control-group">
         <label for="phone" class="control-label">Business Division 1</label>
+        <div class="controls input-icon">
+          <input type="text" required="required" data-unique-field="{&quot;resource&quot;: &quot;employee&quot;, &quot;property&quot;: &quot;phone&quot;}" data-ui-mask="'999-999-9999'" data-ng-model="viewModel.newEmployeeManualAddForm.businessDivision1" name="phone" placeholder="999-999-9999" class="m-wrap span10"/><span data-ng-show="newEmployeeManualAddForm.businessDivision1.$dirty &amp;&amp; newEmployeeManualAddForm.businessDivision1.$valid" class="input-success"><i class="icon-ok"></i></span><span data-ng-show="newEmployeeManualAddForm.businessDivision1.$dirty &amp;&amp; newEmployeeManualAddForm.businessDivision1.$invalid" class="input-error"><i class="icon-exclamation-sign"></i></span><span data-ng-show="newEmployeeManualAddForm.businessDivision1.$error" class="help-inline">Enter a valid phone number</span><span data-ng-show="newEmployeeManualAddForm.businessDivision1.$error.uniqueField" class="help-inline">Another employee with the phone number<strong>{{viewModel.newEmployeeManualAddForm.phone}}</strong>already exists</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span6">
+      <div data-ng-class="{success:newEmployeeManualAddForm.businessDivision1.$valid, error:!newEmployeeManualAddForm.businessDivision1.$valid, 'ng-pristine':newEmployeeManualAddForm.businessDivision1.$pristine}" class="control-group">
+        <label for="phone" class="control-label">Business Division 2</label>
         <div class="controls input-icon">
           <input type="text" required="required" data-unique-field="{&quot;resource&quot;: &quot;employee&quot;, &quot;property&quot;: &quot;phone&quot;}" data-ui-mask="'999-999-9999'" data-ng-model="viewModel.newEmployeeManualAddForm.businessDivision1" name="phone" placeholder="999-999-9999" class="m-wrap span10"/><span data-ng-show="newEmployeeManualAddForm.businessDivision1.$dirty &amp;&amp; newEmployeeManualAddForm.businessDivision1.$valid" class="input-success"><i class="icon-ok"></i></span><span data-ng-show="newEmployeeManualAddForm.businessDivision1.$dirty &amp;&amp; newEmployeeManualAddForm.businessDivision1.$invalid" class="input-error"><i class="icon-exclamation-sign"></i></span><span data-ng-show="newEmployeeManualAddForm.businessDivision1.$error" class="help-inline">Enter a valid phone number</span><span data-ng-show="newEmployeeManualAddForm.businessDivision1.$error.uniqueField" class="help-inline">Another employee with the phone number<strong>{{viewModel.newEmployeeManualAddForm.phone}}</strong>already exists</span>
         </div>

@@ -105,9 +105,31 @@ form.horizontal-form(name       = "newEmployeeManualAddForm"
             | Another employee with the email address
             strong {{viewModel.newEmployeeManualAddForm.email}}
             | already exists
+  .row-fluid
     .span6
       .control-group(data-ng-class = "{success:newEmployeeManualAddForm.businessDivision1.$valid, error:!newEmployeeManualAddForm.businessDivision1.$valid, 'ng-pristine':newEmployeeManualAddForm.businessDivision1.$pristine}")
         label.control-label(for = "phone") Business Division 1
+        .controls.input-icon
+          input.m-wrap.span10(type              = "text"
+                              required
+                              data-unique-field = "{\"resource\": \"employee\", \"property\": \"phone\"}"
+                              data-ui-mask      = "'999-999-9999'"
+                              data-ng-model     = "viewModel.newEmployeeManualAddForm.businessDivision1"
+                              name              = "phone"
+                              placeholder       = "999-999-9999")
+          span.input-success(data-ng-show = "newEmployeeManualAddForm.businessDivision1.$dirty && newEmployeeManualAddForm.businessDivision1.$valid")
+            i.icon-ok
+          span.input-error(data-ng-show = "newEmployeeManualAddForm.businessDivision1.$dirty && newEmployeeManualAddForm.businessDivision1.$invalid")
+            i.icon-exclamation-sign
+          span.help-inline(data-ng-show = "newEmployeeManualAddForm.businessDivision1.$error") Enter a valid phone number
+          span.help-inline(data-ng-show = "newEmployeeManualAddForm.businessDivision1.$error.uniqueField")
+            | Another employee with the phone number
+            strong {{viewModel.newEmployeeManualAddForm.phone}}
+            | already exists
+  .row-fluid
+    .span6
+      .control-group(data-ng-class = "{success:newEmployeeManualAddForm.businessDivision1.$valid, error:!newEmployeeManualAddForm.businessDivision1.$valid, 'ng-pristine':newEmployeeManualAddForm.businessDivision1.$pristine}")
+        label.control-label(for = "phone") Business Division 2
         .controls.input-icon
           input.m-wrap.span10(type              = "text"
                               required
