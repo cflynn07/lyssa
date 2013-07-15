@@ -123,7 +123,7 @@ config =
 
 
 #REDIS parameters
-if GLOBAL.env? and GLOBAL.env.DOTCLOUD_DATA_REDIS_HOST?
+if GLOBAL.env and GLOBAL.env.DOTCLOUD_DATA_REDIS_HOST
   config.redis =
     prefix: 'voxtracker:'
     host:   GLOBAL.env.DOTCLOUD_DATA_REDIS_HOST
