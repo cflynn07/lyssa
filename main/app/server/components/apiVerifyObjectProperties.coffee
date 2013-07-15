@@ -1,10 +1,9 @@
 _                          = require 'underscore'
-async                      = require 'async'
 uuid                       = require 'node-uuid'
-oRMValidateFieldsHelper    = require GLOBAL.appRoot + 'components/oRMValidateFieldsHelper'
+async                      = require 'async'
 config                     = require GLOBAL.appRoot + 'config/config'
+oRMValidateFieldsHelper    = require GLOBAL.appRoot + 'components/oRMValidateFieldsHelper'
 preventUnknownFieldsHelper = require GLOBAL.appRoot + 'components/preventUnknownFieldsHelper'
-
 
 module.exports = (scope, resourceModel, testObjects, req, res, insertMethodCallback = false, requirements, finalMethod) ->
 

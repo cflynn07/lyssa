@@ -8,8 +8,8 @@ fs            = require 'fs'
 try
   output = execSync 'cd ~/code && pwd -P'
 catch e
-  console.log 'execSync error'
-  console.log e
+  console.log 'execSync error -- localhost?'
+  #console.log e
   try
     output = execSync 'cd ~/ && pwd'
   catch e
@@ -19,17 +19,18 @@ GLOBAL.assetHash = crypto.createHash('md5').update(output).digest("hex")
 console.log 'GLOBAL.assetHash'
 console.log GLOBAL.assetHash
 
-localPath = __dirname + '../client/assets/' + GLOBAL.assetHash
+localPath = __dirname + '/../client/assets/' + GLOBAL.assetHash
 if fs.existsSync(localPath + '.css') and fs.existsSync(localPath + '.js')
   require './server'
-
+  return
+  
 else
   async.parallel [
     (cb) ->
 
       #OPTIMIZE CSS
       requirejs.optimize
-        cssIn:        __dirname + '/../client/assets/main.css'
+        cssIn:        __dirname + '/../client/assets/client.css'
         out:          __dirname + '/../client/assets/' + GLOBAL.assetHash + '.css'
         optimizeCss: 'standard.keepLines' #standard
         preserveLicenseComments: false

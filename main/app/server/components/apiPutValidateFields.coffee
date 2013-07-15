@@ -1,9 +1,9 @@
-ORMValidateFieldsHelper = require './oRMValidateFieldsHelper'
-config                  = require '../config/config'
-async                   = require 'async'
-uuid                    = require 'node-uuid'
-_                       = require 'underscore'
-preventUnknownFieldsHelper = require config.appRoot + 'server/components/preventUnknownFieldsHelper'
+_                          = require 'underscore'
+async                      = require 'async'
+uuid                       = require 'node-uuid'
+config                     = require GLOBAL.appRoot + 'config/config'
+ORMValidateFieldsHelper    = require GLOBAL.appRoot + 'components/oRMValidateFieldsHelper'
+preventUnknownFieldsHelper = require GLOBAL.appRoot + 'components/preventUnknownFieldsHelper'
 
 
 module.exports = (scope, resourceModel, putObjects, req, res, requirements) ->

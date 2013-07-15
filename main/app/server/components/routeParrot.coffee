@@ -1,8 +1,6 @@
-config  = require '../config/config'
 _       = require 'underscore'
+config  = require GLOBAL.appRoot + 'config/config'
 #apiAuth = require config.appRoot + 'server/components/apiAuth'
-
-defaultCode = 200
 
 module.exports.http = (req, res, next) ->
 
@@ -16,7 +14,7 @@ module.exports.http = (req, res, next) ->
     req.requestType    = 'http'
     res.jsonAPIRespond = (json) ->
       if !json.code?
-        json.code = defaultCode
+        json.code = config.defaultCode
       res.json json.code, json
 
   next()
@@ -40,7 +38,7 @@ module.exports.socketio = (req, res, callback) ->
 
   res.jsonAPIRespond = (json) ->
     if !json.code?
-      json.code = defaultCode
+      json.code = config.defaultCode
     req.io.respond json
 
   callback(req, res)

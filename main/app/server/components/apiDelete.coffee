@@ -1,6 +1,6 @@
 async  = require 'async'
 _      = require 'underscore'
-config = require '../config/config'
+config = require GLOBAL.appRoot + 'config/config'
 
 module.exports = (resource, conditions, res) ->
 

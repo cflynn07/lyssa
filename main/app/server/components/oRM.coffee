@@ -21,11 +21,6 @@ exportObj =
       paranoid: true
       logging:  false #console.log #<-- set to console.log for query debugging
 
-    console.log config.mysql
-    console.log config.mysql.db
-    console.log config.mysql.user
-    console.log config.mysql.pass
-
     sequelizeDefaults = _.extend sequelizeDefaults, config.mysql
     sequelize         = new Sequelize config.mysql.db, 
       config.mysql.user, 

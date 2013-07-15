@@ -1,8 +1,7 @@
 ###
   Recursively search & attach route handlers in /server/controllers directory
 ###
-
-controllersPath = __dirname + '/../controllers'
+controllersPath = GLOBAL.appRoot + 'controllers'
 fs              = require 'fs'
 
 module.exports = (app) ->

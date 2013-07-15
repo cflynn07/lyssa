@@ -4,7 +4,6 @@ GLOBAL.appRoot = __dirname + '/'
 fs      = require 'fs'
 express = require 'express.io'
 path    = require 'path'
-config  = require GLOBAL.appRoot + 'config/config'
 
 #If we didn't get to server.js from bootstrap.js
 if !GLOBAL.assetHash
@@ -12,6 +11,8 @@ if !GLOBAL.assetHash
 
 require(GLOBAL.appRoot + 'config/envGlobals')(GLOBAL)
 require(GLOBAL.appRoot + 'components/oRM').setup()
+
+config  = require GLOBAL.appRoot + 'config/config'
 
 #redis clients
 pub        = require(GLOBAL.appRoot + 'components/redis').createClient()
@@ -77,7 +78,7 @@ app.configure () ->
 
 
 #Authentication module
-require(GLOBAL.appRoot + 'controllers/authenticate')(app)
+#require(GLOBAL.appRoot + 'controllers/authenticate')(app)
 
 #API Requests
 app.io.route 'apiRequest', (req) ->

@@ -1,7 +1,7 @@
-async  = require 'async'
 _      = require 'underscore'
-config = require '../config/config'
+async  = require 'async'
 uuid   = require 'node-uuid'
+config = require GLOBAL.appRoot + 'config/config'
 
 module.exports = (apiCollectionName, clientUid, resource, objects, req, res, app, insertMethodCallback = false) ->
   #Give everyone their own brand new uid

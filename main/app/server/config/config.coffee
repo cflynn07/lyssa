@@ -38,6 +38,7 @@ config =
     'generalInvalid':
       code: 400
       message: 'invalid request'
+  defaultCode: 200
   apiResponseCodes:
     #Non-errors
     200: 'OK'
@@ -145,7 +146,7 @@ if process.env.CIRCLECI
     pass: ''
     port: ''
     db:   'circle_test'
-else if GLOBAL.env? and GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN
+else if GLOBAL.env and GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN
   #dotCloud
   config.mysql = 
     host: GLOBAL.env.DOTCLOUD_DB_MYSQL_HOST

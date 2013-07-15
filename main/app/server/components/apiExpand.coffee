@@ -3,14 +3,12 @@ Module for managing api resource expansion relationships,
 permissions, and validation
 ###
 
-
 _         = require 'underscore'
 async     = require 'async'
 sanitize  = require('validator').sanitize
 config    = require GLOBAL.appRoot + 'config/config'
 ORM       = require GLOBAL.appRoot + 'components/oRM'
 sequelize = ORM.setup()
-
 
 module.exports = (req, res, resource, resourceQueryParams) ->
 

@@ -1,15 +1,8 @@
-config = require '../config/config'
-async  = require 'async'
 _      = require 'underscore'
-
+async  = require 'async'
+config = require GLOBAL.appRoot + 'config/config'
 
 module.exports = (resourceModel, objects, requirements) ->
-
-  #console.log 'requirements'
-  #console.log requirements
-
-
-  #console.log config.resourceModelUnknownFieldsExceptions
 
   unknownProperties = []
   for object, key in objects

@@ -1,13 +1,7 @@
-###
-#  Verify access credentials
-###
-
-config  = require '../config/config'
 _       = require 'underscore'
-
+config  = require GLOBAL.appRoot + 'config/config'
 
 module.exports = (req, res, callback) ->
-
 
   if req.requestType is 'http'
 
