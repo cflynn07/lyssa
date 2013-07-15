@@ -1,13 +1,13 @@
-config                    = require '../../../../config/config'
-apiVerifyObjectProperties = require config.appRoot + 'server/components/apiVerifyObjectProperties'
-apiAuth                   = require config.appRoot + 'server/components/apiAuth'
+_                         = require 'underscore'
 async                     = require 'async'
 uuid                      = require 'node-uuid'
-ORM                       = require config.appRoot + 'server/components/oRM'
-sequelize                 = ORM.setup()
-_                         = require 'underscore'
 bcrypt                    = require 'bcrypt'
-updateHelper              = require config.appRoot + 'server/components/updateHelper'
+config                    = require GLOBAL.appRoot + 'config/config'
+apiVerifyObjectProperties = require GLOBAL.appRoot + 'components/apiVerifyObjectProperties'
+apiAuth                   = require GLOBAL.appRoot + 'components/apiAuth'
+ORM                       = require GLOBAL.appRoot + 'components/oRM'
+updateHelper              = require GLOBAL.appRoot + 'components/updateHelper'
+sequelize                 = ORM.setup()
 
 
 module.exports = (app) ->

@@ -1,25 +1,27 @@
+#For including modules with absolute file paths
+GLOBAL.appRoot = __dirname + '/'
+
 fs      = require 'fs'
 express = require 'express.io'
 path    = require 'path'
-config  = require './config/config'
+config  = require GLOBAL.appRoot + 'config/config'
 
 #If we didn't get to server.js from bootstrap.js
 if !GLOBAL.assetHash
   GLOBAL.assetHash = 'client'
 
-
-require('./config/envGlobals')(GLOBAL)
-require('./components/oRM').setup()
-
+require(GLOBAL.appRoot + 'config/envGlobals')(GLOBAL)
+require(GLOBAL.appRoot + 'components/oRM').setup()
 
 #redis clients
-pub        = require('./config/redis').createClient()
-sub        = require('./config/redis').createClient()
-store      = require('./config/redis').createClient()
-redisStore = require('./config/redis').createStore()
+pub        = require(GLOBAL.appRoot + 'components/redis').createClient()
+sub        = require(GLOBAL.appRoot + 'components/redis').createClient()
+store      = require(GLOBAL.appRoot + 'components/redis').createClient()
+redisStore = require(GLOBAL.appRoot + 'components/redis').createStore()
 app        = express().http().io()
-GLOBAL.app = app
 
+#Make express.io instance available globally
+GLOBAL.app = app
 
 app.io.set 'store',
   new express.io.RedisStore
@@ -60,7 +62,7 @@ app.configure () ->
     match api requests from socket.io & http to same handlers by modifying
     req & res objects
   ###
-  app.use require('./components/routeParrot').http
+  app.use require(GLOBAL.appRoot + 'components/routeParrot').http
   app.use app.router
 
 
@@ -75,11 +77,11 @@ app.configure () ->
 
 
 #Authentication module
-require('./controllers/authenticate')(app)
+require(GLOBAL.appRoot + 'controllers/authenticate')(app)
 
 #API Requests
 app.io.route 'apiRequest', (req) ->
-  require('./components/routeParrot').socketio req,
+  require(GLOBAL.appRoot + 'components/routeParrot').socketio req,
     {},
     (req, res) ->
       app.router req, res, () ->
@@ -87,7 +89,7 @@ app.io.route 'apiRequest', (req) ->
 
 
 #Mount all controllers (API & Regular)
-require('./components/controllers')(app)
+require(GLOBAL.appRoot + 'components/controllers')(app)
 
 
 

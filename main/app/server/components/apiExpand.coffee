@@ -4,12 +4,12 @@ permissions, and validation
 ###
 
 
-config    = require '../config/config'
 _         = require 'underscore'
-ORM       = require config.appRoot + 'server/components/oRM'
-sequelize = ORM.setup()
 async     = require 'async'
 sanitize  = require('validator').sanitize
+config    = require GLOBAL.appRoot + 'config/config'
+ORM       = require GLOBAL.appRoot + 'components/oRM'
+sequelize = ORM.setup()
 
 
 module.exports = (req, res, resource, resourceQueryParams) ->

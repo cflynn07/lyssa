@@ -1,18 +1,25 @@
-.inline-content.inline-content-responsive(style="text-align:center;")
-  .btn-group(style="margin-bottom:0px !important; text-align:left;")
-    button.btn.detail(data-ng-class="{true:'black', false:'blue'}[viewModel.routeParams.templateUid == '<%= templateUid %>']")
-      i.m-icon-swapup.m-icon-white(style="display:none;")
-      i.m-icon-swapdown.m-icon-white
-      |&nbsp;Revisions ({{ (resourcePool['<%= templateUid %>'].revisions | toArray).length }})
-    button.btn.dropdown-toggle(data-toggle="dropdown")
+<%= revisionUid %>
+
+.inline-content.inline-content-responsive(style = "text-align:center;")
+ 
+  .btn-group(style = "margin-bottom:0px !important; text-align:left;")    
+
+
+    a.btn(href          = <%= '"' + templateUid '"' %>
+          data-ng-class = "{true:'black', false:'blue'}[viewModel.routeParams.templateUid == '<%= templateUid %>']")
+      | Edit&nbsp;
+      i.m-icon-swapleft.m-icon-white(style = "display:none;")
+      i.m-icon-swapright.m-icon-white
+
+    button.btn.dropdown-toggle(data-toggle = "dropdown")
       span.caret
     ul.dropdown-menu.pull-right
-      // dropdown menu links
+
       li
-        a(data-ng-click="")
+        a(data-ng-click)
           i.icon-plus
           | New Revision
       li
-        a.color-red(data-ng-click="$parent.viewModel.deleteConfirmDialogTemplate('<%= templateUid %>')")
+        a.color-red(data-ng-click = "$parent.viewModel.deleteConfirmDialogTemplate('<%= templateUid %>')")
           i.icon-trash
           | Archive Template

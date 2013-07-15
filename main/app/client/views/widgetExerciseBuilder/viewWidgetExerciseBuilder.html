@@ -56,7 +56,7 @@
                   <div class="span12">
                     <h4 style="font-weight:600; margin-top:0;"><span>Template Info</span></h4>
                     <h2 data-ng-hide="viewModel.showEditTemplateName" style="margin-top:0;"><span>{{ resourcePool[viewModel.routeParams.templateUid].name }}</span></h2>
-                    <form name="formEditTemplateName" data-ng-show="viewModel.showEditTemplateName" novalidate="" class="form-horizontal">
+                    <form name="formEditTemplateName" data-ng-show="viewModel.showEditTemplateName" novalidate="novalidate" class="form-horizontal">
                       <div data-ng-class="{success:formEditTemplateName.name.$valid, error:!formEditTemplateName.name.$valid, 'ng-pristine':formEditTemplateName.name.$pristine}" class="control-group">
                         <div class="row-fluid">
                           <div class="span6">
@@ -88,7 +88,6 @@
                   </div>
                 </div>
               </div>
-              <!-- template info box / main menu-->
               <div data-ng-include="'viewPartialExerciseBuilderNewGroupForm'"></div>
               <div data-ng-init="editRevisionChangeSummary = false" class="box template-info-box fade in">
                 <h4 style="font-weight:600; margin-top:0;"><span>Revision Change Summary</span></h4>
@@ -114,13 +113,10 @@
                   </div>
                   <div class="clearfix"></div>
                 </div>
-                <!-- not finalized-->
               </div>
-              <!-- template info box / change summary-->
               <ul style="box-shadow:none !important; border:2px solid #DDD !important;" class="breadcrumb">
                 <li><i class="icon-home"></i><a>Groups</a><i class="icon-angle-right"></i></li>
               </ul>
-              <!-- loading indicator, shown during groups loading-->
               <div data-ng-hide="resourcePool[viewModel.routeParams.revisionUid].groups">
                 <div class="progress progress-striped active">
                   <div style="width: 100%;" class="bar"></div>

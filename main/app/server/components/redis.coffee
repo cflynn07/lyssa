@@ -1,28 +1,16 @@
 redis      = require 'redis'
 express    = require 'express.io'
 redisStore = require('connect-redis')(express)
-
-if GLOBAL.env? and GLOBAL.env.DOTCLOUD_DATA_REDIS_HOST?
-  redisOptions =
-    prefix: 'voxtracker:'
-    host: GLOBAL.env.DOTCLOUD_DATA_REDIS_HOST
-    port: GLOBAL.env.DOTCLOUD_DATA_REDIS_PORT
-    pass: GLOBAL.env.DOTCLOUD_DATA_REDIS_PASSWORD
-else
-  redisOptions =
-    prefix: ''
-    host:   'localhost'
-    port:   6379
-    pass:   ''
+config     = require GLOBAL.appRoot + 'config/config'
 
 createClient = () ->
-  client = redis.createClient(redisOptions.port, redisOptions.host)
-  client.auth redisOptions.pass, () ->
+  client = redis.createClient config.redis.port, config.redis.host
+  client.auth config.redis.pass, ->
   return client
 
 createStore = () ->
-  store = new redisStore redisOptions
+  store = new redisStore config.redis
 
 module.exports =
   createClient: createClient
-  createStore: createStore
+  createStore:  createStore

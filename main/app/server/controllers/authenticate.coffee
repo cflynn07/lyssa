@@ -2,21 +2,18 @@
   Handles authenticate / unauthenticate session operations
   via socket.io & (TODO) http
 ###
-
-
-config    = require '../config/config'
-bcrypt    = require 'bcrypt'
-ORM       = require config.appRoot + 'server/components/oRM'
-sequelize = ORM.setup()
-async     = require 'async'
 _         = require 'underscore'
-
+async     = require 'async'
+bcrypt    = require 'bcrypt'
+config    = require GLOBAL.appRoot + 'config/config'
+ORM       = require GLOBAL.appRoot + 'components/oRM'
+sequelize = ORM.setup()
 
 employee  = ORM.model 'employee'
 client    = ORM.model 'client'
 
-
-module.exports = (app) ->
+module.exports = () ->
+  app = GLOBAL.app 
 
   status = (req) ->
     if !_.isUndefined(req.session.user)

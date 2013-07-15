@@ -1,37 +1,18 @@
 _ = require 'underscore'
 
-module.exports =
-
+config =
   isValidUUID: (uuid) ->
     rgx = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
     return rgx.test(uuid)
-
-  resourceModelUnknownFieldsExceptions: {}
-
   apiSubDir: '/api'
-  appRoot:   __dirname + '/../../'
   env:       (if GLOBAL.app? and GLOBAL.app.settings? and GLOBAL.app.settings.env then GLOBAL.app.settings.env else 'development')
-  assetHash: (if GLOBAL.assetHash then GLOBAL.assetHash else 'main')
   authCategories: [
-  #  'super_admin'
-  #  'client_super_admin'
-  #  'client_admin'
-  #  'client_delegate'
-  #  'client_auditor'
     'superAdmin'
     'clientSuperAdmin'
     'clientAdmin'
     'clientDelegate'
     'clientAuditor'
   ]
-  fieldTypes: [
-    'openResponse'
-    'selectIndividual'
-    'selectMultiple'
-    'yesNo'
-    'slider'
-  ]
-
   apiResponseErrors:
     'nestedTooDeep':
       code: 400
@@ -57,30 +38,24 @@ module.exports =
     'generalInvalid':
       code: 400
       message: 'invalid request'
-
   apiResponseCodes:
-
     #Non-errors
     200: 'OK'
     201: 'Created'
     202: 'Accepted'
-
     #errors
     301: 'Moved Permanently'
     400: 'Bad Request'
     401: 'Unauthorized'
     402: 'Forbidden'
     404: 'Not Found'
-
   response: (code = 200) ->
     if [200, 201, 202].indexOf(code) is -1
       throw new Error 'Invalid API response'
       return
     code: code
     message: @apiResponseCodes[code]
-
   errorResponse: (code = 401) ->
-
     if [301, 400, 401, 402, 404].indexOf(code) is -1
       throw new Error 'Invalid API error response'
       return
@@ -88,7 +63,6 @@ module.exports =
     code: code
     error: @apiResponseCodes[code]
   apiErrorResponse: (apiResponseErrorName) ->
-
     apiResponseErrorsObject = @apiResponseErrors[apiResponseErrorName]
 
     if _.isUndefined apiResponseErrorsObject
@@ -147,4 +121,47 @@ module.exports =
           resource:          resultResource.values
 
 
+
+#REDIS parameters
+if GLOBAL.env? and GLOBAL.env.DOTCLOUD_DATA_REDIS_HOST?
+  config.redis =
+    prefix: 'voxtracker:'
+    host:   GLOBAL.env.DOTCLOUD_DATA_REDIS_HOST
+    port:   GLOBAL.env.DOTCLOUD_DATA_REDIS_PORT
+    pass:   GLOBAL.env.DOTCLOUD_DATA_REDIS_PASSWORD
+else
+  config.redis =
+    prefix: ''
+    host:   'localhost'
+    port:   6379
+    pass:   ''
+
+#MySQL parameters
+if process.env.CIRCLECI
+  #CircleCI CI
+  config.mysql = 
+    host: 'localhost'
+    user: ''
+    pass: ''
+    port: ''
+    db:   'circle_test'
+else if GLOBAL.env? and GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN
+  #dotCloud
+  config.mysql = 
+    host: GLOBAL.env.DOTCLOUD_DB_MYSQL_HOST
+    user: GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN
+    pass: GLOBAL.env.DOTCLOUD_DB_MYSQL_PASSWORD
+    port: GLOBAL.env.DOTCLOUD_DB_MYSQL_PORT
+    db:   'production'
+else 
+  #local development
+  config.mysql = 
+    host: 'localhost'
+    user: 'root'
+    pass: ''
+    port: 3306
+    db:   'lyssa'
+
+
+module.exports = config 
 

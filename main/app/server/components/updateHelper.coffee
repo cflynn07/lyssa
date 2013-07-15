@@ -1,7 +1,7 @@
-async     = require 'async'
-config    = require '../config/config'
 _         = require 'underscore'
-ORM       = require config.appRoot + 'server/components/oRM'
+async     = require 'async'
+config    = require GLOBAL.appRoot + 'config/config'
+ORM       = require GLOBAL.appRoot + 'components/oRM'
 sequelize = ORM.setup()
 
 module.exports = (resource, objects, req, res, app) ->

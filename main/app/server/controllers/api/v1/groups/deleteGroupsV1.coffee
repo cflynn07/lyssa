@@ -1,11 +1,12 @@
-config                = require '../../../../config/config'
-apiAuth               = require config.appRoot + 'server/components/apiAuth'
+_                     = require 'underscore'
 async                 = require 'async'
 uuid                  = require 'node-uuid'
-ORM                   = require config.appRoot + 'server/components/oRM'
+config                = require GLOBAL.appRoot + 'config/config'
+apiAuth               = require GLOBAL.appRoot + 'components/apiAuth'
+ORM                   = require GLOBAL.appRoot + 'components/oRM'
+apiDelete             = require GLOBAL.appRoot + 'components/apiDelete'
 sequelize             = ORM.setup()
-_                     = require 'underscore'
-apiDelete             = require config.appRoot + 'server/components/apiDelete'
+
 
 module.exports = (app) ->
 

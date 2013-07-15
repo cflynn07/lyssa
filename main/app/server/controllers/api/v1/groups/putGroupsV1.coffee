@@ -1,19 +1,17 @@
-config                    = require '../../../../config/config'
-apiVerifyObjectProperties = require config.appRoot + 'server/components/apiVerifyObjectProperties'
-apiAuth                   = require config.appRoot + 'server/components/apiAuth'
+_                         = require 'underscore'
 async                     = require 'async'
 uuid                      = require 'node-uuid'
-ORM                       = require config.appRoot + 'server/components/oRM'
+config                    = require GLOBAL.appRoot + 'config/config'
+apiVerifyObjectProperties = require GLOBAL.appRoot + 'components/apiVerifyObjectProperties'
+apiAuth                   = require GLOBAL.appRoot + 'components/apiAuth'
+ORM                       = require GLOBAL.appRoot + 'components/oRM'
+updateHelper              = require GLOBAL.appRoot + 'components/updateHelper'
 sequelize                 = ORM.setup()
-_                         = require 'underscore'
-updateHelper              = require config.appRoot + 'server/components/updateHelper'
-
 
 module.exports = (app) ->
 
-  group = ORM.model 'group'
+  group    = ORM.model 'group'
   employee = ORM.model 'employee'
-
 
   app.put config.apiSubDir + '/v1/groups', (req, res) ->
     async.series [

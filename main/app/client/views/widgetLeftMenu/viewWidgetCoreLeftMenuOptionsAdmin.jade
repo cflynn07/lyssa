@@ -36,6 +36,20 @@ li(data-ng-class = "{ 'active':(locationHash.indexOf('/admin/themis/templates') 
         href          = "#/admin/themis/templates/mini") Mini Exercises
 
 
+li(data-ng-class = "{ 'active':(locationHash.indexOf('/admin/themis/reports') === 0), 'open':(currentActiveMenuItem == 'reports') }"
+   data-ng-click = "setCurrentActiveMenuItem('reports')")
+  a
+    i.icon-bar-chart
+    span.title Reports
+    span.arrow(data-ng-class = "{true:'open'}[currentActiveMenuItem == 'reports' || locationHash.indexOf('/admin/themis/reports') === 0]")
+    span.selected
+  ul.sub-menu(data-ng-show    = "locationHash.indexOf('/admin/themis/reports') === 0 || currentActiveMenuItem == 'reports'"
+              data-ng-animate = "{show:'slideDown', hide:'slideUp'}")
+    li
+      a(data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/reports/timeline') === 0]"
+        data-ng-click = "setCurrentActiveMenuItem('reports')"
+        href          = "#/admin/themis/reports/timeline") Timeline
+
 
 li(data-ng-class = "{ 'active':(locationHash.indexOf('/admin/themis/settings') === 0), 'open':(currentActiveMenuItem == 'settings') }"
    data-ng-click = "setCurrentActiveMenuItem('settings')")
@@ -57,19 +71,6 @@ li(data-ng-class = "{ 'active':(locationHash.indexOf('/admin/themis/settings') =
         href          = "#/admin/themis/settings/employees") Employees
 
 
-li(data-ng-class = "{ 'active':(locationHash.indexOf('/admin/themis/reports') === 0), 'open':(currentActiveMenuItem == 'reports') }"
-   data-ng-click = "setCurrentActiveMenuItem('reports')")
-  a
-    i.icon-bar-chart
-    span.title Reports
-    span.arrow(data-ng-class = "{true:'open'}[currentActiveMenuItem == 'reports' || locationHash.indexOf('/admin/themis/reports') === 0]")
-    span.selected
-  ul.sub-menu(data-ng-show    = "locationHash.indexOf('/admin/themis/reports') === 0 || currentActiveMenuItem == 'reports'"
-              data-ng-animate = "{show:'slideDown', hide:'slideUp'}")
-    li
-      a(data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/reports/timeline') === 0]"
-        data-ng-click = "setCurrentActiveMenuItem('reports')"
-        href          = "#/admin/themis/reports/timeline") Timeline
 
 
 li

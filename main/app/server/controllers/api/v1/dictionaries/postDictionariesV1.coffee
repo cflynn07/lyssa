@@ -1,13 +1,13 @@
-config                    = require '../../../../config/config'
-apiVerifyObjectProperties = require config.appRoot + 'server/components/apiVerifyObjectProperties'
-apiAuth                   = require config.appRoot + 'server/components/apiAuth'
+_                         = require 'underscore'
 async                     = require 'async'
 uuid                      = require 'node-uuid'
-ORM                       = require config.appRoot + 'server/components/oRM'
+config                    = require GLOBAL.appRoot + 'config/config'
+apiVerifyObjectProperties = require GLOBAL.appRoot + 'components/apiVerifyObjectProperties'
+apiAuth                   = require GLOBAL.appRoot + 'components/apiAuth'
+ORM                       = require GLOBAL.appRoot + 'components/oRM'
+activityInsert            = require GLOBAL.appRoot + 'components/activityInsert'
+insertHelper              = require GLOBAL.appRoot + 'components/insertHelper'
 sequelize                 = ORM.setup()
-_                         = require 'underscore'
-insertHelper              = require config.appRoot + 'server/components/insertHelper'
-activityInsert            = require config.appRoot + 'server/components/activityInsert'
 
 
 module.exports = (app) ->

@@ -4,7 +4,7 @@
 
 async          = require 'async'
 html_minifier  = require 'html-minifier'
-config         = require '../config/config'
+config         = require GLOBAL.appRoot + 'config/config'
 
 module.exports = (app) ->
 
@@ -15,7 +15,7 @@ module.exports = (app) ->
 
       res.render item,
         environment: config.env
-        asset_hash:  config.assetHash,
+        assetHash:   GLOBAL.assetHash,
         (err, html) ->
           callback err, html
 

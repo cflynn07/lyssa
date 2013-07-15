@@ -1,13 +1,12 @@
-config    = require '../../../../config/config'
-apiAuth   = require config.appRoot + 'server/components/apiAuth'
-apiExpand = require config.appRoot + 'server/components/apiExpand'
-ORM       = require config.appRoot + 'server/components/oRM'
-sequelize = ORM.setup()
-async     = require 'async'
 _         = require 'underscore'
+async     = require 'async'
+config    = require GLOBAL.appRoot + 'config/config'
+apiAuth   = require GLOBAL.appRoot + 'components/apiAuth'
+apiExpand = require GLOBAL.appRoot + 'components/apiExpand'
+ORM       = require GLOBAL.appRoot + 'components/oRM'
+sequelize = ORM.setup()
 
 module.exports = (app) ->
-
 
   client = ORM.model 'client'
 

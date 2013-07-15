@@ -1,11 +1,9 @@
-
+<%= revisionUid %>
 <div style="text-align:center;" class="inline-content inline-content-responsive">
-  <div style="margin-bottom:0px !important; text-align:left;" class="btn-group">
-    <button data-ng-class="{true:'black', false:'blue'}[viewModel.routeParams.templateUid == '&lt;%= templateUid %&gt;']" class="btn detail"><i style="display:none;" class="m-icon-swapup m-icon-white"></i><i class="m-icon-swapdown m-icon-white"></i>&nbsp;Revisions ({{ (resourcePool['<%= templateUid %>'].revisions | toArray).length }})</button>
+  <div style="margin-bottom:0px !important; text-align:left;" class="btn-group">   <a href="&lt;%= templateUid %&gt;" data-ng-class="{true:'black', false:'blue'}[viewModel.routeParams.templateUid == '&lt;%= templateUid %&gt;']" class="btn">Edit&nbsp;<i style="display:none;" class="m-icon-swapleft m-icon-white"></i><i class="m-icon-swapright m-icon-white"></i></a>
     <button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
     <ul class="dropdown-menu pull-right">
-      <!-- dropdown menu links-->
-      <li><a data-ng-click=""><i class="icon-plus"></i>New Revision</a></li>
+      <li><a data-ng-click="data-ng-click"><i class="icon-plus"></i>New Revision</a></li>
       <li><a data-ng-click="$parent.viewModel.deleteConfirmDialogTemplate('&lt;%= templateUid %&gt;')" class="color-red"><i class="icon-trash"></i>Archive Template</a></li>
     </ul>
   </div>

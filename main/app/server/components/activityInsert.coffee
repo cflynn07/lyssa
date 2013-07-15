@@ -1,11 +1,11 @@
-async     = require 'async'
 _         = require 'underscore'
-config    = require '../config/config'
+async     = require 'async'
 uuid      = require 'node-uuid'
-ORM       = require config.appRoot + 'server/components/oRM'
+config    = require GLOBAL.appRoot + 'config/config'
+ORM       = require GLOBAL.appRoot + 'components/oRM'
 sequelize = ORM.setup()
 
-activity = ORM.model 'activity'
+activity  = ORM.model 'activity'
 
 module.exports = (insertObj, app, req) ->
 

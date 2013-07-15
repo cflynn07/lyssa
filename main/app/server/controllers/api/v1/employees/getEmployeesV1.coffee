@@ -1,10 +1,10 @@
-config    = require '../../../../config/config'
-apiAuth   = require config.appRoot + 'server/components/apiAuth'
-apiExpand = require config.appRoot + 'server/components/apiExpand'
-ORM       = require config.appRoot + 'server/components/oRM'
-sequelize = ORM.setup()
-async     = require 'async'
 _         = require 'underscore'
+async     = require 'async'
+config    = require GLOBAL.appRoot + 'config/config'
+apiAuth   = require GLOBAL.appRoot + 'components/apiAuth'
+apiExpand = require GLOBAL.appRoot + 'components/apiExpand'
+ORM       = require GLOBAL.appRoot + 'components/oRM'
+sequelize = ORM.setup()
 
 module.exports = (app) ->
 
@@ -12,14 +12,12 @@ module.exports = (app) ->
 
   app.get config.apiSubDir + '/v1/employees', (req, res) ->
 
-
 #    d1 = Date.now()
 #    sequelize.query("SELECT * FROM employees WHERE clientUid = '44cc27a5-af8b-412f-855a-57c8205d86f5'").success (myTableRows) ->
 #      console.log(myTableRows.length)
 #      console.log Date.now() - d1
 #      res.json myTableRows
 #    return
-
 
     async.series [
       (callback) ->

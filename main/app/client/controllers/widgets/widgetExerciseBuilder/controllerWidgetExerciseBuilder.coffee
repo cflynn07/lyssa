@@ -235,8 +235,16 @@ define [
               aTargets:  [2]
               bSortable: false
               mRender: (data, type, full) ->
-                uid = $scope.escapeHtml full.uid
-                html = new EJS({text: viewWidgetExerciseBuilderTemplateListButtonsEJS}).render({templateUid: uid})
+                uid  = $scope.escapeHtml full.uid
+#                {{ resourcePool['<%= templateUid %>'].revisions[0].uid }}
+
+                if !_.isUndefined(resourcePool[uid].revisions[0])
+                  revisionUid = resourcePool[uid].revisions[0].uid
+                else 
+                  revisionUid = ''
+
+
+                html = new EJS({text: viewWidgetExerciseBuilderTemplateListButtonsEJS}).render({templateUid: uid, revisionUid: revisionUid})
             ]
             options:
               bStateSave:      true
