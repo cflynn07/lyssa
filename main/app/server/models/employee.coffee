@@ -1,7 +1,7 @@
 # employee model
 
 config = require '../config/config'
-orm = require '../components/oRM'
+orm = require GLOBAL.appRoot + 'components/oRM'
 SEQ = orm.SEQ
 
 module.exports =

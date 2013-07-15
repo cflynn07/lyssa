@@ -1,6 +1,6 @@
 # exerciseTemplate model
 
-orm = require '../components/oRM'
+orm = require GLOBAL.appRoot + 'components/oRM'
 SEQ = orm.SEQ
 
 module.exports =
