@@ -21,10 +21,12 @@
       div(style="border: 0; margin-bottom: 0;")
         div
           button.btn.pull-right(data-ng-class="{true:'black',false:'green'}[submitting]", type="button", data-ng-click="!submitting && authenticate()", data-ng-disabled="submitting")
-            p(data-ng-hide="submitting")
+            p(data-ng-hide = "submitting"
+              style        = "margin:0;")
               |Login&nbsp;
               i.m-icon-swapright.m-icon-white
-            p.activity(data-ng-show = "submitting")
+            p.activity(data-ng-show = "submitting"
+                       style        = "margin:0;")
               i.icon-cog.icon-spin
               |&nbsp;Authenticating...
       .clearfix
