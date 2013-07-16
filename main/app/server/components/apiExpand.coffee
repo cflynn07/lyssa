@@ -496,6 +496,10 @@ module.exports = (req, res, resource, resourceQueryParams) ->
     filterIdsArr = []
     for obj in offsetLimitSet
       filterIdsArr.push obj.id
+
+    #console.log 'resourceQueryParams'
+    #console.log resourceQueryParams
+
     resourceQueryParams.find.where.id = filterIdsArr
 
     findRealCopy = _.extend {}, resourceQueryParams.find

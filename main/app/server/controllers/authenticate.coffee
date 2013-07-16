@@ -25,27 +25,54 @@ module.exports = () ->
         authenticated: false
 
   authenticate = (req) ->
+
+    if req.headers && req.headers.host
+      clientIdentifier = req.headers.host.split('.')[0]
+    else
+      req.io.respond success: false
+      return
+
     #prevent DoS attacks
     if !req.data.username? || !req.data.password? || req.data.password.length > 70
       req.io.respond success: false
       return
 
-    employee.find
-      where:
-        username: req.data.username
-      include: [
-        client
-      ]
-    .success (user) ->
+    async.waterfall [
+      (callback) ->
 
-      if !user?
+        client.find 
+          where:
+            identifier: clientIdentifier
+        .success (resultClient) ->
+          #console.log resultClient.values
+          callback null, resultClient
+
+      (resultClient, callback) ->
+        
+        if !resultClient
+          callback (new Error())
+          return
+
+        employee.find
+          where:
+            clientId: resultClient.id
+            username: req.data.username
+          include: [
+            client
+          ]
+        .success (resultUser) ->
+          callback null, resultUser
+
+    ], (err, resultUser) ->
+
+      if err || !resultUser
         req.io.respond success: false
-      else
-        bcrypt.compare req.data.password, user.password, (err, res) ->
+      else 
+        bcrypt.compare req.data.password, resultUser.password, (err, res) ->
           if res
 
-            respClient        = user.client.selectedValues
-            userValues        = user.selectedValues
+            respClient        = resultUser.client.values
+            userValues        = resultUser.values
             userValues.client = respClient
 
             #dont send hashed password
@@ -53,6 +80,9 @@ module.exports = () ->
 
             #req.session.user = JSON.parse JSON.stringify user
             req.session.user = userValues
+
+            console.log 'req.session.user'
+            console.log req.session.user
 
             #Hang out with the other cool super admins if you're a super admin
          #   if user.super_admin
@@ -67,6 +97,8 @@ module.exports = () ->
                 user:    userValues
           else
             req.io.respond success: false
+
+
 
   unauthenticate = (req) ->
     delete req.session.user
