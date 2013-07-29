@@ -17,8 +17,8 @@ define [], () ->
       #  ['viewWidgetActivityFeed', 'viewWidgetActivityFeed']
         ['viewWidgetBreadCrumbs']
         ['viewWidgetActivityFeed']
-        ['viewWidgetActivityExercisesQuizes', 'viewWidgetScheduler']
-        ['viewWidgetQuarterlyTestingReport']
+        #['viewWidgetActivityExercisesQuizes', 'viewWidgetScheduler']
+        #['viewWidgetQuarterlyTestingReport']
       ]
 
 
@@ -169,8 +169,19 @@ define [], () ->
       subGroup: ''
       widgetViews: [
         ['viewNoBreadCrumbs']
-        ['viewWidgetTimeline']
+        ['viewWidgetTimeline', 'viewWidgetScheduler']
       ]
+      widgetData: 
+        widgetTimeline:  {}
+        widgetScheduler: {}
+        widgetTabs: 
+          tabs: [
+            title: 'Summary'
+            view:  'viewWidgetTimeline'
+          ,
+            title: 'Calendar'
+            view:  'viewWidgetScheduler'
+          ]
 
 
 
