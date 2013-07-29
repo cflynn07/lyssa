@@ -110,6 +110,9 @@ define [
                 }
 
               $scope.widgetRows.push widgetObjects
+              if $route.current.$$route.widgetData 
+                $scope.widgetData = $route.current.$$route.widgetData 
+
 
             #Used by widgets for forming links
             $rootScope.viewRoot = $route.current.$$route.root

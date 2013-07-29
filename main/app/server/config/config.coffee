@@ -1,6 +1,7 @@
 _ = require 'underscore'
 
 config =
+  resourceModelUnknownFieldsExceptions: {}
   isValidUUID: (uuid) ->
     rgx = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
     return rgx.test(uuid)

@@ -5,7 +5,40 @@
       span Exercise Schedule
   .portlet-body.light-grey
     .row-fluid
-      .span5.responsive.span8(data-ng-hide = "viewModel.exerciseListCollapsed")
+
+      .span12
+
+        .tabbable.tabbable-custom(data-ng-init = "activeTab = 'timeline'")
+          ul.nav.nav-tabs 
+            li(data-ng-class = "{true: 'active'}[activeTab == 'timeline']")
+              a(data-ng-click = "activeTab = 'timeline'") Summary 
+            li(data-ng-class = "{true: 'active'}[activeTab == 'scheduler']")
+              a(data-ng-click = "activeTab = 'scheduler'") Calendar
+          .tab-content
+            .tab-pane(data-ng-class = "{true: 'active'}[activeTab == 'timeline']")
+              .foo(data-ng-include = "")
+            .tab-pane(data-ng-class = "{true: 'active'}[activeTab == 'scheduler']")
+              .bar(data-ng-include = "")
+
+
+
+
+
+
+
+
+    .row-fluid
+      .span12
+        button.btn.green.btn-block(style           = "margin-bottom:20px;"
+                                   data-ng-hide    = "viewModel.showNewExerciseForm"
+                                   data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
+                                   data-ng-click   = "viewModel.showNewExerciseForm = true")
+          | Add Exercise&nbsp;
+          i.m-icon-swapright.m-icon-white
+
+
+    .row-fluid
+      .span12.responsive(data-ng-hide = "true || viewModel.exerciseListCollapsed")
         #listPortlet.portlet.box.grey(data-ng-hide = "viewModel.exerciseListCollapsed")
           .portlet-title
             h4
@@ -36,7 +69,8 @@
                 data-refetch-on-post = "event"
                 data-refetch-on-put  = "event")
 
-      div(data-ng-class = "{true:'span12 no-second-box-margin', false:'span7'}[viewModel.exerciseListCollapsed]")
+    .row-fluid
+      .span12(data-ng-class = "{true:'span12 no-second-box-margin', false:'span12'}[viewModel.exerciseListCollapsed]")
 
         .row-fluid(style           = "display:none;"
                    data-ng-animate = "{show:'fadeIn'}"

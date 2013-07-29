@@ -42,14 +42,6 @@ define [
     Module.controller 'ControllerWidgetEmployeeManagerCSVUpload', ['$scope', 'apiRequest',
     ($scope, apiRequest) ->
 
-
-
-
-
-
-
-
-
       $scope.viewModel =
         uploadComplete:            false
         csvUsersResult:            []
@@ -150,7 +142,10 @@ define [
           employeeListDT:
             detailRow: (obj) ->
               #return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
-              return '<div data-edit-employee data-client-orm-share="clientOrmShare" data-resource-pool="resourcePool" data-employee-uid="' + obj.uid + '"></div>'
+              return '<div data-edit-employee 
+                           data-client-orm-share = "clientOrmShare" 
+                           data-resource-pool    = "resourcePool" 
+                           data-employee-uid     ="' + obj.uid + '"></div>'
 
             options:
               bProcessing:  true

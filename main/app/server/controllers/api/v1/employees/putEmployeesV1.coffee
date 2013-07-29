@@ -169,6 +169,9 @@ module.exports = (app) ->
               requiredProperties:
                 'uid': (val, objectKey, object, callback) ->
 
+                  console.log 'val'
+                  console.log val
+
                   if _.isUndefined val
                     callback null,
                       success: false

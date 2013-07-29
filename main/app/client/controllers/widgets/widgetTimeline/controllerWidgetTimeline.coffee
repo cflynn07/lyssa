@@ -23,7 +23,7 @@ define [
           options:
             bProcessing:     true
             bStateSave:      true
-            iCookieDuration: 0 #2419200 # 1 month
+            iCookieDuration: 0    #2419200 # 1 month
             bPaginate:       true
             bLengthChange:   true
             bFilter:         true
@@ -87,7 +87,7 @@ define [
               mData:     null
               bSortable: true
               aTargets:  [0]
-              sWidth:    '10%'
+              sWidth:    '20%'
               mRender: (data, type, full) ->
                 #console.log 'colrender1'
                 #console.log arguments
@@ -116,7 +116,7 @@ define [
                 return '<div class="progress progress-success" style="margin-bottom:0;">
                           <div style="width: {{ $parent.viewModel.eventListDT.getInitialViewDateTimePercentage(\'' + full.uid + '\') }}%;" class="bar"></div>
                         </div>
-                        <span>({{ $parent.viewModel.eventListDT.getInitialViewDateTimePercentage(\'' + full.uid + '\') }}% Participants Viewed)</span>'
+                        <span>{{ $parent.viewModel.eventListDT.getInitialViewDateTimePercentage(\'' + full.uid + '\') }}%</span>'
             ,
               mData:     null
               bSortable: true
@@ -126,7 +126,7 @@ define [
                 return '<div class="progress progress-success" style="margin-bottom:0;">
                           <div style="width: {{ $parent.viewModel.eventListDT.getfinalizedDateTimePercentage(\'' + full.uid + '\') }}%;" class="bar"></div>
                         </div>
-                        <span>({{ $parent.viewModel.eventListDT.getfinalizedDateTimePercentage(\'' + full.uid + '\') }}% Participants Completed)</span>'
+                        <span>{{ $parent.viewModel.eventListDT.getfinalizedDateTimePercentage(\'' + full.uid + '\') }}%</span>'
             ,
               mData:     null
               bSortable: true

@@ -81,8 +81,8 @@ module.exports = () ->
             #req.session.user = JSON.parse JSON.stringify user
             req.session.user = userValues
 
-            console.log 'req.session.user'
-            console.log req.session.user
+            #console.log 'req.session.user'
+            #console.log req.session.user
 
             #Hang out with the other cool super admins if you're a super admin
          #   if user.super_admin
