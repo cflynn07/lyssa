@@ -173,7 +173,8 @@ define [
             query,
             properties, #data
             (response) ->
-              callback(response)
+              if callback
+                callback(response)
 
 
         delete: (resourceName, uid, query, callback) ->
