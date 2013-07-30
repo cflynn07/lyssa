@@ -194,6 +194,7 @@ require [
   'cs!controllers/widgets/widgetQuarterlyTestingReport/controllerWidgetQuarterlyTestingReport'
   'cs!controllers/widgets/widgetTimeline/controllerWidgetTimeline'
   'cs!controllers/widgets/widgetTabs/controllerWidgetTabs'
+  'cs!controllers/widgets/widgetExerciseScheduleCalendar/controllerWidgetExerciseScheduleCalendar'
 ], (
   $
   jqueryUi
@@ -253,6 +254,7 @@ require [
   ControllerWidgetQuarterlyTestingReport
   ControllerWidgetTimeline
   ControllerWidgetTabs
+  ControllerWidgetExerciseScheduleCalendar
 ) ->
 
   #Modules
@@ -295,26 +297,27 @@ require [
     ClientRoutes $routeProvider
   ]
 
-  ControllerApp                           CS
-  ControllerCoreWidgets                   CS
-  ControllerWidgetCoreLeftMenu            CS
-  ControllerWidgetCoreHeader              CS
-  ControllerWidgetBreadCrumbs             CS
-  ControllerWidgetExerciseBuilder         CS
-  ControllerWidgetCoreLogin               CS
-  ControllerWidgetDictionaryManager       CS
-  ControllerWidgetScheduler               CS
- #ControllerWidgetFullExerciseSubmitter   CS
-  ControllerWidget4oh4                    CS
-  ControllerWidgetCoreFooter              CS
-  ControllerWidgetEmployeeManager         CS
- #ControllerWidgetQuiz                    CS
-  ControllerWidgetActivityFeed            CS
-  ControllerWidgetActivityExercisesQuizes CS
-  ControllerWidgetQuarterlyTestingReport  CS
-  ControllerWidgetQuizExerciseSubmitter   CS
-  ControllerWidgetTimeline                CS
-  ControllerWidgetTabs                    CS
+  ControllerApp                            CS
+  ControllerCoreWidgets                    CS
+  ControllerWidgetCoreLeftMenu             CS
+  ControllerWidgetCoreHeader               CS
+  ControllerWidgetBreadCrumbs              CS
+  ControllerWidgetExerciseBuilder          CS
+  ControllerWidgetCoreLogin                CS
+  ControllerWidgetDictionaryManager        CS
+  ControllerWidgetScheduler                CS
+ #ControllerWidgetFullExerciseSubmitter    CS
+  ControllerWidget4oh4                     CS
+  ControllerWidgetCoreFooter               CS
+  ControllerWidgetEmployeeManager          CS
+ #ControllerWidgetQuiz                     CS
+  ControllerWidgetActivityFeed             CS
+  ControllerWidgetActivityExercisesQuizes  CS
+  ControllerWidgetQuarterlyTestingReport   CS
+  ControllerWidgetQuizExerciseSubmitter    CS
+  ControllerWidgetTimeline                 CS
+  ControllerWidgetTabs                     CS
+  ControllerWidgetExerciseScheduleCalendar CS
 
   #Start the party!
   angular.bootstrap document, ['CS']

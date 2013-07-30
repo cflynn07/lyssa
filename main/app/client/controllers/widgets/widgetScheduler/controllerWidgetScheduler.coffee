@@ -139,7 +139,7 @@ define [
 
         fullCalendarOptions:
           header:
-            right: 'today month,agendaWeek,agendaDay,prev,next'
+            right: 'today month,agendaWeek,prev,next'
           eventsResultCache: ''
           changeIncrementor: 0
           events: (start, end, callback) ->
@@ -159,9 +159,11 @@ define [
 
               for key, eventObj of response.response.data
                 FCEventObj =
-                  title: eventObj.name
-                  start: new Date(eventObj.dateTime)
+                  title:     eventObj.name
+                  start:     new Date(eventObj.dateTime)
                   className: if (new Date(eventObj.dateTime) < curDate) then 'event pastEvent' else 'event upcomingEvent'
+                  url:       '#' + $scope.viewRoot + '/' + eventObj.uid
+
                 eventsArr.push FCEventObj
 
               #console.log 'raw check'

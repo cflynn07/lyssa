@@ -7,6 +7,7 @@ define [
 ) ->
 
   windowHasFocus = true
+  
   $(window).bind 'blur', () ->
     windowHasFocus = false
     #console.log windowHasFocus

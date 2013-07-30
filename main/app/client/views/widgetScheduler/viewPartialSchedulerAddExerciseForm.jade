@@ -2,20 +2,8 @@
   .portlet.box(data-ng-class = "{'green sub-portlet':newEventForm.$valid, 'grey':newEventForm.$invalid}")
 
     .portlet-title
-      .caption.pull-left
-        h4
-          span Add Exercise
-      .tools.pull-right(style = "margin:0;")
-        a.btn.mini.blue(data-ng-click = "$parent.viewModel.toggleExerciseListCollapsed()")
-          p(data-ng-hide = "$parent.viewModel.exerciseListCollapsed"
-            style        = "margin:0;")
-            i.halflings-icon.white.chevron-left(style = "width:11px;")
-            span(style = "vertical-align:bottom; font-size:14px;")
-          p(data-ng-show = "$parent.viewModel.exerciseListCollapsed"
-            style        = "margin:0;")
-            span(style = "vertical-align:bottom; font-size:14px;")
-            i.halflings-icon.white.chevron-right(style = "width:11px;")
-      .clearfix
+      h4
+        span Add Exercise
     .portlet-body.form
 
       form.form-horizontal(novalidate="", name="newEventForm")

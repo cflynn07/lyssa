@@ -87,7 +87,7 @@ define [
               mData:     null
               bSortable: true
               aTargets:  [0]
-              sWidth:    '20%'
+              sWidth:    '120px'
               mRender: (data, type, full) ->
                 #console.log 'colrender1'
                 #console.log arguments
@@ -110,7 +110,7 @@ define [
               mData:     null
               bSortable: true
               aTargets:  [3]
-              sWidth:    '20%'
+              sWidth:    '120px'
               mRender: (data, type, full) ->
 
                 return '<div class="progress progress-success" style="margin-bottom:0;">
@@ -121,7 +121,7 @@ define [
               mData:     null
               bSortable: true
               aTargets:  [4]
-              sWidth:    '20%'
+              sWidth:    '120px'
               mRender: (data, type, full) ->
                 return '<div class="progress progress-success" style="margin-bottom:0;">
                           <div style="width: {{ $parent.viewModel.eventListDT.getfinalizedDateTimePercentage(\'' + full.uid + '\') }}%;" class="bar"></div>
@@ -131,9 +131,14 @@ define [
               mData:     null
               bSortable: true
               aTargets:  [5]
+              sWidth:    '120px'
               mRender: (data, type, full) ->
-                return '<div style="width:100%; text-align:center;">
-                          <button class="btn green">Summary <i class="m-icon-swapright m-icon-white"></i></button>
+                return '<div style = "width:100%; text-align:center;">
+                          <a href  = "#{{ viewRoot }}/' + full.uid + '" 
+                             class = "btn green">
+                            Summary&nbsp;
+                            <i class="m-icon-swapright m-icon-white"></i>
+                          </a>
                         </div>'
             ]
 

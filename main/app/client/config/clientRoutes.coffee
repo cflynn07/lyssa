@@ -29,7 +29,7 @@ define [], () ->
 
 
 
-    $routeProvider.when '/admin/themis/templates',
+    $routeProvider.when '/admin/themis/templates*',
       root: '/admin/themis/templates'
       group: 'templates'
       subGroup: ''
@@ -124,9 +124,9 @@ define [], () ->
       ]
 
 
-    $routeProvider.when '/admin/themis/schedule',
-      root: '/admin/themis/schedule'
-      group: 'schedule'
+    $routeProvider.when '/admin/themis/exercises',
+      root: '/admin/themis/exercises'
+      group: 'exercises'
       subGroup: ''
       widgetViews: [
         [
@@ -138,6 +138,20 @@ define [], () ->
           data: {}
         ]
       ]
+    $routeProvider.when '/admin/themis/exercises/:exerciseUid',
+      root: '/admin/themis/exercises'
+      group: 'exercisesDetail'
+      subGroup: ''
+      widgetViews: [
+        [
+          name: 'viewNoBreadCrumbs'
+          data: {}
+        ]
+      ]
+
+
+
+
 
 
     $routeProvider.when '/admin/themis/settings',
@@ -234,7 +248,7 @@ define [], () ->
       ]
 
 
-
+    ###
     $routeProvider.when '/admin/themis/reports/timeline',
       root: '/admin/themis/reports/timeline'
       group: 'reportsTimeline'
@@ -254,7 +268,7 @@ define [], () ->
           name: 'viewWidgetTabs'
           data: 
             tabs: [
-              name:       'Scheduler'
+              name:       'Calendar'
               widgetName: 'viewWidgetScheduler'
               data:       {}
             ,
@@ -277,7 +291,7 @@ define [], () ->
             view:  'viewWidgetScheduler'
           ]
 
-
+    ###
 
 
     $routeProvider.otherwise
