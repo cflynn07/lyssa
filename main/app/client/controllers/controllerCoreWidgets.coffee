@@ -26,13 +26,11 @@ define [
     ($scope, $route, $rootScope) ->
 
 
-      #primaryWidgetRow    = [{widget: 'viewWidgetBreadCrumbs', spanLength:'span12'}]
-      primaryWidgetRow    = []
-      $scope.widgetRows   = [primaryWidgetRow]
-
-
-      previousRouteGroup  = ''
-
+      #primaryWidgetRow      = [{widget: 'viewWidgetBreadCrumbs', spanLength:'span12'}]
+      primaryWidgetRow       = []
+      $scope.widgetRows      = [primaryWidgetRow]
+      previousRouteGroup     = ''
+      $rootScope.widgetsData = {}
 
       isDerivativeRoute   = (newRouteTitle) ->
         result = true
@@ -50,14 +48,6 @@ define [
         widgets.push widget:'viewWidget4oh4'
         $scope.widgetRows = widgets
         previousRouteGroup = ''
-
-
-
-
-
-
-
-
 
       loadNewRoute = () ->
 
@@ -95,23 +85,28 @@ define [
             if !$route.current.$$route.widgetViews || !$route.current.$$route.widgetViews.length
               return
 
+            $rootScope.widgetsData = {}
+
             for rowWidgets in $route.current.$$route.widgetViews
 
               widgetObjects = []
               for widget in rowWidgets
-        
+              
                 spanLength = 'span12'
                 if rowWidgets.length == 2
                   spanLength = 'span6'
 
+                #Mesh that data in there                
                 widgetObjects.push {
                   spanLength: spanLength
-                  widget: widget
+                  widget:     widget.name
                 }
+                $rootScope.widgetsData[widget.name] = widget.data
+
 
               $scope.widgetRows.push widgetObjects
-              if $route.current.$$route.widgetData 
-                $scope.widgetData = $route.current.$$route.widgetData 
+              #if $route.current.$$route.widgetData 
+              #  $scope.widgetData = $route.current.$$route.widgetData 
 
 
             #Used by widgets for forming links

@@ -58,7 +58,7 @@ app.configure () ->
     secret: 'c9d7732c0de118325e6de4582b37a4e9'
     store:  redisStore
     cookie: 
-      maxAge: 86400 # 1 day
+      maxAge: 31536000000 # 1 day
 
   ###
     Route parrot middleware
