@@ -29,14 +29,9 @@ define [], () ->
 
 
 
-    $routeProvider.when '/admin/themis/templates*',
+
+    $routeProvider.when '/admin/themis/templates',
       root: '/admin/themis/templates'
-      group: 'templates'
-      subGroup: ''
-      widgetViews: [
-      ]
-    $routeProvider.when '/admin/themis/templates/full',
-      root: '/admin/themis/templates/full'
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
@@ -49,8 +44,8 @@ define [], () ->
           data: {}
         ]
       ]
-    $routeProvider.when '/admin/themis/templates/full/:templateUid',
-      root: '/admin/themis/templates/full'
+    $routeProvider.when '/admin/themis/templates/:templateUid',
+      root: '/admin/themis/templates'
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
@@ -63,8 +58,8 @@ define [], () ->
           data: {}
         ]
       ]
-    $routeProvider.when '/admin/themis/templates/full/:templateUid/:revisionUid',
-      root: '/admin/themis/templates/full'
+    $routeProvider.when '/admin/themis/templates/:templateUid/:revisionUid',
+      root: '/admin/themis/templates'
       group: 'templatesExercises'
       subGroup: ''
       widgetViews: [
@@ -79,7 +74,7 @@ define [], () ->
       ]
 
 
-
+    ###
     $routeProvider.when '/admin/themis/templates/mini',
       root: '/admin/themis/templates/mini'
       group: 'templatesQuizes'
@@ -93,7 +88,7 @@ define [], () ->
           name: 'viewWidgetExerciseBuilder'
           data: {}
         ]
-      ]
+      ]    
     $routeProvider.when '/admin/themis/templates/mini/:templateUid',
       root: '/admin/themis/templates/mini'
       group: 'templatesQuizes'
@@ -122,6 +117,7 @@ define [], () ->
           data: {}
         ]
       ]
+    ###
 
 
     $routeProvider.when '/admin/themis/exercises',

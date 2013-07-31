@@ -222,18 +222,35 @@ define [
                 if full.name
                   resHtml += '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + $scope.escapeHtml(full.name) + '</span>'
                 resHtml += '</a>'
-                return resHtml
-            ,
+                return resHtml        
+            , 
+
+
               mData:     null
               aTargets:  [1]
               bSortable: true
-              sWidth:    '45px'
               mRender: (data, type, full) ->
-                resHtml = _.str.capitalize(full.type)
+                ''
             ,
               mData:     null
               aTargets:  [2]
+              bSortable: true
+              mRender: (data, type, full) ->
+                ''
+            ,
+              mData:     null
+              aTargets:  [3]
+              bSortable: true
+              mRender: (data, type, full) ->
+                ''
+            ,
+
+
+
+              mData:     null
+              aTargets:  [4]
               bSortable: false
+              sWidth:    '100px'
               mRender: (data, type, full) ->
                 uid  = $scope.escapeHtml full.uid
 #                {{ resourcePool['<%= templateUid %>'].revisions[0].uid }}
@@ -242,7 +259,6 @@ define [
                   revisionUid = resourcePool[uid].revisions[0].uid
                 else 
                   revisionUid = ''
-
 
                 html = new EJS({text: viewWidgetExerciseBuilderTemplateListButtonsEJS}).render({templateUid: uid, revisionUid: revisionUid})
             ]
