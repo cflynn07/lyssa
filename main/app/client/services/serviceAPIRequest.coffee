@@ -57,6 +57,7 @@ define [
           limit:  300 #API DEF
           filter: []
           order:  []
+          uids:   []
         _.extend defaultOptions, options
 
         #Flatten arrays to aid in creating simple hash string
@@ -67,9 +68,19 @@ define [
 
         order = []
         order = _.sortBy defaultOptions.order, (arr) ->
-          return arr[0] + arr[1]
+          return arr[0] + arr[1]        
 
-        hashString = resourceName + defaultOptions.offset + defaultOptions.limit + JSON.stringify(filter) + JSON.stringify(order)
+        uids = []
+        uids = _.sortBy defaultOptions.uids, (uid) ->
+          return uid
+
+        hashString = resourceName + 
+          defaultOptions.offset   +
+          defaultOptions.limit    +
+          JSON.stringify(filter)  +
+          JSON.stringify(order)   + 
+          uids.join(',')
+
         return hashString
 
       #Merges new values of objects pulled from server with cache-pool present on the client
@@ -118,8 +129,9 @@ define [
             limit:  if query.limit  then query.limit  else 300
             filter: if query.filter then query.filter else []
             order:  if query.order  then query.order  else []
+            uids:   uids
 
-          if !_.isUndefined(resourcePoolResultCache[hashString])
+          if !_.isUndefined(resourcePoolResultCache[hashString])            
             callback resourcePoolResultCache[hashString].response, resourcePoolResultCache[hashString].responseRaw, true
 
           socket.apiRequest 'GET',
