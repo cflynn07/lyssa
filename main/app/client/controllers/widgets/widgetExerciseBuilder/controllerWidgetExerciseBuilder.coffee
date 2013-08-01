@@ -548,10 +548,8 @@ define [
         hashChangeUpdate = () ->
           $scope.viewModel.showEditTemplateName = false
           $scope.viewModel.routeParams          = $routeParams
-          if $routeParams.templateUid
+          if $routeParams.revisionUid
             $scope.viewModel.fetchCurrentTemplate()
-          #$scope.viewModel.fetchCurrentTemplateRevision()
-          #$scope.viewModel.fetchCurrentTemplate()
 
 
         $scope.$on '$routeChangeSuccess', () ->
