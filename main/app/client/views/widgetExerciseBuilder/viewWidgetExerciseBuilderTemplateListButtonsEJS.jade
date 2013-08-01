@@ -12,10 +12,6 @@
     ul.dropdown-menu.pull-right
 
       li
-        a(data-ng-click)
-          i.icon-plus
-          | New Revision
-      li
         a.color-red(data-ng-click != "$parent.viewModel.deleteConfirmDialogTemplate('<%= templateUid %>')")
           i.icon-trash
-          | Archive Template
+          | Archive

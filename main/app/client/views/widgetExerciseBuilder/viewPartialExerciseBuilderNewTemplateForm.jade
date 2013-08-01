@@ -5,12 +5,12 @@
   .portlet-title
     h4
       span New Template
-  .portlet-body.light-grey
-    form.form-horizontal(novalidate
+  .portlet-body.light-grey.form
+    form.horizontal-form(novalidate
                          name  = "newTemplateForm"
                          style = "margin:0;")
       .control-group(data-ng-class = "{success:newTemplateForm.name.$valid, error:!newTemplateForm.name.$valid, 'ng-pristine':newTemplateForm.name.$pristine}")
-        label.control-label Name
+        label.control-label Template Name
         .controls.input-icon
           input.large.m-wrap(type              = "text"
                              name              = "name"
@@ -46,15 +46,15 @@
               | Name must be shorter than {{clientOrmShare.template.model.name.validate.len[1]}} characters
             span.help-inline(data-ng-show = "newTemplateForm.name.$error.uniqueField") A template with the name "{{viewModel.newTemplateForm.name}}" already exists
 
-      .row-fluid
-        .span6
-          .span6
-            button.btn.red.btn-block(data-ng-click = "viewModel.clearNewTemplateForm()")
-              i.icon-close.m-icon-white
-              | Cancel
-          .span6
-            button.btn.green.btn-block(type             = "submit" 
-                                       data-ng-disabled = "newTemplateForm.$invalid"
-                                       data-ng-click    = "viewModel.postNewTemplate()")
-              | Add
-              i.m-icon-swapright.m-icon-white
+      .form-actions 
+        button.btn.green.pull-right(type             = "submit" 
+                                    data-ng-disabled = "newTemplateForm.$invalid"
+                                    data-ng-click    = "viewModel.postNewTemplate()"
+                                    style            = "margin-left:5px;")
+          i.icon-plus.m-icon-white
+          |&nbsp;Add
+
+        button.btn.red.pull-right(data-ng-click = "viewModel.clearNewTemplateForm()")
+          i.icon-remove.m-icon-white
+          |&nbsp;Cancel
+

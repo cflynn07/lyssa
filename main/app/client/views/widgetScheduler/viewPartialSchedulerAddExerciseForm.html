@@ -143,11 +143,11 @@
             <!-- tab-pane-->
           </div>
           <!-- tab-content-->
-          <div data-ng-init="viewModel.newEventForm.submitting = false" class="form-actions clearfix"><a data-ng-hide="viewModel.newEventForm.submitting" data-ng-click="viewModel.closeAddNewExerciseForm()" class="btn red btn-inline"><i class="icon-remove"></i>&nbsp;Cancel</a><a data-ng-click="viewModel.activeWizardStep = viewModel.activeWizardStep - 1" data-ng-hide="viewModel.activeWizardStep == 0 || viewModel.newEventForm.submitting" class="btn button-previous btn-inline"><i class="m-icon-swapleft"></i>&nbsp;Back</a><a data-ng-disabled="!viewModel.isStepValid()" data-ng-click="viewModel.isStepValid() &amp;&amp; (viewModel.activeWizardStep = viewModel.activeWizardStep + 1)" data-ng-hide="viewModel.activeWizardStep == 2 || viewModel.newEventForm.submitting" class="btn blue btn-inline">Continue&nbsp;<i class="m-icon-swapright m-icon-white"></i></a>
-            <button data-ng-class="{true:'black',false:'green'}[viewModel.newEventForm.submitting]" data-ng-disabled="!viewModel.isStepValid() || viewModel.newEventForm.submitting" data-ng-show="viewModel.activeWizardStep == 2" data-ng-click="viewModel.submitAddNewExercise()" class="btn button-submit btn-inline">
-              <p data-ng-hide="viewModel.newEventForm.submitting">Submit&nbsp;<i class="m-icon-swapright m-icon-white"></i></p>
-              <p data-ng-show="viewModel.newEventForm.submitting"><i class="icon-cog icon-spin"></i>Saving...&nbsp;</p>
-            </button>
+          <div data-ng-init="viewModel.newEventForm.submitting = false" class="form-actions clearfix">
+            <button data-ng-class="{true:'black',false:'green'}[viewModel.newEventForm.submitting]" data-ng-disabled="!viewModel.isStepValid() || viewModel.newEventForm.submitting" data-ng-show="viewModel.activeWizardStep == 2" data-ng-click="viewModel.submitAddNewExercise()" class="btn button-submit btn-inline pull-right">
+              <p data-ng-hide="viewModel.newEventForm.submitting" style="margin-bottom:0px;">Submit&nbsp;<i class="m-icon-swapright m-icon-white"></i></p>
+              <p data-ng-show="viewModel.newEventForm.submitting" style="margin-bottom:0px;"><i class="icon-cog icon-spin"></i>Saving...&nbsp;</p>
+            </button><a data-ng-disabled="!viewModel.isStepValid()" data-ng-click="viewModel.isStepValid() &amp;&amp; (viewModel.activeWizardStep = viewModel.activeWizardStep + 1)" data-ng-hide="viewModel.activeWizardStep == 2 || viewModel.newEventForm.submitting" class="btn blue btn-inline pull-right">Continue&nbsp;<i class="m-icon-swapright m-icon-white"></i></a><a data-ng-click="viewModel.activeWizardStep = viewModel.activeWizardStep - 1" data-ng-hide="viewModel.activeWizardStep == 0 || viewModel.newEventForm.submitting" class="btn button-previous btn-inline pull-right"><i class="m-icon-swapleft"></i>&nbsp;Back</a><a data-ng-hide="viewModel.newEventForm.submitting" data-ng-click="viewModel.closeAddNewExerciseForm()" class="btn red btn-inline pull-right"><i class="icon-remove"></i>&nbsp;Cancel</a>
           </div>
           <!-- form-actions-->
         </div>
