@@ -198,9 +198,9 @@
           .form-actions.clearfix(data-ng-init = "viewModel.newEventForm.submitting = false")
 
             button.btn.button-submit.btn-inline.pull-right(data-ng-class    = "{true:'black',false:'green'}[viewModel.newEventForm.submitting]"
-                                                data-ng-disabled = "!viewModel.isStepValid() || viewModel.newEventForm.submitting"
-                                                data-ng-show     = "viewModel.activeWizardStep == 2"
-                                                data-ng-click    = "viewModel.submitAddNewExercise()")
+                                                           data-ng-disabled = "!viewModel.isStepValid() || viewModel.newEventForm.submitting"
+                                                           data-ng-show     = "viewModel.activeWizardStep == 2"
+                                                           data-ng-click    = "viewModel.submitAddNewExercise()")
               p(data-ng-hide = "viewModel.newEventForm.submitting"
                 style        = "margin-bottom:0px;")
                 | Submit&nbsp;

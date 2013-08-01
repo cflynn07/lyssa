@@ -330,7 +330,10 @@ define [
             $scope.viewModel.newTemplateGroupForm = {}
 
           clearNewTemplateForm: () ->
-            $scope.viewModel.showAddNewTemplate = false
+
+            $scope.viewModel.showAddNewTemplate   = false
+            $scope.viewModel.postNewTemplateSaving = true
+
             if $scope.newTemplateForm
               $scope.newTemplateForm.$setPristine()
             $scope.viewModel.newTemplateForm = {}
@@ -397,9 +400,12 @@ define [
 
 
           postNewTemplate: () ->
+
+            $scope.viewModel.postNewTemplateSaving = true
+
             apiRequest.post 'template', {
-              name:        $scope.viewModel.newTemplateForm.name
-              type:        $scope.viewModel.newTemplateForm.type
+              name:         $scope.viewModel.newTemplateForm.name
+              type:         $scope.viewModel.newTemplateForm.type
             }, {}, (response) ->
               
               if response.code != 201

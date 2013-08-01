@@ -20,7 +20,10 @@
         </div>
       </div>-->
       <div class="form-actions"> 
-        <button type="submit" data-ng-disabled="newTemplateForm.$invalid" data-ng-click="viewModel.postNewTemplate()" style="margin-left:5px;" class="btn green pull-right"><i class="icon-plus m-icon-white"></i>&nbsp;Add</button>
+        <button type="submit" data-ng-class="{true:'black', false:'green'}[viewModel.postNewTemplateSaving]" data-ng-disabled="newTemplateForm.$invalid || viewModel.postNewTemplateSaving" data-ng-click="viewModel.postNewTemplate()" style="margin-left:5px;" class="btn green pull-right">
+          <p style="margin:0;" data-ng-show="!viewModel.postNewTemplateSaving"><i class="icon-plus m-icon-white"></i>&nbsp;Add</p>
+          <p style="margin:0;" data-ng-show="viewModel.postNewTemplateSaving"><i class="icon-cog icon-spin"></i>&nbsp;Saving...</p>
+        </button>
         <button data-ng-click="viewModel.clearNewTemplateForm()" class="btn red pull-right"><i class="icon-remove m-icon-white"></i>&nbsp;Cancel</button>
       </div>
     </form>

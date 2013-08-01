@@ -47,12 +47,20 @@
             span.help-inline(data-ng-show = "newTemplateForm.name.$error.uniqueField") A template with the name "{{viewModel.newTemplateForm.name}}" already exists
 
       .form-actions 
-        button.btn.green.pull-right(type             = "submit" 
-                                    data-ng-disabled = "newTemplateForm.$invalid"
+        button.btn.green.pull-right(type             = "submit"
+                                    data-ng-class    = "{true:'black', false:'green'}[viewModel.postNewTemplateSaving]"
+                                    data-ng-disabled = "newTemplateForm.$invalid || viewModel.postNewTemplateSaving"
                                     data-ng-click    = "viewModel.postNewTemplate()"
                                     style            = "margin-left:5px;")
-          i.icon-plus.m-icon-white
-          |&nbsp;Add
+          p(style        = "margin:0;"
+            data-ng-show = "!viewModel.postNewTemplateSaving")
+            i.icon-plus.m-icon-white
+            |&nbsp;Add
+          p(style        = "margin:0;"
+            data-ng-show = "viewModel.postNewTemplateSaving")
+            i.icon-cog.icon-spin
+            |&nbsp;Saving...
+
 
         button.btn.red.pull-right(data-ng-click = "viewModel.clearNewTemplateForm()")
           i.icon-remove.m-icon-white
