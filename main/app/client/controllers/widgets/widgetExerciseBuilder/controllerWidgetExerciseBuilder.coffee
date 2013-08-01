@@ -233,14 +233,17 @@ define [
               mData:     null
               aTargets:  [2]
               bSortable: true
+              sWidth:    '125px'
               mRender: (data, type, full) ->              
                 '{{ resourcePool[\'' + full.uid + '\'].createdAt | date:\'short\' }}'
             ,
               mData:     null
               aTargets:  [3]
               bSortable: true
+              sWidth:    '75px'
               mRender: (data, type, full) ->
-                ''
+                '<span data-ng-show = "resourcePool[\'' + full.uid + '\'].revisions[0].finalized">Yes</span>
+                 <span data-ng-show = "!resourcePool[\'' + full.uid + '\'].revisions[0].finalized">No</span>'
             ,
               mData:     null
               aTargets:  [4]
@@ -269,8 +272,8 @@ define [
               bServerSide:     true
               bProcessing:     true
               fnServerData: (sSource, aoData, fnCallback, oSettings) ->
-                query = utilBuildDTQuery ['name', 'type'],
-                  ['name', 'type'],
+                query = utilBuildDTQuery ['name', 'employeeUid', 'createdAt'],
+                  ['name', 'employeeUid', 'createdAt'],
                   oSettings
 
                 query.filter.push ['deletedAt', '=', 'null']
