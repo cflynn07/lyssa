@@ -6,7 +6,7 @@ define [
   'underscore_string'
   'cs!utils/utilBuildDTQuery'
 
-  'cs!controllers/widgets/widgetExerciseBuilder/groupFieldAddFormControllers/controllerWidgetExerciseBuilderGroupFieldOpenResponse'
+  'controllers/widgets/widgetExerciseBuilder/groupFieldAddFormControllers/controllerWidgetExerciseBuilderGroupFieldOpenResponse'
   'cs!controllers/widgets/widgetExerciseBuilder/groupFieldAddFormControllers/controllerWidgetExerciseBuilderGroupFieldSelectIndividual'
   'cs!controllers/widgets/widgetExerciseBuilder/groupFieldAddFormControllers/controllerWidgetExerciseBuilderGroupFieldSelectMultiple'
   'cs!controllers/widgets/widgetExerciseBuilder/groupFieldAddFormControllers/controllerWidgetExerciseBuilderGroupFieldYesNo'
@@ -223,20 +223,18 @@ define [
                   resHtml += '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + $scope.escapeHtml(full.name) + '</span>'
                 resHtml += '</a>'
                 return resHtml        
-            , 
-
-
+            ,
               mData:     null
               aTargets:  [1]
               bSortable: true
               mRender: (data, type, full) ->
-                ''
+                '{{ resourcePool[\'' + full.employeeUid + '\'].firstName }} {{ resourcePool[\'' + full.employeeUid + '\'].lastName }}'
             ,
               mData:     null
               aTargets:  [2]
               bSortable: true
-              mRender: (data, type, full) ->
-                ''
+              mRender: (data, type, full) ->              
+                '{{ resourcePool[\'' + full.uid + '\'].createdAt | date:\'short\' }}'
             ,
               mData:     null
               aTargets:  [3]
@@ -244,7 +242,6 @@ define [
               mRender: (data, type, full) ->
                 ''
             ,
-
               mData:     null
               aTargets:  [4]
               bSortable: false
@@ -281,6 +278,8 @@ define [
                   resource: 'revisions'
                   expand: [{
                     resource: 'template'
+                  },{
+                    resource: 'employee'
                   }]
                 }]
 
