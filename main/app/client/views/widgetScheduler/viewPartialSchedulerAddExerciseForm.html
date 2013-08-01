@@ -5,7 +5,7 @@
       <h4><span>New Exercise</span></h4>
     </div>
     <div class="portlet-body form">
-      <form novalidate="" name="newEventForm" class="form-horizontal">
+      <form novalidate="novalidate" name="newEventForm" class="horizontal-form">
         <div class="form-wizard">
           <div class="navbar steps">
             <div class="navbar-inner">
@@ -44,21 +44,21 @@
               <div data-ng-class="{success:newEventForm.name.$valid, error:!newEventForm.name.$valid, 'ng-pristine':newEventForm.name.$pristine}" class="control-group">
                 <label class="control-label">Name</label>
                 <div class="controls">
-                  <input type="text" required="" data-ng-minlength="{{clientOrmShare.event.model.name.validate.len[0]}}" data-ng-maxlength="{{clientOrmShare.event.model.name.validate.len[1]}}" data-ng-model="viewModel.newEventForm.name" name="name" class="medium m-wrap"/>
+                  <input type="text" required="" data-ng-minlength="{{clientOrmShare.event.model.name.validate.len[0]}}" data-ng-maxlength="{{clientOrmShare.event.model.name.validate.len[1]}}" data-ng-model="viewModel.newEventForm.name" name="name" class="large m-wrap"/>
                   <div class="clear"></div><span data-ng-show="newEventForm.name.$error.minlength" class="help-inline">Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters</span><span data-ng-show="newEventForm.name.$error.maxlength" class="help-inline">Name must be shorter than {{clientOrmShare.event.model.name.validate.len[1]}} characters</span>
                 </div>
               </div>
               <div data-ng-class="{success:newEventForm.description.$valid, error:!newEventForm.description.$valid, 'ng-pristine':newEventForm.description.$pristine}" class="control-group">
                 <label class="control-label">Description</label>
                 <div class="controls">
-                  <textarea name="description" data-ng-model="viewModel.newEventForm.description" rows="3" class="medium m-wrap"></textarea>
+                  <textarea name="description" data-ng-model="viewModel.newEventForm.description" rows="3" class="large m-wrap"></textarea>
                 </div>
               </div>
               <div data-ng-class="{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}" class="control-group">
                 <label class="control-label">Start Date & Time</label>
                 <div class="controls">
                   <input type="text" required="" name="date" data-ng-model="viewModel.newEventForm.date" data-ng-bind="viewModel.newEventForm.date" data-ng-show="false"/>
-                  <div style="vertical-align:bottom;" class="input-append bootstrap-timepicker-component">
+                  <div style="vertical-align:middle;" class="input-append bootstrap-timepicker-component">
                     <input type="text" data-date-time-picker="data-date-time-picker" style="cursor:pointer;" readonly="readonly" data-form="newEventForm.date" data-model="viewModel.newEventForm.date" class="m-wrap m-ctrl-small timepicker-default"/><span class="add-on"><i style="display:inline-block !important;" class="icon-time"></i></span>
                   </div><span style="display:inline-block !important;" class="help-inline">TimeZone: {{viewModel.clientTimeZone}}</span>
                 </div>

@@ -203,15 +203,6 @@ define [
                 $scope.viewModel.fullCalendarOptionsSecondary.eventsResultCache = responseRaw #utilSafeStringify(eventsArr) # JSON.stringify(eventsArr)
                 callback eventsArr
 
-
-
-
-
-
-
-
-
-
       hashChangeUpdate = () ->
         $scope.viewModel.routeParams = $routeParams
       $scope.$on '$routeChangeSuccess', () ->

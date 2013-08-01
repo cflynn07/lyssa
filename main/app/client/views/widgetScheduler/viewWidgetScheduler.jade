@@ -1,64 +1,77 @@
-//
-  .widget-themis-finish.portlet.box.blue(data-animate-in
-                                         data-ng-controller = "ControllerWidgetScheduler")
-    .portlet-title
-      h4
-        span Exercise Schedule
-    .portlet-body
+div(data-ng-controller = "ControllerWidgetScheduler")
 
-
-
-div(data-ng-controller = "ControllerWidgetScheduler")  
-  .row-fluid
-    .span3
+  div(data-ng-show = "!viewModel.routeParams.eventUid")
+    .row-fluid
+      .span3
+        .span6
+          button.btn.green.btn-block(data-ng-hide    = "viewModel.showNewExerciseForm"
+                                     data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
+                                     data-ng-click   = "viewModel.showNewExerciseForm = true")
+            i.icon-plus.m-icon-white
+            |&nbsp;New Exercise
       .span6
-        button.btn.green.btn-block(data-ng-hide    = "viewModel.showNewExerciseForm"
-                                   data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
-                                   data-ng-click   = "viewModel.showNewExerciseForm = true")
-          i.icon-plus.m-icon-white
-          |&nbsp;New Exercise
-    .span6
-    .span3(style = "padding-bottom:10px;")
-      .span6.pull-right(data-ng-init = "activeViewType = 'calendar'")
-        button.btn.blue.btn-block(data-ng-show  = "activeViewType == 'calendar'"
-                                  data-ng-click = "activeViewType = 'list'")
-          i.icon-list
-          |&nbsp;List
-        button.btn.blue.btn-block(data-ng-show  = "activeViewType == 'list'"
-                                  data-ng-click = "activeViewType = 'calendar'"
-                                  style         = "margin-top:0;")
-          i.icon-calendar
-          |&nbsp;Calendar  
+      .span3(style = "padding-bottom:10px;")
+        .span6.pull-right(data-ng-init = "activeViewType = 'calendar'")
+          button.btn.blue.btn-block(data-ng-show  = "activeViewType == 'calendar'"
+                                    data-ng-click = "activeViewType = 'list'")
+            i.icon-list
+            |&nbsp;List
+          button.btn.blue.btn-block(data-ng-show  = "activeViewType == 'list'"
+                                    data-ng-click = "activeViewType = 'calendar'"
+                                    style         = "margin-top:0;")
+            i.icon-calendar
+            |&nbsp;Calendar  
 
 
 
-  .row-fluid(style           = "display:none;"
-             data-ng-animate = "{show:'slideDown', hide:'slideUp'}"
-             data-ng-show    = "viewModel.showNewExerciseForm"
-             data-ng-include = "'viewPartialSchedulerAddExerciseForm'")
+    .row-fluid(style           = "display:none;"
+               data-ng-animate = "{show:'slideDown', hide:'slideUp'}"
+               data-ng-show    = "viewModel.showNewExerciseForm"
+               data-ng-include = "'viewPartialSchedulerAddExerciseForm'")
 
 
 
-  .row-fluid
-    .span12
+    .row-fluid
+      .span12
 
-      .portlet.box.grey(data-ng-show = "activeViewType == 'list'"
-                        style        = "margin-bottom:0;")
-        .portlet-title
-          h4
-            span List
-        .portlet-body.no-wrapper(style = "")
-          div(data-ng-include = "'viewWidgetTimeline'")
+        .portlet.box.grey(data-ng-show = "activeViewType == 'list'"
+                          style        = "margin-bottom:0;")
+          .portlet-title
+            h4
+              span List
+          .portlet-body.no-wrapper(style = "")
+            div(data-ng-include = "'viewWidgetTimeline'")
 
-      .portlet.box.grey(data-ng-show = "activeViewType == 'calendar'"
-                        style        = "margin-bottom:0;")
-        .portlet-title
-          h4
-            span Calendar
-        .portlet-body(style = "")
-          div(data-calendar         = "data-calendar"
-              data-activate-watch   = "!(viewModel.routeParams.eventUid || viewModel.showNewExerciseForm)"
-              data-options          = "viewModel.fullCalendarOptions"
-              data-refetch-on-post  = "event"
-              data-refetch-on-put   = "event"
-              data-update-on-change = "viewModel.fullCalendarOptions.changeIncrementor")
+        .portlet.box.grey(data-ng-show = "activeViewType == 'calendar'"
+                          style        = "margin-bottom:0;")
+          .portlet-title
+            h4
+              span Calendar
+          .portlet-body(style = "")
+            div(data-calendar         = "data-calendar"
+                data-activate-watch   = "!(viewModel.routeParams.eventUid || viewModel.showNewExerciseForm)"
+                data-options          = "viewModel.fullCalendarOptions"
+                data-refetch-on-post  = "event"
+                data-refetch-on-put   = "event"
+                data-update-on-change = "viewModel.fullCalendarOptions.changeIncrementor")
+  div(data-ng-show = "viewModel.routeParams.eventUid")
+    .row-fluid
+      .span3(style = "padding-bottom:10px;")      
+        .span6
+          a.btn.blue(href = "{{ '#' + viewRoot }}")
+            i.icon-arrow-left.m-icon-white
+            |&nbsp;Exercises
+
+    .row-fluid 
+      .span12
+        .portlet.box.grey(style = "margin-bottom:0;")
+          .portlet-title 
+            h4 
+              span Exercise 
+          .portlet-body
+            
+
+
+
+
+

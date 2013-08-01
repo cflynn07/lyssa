@@ -137,13 +137,17 @@ define [], () ->
           data: {}
         ]
       ]
-    $routeProvider.when '/admin/themis/exercises/:exerciseUid',
+    $routeProvider.when '/admin/themis/exercises/:eventUid',
       root: '/admin/themis/exercises'
-      group: 'exercisesDetail'
+      group: 'exercises'
       subGroup: ''
       widgetViews: [
         [
           name: 'viewNoBreadCrumbs'
+          data: {}
+        ]
+        [
+          name: 'viewWidgetScheduler'
           data: {}
         ]
       ]
@@ -154,14 +158,14 @@ define [], () ->
 
 
     $routeProvider.when '/admin/themis/settings',
-      root: '/admin/themis/settings'
-      group: 'settings'
+      root:     '/admin/themis/settings'
+      group:    'settings'
       subGroup: ''
       widgetViews: [
       ]
     $routeProvider.when '/admin/themis/settings/dictionaries',
-      root: '/admin/themis/settings/dictionaries'
-      group: 'settingsDictionaries'
+      root:     '/admin/themis/settings/dictionaries'
+      group:    'settingsDictionaries'
       subGroup: ''
       widgetViews: [
         [
@@ -174,8 +178,8 @@ define [], () ->
         ]
       ]
     $routeProvider.when '/admin/themis/settings/dictionaries/:dictionaryUid',
-      root: '/admin/themis/settings/dictionaries'
-      group: 'settingsDictionaries'
+      root:     '/admin/themis/settings/dictionaries'
+      group:    'settingsDictionaries'
       subGroup: ''
       widgetViews: [
         [
@@ -188,8 +192,8 @@ define [], () ->
         ]
       ]
     $routeProvider.when '/admin/themis/settings/employees',
-      root: '/admin/themis/settings/employees'
-      group: 'settingsEmployees'
+      root:     '/admin/themis/settings/employees'
+      group:    'settingsEmployees'
       subGroup: ''
       widgetViews: [
         [
@@ -225,15 +229,15 @@ define [], () ->
 
 
     $routeProvider.when '/exercises',
-      root: '/exercises'
-      group: 'exerciseSubmit'
+      root:     '/exercises'
+      group:    'exerciseSubmit'
       subGroup: ''
       widgetViews: [
       #  ['viewWidgetScheduler']
       ]
     $routeProvider.when '/exercises/:eventParticipantUid',
-      root: '/exercises'
-      group: 'exerciseSubmit'
+      root:     '/exercises'
+      group:    'exerciseSubmit'
       subGroup: ''
       widgetViews: [
         [

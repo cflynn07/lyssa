@@ -6,7 +6,8 @@
         span New Exercise
     .portlet-body.form
 
-      form.form-horizontal(novalidate="", name="newEventForm")
+      form.horizontal-form(novalidate
+                           name = "newEventForm")
         .form-wizard
           .navbar.steps
             .navbar-inner
@@ -74,7 +75,7 @@
               .control-group(data-ng-class = "{success:newEventForm.name.$valid, error:!newEventForm.name.$valid, 'ng-pristine':newEventForm.name.$pristine}")
                 label.control-label Name
                 .controls
-                  input.medium.m-wrap(type              = "text"
+                  input.large.m-wrap(type              = "text"
                                       required          = ""
                                       data-ng-minlength = "{{clientOrmShare.event.model.name.validate.len[0]}}"
                                       data-ng-maxlength = "{{clientOrmShare.event.model.name.validate.len[1]}}"
@@ -89,7 +90,7 @@
               .control-group(data-ng-class = "{success:newEventForm.description.$valid, error:!newEventForm.description.$valid, 'ng-pristine':newEventForm.description.$pristine}")
                 label.control-label Description
                 .controls
-                  textarea.medium.m-wrap(name          = "description"
+                  textarea.large.m-wrap(name          = "description"
                                          data-ng-model = "viewModel.newEventForm.description"
                                          rows          = "3")
               .control-group(data-ng-class = "{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}")
@@ -103,7 +104,7 @@
                         data-ng-bind  = "viewModel.newEventForm.date"
                         data-ng-show  = "false")
 
-                  .input-append.bootstrap-timepicker-component(style = "vertical-align:bottom;")
+                  .input-append.bootstrap-timepicker-component(style = "vertical-align:middle;")
                     input.m-wrap.m-ctrl-small.timepicker-default(type                  = "text"
                                                                  data-date-time-picker
                                                                  style                 = "cursor:pointer;"

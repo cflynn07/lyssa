@@ -331,12 +331,11 @@ define [
 
           clearNewTemplateForm: () ->
 
-            $scope.viewModel.showAddNewTemplate   = false
-            $scope.viewModel.postNewTemplateSaving = true
-
+            $scope.viewModel.showAddNewTemplate    = false
+            $scope.viewModel.postNewTemplateSaving = false
+            $scope.viewModel.newTemplateForm       = {}
             if $scope.newTemplateForm
               $scope.newTemplateForm.$setPristine()
-            $scope.viewModel.newTemplateForm = {}
 
           postNewTemplateGroup: () ->
             #$groupsObj = $scope.viewModel.currentTemplateRevision.groups
@@ -422,9 +421,11 @@ define [
 
                 if templateResponse.code != 200
                   return
+                
+                $scope.viewModel.clearNewTemplateForm()
+
                 window.location.hash = hash + '/' + templateResponse.response.data.revisions[0].uid
 
-                $scope.viewModel.clearNewTemplateForm()
 
 
               ###
