@@ -6,10 +6,10 @@
   <div class="portlet-body"></div>
 </div>-->
 <div data-ng-controller="ControllerWidgetScheduler"> 
-  <div data-ng-show="true" class="row-fluid">
+  <div class="row-fluid">
     <div class="span3">
       <div class="span6">
-        <button data-ng-hide="viewModel.showNewExerciseForm" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.showNewExerciseForm = true" class="btn green btn-block"><i class="icon-plus m-icon-white"></i>&nbsp;New</button>
+        <button data-ng-hide="viewModel.showNewExerciseForm" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.showNewExerciseForm = true" class="btn green btn-block"><i class="icon-plus m-icon-white"></i>&nbsp;New Exercise</button>
       </div>
     </div>
     <div class="span6"></div>
@@ -21,13 +21,13 @@
     </div>
   </div>
   <div style="display:none;" data-ng-animate="{show:'slideDown', hide:'slideUp'}" data-ng-show="viewModel.showNewExerciseForm" data-ng-include="'viewPartialSchedulerAddExerciseForm'" class="row-fluid"></div>
-  <div class="row-fluid no-wrapper">
+  <div class="row-fluid">
     <div class="span12">
       <div data-ng-show="activeViewType == 'list'" style="margin-bottom:0;" class="portlet box grey">
         <div class="portlet-title">
           <h4><span>List</span></h4>
         </div>
-        <div style="padding:0;" class="portlet-body no-wrapper">
+        <div style="" class="portlet-body no-wrapper">
           <div data-ng-include="'viewWidgetTimeline'"></div>
         </div>
       </div>
@@ -35,7 +35,7 @@
         <div class="portlet-title">
           <h4><span>Calendar</span></h4>
         </div>
-        <div style="padding:0;" class="portlet-body">
+        <div style="" class="portlet-body">
           <div data-calendar="data-calendar" data-activate-watch="!(viewModel.routeParams.eventUid || viewModel.showNewExerciseForm)" data-options="viewModel.fullCalendarOptions" data-refetch-on-post="event" data-refetch-on-put="event" data-update-on-change="viewModel.fullCalendarOptions.changeIncrementor"></div>
         </div>
       </div>

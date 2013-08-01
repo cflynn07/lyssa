@@ -245,8 +245,6 @@ define [
                 ''
             ,
 
-
-
               mData:     null
               aTargets:  [4]
               bSortable: false
@@ -400,13 +398,28 @@ define [
             apiRequest.post 'template', {
               name:        $scope.viewModel.newTemplateForm.name
               type:        $scope.viewModel.newTemplateForm.type
-            }, {}, (result) ->
-              console.log 'result'
-              console.log result
-              $scope.viewModel.clearNewTemplateForm()
+            }, {}, (response) ->
+              
+              if response.code != 201
+                return
+
+              uid  = response.uids[0]
+              hash = window.location.hash
+
+              apiRequest.get 'template', [uid + ''], {
+                expand: [{
+                  resource: 'revisions'
+                }]
+              }, (templateResponse) ->              
+
+                if templateResponse.code != 200
+                  return
+                window.location.hash = hash + '/' + templateResponse.response.data.revisions[0].uid
+
+                $scope.viewModel.clearNewTemplateForm()
+
 
               ###
-
               MODIFIED API TO IMPLICITLY CREATE FIRST REVISION AND GROUP
 
               #Create first revision
@@ -449,38 +462,25 @@ define [
           currentTemplate: false
           fetchCurrentTemplate: () ->
 
-            if !$scope.viewModel.routeParams.templateUid
+            if !$scope.viewModel.routeParams.revisionUid
               $scope.viewModel.currentTemplate = false
               return
-            apiRequest.get 'template', [$scope.viewModel.routeParams.templateUid], {
+            apiRequest.get 'revision', [$scope.viewModel.routeParams.revisionUid], {
               expand: [{
-                resource: 'revisions',
-                expand: [{resource: 'groups'}]
+                resource: 'template',                
+              },{
+                resource: 'groups',
+                expand:   [{
+                  resource: 'fields'
+                }]
               }]
             }, (response) ->
 
               if response.code != 200
                 return
 
-              #if !_.isUndefined $scope.resourcePool[$scope.viewModel.routeParams.revisionUid]
-              #  $scope.viewModel.revisionChangeSummary = $scope.resourcePool[$scope.viewModel.routeParams.revisionUid].changeSummary
-
-              groupUids = []
-              for template in response.response.data
-                for revision in template.revisions
-                  for group in revision.groups
-                    groupUids.push group.uid
-
-
-              apiRequest.get 'group', groupUids, {
-                expand: [{resource: 'fields'}]
-              }, (response) ->
-                console.log 'groups'
-                console.log response
-
-
-            #$scope.viewModel.currentTemplate = $scope.viewModel.templates[$scope.viewModel.routeParams.templateUid]
-            #console.log $scope.viewModel.currentTemplate
+              $scope.viewModel.currentTemplate = response.response.template 
+              $scope.viewModel.currentRevision = response.response             
 
 
         $scope.fieldsSortableOptions =

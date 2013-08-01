@@ -100,9 +100,14 @@ module.exports = (app) ->
                         success: true
                     else
                       callback null,
+                        success:   true
+                        transform: [objectKey, 'type', 'full']
+                      ###
+                      callback null,
                         success: false
                         message:
                           type: 'required'
+                      ###
 
                   'employeeUid': (val, objectKey, object, callback) ->
 
@@ -203,83 +208,89 @@ module.exports = (app) ->
 
           when 'clientSuperAdmin', 'clientAdmin'
             insertMethod = (item, insertMethodCallback = false) ->
-                apiVerifyObjectProperties this, template, item, req, res, insertMethodCallback, {
-                  requiredProperties:
-                    'name':        (val, objectKey, object, callback) ->
+              apiVerifyObjectProperties this, template, item, req, res, insertMethodCallback, {
+                requiredProperties:
+                  'name':        (val, objectKey, object, callback) ->
 
-                      if !_.isUndefined(val)
+                    if !_.isUndefined(val)
+                      callback null,
+                        success: true
+                    else
+                      callback null,
+                        success: false
+                        message:
+                          name: 'required'
+
+                  'type':        (val, objectKey, object, callback) ->
+
+                    if val
+                      callback null,
+                        success: true
+                    else
+                      val = 'full'
+                      callback null,
+                        success:   true
+                        transform: [objectKey, 'type', 'full']
+                      ###
+                      callback null,
+                        success: false
+                        message:
+                          type: 'required'
+                      ###
+
+                  'employeeUid': (val, objectKey, object, callback) ->
+
+                    if _.isUndefined val
+                      val = uid
+
+                    where =
+                      uid:       val
+                      clientUid: clientUid
+
+                    #check exists
+                    employee.find(
+                      where: where  #<-- make sure to limit to session clientUid
+                    ).success (resultEmployee) ->
+
+                      if resultEmployee
+                        mapObj = {}
+                        mapObj[resultEmployee.uid] = resultEmployee
+                        callback null,
+                          uidMapping: mapObj
+                          success:    true
+                          transform:  [objectKey, 'employeeUid', resultEmployee.uid]
+
+                      else
+                        callback null,
+                          success: false
+                          message:
+                            employeeUid: 'unknown'
+
+                  'clientUid': (val, objectKey, object, callback) ->
+
+                    #For everyone besides superAdmins, they shouldn't be specifying clientUids
+                    if !_.isUndefined val
+                      callback null,
+                        success: false
+                        message:
+                          clientUid: 'unknown'
+                      return
+                    else
+                      client.find(
+                        where:
+                          uid: clientUid
+                      ).success (resultClient) ->
+                        #This should never fail, apiAuth should block
+                        mapObj = {}
+                        mapObj[resultClient.uid] = resultClient
                         callback null,
                           success: true
-                      else
-                        callback null,
-                          success: false
-                          message:
-                            name: 'required'
+                          uidMapping: mapObj
+                          transform: [objectKey, 'clientUid', clientUid] #<-- take from session
 
-                    'type':        (val, objectKey, object, callback) ->
-
-                      if val
-                        callback null,
-                          success: true
-                      else
-                        callback null,
-                          success: false
-                          message:
-                            type: 'required'
-
-                    'employeeUid': (val, objectKey, object, callback) ->
-
-                      if _.isUndefined val
-                        val = uid
-
-                      where =
-                        uid:       val
-                        clientUid: clientUid
-
-                      #check exists
-                      employee.find(
-                        where: where  #<-- make sure to limit to session clientUid
-                      ).success (resultEmployee) ->
-
-                        if resultEmployee
-                          mapObj = {}
-                          mapObj[resultEmployee.uid] = resultEmployee
-                          callback null,
-                            uidMapping: mapObj
-                            success:    true
-                            transform:  [objectKey, 'employeeUid', resultEmployee.uid]
-
-                        else
-                          callback null,
-                            success: false
-                            message:
-                              employeeUid: 'unknown'
-
-                    'clientUid': (val, objectKey, object, callback) ->
-
-                      #For everyone besides superAdmins, they shouldn't be specifying clientUids
-                      if !_.isUndefined val
-                        callback null,
-                          success: false
-                          message:
-                            clientUid: 'unknown'
-                        return
-                      else
-                        client.find(
-                          where:
-                            uid: clientUid
-                        ).success (resultClient) ->
-                          #This should never fail, apiAuth should block
-                          mapObj = {}
-                          mapObj[resultClient.uid] = resultClient
-                          callback null,
-                            success: true
-                            uidMapping: mapObj
-                            transform: [objectKey, 'clientUid', clientUid] #<-- take from session
-
-                }, (objects) ->
-                  #insertHelper.call(this, objects, res)
-                  insertHelper 'templates', clientUid, template, objects, req, res, app, insertMethodCallback
+              }, (objects) ->
+                #insertHelper.call(this, objects, res)
+                insertHelper 'templates', clientUid, template, objects, req, res, app, insertMethodCallback
 
 
             if _.isArray req.body

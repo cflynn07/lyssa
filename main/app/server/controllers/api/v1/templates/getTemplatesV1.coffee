@@ -46,6 +46,9 @@ module.exports = (app) ->
         apiAuth req, res, callback
       (callback) ->
 
+
+        console.log '939393993939393939933'
+
         userType  = req.session.user.type
         clientUid = req.session.user.clientUid
         uids      = req.params.id.split ','

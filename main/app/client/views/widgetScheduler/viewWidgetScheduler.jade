@@ -9,14 +9,14 @@
 
 
 div(data-ng-controller = "ControllerWidgetScheduler")  
-  .row-fluid(data-ng-show = "true")
+  .row-fluid
     .span3
       .span6
         button.btn.green.btn-block(data-ng-hide    = "viewModel.showNewExerciseForm"
                                    data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
                                    data-ng-click   = "viewModel.showNewExerciseForm = true")
           i.icon-plus.m-icon-white
-          |&nbsp;New
+          |&nbsp;New Exercise
     .span6
     .span3(style = "padding-bottom:10px;")
       .span6.pull-right(data-ng-init = "activeViewType = 'calendar'")
@@ -39,7 +39,7 @@ div(data-ng-controller = "ControllerWidgetScheduler")
 
 
 
-  .row-fluid.no-wrapper
+  .row-fluid
     .span12
 
       .portlet.box.grey(data-ng-show = "activeViewType == 'list'"
@@ -47,7 +47,7 @@ div(data-ng-controller = "ControllerWidgetScheduler")
         .portlet-title
           h4
             span List
-        .portlet-body.no-wrapper(style = "padding:0;")
+        .portlet-body.no-wrapper(style = "")
           div(data-ng-include = "'viewWidgetTimeline'")
 
       .portlet.box.grey(data-ng-show = "activeViewType == 'calendar'"
@@ -55,7 +55,7 @@ div(data-ng-controller = "ControllerWidgetScheduler")
         .portlet-title
           h4
             span Calendar
-        .portlet-body(style = "padding:0;")
+        .portlet-body(style = "")
           div(data-calendar         = "data-calendar"
               data-activate-watch   = "!(viewModel.routeParams.eventUid || viewModel.showNewExerciseForm)"
               data-options          = "viewModel.fullCalendarOptions"

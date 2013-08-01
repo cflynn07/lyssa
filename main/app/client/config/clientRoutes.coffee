@@ -44,7 +44,7 @@ define [], () ->
           data: {}
         ]
       ]
-    $routeProvider.when '/admin/themis/templates/:templateUid',
+    $routeProvider.when '/admin/themis/templates/:revisionUid',
       root: '/admin/themis/templates'
       group: 'templatesExercises'
       subGroup: ''
@@ -58,6 +58,8 @@ define [], () ->
           data: {}
         ]
       ]
+      
+    ###
     $routeProvider.when '/admin/themis/templates/:templateUid/:revisionUid',
       root: '/admin/themis/templates'
       group: 'templatesExercises'
@@ -72,6 +74,7 @@ define [], () ->
           data: {}
         ]
       ]
+    ###
 
 
     ###
