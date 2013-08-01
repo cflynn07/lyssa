@@ -3,7 +3,7 @@ define [
   'jquery'
   'underscore'
   'text!views/viewCoreWidgets.html'
-  'cs!config/clientConfig'
+  'config/clientConfig'
 ], (
   angular
   $

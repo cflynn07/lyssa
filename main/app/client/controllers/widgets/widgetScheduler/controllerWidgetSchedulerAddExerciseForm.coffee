@@ -2,9 +2,9 @@ define [
   'jquery'
   'angular'
   'ejs'
-  'cs!utils/utilBuildDTQuery'
-  'cs!utils/utilParseClientTimeZone'
-  'cs!utils/utilSafeStringify'
+  'utils/utilBuildDTQuery'
+  'utils/utilParseClientTimeZone'
+  'utils/utilSafeStringify'
   'underscore'
 ], (
   $

@@ -2,7 +2,7 @@ define [
   'angular'
   'underscore'
   'jquery'
-  'cs!utils/utilSoundManager'
+  'utils/utilSoundManager'
   'text!views/viewWidgetCoreHeader.html'
 ], (
   angular

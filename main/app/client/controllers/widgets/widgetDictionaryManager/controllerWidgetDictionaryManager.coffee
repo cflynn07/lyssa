@@ -4,7 +4,7 @@ define [
   'angular-ui'
   'bootstrap'
   'underscore'
-  'cs!utils/utilBuildDTQuery'
+  'utils/utilBuildDTQuery'
   'text!views/widgetDictionaryManager/viewWidgetDictionaryManager.html'
   'text!views/widgetDictionaryManager/viewWidgetDictionaryManagerDictionaryItemsButtonsEJS.html'
   'text!views/widgetDictionaryManager/viewWidgetDictionaryManagerListButtonsEJS.html'

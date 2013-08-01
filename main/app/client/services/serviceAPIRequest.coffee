@@ -1,7 +1,7 @@
 define [
   'underscore'
   'uuid'
-  'cs!utils/utilSortHash'
+  'utils/utilSortHash'
   'text!config/clientOrmShare.json'
 ], (
   _

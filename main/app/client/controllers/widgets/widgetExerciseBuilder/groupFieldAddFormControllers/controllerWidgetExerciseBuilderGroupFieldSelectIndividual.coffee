@@ -1,5 +1,5 @@
 define [
-  'cs!utils/utilBuildDTQuery'
+  'utils/utilBuildDTQuery'
 ], (
   utilBuildDTQuery
 ) ->

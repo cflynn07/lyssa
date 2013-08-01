@@ -2,8 +2,8 @@ define [
   'jquery'
   'underscore'
   'angular'
-  'cs!config/clientConfig'
-  'cs!config/clientConfigHelperMethods'
+  'config/clientConfig'
+  'config/clientConfigHelperMethods'
   'text!views/viewCore.html'
   'text!config/clientOrmShare.json'
 ], (

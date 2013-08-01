@@ -2,7 +2,7 @@ define [
   'jquery'
   'angular'
   'ejs'
-  'cs!utils/utilBuildDTQuery'
+  'utils/utilBuildDTQuery'
   'text!views/widgetQuizExerciseSubmitter/viewWidgetQuizExerciseSubmitter.html'
   'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterOpenResponse.html'
   'text!views/widgetQuizExerciseSubmitter/partials/viewPartialQuizExerciseSubmitterSelectIndividual.html'

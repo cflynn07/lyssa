@@ -1,7 +1,7 @@
 define [
   'jquery'
   'underscore'
-  'cs!utils/utilBuildDTQuery'
+  'utils/utilBuildDTQuery'
   'text!views/widgetTimeline/viewWidgetTimeline.html'
 ], (
   $

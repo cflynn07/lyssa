@@ -5,7 +5,7 @@ define [
   'text!views/widgetLeftMenu/viewWidgetCoreLeftMenu.html'
   'text!views/widgetLeftMenu/viewWidgetCoreLeftMenuOptionsAdmin.html'
   'text!views/widgetLeftMenu/viewWidgetCoreLeftMenuOptionsDelegate.html'
-  'cs!config/clientConfig'
+  'config/clientConfig'
 ], (
   $
   _

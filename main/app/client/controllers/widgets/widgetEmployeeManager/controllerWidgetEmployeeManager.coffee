@@ -7,7 +7,7 @@ define [
   'bootstrapFileUpload'
   'bootstrap'
   'underscore'
-  'cs!utils/utilBuildDTQuery'
+  'utils/utilBuildDTQuery'
   'spacetree'
   'text!views/widgetEmployeeManager/viewWidgetEmployeeManager.html'
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerAddManualForm.html'
