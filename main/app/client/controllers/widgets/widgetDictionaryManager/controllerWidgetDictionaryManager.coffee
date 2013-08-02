@@ -197,7 +197,10 @@ define [
               apiRequest.post 'dictionary', {
                 name: $scope.viewModel.newDictionaryForm.name
               }, {}, (response) ->
+
                 $scope.viewModel.closeAddNewDictionary()
+                if response.code == 201
+                  window.location.href = '#' + $scope.viewRoot + '/' + response.uids[0]
 
 
             closeAddNewDictionaryItem: () ->
