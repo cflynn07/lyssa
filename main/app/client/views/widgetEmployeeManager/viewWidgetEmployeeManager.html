@@ -6,15 +6,12 @@
   <div class="portlet-body light-grey"></div>
 </div>-->
 <div data-ng-controller="ControllerWidgetEmployeeManager">
-  <div class="row-fluid">
+  <div style="margin-bottom:10px;" class="row-fluid">
     <div class="span3">
       <div class="span6">
         <button data-ng-hide="viewModel.showAddNewEmployee" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.showAddNewEmployee = true" class="btn green btn-block"><i class="icon-plus m-icon-white"></i>&nbsp;New Employee</button>
       </div>
-    </div>
-    <div class="span6"></div>
-    <div style="padding-bottom:10px;" class="span3">
-      <div data-ng-init="activeViewType = 'employees'" class="span6 pull-right">
+      <div data-ng-init="activeViewType = 'employees'" class="span6">
         <button data-ng-show="activeViewType == 'employees'" data-ng-click="activeViewType = 'organization'" class="btn blue btn-block"><i class="icon-sitemap"></i>&nbsp;Organization</button>
         <button data-ng-show="activeViewType == 'organization'" data-ng-click="activeViewType = 'employees'" style="margin-top:0;" class="btn blue btn-block"><i class="icon-list"></i>&nbsp;Employees</button>
       </div>

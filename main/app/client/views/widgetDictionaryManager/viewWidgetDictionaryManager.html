@@ -77,14 +77,14 @@
         </div>
       </div>
     </div>
-    <div class="row-fluid">
+    <div data-ng-show="viewModel.showAddNewDictionary" style="display:none;" data-ng-animate="{show: 'slideDown', hide: 'slideUp'}" class="row-fluid">
       <div class="span12">
-        <div data-ng-class="{'green sub-portlet':newDictionaryForm.$valid, 'grey':newDictionaryForm.$invalid}" style="display:none;" data-ng-show="viewModel.showAddNewDictionary" data-ng-animate="{show: 'slideDown', hide: 'slideUp'}" class="portlet box">
+        <div data-ng-class="{'green sub-portlet':newDictionaryForm.$valid, 'grey':newDictionaryForm.$invalid}" class="portlet box">
           <div class="portlet-title">
             <h4><span>New Dictionary</span></h4>
           </div>
-          <div class="portlet-body light-gray">
-            <form novalidate="novalidate" name="newDictionaryForm" class="form-horizontal">
+          <div class="portlet-body light-gray form">
+            <form novalidate="novalidate" name="newDictionaryForm" class="horizontal-form">
               <div data-ng-class="{success:newDictionaryForm.name.$valid, error:!newDictionaryForm.name.$valid, 'ng-pristine':newDictionaryForm.name.$pristine}" class="control-group">
                 <label class="control-label">Name</label>
                 <div class="controls input-icon">
@@ -92,16 +92,12 @@
                   <div class="clear"></div><span data-ng-show="newDictionaryForm.name.$error.minlength" class="help-inline">Name must be longer than {{clientOrmShare.dictionary.model.name.validate.len[0]}} characters</span><span data-ng-show="newDictionaryForm.name.$error.maxlength" class="help-inline">Name must be shorter than {{clientOrmShare.dictionary.model.name.validate.len[1]}} characters</span><span data-ng-show="newDictionaryForm.name.$error.uniqueField" class="help-inline">A dictionary with the name "{{viewModel.newDictionaryForm.name}}" already exists</span>
                 </div>
               </div>
-              <div class="row-fluid">
-                <div class="span6 responsive span8">
-                  <button data-ng-hide="!!viewModel.newDictionaryForm.submitting" data-ng-click="viewModel.closeAddNewDictionary();" class="btn red btn-block"><i class="m-icon-swapleft m-icon-white"></i>Cancel</button>
-                </div>
-                <div class="span6 responsive span8">
-                  <button data-ng-class="{true:'black',false:'green'}[!!viewModel.newDictionaryForm.submitting]" type="submit" data-ng-disabled="newDictionaryForm.$invalid || !!viewModel.newDictionaryForm.submitting" data-ng-click="viewModel.postNewDictionary();" class="btn btn-block">
-                    <p data-ng-hide="!!viewModel.newDictionaryForm.submitting">Add<i class="m-icon-swapright m-icon-white"></i></p>
-                    <p data-ng-show="!!viewModel.newDictionaryForm.submitting"><i class="icon-cog icon-spin"></i>Saving...</p>
-                  </button>
-                </div>
+              <div class="form-actions">
+                <button data-ng-class="{true:'black',false:'green'}[!!viewModel.newDictionaryForm.submitting]" type="submit" data-ng-disabled="newDictionaryForm.$invalid || !!viewModel.newDictionaryForm.submitting" data-ng-click="viewModel.postNewDictionary();" style="margin-left:5px;" class="btn pull-right">
+                  <p data-ng-hide="!!viewModel.newDictionaryForm.submitting" style="margin-bottom:0;"><i class="icon-plus m-icon-white"></i>&nbsp;Add</p>
+                  <p data-ng-show="!!viewModel.newDictionaryForm.submitting" style="margin-bottom:0;"><i class="icon-cog icon-spin"></i>Saving...</p>
+                </button>
+                <button data-ng-hide="!!viewModel.newDictionaryForm.submitting" data-ng-click="viewModel.closeAddNewDictionary();" class="btn red pull-right"><i class="icon-remove m-icon-white"></i>&nbsp;Cancel</button>
               </div>
             </form>
           </div>

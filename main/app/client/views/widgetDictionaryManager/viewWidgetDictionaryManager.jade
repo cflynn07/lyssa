@@ -113,19 +113,16 @@ div(data-ng-controller = "ControllerWidgetDictionaryManager")
             |&nbsp;New Dictionary
 
 
-
-
-    .row-fluid
+    .row-fluid(data-ng-show    = "viewModel.showAddNewDictionary"
+               style           = "display:none;"
+               data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}")
       .span12
-        .portlet.box(data-ng-class   = "{'green sub-portlet':newDictionaryForm.$valid, 'grey':newDictionaryForm.$invalid}"          
-                     style           = "display:none;"
-                     data-ng-show    = "viewModel.showAddNewDictionary"
-                     data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}")
+        .portlet.box(data-ng-class   = "{'green sub-portlet':newDictionaryForm.$valid, 'grey':newDictionaryForm.$invalid}")
           .portlet-title
             h4
               span New Dictionary
-          .portlet-body.light-gray
-            form.form-horizontal(novalidate
+          .portlet-body.light-gray.form
+            form.horizontal-form(novalidate
                                  name       = "newDictionaryForm")
               .control-group(data-ng-class = "{success:newDictionaryForm.name.$valid, error:!newDictionaryForm.name.$valid, 'ng-pristine':newDictionaryForm.name.$pristine}")
                 label.control-label Name
@@ -147,24 +144,27 @@ div(data-ng-controller = "ControllerWidgetDictionaryManager")
                   span.help-inline(data-ng-show = "newDictionaryForm.name.$error.maxlength")
                     | Name must be shorter than {{clientOrmShare.dictionary.model.name.validate.len[1]}} characters
                   span.help-inline(data-ng-show = "newDictionaryForm.name.$error.uniqueField") A dictionary with the name "{{viewModel.newDictionaryForm.name}}" already exists
-              .row-fluid
-                .span6.responsive.span8
-                  button.btn.red.btn-block(data-ng-hide  = "!!viewModel.newDictionaryForm.submitting"
-                                           data-ng-click = "viewModel.closeAddNewDictionary();")
-                    i.m-icon-swapleft.m-icon-white
-                    | Cancel
-                .span6.responsive.span8
-                  button.btn.btn-block(data-ng-class    = "{true:'black',false:'green'}[!!viewModel.newDictionaryForm.submitting]"
-                                       type             = "submit"
-                                       data-ng-disabled = "newDictionaryForm.$invalid || !!viewModel.newDictionaryForm.submitting"
-                                       data-ng-click    = "viewModel.postNewDictionary();")
-                    p(data-ng-hide = "!!viewModel.newDictionaryForm.submitting")
-                      | Add
-                      i.m-icon-swapright.m-icon-white
-                    p(data-ng-show = "!!viewModel.newDictionaryForm.submitting")
+              
+              .form-actions
+
+                  button.btn.pull-right(data-ng-class    = "{true:'black',false:'green'}[!!viewModel.newDictionaryForm.submitting]"
+                                        type             = "submit"
+                                        data-ng-disabled = "newDictionaryForm.$invalid || !!viewModel.newDictionaryForm.submitting"
+                                        data-ng-click    = "viewModel.postNewDictionary();"
+                                        style            = "margin-left:5px;")
+                    p(data-ng-hide = "!!viewModel.newDictionaryForm.submitting"
+                      style        = "margin-bottom:0;")
+                      i.icon-plus.m-icon-white
+                      |&nbsp;Add
+                    p(data-ng-show = "!!viewModel.newDictionaryForm.submitting"
+                      style        = "margin-bottom:0;")
                       i.icon-cog.icon-spin
                       | Saving...
 
+                  button.btn.red.pull-right(data-ng-hide  = "!!viewModel.newDictionaryForm.submitting"
+                                            data-ng-click = "viewModel.closeAddNewDictionary();")
+                    i.icon-remove.m-icon-white
+                    |&nbsp;Cancel
         
 
     .row-fluid

@@ -9,7 +9,7 @@
 
 div(data-ng-controller = "ControllerWidgetEmployeeManager")
 
-  .row-fluid
+  .row-fluid(style = "margin-bottom:10px;")
     .span3
       .span6
         button.btn.green.btn-block(data-ng-hide    = "viewModel.showAddNewEmployee"
@@ -17,9 +17,7 @@ div(data-ng-controller = "ControllerWidgetEmployeeManager")
                                    data-ng-click   = "viewModel.showAddNewEmployee = true")
           i.icon-plus.m-icon-white
           |&nbsp;New Employee
-    .span6
-    .span3(style = "padding-bottom:10px;")
-      .span6.pull-right(data-ng-init = "activeViewType = 'employees'")
+      .span6(data-ng-init = "activeViewType = 'employees'")
         button.btn.blue.btn-block(data-ng-show  = "activeViewType == 'employees'"
                                   data-ng-click = "activeViewType = 'organization'")
           i.icon-sitemap
