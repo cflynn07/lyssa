@@ -1,39 +1,133 @@
-.widget-themis-finish.portlet.box.blue(data-animate-in    = ""
-                                       data-ng-controller = "ControllerWidgetDictionaryManager")
-  .portlet-title
-    h4
-      span Dictionary Manager
-  .portlet-body.light-grey
+div(data-ng-controller = "ControllerWidgetDictionaryManager")
+
+
+  div(data-ng-show = "viewModel.routeParams.dictionaryUid")
     .row-fluid
-      .span5.responsive.span8
-        // Dictionaries List
-        .portlet.box.grey
-          .portlet-title
-            h4
-              span Dictionaries
-          .portlet-body
-            button.btn.green.btn-block(style="margin-bottom: 5px;", data-ng-hide="viewModel.showAddNewDictionary", data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}", data-ng-click="viewModel.showAddNewDictionary=true;")
-              | Add Dictionary
-              i.m-icon-swapright.m-icon-white
-            table.table.table-striped.table-hover.table-bordered.dataTable(data-data-table="viewModel.dictionaryListOptions", aa-data="viewModel.dictionaries", ao-column-defs="viewModel.columnDefsDictionaryList", data-parent-model="viewModel", update-on-resource-post="dictionary", fn-row-callback="myCallback")
-              thead
-                tr
-                  th.sorting Name
-                  th.sorting_disabled Items
-                  th.sorting_disabled Actions
-            button.btn.btn-block(style="margin-bottom: 5px;", data-ng-hide="viewModel.showAddNewDictionary", data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}", data-ng-click="viewModel.showAddNewDictionary=true;")
-              | Show Archived
-              i.m-icon-swapdown
-        // /Dictionaries List
-      .span7
-        // new dictionary form
-        .portlet.box(data-ng-class="{'green sub-portlet':newDictionaryForm.$valid, 'grey':newDictionaryForm.$invalid}", style="display:none;", data-ng-show="viewModel.showAddNewDictionary", data-ng-animate="{show: 'slideDown', hide: 'slideUp'}")
+      .span3(style = "padding-bottom:10px;")      
+        .span6
+          a.btn.blue(href = "{{ '#' + viewRoot }}")
+            i.icon-arrow-left.m-icon-white
+            |&nbsp;Dictionaries
+
+
+    .portlet.box.grey(data-animate-in)
+      .portlet-title
+        h4
+          span Edit {{resourcePool[viewModel.routeParams.dictionaryUid].name }}
+
+      .portlet-body.light-grey
+        div(data-ng-hide = "viewModel.currentDictionaryUid && !resourcePool[viewModel.currentDictionaryUid].deletedAt")
+          .box.template-info-box.fade.in.ng-scope
+            .inline-content
+              strong
+                i.m-icon-big-swapleft(style = "vertical-align:middle; margin-top:0;")
+              h3 Select Dictionary
+        div(data-ng-show = "viewModel.currentDictionaryUid && !resourcePool[viewModel.currentDictionaryUid].deletedAt")
+          .box.template-info-box.fade.in.ng-scope
+            .row-fluid
+              .span6
+                h2.alert-heading.ng-binding(style = "margin-top:0px; font-weight:600;")
+                  | {{resourcePool[viewModel.currentDictionaryUid].name}}
+                .inline-content
+                  button.btn.green.btn-block(data-ng-hide    = "viewModel.showAddDictionaryItems"
+                                             data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
+                                             data-ng-click   = "viewModel.showAddDictionaryItems=true;")
+                    | Add Item
+                    i.m-icon-swapright.m-icon-white
+              .span6(style = "text-align:right;")
+          .portlet.box(style           = "display:none;"
+                       data-ng-class   = "{'green sub-portlet':newDictionaryItemForm.$valid, 'grey':newDictionaryItemForm.$invalid}"
+                       data-ng-show    = "viewModel.showAddDictionaryItems"
+                       data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}")
+            .portlet-title
+              h4
+                span Add Item
+            .portlet-body.light-grey
+              form.form-horizontal(name = "newDictionaryItemForm"
+                                   novalidate)
+                .control-group(data-ng-class = "{success:newDictionaryItemForm.$valid, error:!newDictionaryItemForm.$valid, 'ng-pristine':newDictionaryItemForm.$pristine}")
+                  label.control-label Item Name
+                  .controls.input-icon
+                    input.span11.m-wrap(type              = "text"
+                                        name              = "name"
+                                        data-ng-model     = "viewModel.newDictionaryItemForm.name"
+                                        data-ng-minlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[0]}}"
+                                        data-ng-maxlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[1]}}"
+                                        data-unique-field = "{\"resource\": \"dictionary\", \"uids\":\"{{viewModel.dictionaries[viewModel.currentDictionaryUid].uid}}\", \"property\":\"dictionarItems\", \"subProperty\":\"name\"}"
+                                        data-required)
+                    span.input-success
+                      i.icon-ok
+                    span.input-error
+                      i.icon-exclamation-sign
+                    .clear
+                    span.help-inline(data-ng-show = "newDictionaryItemForm.name.$error.minlength")
+                      | Name must be longer than {{clientOrmShare.dictionaryItem.model.name.validate.len[0]}} characters
+                    span.help-inline(data-ng-show = "newDictionaryItemForm.name.$error.maxlength")
+                      | Name must be shorter than {{clientOrmShare.dictionaryItem.model.name.validate.len[1]}} characters
+                    span.help-inline(data-ng-show = "newDictionaryItemForm.name.$error.uniqueField")
+                      | A item with the name "{{viewModel.newDictionaryItemForm.name}}" already exists in this dictionary
+                .row-fluid
+                  .span6.responsive.span8
+                    button.btn.red.btn-block(data-ng-hide  = "!!viewModel.newDictionaryItemForm.submitting"
+                                             data-ng-click = "viewModel.closeAddNewDictionaryItem()")
+                      i.m-icon-swapleft.m-icon-white
+                      | Cancel
+
+                  .span6.responsive.span8
+                    button.btn.btn-block(data-ng-class    = "{true:'black',false:'green'}[!!viewModel.newDictionaryItemForm.submitting]"
+                                         type             = "submit"
+                                         data-ng-disabled = "newDictionaryItemForm.$invalid || !!viewModel.newDictionaryItemForm.submitting"
+                                         data-ng-click    = "viewModel.postNewDictionaryItem()")
+                      p(data-ng-hide = "!!viewModel.newDictionaryItemForm.submitting")
+                        | Add
+                        i.m-icon-swapright.m-icon-white
+                      p(data-ng-show = "!!viewModel.newDictionaryItemForm.submitting")
+                        i.icon-cog.icon-spin
+                        | Saving...
+          table.table.table-striped.table-hover.table-bordered.dataTable(data-data-table              = "viewModel.dictionaryItemsOptions"
+                                                                         data-aa-data                 = "[]"
+                                                                         data-update-on-resource-post = "dictionaryItem"
+                                                                         data-update-watch            = "viewModel.currentDictionaryUid"
+                                                                         data-ao-column-defs          = "viewModel.columnDefsCurrentDictionaryItems"
+                                                                         data-fn-row-callback         = "myCallback")
+            thead
+              tr
+                th.sorting Item
+                th.sorting_disabled Actions
+
+
+
+
+
+
+
+  div(data-ng-show = "!viewModel.routeParams.dictionaryUid")
+
+    .row-fluid
+      .span3(style = "padding-bottom:10px;")
+        .span6
+          button.btn.green.btn-block(data-ng-hide    = "viewModel.showAddNewDictionary"
+                                     data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
+                                     data-ng-click   = "viewModel.showAddNewDictionary=true;")
+            i.icon-plus.m-icon-white
+            |&nbsp;New Dictionary
+
+
+
+
+    .row-fluid
+      .span12
+        .portlet.box(data-ng-class   = "{'green sub-portlet':newDictionaryForm.$valid, 'grey':newDictionaryForm.$invalid}"          
+                     style           = "display:none;"
+                     data-ng-show    = "viewModel.showAddNewDictionary"
+                     data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}")
           .portlet-title
             h4
               span New Dictionary
           .portlet-body.light-gray
-            form.form-horizontal(name="newDictionaryForm", novalidate="")
-              .control-group(data-ng-class="{success:newDictionaryForm.name.$valid, error:!newDictionaryForm.name.$valid, 'ng-pristine':newDictionaryForm.name.$pristine}")
+            form.form-horizontal(novalidate
+                                 name       = "newDictionaryForm")
+              .control-group(data-ng-class = "{success:newDictionaryForm.name.$valid, error:!newDictionaryForm.name.$valid, 'ng-pristine':newDictionaryForm.name.$pristine}")
                 label.control-label Name
                 .controls.input-icon
                   input.span11.m-wrap(type              = "text"
@@ -55,84 +149,45 @@
                   span.help-inline(data-ng-show = "newDictionaryForm.name.$error.uniqueField") A dictionary with the name "{{viewModel.newDictionaryForm.name}}" already exists
               .row-fluid
                 .span6.responsive.span8
-                  button.btn.red.btn-block(data-ng-hide="!!viewModel.newDictionaryForm.submitting", data-ng-click="viewModel.closeAddNewDictionary();")
+                  button.btn.red.btn-block(data-ng-hide  = "!!viewModel.newDictionaryForm.submitting"
+                                           data-ng-click = "viewModel.closeAddNewDictionary();")
                     i.m-icon-swapleft.m-icon-white
                     | Cancel
                 .span6.responsive.span8
-                  button.btn.btn-block(data-ng-class="{true:'black',false:'green'}[!!viewModel.newDictionaryForm.submitting]", type="submit", data-ng-disabled="newDictionaryForm.$invalid || !!viewModel.newDictionaryForm.submitting", data-ng-click="viewModel.postNewDictionary();")
-                    p(data-ng-hide="!!viewModel.newDictionaryForm.submitting")
+                  button.btn.btn-block(data-ng-class    = "{true:'black',false:'green'}[!!viewModel.newDictionaryForm.submitting]"
+                                       type             = "submit"
+                                       data-ng-disabled = "newDictionaryForm.$invalid || !!viewModel.newDictionaryForm.submitting"
+                                       data-ng-click    = "viewModel.postNewDictionary();")
+                    p(data-ng-hide = "!!viewModel.newDictionaryForm.submitting")
                       | Add
                       i.m-icon-swapright.m-icon-white
-                    p(data-ng-show="!!viewModel.newDictionaryForm.submitting")
+                    p(data-ng-show = "!!viewModel.newDictionaryForm.submitting")
                       i.icon-cog.icon-spin
                       | Saving...
-        // /new dictionary form
-        // Active Dictionary Items
-        .portlet.box.grey
+
+        
+
+    .row-fluid
+      .span12
+        .portlet.box.grey(data-animate-in)
           .portlet-title
             h4
-              span Edit Dictionary
-          // portlet-body
-          .portlet-body.light-grey
-            div(data-ng-hide="viewModel.currentDictionaryUid && !resourcePool[viewModel.currentDictionaryUid].deletedAt")
-              .box.template-info-box.fade.in.ng-scope
-                .inline-content
-                  strong
-                    i.m-icon-big-swapleft(style="vertical-align:middle; margin-top:0;")
-                  h3 Select Dictionary
-            div(data-ng-show="viewModel.currentDictionaryUid && !resourcePool[viewModel.currentDictionaryUid].deletedAt")
-              .box.template-info-box.fade.in.ng-scope
-                .row-fluid
-                  .span6
-                    h2.alert-heading.ng-binding(style="margin-top:0px; font-weight:600;")
-                      | {{resourcePool[viewModel.currentDictionaryUid].name}}
-                    .inline-content
-                      button.btn.green.btn-block(data-ng-hide="viewModel.showAddDictionaryItems", data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}", data-ng-click="viewModel.showAddDictionaryItems=true;")
-                        | Add Item
-                        i.m-icon-swapright.m-icon-white
-                  .span6(style="text-align:right;")
-              .portlet.box(style="display:none;", data-ng-class="{'green sub-portlet':newDictionaryItemForm.$valid, 'grey':newDictionaryItemForm.$invalid}", data-ng-show="viewModel.showAddDictionaryItems", data-ng-animate="{show: 'slideDown', hide: 'slideUp'}")
-                .portlet-title
-                  h4
-                    span Add Item
-                .portlet-body.light-grey
-                  form.form-horizontal(name="newDictionaryItemForm", novalidate="")
-                    .control-group(data-ng-class="{success:newDictionaryItemForm.$valid, error:!newDictionaryItemForm.$valid, 'ng-pristine':newDictionaryItemForm.$pristine}")
-                      label.control-label Item Name
-                      .controls.input-icon
-                        input.span11.m-wrap(type="text", name="name", data-ng-model="viewModel.newDictionaryItemForm.name", data-ng-minlength="{{clientOrmShare.dictionaryItem.model.name.validate.len[0]}}", data-ng-maxlength="{{clientOrmShare.dictionaryItem.model.name.validate.len[1]}}", data-unique-field = "{\"resource\": \"dictionary\", \"uids\":\"{{viewModel.dictionaries[viewModel.currentDictionaryUid].uid}}\", \"property\":\"dictionarItems\", \"subProperty\":\"name\"}", data-required="")
-                        span.input-success
-                          i.icon-ok
-                        span.input-error
-                          i.icon-exclamation-sign
-                        .clear
-                        span.help-inline(data-ng-show="newDictionaryItemForm.name.$error.minlength")
-                          | Name must be longer than {{clientOrmShare.dictionaryItem.model.name.validate.len[0]}} characters
-                        span.help-inline(data-ng-show="newDictionaryItemForm.name.$error.maxlength")
-                          | Name must be shorter than {{clientOrmShare.dictionaryItem.model.name.validate.len[1]}} characters
-                        span.help-inline(data-ng-show="newDictionaryItemForm.name.$error.uniqueField")
-                          | A item with the name "{{viewModel.newDictionaryItemForm.name}}" already exists in this dictionary
-                    .row-fluid
-                      .span6.responsive.span8
-                        button.btn.red.btn-block(data-ng-hide="!!viewModel.newDictionaryItemForm.submitting", data-ng-click="viewModel.closeAddNewDictionaryItem()")
-                          i.m-icon-swapleft.m-icon-white
-                          | Cancel
-                      // span6
-                      .span6.responsive.span8
-                        button.btn.btn-block(data-ng-class="{true:'black',false:'green'}[!!viewModel.newDictionaryItemForm.submitting]", type="submit", data-ng-disabled="newDictionaryItemForm.$invalid || !!viewModel.newDictionaryItemForm.submitting", data-ng-click="viewModel.postNewDictionaryItem()")
-                          p(data-ng-hide="!!viewModel.newDictionaryItemForm.submitting")
-                            | Add
-                            i.m-icon-swapright.m-icon-white
-                          p(data-ng-show="!!viewModel.newDictionaryItemForm.submitting")
-                            i.icon-cog.icon-spin
-                            | Saving...
-                      // span6
-                    // row-fluid
-              table.table.table-striped.table-hover.table-bordered.dataTable(data-data-table="viewModel.dictionaryItemsOptions", data-aa-data="[]", data-update-on-resource-post="dictionaryItem", data-update-watch="viewModel.currentDictionaryUid", data-ao-column-defs="viewModel.columnDefsCurrentDictionaryItems", data-fn-row-callback="myCallback")
-                thead
-                  tr
-                    th.sorting Item
-                    th.sorting_disabled Actions
-          // /portlet-body
-        // /Active Dictionary Items
-      // /span9
+              span Dictionaries
+          .portlet-body
+            table.table.table-striped.table-hover.table-bordered.dataTable(data-data-table         = "viewModel.dictionaryListOptions"
+                                                                           aa-data                 = "viewModel.dictionaries"
+                                                                           ao-column-defs          = "viewModel.columnDefsDictionaryList"
+                                                                           data-parent-model       = "viewModel"
+                                                                           update-on-resource-post = "dictionary"
+                                                                           fn-row-callback         = "myCallback")
+              thead
+                tr
+                  th.sorting Name
+                  th.sorting_disabled Items
+                  th.sorting_disabled Actions
+            button.btn.btn-block(style           = "margin-bottom: 5px;"
+                                 data-ng-hide    = "viewModel.showAddNewDictionary"
+                                 data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
+                                 data-ng-click   = "viewModel.showAddNewDictionary=true;")
+              | Show Archived
+              i.m-icon-swapdown

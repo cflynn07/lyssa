@@ -163,6 +163,9 @@ define [], () ->
       subGroup: ''
       widgetViews: [
       ]
+
+
+
     $routeProvider.when '/admin/themis/settings/dictionaries',
       root:     '/admin/themis/settings/dictionaries'
       group:    'settingsDictionaries'
@@ -191,6 +194,8 @@ define [], () ->
           data: {}
         ]
       ]
+
+      
     $routeProvider.when '/admin/themis/settings/employees',
       root:     '/admin/themis/settings/employees'
       group:    'settingsEmployees'

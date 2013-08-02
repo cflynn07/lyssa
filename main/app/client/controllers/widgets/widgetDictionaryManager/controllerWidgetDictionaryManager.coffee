@@ -289,7 +289,10 @@ define [
             $scope.newDictionaryForm.$setPristine()
             $scope.viewModel.newDictionaryForm    = {}
 
+            $scope.viewModel.routeParams = $routeParams          
             setCurrentDictionary()
+
+          $scope.viewModel.routeParams = $routeParams
           setCurrentDictionary()
 
 

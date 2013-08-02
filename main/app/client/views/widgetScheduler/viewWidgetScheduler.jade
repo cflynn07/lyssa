@@ -35,7 +35,8 @@ div(data-ng-controller = "ControllerWidgetScheduler")
       .span12
 
         .portlet.box.grey(data-ng-show = "activeViewType == 'list'"
-                          style        = "margin-bottom:0;")
+                          style        = "margin-bottom:0;"
+                          data-animate-in)
           .portlet-title
             h4
               span List
@@ -43,7 +44,8 @@ div(data-ng-controller = "ControllerWidgetScheduler")
             div(data-ng-include = "'viewWidgetTimeline'")
 
         .portlet.box.grey(data-ng-show = "activeViewType == 'calendar'"
-                          style        = "margin-bottom:0;")
+                          style        = "margin-bottom:0;"
+                          data-animate-in)
           .portlet-title
             h4
               span Calendar
@@ -69,7 +71,7 @@ div(data-ng-controller = "ControllerWidgetScheduler")
             h4 
               span Exercise 
           .portlet-body
-            
+
 
 
 

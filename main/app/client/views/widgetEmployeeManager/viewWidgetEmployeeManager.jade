@@ -71,7 +71,7 @@ div(data-ng-controller = "ControllerWidgetEmployeeManager")
 
 
   .row-fluid(data-ng-show = "activeViewType == 'organization'")
-    .portlet.box.grey
+    .portlet.box.grey(data-animate-in)
       .portlet-title
         h4
           span Organization Structure
@@ -83,7 +83,7 @@ div(data-ng-controller = "ControllerWidgetEmployeeManager")
 
 
   .row-fluid(data-ng-show = "activeViewType == 'employees'")
-    .portlet.box.grey
+    .portlet.box.grey(data-animate-in)
       .portlet-title
         h4
           span Employees

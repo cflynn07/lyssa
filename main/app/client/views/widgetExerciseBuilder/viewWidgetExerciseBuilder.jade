@@ -2,7 +2,7 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
 
   div(data-ng-hide = "viewModel.routeParams.revisionUid")
 
-    .row-fluid()
+    .row-fluid
       .span3(style = "padding-bottom:10px;")
         
         .span6
@@ -19,7 +19,8 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
 
       .span12(data-ng-hide = "viewModel.templatesListCollapsed && viewModel.routeParams.revisionUid"
               style        = "margin:0;")
-        .portlet.box.grey(data-ng-show = "!viewModel.templatesListCollapsed")
+        .portlet.box.grey(data-ng-show = "!viewModel.templatesListCollapsed"
+                          data-animate-in)
           .portlet-title
             h4
               span Templates
@@ -49,7 +50,7 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
             |&nbsp;Templates
 
 
-    .portlet.box.grey
+    .portlet.box.grey(data-animate-in)
       .portlet-title
         h4
           span {{ resourcePool[viewModel.routeParams.revisionUid].template.name }}
