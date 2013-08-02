@@ -16,7 +16,6 @@
               </ul>
             </div>
           </div>
-          <!-- navbar steps-->
           <div id="bar" class="progress progress-success progress-striped">
             <div style="width: {{ (viewModel.activeWizardStep+1) / 3.0 * 100 }}%;" class="bar"></div>
           </div>
@@ -24,7 +23,10 @@
             <div data-ng-show="viewModel.activeWizardStep == 0" data-ng-animate="{show:'fade-in'}" data-ng-class="{'active':(viewModel.activeWizardStep == 0)}" class="tab-pane">
               <h3 class="block">Set up a new exercise or quiz</h3>
               <div data-ng-class="{success:newEventForm.eventType.$valid, error:!newEventForm.eventType.$valid, 'ng-pristine':newEventForm.eventType.$pristine}" class="control-group">
-                <label class="control-label">Type</label>
+                <label class="control-label">
+                   
+                  Type<span style="color:red !important;">&#42;</span>
+                </label>
                 <div class="controls">
                   <select data-ng-click="viewModel.newEventForm.templateUid = false; viewModel.newEventForm.revisionUid = false;" data-ng-model="viewModel.newEventForm.eventType" name="eventType">
                     <option value="mini">Employee Quiz</option>
@@ -42,7 +44,7 @@
                 </div>
               </div>
               <div data-ng-class="{success:newEventForm.name.$valid, error:!newEventForm.name.$valid, 'ng-pristine':newEventForm.name.$pristine}" class="control-group">
-                <label class="control-label">Name</label>
+                <label class="control-label">Name<span style="color:red !important;">&#42;</span></label>
                 <div class="controls">
                   <input type="text" required="" data-ng-minlength="{{clientOrmShare.event.model.name.validate.len[0]}}" data-ng-maxlength="{{clientOrmShare.event.model.name.validate.len[1]}}" data-ng-model="viewModel.newEventForm.name" name="name" class="large m-wrap"/>
                   <div class="clear"></div><span data-ng-show="newEventForm.name.$error.minlength" class="help-inline">Name must be longer than {{clientOrmShare.event.model.name.validate.len[0]}} characters</span><span data-ng-show="newEventForm.name.$error.maxlength" class="help-inline">Name must be shorter than {{clientOrmShare.event.model.name.validate.len[1]}} characters</span>
@@ -55,7 +57,10 @@
                 </div>
               </div>
               <div data-ng-class="{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}" class="control-group">
-                <label class="control-label">Start Date & Time</label>
+                <label class="control-label">
+                   
+                  Start Date & Time<span style="color:red !important;">&#42;</span>
+                </label>
                 <div class="controls">
                   <input type="text" required="" name="date" data-ng-model="viewModel.newEventForm.date" data-ng-bind="viewModel.newEventForm.date" data-ng-show="false"/>
                   <div style="vertical-align:middle;" class="input-append bootstrap-timepicker-component">
@@ -67,7 +72,7 @@
             <div data-ng-show="viewModel.activeWizardStep == 1" data-ng-animate="{show:'fade-in'}" data-ng-class="{'active':(viewModel.activeWizardStep == 1)}" class="tab-pane">
               <h3 class="block">Choose a template & revision</h3>
               <div data-ng-class="{success:newEventForm.templateUid.$valid, error:!newEventForm.templateUid.$valid, 'ng-pristine':newEventForm.templateUid.$pristine}" class="control-group">
-                <label class="control-label">Template</label>
+                <label class="control-label">Template<span style = "color:red !important;">&#42;</span></label>
                 <div class="controls">
                   <input type="text" required="" name="templateUid" data-ng-model="viewModel.newEventForm.templateUid" data-ng-bind="viewModel.newEventForm.templateUid" data-ng-show="false"/>
                   <p data-ng-show="viewModel.newEventForm.templateUid" class="DTSelectedItemInfo"><span><span class="input-success color-green"><i class="icon-ok"></i></span>{{resourcePool[viewModel.newEventForm.templateUid].name}}</span><br/><a data-ng-click="viewModel.newEventForm.templateUid = false; viewModel.newEventForm.revisionUid = false;" class="btn red mini">Cancel Selection</a></p>
@@ -85,7 +90,10 @@
                 </div>
               </div>
               <div data-ng-class="{success:newEventForm.revisionUid.$valid, error:!newEventForm.revisionUid.$valid, 'ng-pristine':newEventForm.revisionUid.$pristine}" class="control-group">
-                <label class="control-label">Revision</label>
+                <label class="control-label">
+                   
+                  Revision<span style="color:red !important;">&#42;</span>
+                </label>
                 <div class="controls">
                   <input type="text" required="" name="revisionUid" data-ng-model="viewModel.newEventForm.revisionUid" data-ng-bind="viewModel.newEventForm.revisionUid" data-ng-show="false"/>
                   <p style="margin-top:5px; font-size:16px;" data-ng-hide="viewModel.newEventForm.templateUid">Select a template</p>
@@ -105,13 +113,21 @@
                 </div>
               </div>
             </div>
-            <!-- tab-pane-->
             <div data-ng-show="viewModel.activeWizardStep == 2" data-ng-animate="{show:'fade-in'}" data-ng-class="{'active':(viewModel.activeWizardStep == 2)}" class="tab-pane">
-              <h3 class="block">Select participants</h3>
+              <h3 class="block">
+                 
+                Select participants<span style="color:red !important;">&#42;</span>
+              </h3>
               <div data-ng-class="{success:newEventForm.employeeUids.$valid, error:!newEventForm.employeeUids.$valid, 'ng-pristine':newEventForm.employeeUids.$pristine}" class="control-group">
                 <div style="display:none;">
-                  <label data-ng-show="viewModel.newEventForm.eventType == 'mini'" class="control-label">Employees</label>
-                  <label data-ng-show="viewModel.newEventForm.eventType == 'full'" class="control-label">Delegates</label>
+                  <label data-ng-show="viewModel.newEventForm.eventType == 'mini'" class="control-label">
+                     
+                    Employees<span style="color:red !important;">&#42;</span>
+                  </label>
+                  <label data-ng-show="viewModel.newEventForm.eventType == 'full'" class="control-label">
+                     
+                    Delegates<span style="color:red !important;">&#42;</span>
+                  </label>
                 </div>
                 <div style="margin-left:0px;" class="controls">
                   <input type="text" required="" name="employeeUids" data-ng-model="viewModel.newEventForm.employeeUids" data-ng-bind="viewModel.newEventForm.employeeUids" data-ng-show="false"/>
@@ -143,7 +159,7 @@
             <!-- tab-pane-->
           </div>
           <!-- tab-content-->
-          <div data-ng-init="viewModel.newEventForm.submitting = false" class="form-actions clearfix">
+          <div data-ng-init="viewModel.newEventForm.submitting = false" class="form-actions clearfix"><span></span>
             <button data-ng-class="{true:'black',false:'green'}[viewModel.newEventForm.submitting]" data-ng-disabled="!viewModel.isStepValid() || viewModel.newEventForm.submitting" data-ng-show="viewModel.activeWizardStep == 2" data-ng-click="viewModel.submitAddNewExercise()" class="btn button-submit btn-inline pull-right">
               <p data-ng-hide="viewModel.newEventForm.submitting" style="margin-bottom:0px;">Submit&nbsp;<i class="m-icon-swapright m-icon-white"></i></p>
               <p data-ng-show="viewModel.newEventForm.submitting" style="margin-bottom:0px;"><i class="icon-cog icon-spin"></i>Saving...&nbsp;</p>

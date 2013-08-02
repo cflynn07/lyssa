@@ -33,21 +33,21 @@
                     span.desc
                       i.icon-ok
                       | Participants
-          // navbar steps
+
 
           #bar.progress.progress-success.progress-striped
             .bar(style = "width: {{ (viewModel.activeWizardStep+1) / 3.0 * 100 }}%;")
 
           .tab-content
-
-
             .tab-pane(data-ng-show    = "viewModel.activeWizardStep == 0"
                       data-ng-animate = "{show:'fade-in'}"
                       data-ng-class   = "{'active':(viewModel.activeWizardStep == 0)}")
               h3.block Set up a new exercise or quiz
               .control-group(data-ng-class = "{success:newEventForm.eventType.$valid, error:!newEventForm.eventType.$valid, 'ng-pristine':newEventForm.eventType.$pristine}")
 
-                label.control-label Type
+                label.control-label 
+                  |Type
+                  span(style = "color:red !important;") &#42;
                 .controls
                   select(data-ng-click = "viewModel.newEventForm.templateUid = false; viewModel.newEventForm.revisionUid = false;"
                          data-ng-model = "viewModel.newEventForm.eventType"
@@ -73,7 +73,10 @@
 
 
               .control-group(data-ng-class = "{success:newEventForm.name.$valid, error:!newEventForm.name.$valid, 'ng-pristine':newEventForm.name.$pristine}")
-                label.control-label Name
+                label.control-label
+                  |Name
+                  span(style = "color:red !important;") &#42;
+
                 .controls
                   input.large.m-wrap(type              = "text"
                                       required          = ""
@@ -94,7 +97,10 @@
                                          data-ng-model = "viewModel.newEventForm.description"
                                          rows          = "3")
               .control-group(data-ng-class = "{success:newEventForm.date.$valid, error:!newEventForm.date.$valid, 'ng-pristine':newEventForm.date.$pristine}")
-                label.control-label Start Date & Time
+                label.control-label 
+                  |Start Date & Time
+                  span(style = "color:red !important;") &#42;
+
                 .controls
 
                   input(type          = "text"
@@ -120,7 +126,7 @@
             .tab-pane(data-ng-show="viewModel.activeWizardStep == 1", data-ng-animate="{show:'fade-in'}", data-ng-class="{'active':(viewModel.activeWizardStep == 1)}")
               h3.block Choose a template & revision
               .control-group(data-ng-class="{success:newEventForm.templateUid.$valid, error:!newEventForm.templateUid.$valid, 'ng-pristine':newEventForm.templateUid.$pristine}")
-                label.control-label Template
+                label.control-label Template<span style = "color:red !important;">&#42;</span>
                 .controls
                   input(type="text", required="", name="templateUid", data-ng-model="viewModel.newEventForm.templateUid", data-ng-bind="viewModel.newEventForm.templateUid", data-ng-show="false")
                   p.DTSelectedItemInfo(data-ng-show="viewModel.newEventForm.templateUid")
@@ -146,7 +152,10 @@
 
 
               .control-group(data-ng-class="{success:newEventForm.revisionUid.$valid, error:!newEventForm.revisionUid.$valid, 'ng-pristine':newEventForm.revisionUid.$pristine}")
-                label.control-label Revision
+                label.control-label 
+                  |Revision
+                  span(style = "color:red !important;") &#42;
+
                 .controls
                   input(type="text", required="", name="revisionUid", data-ng-model="viewModel.newEventForm.revisionUid", data-ng-bind="viewModel.newEventForm.revisionUid", data-ng-show="false")
                   p(style="margin-top:5px; font-size:16px;", data-ng-hide="viewModel.newEventForm.templateUid") Select a template
@@ -165,13 +174,21 @@
                           th.sorting Date Created
                           th.sorting Change Summary
                           th.sorting_disabled
-            // tab-pane
+
             .tab-pane(data-ng-show="viewModel.activeWizardStep == 2", data-ng-animate="{show:'fade-in'}", data-ng-class="{'active':(viewModel.activeWizardStep == 2)}")
-              h3.block Select participants
+              h3.block 
+                |Select participants
+                span(style = "color:red !important;") &#42;
               .control-group(data-ng-class="{success:newEventForm.employeeUids.$valid, error:!newEventForm.employeeUids.$valid, 'ng-pristine':newEventForm.employeeUids.$pristine}")
                 div(style="display:none;")
-                  label.control-label(data-ng-show="viewModel.newEventForm.eventType == 'mini'") Employees
-                  label.control-label(data-ng-show="viewModel.newEventForm.eventType == 'full'") Delegates
+                  
+                  label.control-label(data-ng-show="viewModel.newEventForm.eventType == 'mini'") 
+                    |Employees
+                    span(style = "color:red !important;") &#42;
+                  label.control-label(data-ng-show="viewModel.newEventForm.eventType == 'full'") 
+                    |Delegates
+                    span(style = "color:red !important;") &#42;
+
                 .controls(style="margin-left:0px;")
                   input(type="text", required="", name="employeeUids", data-ng-model="viewModel.newEventForm.employeeUids", data-ng-bind="viewModel.newEventForm.employeeUids", data-ng-show="false")
                   .box.template-info-box.fade.in(data-ng-show="viewModel.newEventForm.employeeUids.length")
@@ -197,6 +214,8 @@
             // tab-pane
           // tab-content
           .form-actions.clearfix(data-ng-init = "viewModel.newEventForm.submitting = false")
+
+            span
 
             button.btn.button-submit.btn-inline.pull-right(data-ng-class    = "{true:'black',false:'green'}[viewModel.newEventForm.submitting]"
                                                            data-ng-disabled = "!viewModel.isStepValid() || viewModel.newEventForm.submitting"
