@@ -127,7 +127,7 @@ div(data-ng-controller = "ControllerWidgetDictionaryManager")
               .control-group(data-ng-class = "{success:newDictionaryForm.name.$valid, error:!newDictionaryForm.name.$valid, 'ng-pristine':newDictionaryForm.name.$pristine}")
                 label.control-label Name
                 .controls.input-icon
-                  input.span11.m-wrap(type              = "text"
+                  input.large.m-wrap(type              = "text"
                                       name              = "name"
                                       data-ng-model     = "viewModel.newDictionaryForm.name"
                                       data-ng-minlength = "{{clientOrmShare.dictionary.model.name.validate.len[0]}}"
