@@ -24,6 +24,9 @@
               <div class="span6">
                 <button data-ng-hide="viewModel.showAddDictionaryItems" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.showAddDictionaryItems=true;" class="btn green btn-block"><i class="icon-plus m-icon-white"></i>&nbsp;Add Item</button>
               </div>
+              <div class="span6">
+                <button data-ng-hide="viewModel.showRenameDictionary" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.showRenameDictionary=true;" class="btn blue btn-block"><i class="icon-pencil m-icon-white"></i>&nbsp;Rename</button>
+              </div>
             </div>
           </div><br/>
           <div style="display:none;" data-ng-class="{'green sub-portlet':newDictionaryItemForm.$valid, 'grey':newDictionaryItemForm.$invalid}" data-ng-show="viewModel.showAddDictionaryItems" data-ng-animate="{show: 'slideDown', hide: 'slideUp'}" class="portlet box">
@@ -63,7 +66,7 @@
             <thead>
               <tr>
                 <th class="sorting">Item</th>
-                <th class="sorting_disabled">Actions</th>
+                <th class="sorting_disabled"></th>
               </tr>
             </thead>
           </table>

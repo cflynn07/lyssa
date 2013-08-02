@@ -121,7 +121,7 @@ define [
             columnDefsCurrentDictionaryItems: [
               mDataProp:  "name"
               aTargets:   [0]
-              sWidth:     '50%'
+
               mRender: (data, type, full) ->
 
                 name = 'editDictionaryItemForm' + full.uid.replace /-/g, '_'
@@ -132,15 +132,10 @@ define [
                   name: name
                   uid:  uid
                   data: data
-            #,
-            #  mData:     null
-            #  aTargets:  [1]
-            #  mRender: (data, type, full) ->
-            #    return '0'
             ,
               mData:     null
               bSortable: false
-              sWidth:    '10%'
+              sWidth:    '100px'
               aTargets:  [1]
               mRender: (data, type, full) ->
                 name = 'editDictionaryItemForm' + full.uid.replace /-/g, '_'
@@ -167,15 +162,15 @@ define [
             ,
               mData:     null
               bSortable: false
-              sWidth:    '20%'
+              sWidth:    '100px'
               aTargets:  [1]
               mRender: (data, type, full) ->
                 return $scope.getKeysLength(full.dictionaryItems)
             ,
               mData:     null
               bSortable: false
-              sWidth:    '20%'
               aTargets:  [2]
+              sWidth:    '100px'
               mRender: (data, type, full) ->
                 uid      = $scope.escapeHtml(full.uid)
                 viewRoot = $scope.viewRoot

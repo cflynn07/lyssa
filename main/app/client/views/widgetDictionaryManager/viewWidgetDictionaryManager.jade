@@ -36,6 +36,12 @@ div(data-ng-controller = "ControllerWidgetDictionaryManager")
                                            data-ng-click   = "viewModel.showAddDictionaryItems=true;")
                   i.icon-plus.m-icon-white
                   |&nbsp;Add Item
+              .span6
+                button.btn.blue.btn-block(data-ng-hide     = "viewModel.showRenameDictionary"
+                                           data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
+                                           data-ng-click   = "viewModel.showRenameDictionary=true;")
+                  i.icon-pencil.m-icon-white
+                  |&nbsp;Rename
 
           br
 
@@ -111,7 +117,7 @@ div(data-ng-controller = "ControllerWidgetDictionaryManager")
             thead
               tr
                 th.sorting Item
-                th.sorting_disabled Actions
+                th.sorting_disabled
 
 
 
