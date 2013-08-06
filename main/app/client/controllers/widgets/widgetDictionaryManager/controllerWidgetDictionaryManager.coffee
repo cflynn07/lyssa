@@ -34,6 +34,28 @@ define [
           #Trying the object literal as a prop
           #on the scope object approach
           $scope.viewModel =
+
+
+            submitRenameDictionaryForm: ->
+              console.log 'submitRenameDictionaryForm'
+              $scope.viewModel.dictionaryRenameForm.submitting = true
+              apiRequest.put 'dictionary', $scope.viewModel.routeParams.dictionaryUid, {
+                name: $scope.viewModel.dictionaryRenameForm.name
+              }, {}, (response) ->
+                console.log 'response', response
+                $scope.viewModel.closeRenameDictionaryForm();
+
+
+            closeRenameDictionaryForm: ->
+              $scope.viewModel.dictionaryRenameForm = {}
+              $scope.viewModel.showRenameDictionary = false
+              if $scope.dictionaryRenameForm.$setPristine
+                $scope.dictionaryRenameForm.$setPristine()
+
+
+
+
+
             dictionaries:               {}
 
             currentDictionaryUid:       ''

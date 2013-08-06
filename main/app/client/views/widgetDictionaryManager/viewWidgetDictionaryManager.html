@@ -8,7 +8,7 @@
     </div>
     <div data-animate-in="data-animate-in" class="portlet box grey">
       <div class="portlet-title">
-        <h4><span>Edit {{resourcePool[viewModel.routeParams.dictionaryUid].name }}</span></h4>
+        <h4><span>Edit {{ resourcePool[viewModel.routeParams.dictionaryUid].name }}</span></h4>
       </div>
       <div class="portlet-body light-grey"><!--
         <div data-ng-hide="viewModel.currentDictionaryUid &amp;&amp; !resourcePool[viewModel.currentDictionaryUid].deletedAt">
@@ -25,7 +25,7 @@
                 <button data-ng-hide="viewModel.showAddDictionaryItems" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.showAddDictionaryItems=true;" class="btn green btn-block"><i class="icon-plus m-icon-white"></i>&nbsp;Add Item</button>
               </div>
               <div class="span6">
-                <button data-ng-hide="viewModel.showRenameDictionary" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.showRenameDictionary=true;" class="btn blue btn-block"><i class="icon-pencil m-icon-white"></i>&nbsp;Rename</button>
+                <button data-ng-hide="viewModel.showRenameDictionary" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.dictionaryRenameForm.name = resourcePool[viewModel.routeParams.dictionaryUid].name; viewModel.showRenameDictionary=true;" class="btn blue btn-block"><i class="icon-pencil m-icon-white"></i>&nbsp;Rename</button>
               </div>
             </div>
           </div><br/>
@@ -48,6 +48,34 @@
                     <p data-ng-show="!!viewModel.newDictionaryItemForm.submitting" style="margin-bottom:0px;"><i class="icon-cog icon-spin"></i>&nbsp;Saving...</p>
                   </button>
                   <button data-ng-hide="!!viewModel.newDictionaryItemForm.submitting" data-ng-click="viewModel.closeAddNewDictionaryItem()" class="btn red pull-right"><i class="icon-remove m-icon-white"></i>&nbsp;Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div style="display:none;" data-ng-class="{'green sub-portlet':(dictionaryRenameForm.$valid &amp;&amp; !dictionaryRenameForm.$pristine), 'grey':(dictionaryRenameForm.$invalid || dictionaryRenameForm.$pristine)}" data-ng-show="viewModel.showRenameDictionary" data-ng-animate="{show: 'slideDown', hide: 'slideUp'}" class="portlet box">
+            <div class="portlet-title">
+              <h4><span>Rename {{resourcePool[viewModel.routeParams.dictionaryUid].name }}</span></h4>
+            </div>
+            <div class="portlet-body light-grey form">
+              <form name="dictionaryRenameForm" novalidate="novalidate" class="form-horizontal">
+                <div data-ng-class="{success:dictionaryRenameForm.$valid, error:!dictionaryRenameForm.$valid, 'ng-pristine':dictionaryRenameForm.$pristine}" class="control-group">
+                  <label class="control-label">
+                     
+                    New Name<span style="color:red !important;">&#42;</span>
+                  </label>
+                  <div class="controls input-icon">
+                    <input type="text" name="name" data-ng-model="viewModel.dictionaryRenameForm.name" data-ng-minlength="{{clientOrmShare.dictionaryItem.model.name.validate.len[0]}}" data-ng-maxlength="{{clientOrmShare.dictionaryItem.model.name.validate.len[1]}}" data-unique-field="{&quot;resource&quot;: &quot;dictionary&quot;, &quot;uids&quot;:&quot;{{viewModel.dictionaries[viewModel.currentDictionaryUid].uid}}&quot;, &quot;property&quot;:&quot;dictionarItems&quot;, &quot;subProperty&quot;:&quot;name&quot;}" data-required="data-required" class="large m-wrap"/><span class="input-success"><i class="icon-ok"></i></span><span class="input-error"><i class="icon-exclamation-sign"></i></span>
+                    <div class="clear"></div><span data-ng-show="dictionaryRenameForm.name.$error.minlength" class="help-inline">Name must be longer than {{clientOrmShare.dictionary.model.name.validate.len[0]}} characters</span><span data-ng-show="dictionaryRenameForm.name.$error.maxlength" class="help-inline">Name must be shorter than {{clientOrmShare.dictionary.model.name.validate.len[1]}} characters</span>
+                    <!--span.help-inline(data-ng-show = "dictionaryRenameForm.name.$error.uniqueField")-->
+                    <!--  | A item with the name "{{viewModel.dictionaryRenameForm.name}}" already exists in this dictionary-->
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button data-ng-class="{true:'black',false:'green'}[!!viewModel.dictionaryRenameForm.submitting]" type="submit" data-ng-disabled="dictionaryRenameForm.$invalid || dictionaryRenameForm.$pristine || !!viewModel.dictionaryRenameForm.submitting" data-ng-click="viewModel.submitRenameDictionaryForm()" style="margin-left:5px;" class="btn pull-right">
+                    <p data-ng-hide="!!viewModel.dictionaryRenameForm.submitting" style="margin-bottom:0px;"><i class="icon-plus m-icon-white"></i>&nbsp;Update</p>
+                    <p data-ng-show="!!viewModel.dictionaryRenameForm.submitting" style="margin-bottom:0px;"><i class="icon-cog icon-spin"></i>&nbsp;Saving...</p>
+                  </button>
+                  <button data-ng-hide="!!viewModel.dictionaryRenameForm.submitting" data-ng-click="viewModel.closeRenameDictionaryForm()" class="btn red pull-right"><i class="icon-remove m-icon-white"></i>&nbsp;Cancel</button>
                 </div>
               </form>
             </div>

@@ -13,7 +13,7 @@ div(data-ng-controller = "ControllerWidgetDictionaryManager")
     .portlet.box.grey(data-animate-in)
       .portlet-title
         h4
-          span Edit {{resourcePool[viewModel.routeParams.dictionaryUid].name }}
+          span Edit {{ resourcePool[viewModel.routeParams.dictionaryUid].name }}
 
       .portlet-body.light-grey
 
@@ -39,7 +39,7 @@ div(data-ng-controller = "ControllerWidgetDictionaryManager")
               .span6
                 button.btn.blue.btn-block(data-ng-hide     = "viewModel.showRenameDictionary"
                                            data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
-                                           data-ng-click   = "viewModel.showRenameDictionary=true;")
+                                           data-ng-click   = "viewModel.dictionaryRenameForm.name = resourcePool[viewModel.routeParams.dictionaryUid].name; viewModel.showRenameDictionary=true;")
                   i.icon-pencil.m-icon-white
                   |&nbsp;Rename
 
@@ -96,6 +96,80 @@ div(data-ng-controller = "ControllerWidgetDictionaryManager")
                                             data-ng-click = "viewModel.closeAddNewDictionaryItem()")
                     i.icon-remove.m-icon-white
                     |&nbsp;Cancel
+
+
+            
+
+
+
+
+
+
+
+
+          .portlet.box(style             = "display:none;"
+                         data-ng-class   = "{'green sub-portlet':(dictionaryRenameForm.$valid && !dictionaryRenameForm.$pristine), 'grey':(dictionaryRenameForm.$invalid || dictionaryRenameForm.$pristine)}"
+                         data-ng-show    = "viewModel.showRenameDictionary"
+                         data-ng-animate = "{show: 'slideDown', hide: 'slideUp'}")
+            .portlet-title
+              h4
+                span Rename {{resourcePool[viewModel.routeParams.dictionaryUid].name }}
+            .portlet-body.light-grey.form
+              form.form-horizontal(name = "dictionaryRenameForm"
+                                   novalidate)
+                .control-group(data-ng-class = "{success:dictionaryRenameForm.$valid, error:!dictionaryRenameForm.$valid, 'ng-pristine':dictionaryRenameForm.$pristine}")
+                  label.control-label 
+                    |New Name
+                    span(style = "color:red !important;") &#42;
+                  .controls.input-icon
+                    input.large.m-wrap(type              = "text"
+                                       name              = "name"
+                                       data-ng-model     = "viewModel.dictionaryRenameForm.name"
+                                       data-ng-minlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[0]}}"
+                                       data-ng-maxlength = "{{clientOrmShare.dictionaryItem.model.name.validate.len[1]}}"
+                                       data-unique-field = "{\"resource\": \"dictionary\", \"uids\":\"{{viewModel.dictionaries[viewModel.currentDictionaryUid].uid}}\", \"property\":\"dictionarItems\", \"subProperty\":\"name\"}"
+                                       data-required)
+                    span.input-success
+                      i.icon-ok
+                    span.input-error
+                      i.icon-exclamation-sign
+                    .clear
+                    span.help-inline(data-ng-show = "dictionaryRenameForm.name.$error.minlength")
+                      | Name must be longer than {{clientOrmShare.dictionary.model.name.validate.len[0]}} characters
+                    span.help-inline(data-ng-show = "dictionaryRenameForm.name.$error.maxlength")
+                      | Name must be shorter than {{clientOrmShare.dictionary.model.name.validate.len[1]}} characters
+                    //span.help-inline(data-ng-show = "dictionaryRenameForm.name.$error.uniqueField")
+                    //  | A item with the name "{{viewModel.dictionaryRenameForm.name}}" already exists in this dictionary
+                .form-actions
+
+                  button.btn.pull-right(data-ng-class    = "{true:'black',false:'green'}[!!viewModel.dictionaryRenameForm.submitting]"
+                                        type             = "submit"
+                                        data-ng-disabled = "dictionaryRenameForm.$invalid || dictionaryRenameForm.$pristine || !!viewModel.dictionaryRenameForm.submitting"
+                                        data-ng-click    = "viewModel.submitRenameDictionaryForm()"
+                                        style            = "margin-left:5px;")
+                    p(data-ng-hide = "!!viewModel.dictionaryRenameForm.submitting"
+                      style        = "margin-bottom:0px;")
+                      i.icon-plus.m-icon-white
+                      |&nbsp;Update
+                    p(data-ng-show = "!!viewModel.dictionaryRenameForm.submitting"
+                      style        = "margin-bottom:0px;")
+                      i.icon-cog.icon-spin
+                      |&nbsp;Saving...
+
+                  button.btn.red.pull-right(data-ng-hide  = "!!viewModel.dictionaryRenameForm.submitting"
+                                            data-ng-click = "viewModel.closeRenameDictionaryForm()")
+                    i.icon-remove.m-icon-white
+                    |&nbsp;Cancel
+
+
+
+
+
+
+
+
+
+
 
 
           .row-fluid
