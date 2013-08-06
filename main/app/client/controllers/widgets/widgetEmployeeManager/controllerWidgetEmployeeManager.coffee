@@ -139,6 +139,9 @@ define [
               resetHelper()
 
           employees: {}
+
+          employeesListLength: 0
+
           employeeListDT:
             detailRow: (obj) ->
               #return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
@@ -167,6 +170,8 @@ define [
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'employee', [], query, (response) ->
                   if response.code == 200
+
+                    viewModel.employeesListLength = response.response.length
 
                     responseDataString = JSON.stringify(response.response)
                     if cacheResponse == responseDataString

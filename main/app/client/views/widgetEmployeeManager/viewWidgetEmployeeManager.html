@@ -50,7 +50,7 @@
   <div data-ng-show="activeViewType == 'employees'" class="row-fluid">
     <div data-animate-in="data-animate-in" class="portlet box grey">
       <div class="portlet-title">
-        <h4><span>Employees</span></h4>
+        <h4><span>Employees ({{ viewModel.employeesListLength }})</span></h4>
       </div>
       <div class="portlet-body">
         <div data-ng-animate="{show: 'fadeIn'}" data-ng-hide="viewModel.showAddNewEmployee" class="row-fluid"><!--

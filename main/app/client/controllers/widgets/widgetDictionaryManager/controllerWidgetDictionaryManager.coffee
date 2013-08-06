@@ -67,8 +67,11 @@ define [
             newDictionaryForm:          {}
             newDictionaryItemForm:      {}
 
+
+            archivedDictionariesListLength: 0
+            nonArchivedDictionariesListLength: 0
+
             restoreDictionary: (uid) ->
-              console.log uid
               apiRequest.put 'dictionary', uid, {
 
                 deletedAt: null
@@ -101,6 +104,8 @@ define [
                   cacheResponse   = ''
                   oSettings.jqXHR = apiRequest.get 'dictionary', [], query, (response) ->
                     if response.code == 200
+
+                      $scope.viewModel.archivedDictionariesListLength = response.response.length
 
                       responseDataString = JSON.stringify(response.response)
                       if cacheResponse == responseDataString
@@ -174,7 +179,6 @@ define [
                 query.filter.push ['deletedAt', '=', 'null', 'and']
                 query.filter.push ['dictionaryUid', '=', $scope.viewModel.currentDictionaryUid, 'and']
 
-                console.log 'query', query
 
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response) ->
@@ -216,6 +220,8 @@ define [
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'dictionary', [], query, (response) ->
                   if response.code == 200
+
+                    $scope.viewModel.nonArchivedDictionariesListLength = response.response.length
 
                     responseDataString = JSON.stringify(response.response)
                     if cacheResponse == responseDataString

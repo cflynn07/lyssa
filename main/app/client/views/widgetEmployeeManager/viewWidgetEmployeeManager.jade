@@ -84,7 +84,7 @@ div(data-ng-controller = "ControllerWidgetEmployeeManager")
     .portlet.box.grey(data-animate-in)
       .portlet-title
         h4
-          span Employees
+          span Employees ({{ viewModel.employeesListLength }})
       .portlet-body
         .row-fluid(data-ng-animate = "{show: 'fadeIn'}"
                    data-ng-hide    = "viewModel.showAddNewEmployee")

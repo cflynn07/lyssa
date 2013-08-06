@@ -212,6 +212,9 @@ define [
 
 
 
+          archivedListLength:    0
+          nonArchivedListLength: 0
+
 
           restoreTemplate: (uid) ->
             apiRequest.put 'template', uid, {
@@ -220,7 +223,7 @@ define [
               console.log response
 
 
-              
+
           archivedTemplatesListDataTable:
             columnDefs: [
               mData:     null
@@ -301,6 +304,8 @@ define [
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'template', [], query, (response, responseRaw) ->
                   if response.code == 200
+
+                    $scope.viewModel.archivedListLength = response.response.length
 
                     responseDataString = responseRaw #JSON.stringify(response.response)
                     if cacheResponse == responseDataString
@@ -413,6 +418,8 @@ define [
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'template', [], query, (response, responseRaw) ->
                   if response.code == 200
+
+                    $scope.viewModel.nonArchivedListLength = response.response.length
 
                     responseDataString = responseRaw #JSON.stringify(response.response)
                     if cacheResponse == responseDataString
