@@ -71,6 +71,10 @@ module.exports = (app) ->
                       message:
                         clientUid: 'unknown'
 
+                'deletedAt': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
             }, (objects) ->
 
               #updateHelper objects, res
@@ -124,6 +128,11 @@ module.exports = (app) ->
                       success: false
                       message:
                         clientUid: 'unknown'
+
+                'deletedAt': (val, objectKey, object, callback) ->
+                  callback null,
+                    success: true
+
 
             }, (objects) ->
 

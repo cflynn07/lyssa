@@ -16,6 +16,7 @@
             i.icon-pencil
             | Rename
       li
-        a(data-ng-click != "$parent.viewModel.deleteConfirmDialogDictionary('<%= uid %>')")
+        a(data-ng-click != "$parent.viewModel.deleteConfirmDialogDictionary('<%= uid %>')"
+          style          = "color:red;")
           i.icon-trash
           | Archive

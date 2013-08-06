@@ -9,6 +9,7 @@ define [
   'text!views/widgetDictionaryManager/viewWidgetDictionaryManagerDictionaryItemsButtonsEJS.html'
   'text!views/widgetDictionaryManager/viewWidgetDictionaryManagerListButtonsEJS.html'
   'text!views/widgetDictionaryManager/viewWidgetDictionaryManagerDictionaryItemEditEJS.html'
+  'text!views/widgetDictionaryManager/viewWidgetDictionaryManagerArchivedListButtonsEJS.html'
 ], (
   $
   angular
@@ -20,6 +21,7 @@ define [
   viewWidgetDictionaryManagerDictionaryItemsButtonsEJS
   viewWidgetDictionaryManagerListButtonsEJS
   viewWidgetDictionaryManagerDictionaryItemEditEJS
+  viewWidgetDictionaryManagerArchivedListButtonsEJS
 ) ->
   (Module) ->
 
@@ -65,6 +67,85 @@ define [
             newDictionaryForm:          {}
             newDictionaryItemForm:      {}
 
+            restoreDictionary: (uid) ->
+              console.log uid
+              apiRequest.put 'dictionary', uid, {
+
+                deletedAt: null
+              }, {}, (response) ->
+                console.log response
+
+
+            archivedDictionaries:
+              options: 
+                bStateSave:      true
+                iCookieDuration: 2419200
+                bJQueryUI:       false
+                bPaginate:       true
+                bLengthChange:   true
+                bFilter:         false
+                bInfo:           true
+                bDestroy:        true
+                bServerSide:     true
+                bProcessing:     true
+                fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                  query = utilBuildDTQuery ['name'],
+                    ['name'],
+                    oSettings
+
+                  query.filter.push ['deletedAt', '!=', 'null']
+                  query.expand = [{
+                    resource: 'dictionaryItems'
+                  }]
+
+                  cacheResponse   = ''
+                  oSettings.jqXHR = apiRequest.get 'dictionary', [], query, (response) ->
+                    if response.code == 200
+
+                      responseDataString = JSON.stringify(response.response)
+                      if cacheResponse == responseDataString
+                        return
+                      cacheResponse = responseDataString
+
+                      dataArr = _.toArray response.response.data
+
+                      fnCallback
+                        iTotalRecords:        response.response.length
+                        iTotalDisplayRecords: response.response.length
+                        aaData:               dataArr
+              columnDefs: [
+                mDataProp: 'name'
+                aTargets:  [0]
+                bSortable: true
+                mRender: (data, type, full) ->
+                  resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
+                  resHtml += data #+ ' (' + $scope.getKeysLength(full.dictionaryItems) + ')'
+                  resHtml += '</a>'
+                  return resHtml
+              ,
+                mData:     null
+                bSortable: false
+                sWidth:    '100px'
+                aTargets:  [1]
+                mRender: (data, type, full) ->
+                  return $scope.getKeysLength(full.dictionaryItems)
+              ,
+                mData:     null
+                bSortable: false
+                aTargets:  [2]
+                sWidth:    '100px'
+                mRender: (data, type, full) ->
+                  uid      = $scope.escapeHtml(full.uid)
+                  viewRoot = $scope.viewRoot
+
+                  html = new EJS({text: viewWidgetDictionaryManagerArchivedListButtonsEJS}).render
+                    uid:      uid
+                    viewRoot: viewRoot
+              ]
+
+
+
+
             dictionaryItemsOptions:
               bStateSave:      true
               iCookieDuration: 2419200
@@ -85,11 +166,9 @@ define [
                   return
 
 
-
                 #TODO: Fix. This is a band-aid quick fix
                 if query.filter && query.filter.length 
                   query.filter[0][3] = 'and'
-
 
 
                 query.filter.push ['deletedAt', '=', 'null', 'and']
