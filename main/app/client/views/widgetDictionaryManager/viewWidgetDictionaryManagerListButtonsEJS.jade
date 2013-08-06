@@ -10,10 +10,11 @@
     button.btn.dropdown-toggle(data-toggle = "dropdown")
       span.caret
     ul.dropdown-menu.pull-right
-      li
-        a(href = "#")
-          i.icon-pencil
-          | Rename
+      //
+        li
+          a(href = "#")
+            i.icon-pencil
+            | Rename
       li
         a(data-ng-click != "$parent.viewModel.deleteConfirmDialogDictionary('<%= uid %>')")
           i.icon-trash

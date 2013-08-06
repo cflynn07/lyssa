@@ -84,8 +84,18 @@ define [
                 if !$scope.viewModel.currentDictionaryUid
                   return
 
+
+
+                #TODO: Fix. This is a band-aid quick fix
+                if query.filter && query.filter.length 
+                  query.filter[0][3] = 'and'
+
+
+
                 query.filter.push ['deletedAt', '=', 'null', 'and']
                 query.filter.push ['dictionaryUid', '=', $scope.viewModel.currentDictionaryUid, 'and']
+
+                console.log 'query', query
 
                 cacheResponse   = ''
                 oSettings.jqXHR = apiRequest.get 'dictionaryItem', [], query, (response) ->
