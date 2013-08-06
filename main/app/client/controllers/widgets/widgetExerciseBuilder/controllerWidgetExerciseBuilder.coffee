@@ -30,6 +30,7 @@ define [
 
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderDetailsEJS.html'
   'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderTemplateListButtonsEJS.html'
+  'text!views/widgetExerciseBuilder/viewWidgetExerciseBuilderArchivedTemplateListButtonsEJS.html'
   'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderNewTemplateForm.html'
   'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderNewGroupForm.html'
   'text!views/widgetExerciseBuilder/viewPartialExerciseBuilderGroupMenu.html'
@@ -73,6 +74,7 @@ define [
 
   viewWidgetExerciseBuilderDetailsEJS
   viewWidgetExerciseBuilderTemplateListButtonsEJS
+  viewWidgetExerciseBuilderArchivedTemplateListButtonsEJS
   viewPartialExerciseBuilderNewTemplateForm
   viewPartialExerciseBuilderNewGroupForm
   viewPartialExerciseBuilderGroupMenu
@@ -200,6 +202,128 @@ define [
           newTemplateForm:      {}
           newTemplateGroupForm: {}
           editTemplateNameForm: {}
+
+
+
+
+
+
+
+
+
+
+
+          restoreTemplate: (uid) ->
+            apiRequest.put 'template', uid, {
+              deletedAt: null
+            }, {}, (response) ->
+              console.log response
+
+
+              
+          archivedTemplatesListDataTable:
+            columnDefs: [
+              mData:     null
+              aTargets:  [0]
+              bSortable: true
+              mRender: (data, type, full) ->
+                resHtml  = '<a href="#' + $scope.viewRoot + '/' + $scope.escapeHtml(full.uid) + '">'
+                if full.name
+                  resHtml += '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + $scope.escapeHtml(full.name) + '</span>'
+                resHtml += '</a>'
+                return resHtml        
+            ,
+              mData:     null
+              aTargets:  [1]
+              bSortable: true
+              mRender: (data, type, full) ->
+                '{{ resourcePool[\'' + full.employeeUid + '\'].firstName }} {{ resourcePool[\'' + full.employeeUid + '\'].lastName }}'
+            ,
+              mData:     null
+              aTargets:  [2]
+              bSortable: true
+              sWidth:    '125px'
+              mRender: (data, type, full) ->              
+                '{{ resourcePool[\'' + full.uid + '\'].createdAt | date:\'short\' }}'
+            ,
+              mData:     null
+              aTargets:  [3]
+              bSortable: true
+              sWidth:    '75px'
+              mRender: (data, type, full) ->
+                '<span data-ng-show = "resourcePool[\'' + full.uid + '\'].revisions[0].finalized">Yes</span>
+                 <span data-ng-show = "!resourcePool[\'' + full.uid + '\'].revisions[0].finalized">No</span>'
+            ,
+              mData:     null
+              aTargets:  [4]
+              bSortable: false
+              sWidth:    '100px'
+              mRender: (data, type, full) ->
+                uid  = $scope.escapeHtml full.uid
+#                {{ resourcePool['<%= templateUid %>'].revisions[0].uid }}
+
+                if !_.isUndefined(resourcePool[uid].revisions[0])
+                  revisionUid = resourcePool[uid].revisions[0].uid
+                else 
+                  revisionUid = ''
+
+                html = new EJS({text: viewWidgetExerciseBuilderArchivedTemplateListButtonsEJS}).render({
+                  uid: uid
+                })
+
+            ]
+            options:
+              bStateSave:      true
+              iCookieDuration: 2419200
+              bJQueryUI:       false
+              bPaginate:       true
+              bLengthChange:   true
+              bFilter:         false
+              bInfo:           true
+              bDestroy:        true
+              bServerSide:     true
+              bProcessing:     true
+              fnServerData: (sSource, aoData, fnCallback, oSettings) ->
+                query = utilBuildDTQuery ['name', 'employeeUid', 'createdAt'],
+                  ['name', 'employeeUid', 'createdAt'],
+                  oSettings
+
+                query.filter.push ['deletedAt', '!=', 'null']
+                query.expand = [{
+                  resource: 'revisions'
+                  expand: [{
+                    resource: 'template'
+                  },{
+                    resource: 'employee'
+                  }]
+                }]
+
+                cacheResponse   = ''
+                oSettings.jqXHR = apiRequest.get 'template', [], query, (response, responseRaw) ->
+                  if response.code == 200
+
+                    responseDataString = responseRaw #JSON.stringify(response.response)
+                    if cacheResponse == responseDataString
+                      return
+                    cacheResponse = responseDataString
+
+                    dataArr = _.toArray response.response.data
+
+                    fnCallback
+                      iTotalRecords:        response.response.length
+                      iTotalDisplayRecords: response.response.length
+                      aaData:               dataArr
+
+
+
+
+
+
+
+
+
+
+
 
           templatesListDataTable:
             detailRow: (obj) ->
