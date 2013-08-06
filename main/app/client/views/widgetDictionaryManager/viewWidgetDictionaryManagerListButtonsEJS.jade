@@ -3,7 +3,7 @@
 
     a.btn(data-ng-class = "{true:'black', false:'blue'}[viewModel.currentDictionaryUid == '<%= uid %>']"
                   href != "#<%= viewRoot %>/<%= uid %>")
-      | Edit
+      |Edit&nbsp;
       i.m-icon-swapright.m-icon-white(data-ng-hide != "viewModel.currentDictionaryUid == '<%= uid %>'")
       i.m-icon-swapleft.m-icon-white(data-ng-show  != "viewModel.currentDictionaryUid == '<%= uid %>'")
 
@@ -19,4 +19,4 @@
         a(data-ng-click != "$parent.viewModel.deleteConfirmDialogDictionary('<%= uid %>')"
           style          = "color:red;")
           i.icon-trash
-          | Archive
+          |&nbsp;Archive

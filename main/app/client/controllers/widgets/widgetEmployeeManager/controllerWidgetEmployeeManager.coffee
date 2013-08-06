@@ -50,6 +50,10 @@ define [
 
         validCSV:        false
         processingUsers: false
+
+
+
+
         processNewUsers: () ->
           $scope.viewModel.processingUsers = true
 
@@ -118,6 +122,55 @@ define [
           viewModel.newEmployeeManualAddForm = {}
 
         viewModel =
+
+          deleteConfirmDialogEmployee = (employeeUid) ->
+            console.log 'hi'
+            return
+            console.log 'fooba'
+            apiRequest.get 'employee', [employeeUid], {}, (response) ->
+              if response.code == 200
+                title = 'Delete Dialog'
+                msg   = 'Dire Consequences...'
+                btns  = [
+                  result:   false
+                  label:    'Cancel'
+                  cssClass: 'red'
+                ,
+                  result:   true
+                  label:    'Confirm'
+                  cssClass: 'green'
+                ]
+                $dialog.messageBox(title, msg, btns).open()
+                  .then (result) ->
+                    if result
+                      apiRequest.delete 'employee', employeeUid, {}, (result) ->
+
+
+
+          updateEmployee: () ->
+            viewModel.editEmployeeFormSubmitting = true
+            apiRequest.put 'employee', viewModel.routeParams.employeeUid, 
+              firstName: viewModel.editEmployeeForm.firstName
+              lastName:  viewModel.editEmployeeForm.lastName
+              email:     viewModel.editEmployeeForm.email
+              phone:     viewModel.editEmployeeForm.phone
+            , {}, (response) ->
+              window.location.hash = '#' + $scope.viewRoot
+
+
+
+
+
+
+          fetchEmployee: () ->
+            $(window).scrollTop(0)
+            if !viewModel.routeParams.employeeUid
+              return
+
+            apiRequest.get 'employee', [viewModel.routeParams.employeeUid], {}, (response) ->
+              $scope.viewModel.editEmployeeForm = _.extend {}, $scope.resourcePool[viewModel.routeParams.employeeUid]
+
+
           showAddNewEmployee: false
           addNewEmployeeMode: false #Manual || CSV
           showAddNewEmployeeOpen: () ->
@@ -219,9 +272,6 @@ define [
               aTargets:  [4]
               mRender: (data, type, full) ->
                 return 'Delegate' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
-
-
-
             ,
               mData:     null
               bSortable: false
@@ -240,19 +290,37 @@ define [
               aTargets:  [7]
               mRender: (data, type, full) ->
                 return 'bd2' #<span data-ng-bind="resourcePool[\'' + full.uid + '\'].type">' + full.type + '</span>'
-
-
             ,
               mData:     null
               bSortable: false
               aTargets:  [8]
               mRender: (data, type, full) ->
-                return new EJS({text: viewPartialEmployeeManagerListButtonsEJS}).render(full)
+                return new EJS({text: viewPartialEmployeeManagerListButtonsEJS}).render full
+              
             ]
 
 
-        #apiRequest.get 'employee', [], {}, (response) ->
-        #  viewModel.employees = response.response
+
+
+        $scope.$on '$routeChangeSuccess', () ->
+          routeChangeInitialize()
+
+
+
+
+        routeChangeInitialize = ->
+          viewModel.routeParams                = $routeParams
+          viewModel.editEmployeeFormSubmitting = false
+          viewModel.editEmployeeFormSubmitting = false
+          if $scope.editEmployeeForm && $scope.editEmployeeForm.$setPristine
+            $scope.editEmployeeForm.$setPristine()
+          viewModel.fetchEmployee()
+
+
+        routeChangeInitialize()
+
+
+
 
         $scope.viewModel = viewModel
 

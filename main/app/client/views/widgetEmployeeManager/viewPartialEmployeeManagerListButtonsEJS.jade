@@ -1,26 +1,16 @@
 .inline-content.inline-content-responsive(style = "text-align:center;")
   .btn-group(style = "margin-bottom:0px !important; text-align:left;")
 
-    //The transition of class and icon happens 
-    //inside dataTable directive...
-
-    button.btn.green.detail
+    a.btn.green(href != "{{ '#' + viewRoot + '/' }}<%= uid %>")
       | Edit&nbsp;
-      i.m-icon-swapup.m-icon-white(style = "display:none;")
-      i.m-icon-swapdown.m-icon-white
-
-
-    a.btn.detail(style         = "display:none;"
-                 data-ng-click = "$parent.viewModel.editEmployee('<%= uid%>')"
-                 data-ng-class = "{true:'black', false:'blue'}[viewModel.currentTemplate.uid == '<%= uid %>']")
+      i.m-icon-swapright.m-icon-white
 
     button.btn.dropdown-toggle(data-toggle = "dropdown")
       span.caret
-    ul.dropdown-menu.pull-right   
-     
-      //dropdown menu links
 
+    ul.dropdown-menu.pull-right   
       li
-        a.color-red(data-ng-click = "$parent.viewModel.deleteConfirmDialogEmployee('<%= uid %>')")
+        a(data-ng-click != "$parent.viewModel.deleteConfirmDialogEmployee('<%= uid %>')"
+          style          = "color:red;")
           i.icon-trash
-          | Archive Employee
+          |&nbsp;Archive

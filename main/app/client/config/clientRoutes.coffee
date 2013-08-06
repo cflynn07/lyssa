@@ -210,6 +210,20 @@ define [], () ->
           data:  {}
         ]
       ]
+    $routeProvider.when '/admin/themis/settings/employees/:employeeUid',
+      root:     '/admin/themis/settings/employees'
+      group:    'settingsEmployees'
+      subGroup: ''
+      widgetViews: [
+        [
+          name: 'viewNoBreadCrumbs'
+          data: {}
+        ]
+        [
+          name: 'viewWidgetEmployeeManager'
+          data:  {}
+        ]
+      ]
 
 
 
