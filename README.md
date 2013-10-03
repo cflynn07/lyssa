@@ -8,6 +8,7 @@ Requirements
 ------------
 - Vagrant v1.3.1 (http://downloads.vagrantup.com/tags/v1.3.1)
 - Virtual Box (https://www.virtualbox.org/wiki/Downloads)
+- Vagrant Host Manager <pre>vagrant plugin install vagrant-hostmanager</pre>
 - Within the VM (auto-configured & set up by vagrant)
   - Redis
   - MySQL
