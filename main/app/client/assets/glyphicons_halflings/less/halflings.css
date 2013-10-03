@@ -29,7 +29,7 @@ html .halflings {
   position: absolute;
   left: 0;
   top: 0;
-  font: 12px 'Glyphicons Halflings';
+  font: 12px/1em 'Glyphicons Halflings';
   font-style: normal;
   color: #1d1d1b;
 }

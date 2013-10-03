@@ -123,10 +123,12 @@ define [
 
         viewModel =
 
-          deleteConfirmDialogEmployee = (employeeUid) ->
+          deleteConfirmDialogEmployee: (employeeUid) ->
             console.log 'hi'
             return
+
             console.log 'fooba'
+
             apiRequest.get 'employee', [employeeUid], {}, (response) ->
               if response.code == 200
                 title = 'Delete Dialog'
@@ -144,12 +146,11 @@ define [
                   .then (result) ->
                     if result
                       apiRequest.delete 'employee', employeeUid, {}, (result) ->
-
-
+                        return
 
           updateEmployee: () ->
             viewModel.editEmployeeFormSubmitting = true
-            apiRequest.put 'employee', viewModel.routeParams.employeeUid, 
+            apiRequest.put 'employee', viewModel.routeParams.employeeUid,
               firstName: viewModel.editEmployeeForm.firstName
               lastName:  viewModel.editEmployeeForm.lastName
               email:     viewModel.editEmployeeForm.email
@@ -198,9 +199,9 @@ define [
           employeeListDT:
             detailRow: (obj) ->
               #return new EJS({text: viewPartialEmployeeManagerEditEmployeeEJS}).render obj
-              return '<div data-edit-employee 
-                           data-client-orm-share = "clientOrmShare" 
-                           data-resource-pool    = "resourcePool" 
+              return '<div data-edit-employee
+                           data-client-orm-share = "clientOrmShare"
+                           data-resource-pool    = "resourcePool"
                            data-employee-uid     ="' + obj.uid + '"></div>'
 
             options:
@@ -296,7 +297,7 @@ define [
               aTargets:  [8]
               mRender: (data, type, full) ->
                 return new EJS({text: viewPartialEmployeeManagerListButtonsEJS}).render full
-              
+
             ]
 
 

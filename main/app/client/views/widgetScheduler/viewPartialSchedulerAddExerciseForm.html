@@ -23,10 +23,7 @@
             <div data-ng-show="viewModel.activeWizardStep == 0" data-ng-animate="{show:'fade-in'}" data-ng-class="{'active':(viewModel.activeWizardStep == 0)}" class="tab-pane">
               <h3 class="block">Set up a new exercise or quiz</h3>
               <div data-ng-class="{success:newEventForm.eventType.$valid, error:!newEventForm.eventType.$valid, 'ng-pristine':newEventForm.eventType.$pristine}" class="control-group">
-                <label class="control-label">
-                   
-                  Type<span style="color:red !important;">&#42;</span>
-                </label>
+                <label class="control-label">Type<span style="color:red !important;">&#42;</span></label>
                 <div class="controls">
                   <select data-ng-click="viewModel.newEventForm.templateUid = false; viewModel.newEventForm.revisionUid = false;" data-ng-model="viewModel.newEventForm.eventType" name="eventType">
                     <option value="mini">Employee Quiz</option>

@@ -58,7 +58,7 @@ define [], () ->
           data: {}
         ]
       ]
-      
+
     ###
     $routeProvider.when '/admin/themis/templates/:templateUid/:revisionUid',
       root: '/admin/themis/templates'
@@ -91,7 +91,7 @@ define [], () ->
           name: 'viewWidgetExerciseBuilder'
           data: {}
         ]
-      ]    
+      ]
     $routeProvider.when '/admin/themis/templates/mini/:templateUid',
       root: '/admin/themis/templates/mini'
       group: 'templatesQuizes'
@@ -157,12 +157,15 @@ define [], () ->
 
 
 
+
     $routeProvider.when '/admin/themis/settings',
       root:     '/admin/themis/settings'
       group:    'settings'
       subGroup: ''
       widgetViews: [
       ]
+
+
 
 
 
@@ -195,7 +198,7 @@ define [], () ->
         ]
       ]
 
-      
+
     $routeProvider.when '/admin/themis/settings/employees',
       root:     '/admin/themis/settings/employees'
       group:    'settingsEmployees'
@@ -288,7 +291,7 @@ define [], () ->
         #  data: {}
         #,
           name: 'viewWidgetTabs'
-          data: 
+          data:
             tabs: [
               name:       'Calendar'
               widgetName: 'viewWidgetScheduler'
@@ -301,10 +304,10 @@ define [], () ->
         ]
       ]
 
-      widgetData: 
+      widgetData:
         widgetTimeline:  {}
         widgetScheduler: {}
-        widgetTabs: 
+        widgetTabs:
           tabs: [
             title: 'Summary'
             view:  'viewWidgetTimeline'

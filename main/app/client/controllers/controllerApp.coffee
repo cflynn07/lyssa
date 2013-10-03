@@ -40,6 +40,8 @@ define [
       #ORM objects properties/validation rules
       $rootScope.clientOrmShare = clientOrmShare
 
+      $rootScope.rootStatus = 'food';
+
 
 
 

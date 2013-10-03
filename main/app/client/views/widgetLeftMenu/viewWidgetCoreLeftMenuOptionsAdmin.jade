@@ -52,6 +52,14 @@ li(data-ng-class = "{ 'active':(locationHash.indexOf('/admin/themis/templates') 
           data-ng-click = "setCurrentActiveMenuItem('reports')"
           href          = "#/admin/themis/reports/timeline") Timeline
 
+//
+  li(data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/repository') === 0]"
+     data-ng-click = "setCurrentActiveMenuItem('')")
+    a(href = "#/admin/themis/repository")
+      i.icon-table
+      span.title Repository
+      span.selected
+
 
 li(data-ng-class = "{ 'active':(locationHash.indexOf('/admin/themis/settings') === 0), 'open':(currentActiveMenuItem == 'settings') }"
    data-ng-click = "setCurrentActiveMenuItem('settings')")
@@ -71,6 +79,7 @@ li(data-ng-class = "{ 'active':(locationHash.indexOf('/admin/themis/settings') =
       a(data-ng-class = "{true:'active'}[locationHash.indexOf('/admin/themis/settings/employees') === 0]"
         data-ng-click = "setCurrentActiveMenuItem('settings')"
         href          = "#/admin/themis/settings/employees") Employees
+
 
 
 

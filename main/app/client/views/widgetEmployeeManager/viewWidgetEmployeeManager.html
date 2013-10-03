@@ -65,8 +65,10 @@
                   </div>
                 </div>
               </div>
-              <div class="form-actions"><!--
-                <button data-ng-disabled="editEmployeeForm.$invalid || viewModel.editEmployeeFormSubmitting" data-ng-click="viewModel.updateEmployee()" type="submit" class="btn green pull-right"><i class="icon-pencil m-icon-white"></i><span style="color:#FFF !important;" data-ng-show="!viewModel.editEmployeeFormSubmitting">Update Employee</span><span style="color:#FFF !important;" data-ng-show="viewModel.editEmployeeFormSubmitting">Saving...</span></button>-->
+              <div class="form-actions">
+                <!--
+                <button data-ng-disabled="editEmployeeForm.$invalid || viewModel.editEmployeeFormSubmitting" data-ng-click="viewModel.updateEmployee()" type="submit" class="btn green pull-right"><i class="icon-pencil m-icon-white"></i><span style="color:#FFF !important;" data-ng-show="!viewModel.editEmployeeFormSubmitting">Update Employee</span><span style="color:#FFF !important;" data-ng-show="viewModel.editEmployeeFormSubmitting">Saving...</span></button>
+                -->
                 <button data-ng-class="{true:'black',false:'green'}[!!viewModel.editEmployeeFormSubmitting]" type="submit" data-ng-disabled="editEmployeeForm.$invalid || !!viewModel.editEmployeeFormSubmitting" data-ng-click="viewModel.updateEmployee()" class="btn green pull-right">
                   <p data-ng-hide="!!viewModel.editEmployeeFormSubmitting" style="margin-bottom:0px;">&nbsp;Update</p>
                   <p data-ng-show="!!viewModel.editEmployeeFormSubmitting" style="margin-bottom:0px;"><i class="icon-cog icon-spin"></i>&nbsp;Saving...</p>
@@ -132,11 +134,13 @@
           <h4><span>Employees ({{ viewModel.employeesListLength }})</span></h4>
         </div>
         <div class="portlet-body">
-          <div data-ng-animate="{show: 'fadeIn'}" data-ng-hide="viewModel.showAddNewEmployee" class="row-fluid"><!--
+          <div data-ng-animate="{show: 'fadeIn'}" data-ng-hide="viewModel.showAddNewEmployee" class="row-fluid">
+            <!--
             <div class="span6">&nbsp;</div>
             <div class="span6">
               <button style="margin-bottom: 5px;" data-ng-click="viewModel.showAddNewEmployeeOpen()" class="btn green btn-block">Add Employees<i class="m-icon-swapright m-icon-white"></i></button>
-            </div>-->
+            </div>
+            -->
           </div>
           <table data-data-table="viewModel.employeeListDT.options" ao-column-defs="viewModel.employeeListDT.columnDefs" data-parent-model="viewModel.employeeListDT" aa-data="viewModel.employees" data-parent-data-table-view-model-prop="employeeListDT" update-on-resource-post="employee" fn-row-callback="fn-row-callback" class="table table-striped table-hover table-bordered dataTable">
             <thead>

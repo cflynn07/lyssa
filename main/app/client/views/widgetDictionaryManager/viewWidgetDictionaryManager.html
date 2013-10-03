@@ -10,14 +10,16 @@
       <div class="portlet-title">
         <h4><span>Edit {{ resourcePool[viewModel.routeParams.dictionaryUid].name }}</span></h4>
       </div>
-      <div class="portlet-body light-grey"><!--
+      <div class="portlet-body light-grey">
+        <!--
         <div data-ng-hide="viewModel.currentDictionaryUid &amp;&amp; !resourcePool[viewModel.currentDictionaryUid].deletedAt">
           <div class="box template-info-box fade in ng-scope">
             <div class="inline-content"><strong><i style="vertical-align:middle; margin-top:0;" class="m-icon-big-swapleft"></i></strong>
               <h3>Select Dictionary</h3>
             </div>
           </div>
-        </div>-->
+        </div>
+        -->
         <div data-ng-show="viewModel.currentDictionaryUid &amp;&amp; !resourcePool[viewModel.currentDictionaryUid].deletedAt">
           <div class="row-fluid">
             <div class="span3">
@@ -178,8 +180,10 @@
                   <th class="sorting_disabled">Actions</th>
                 </tr>
               </thead>
-            </table><!--
-            <button style="margin-bottom: 5px;" data-ng-hide="viewModel.showAddNewDictionary" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.showAddNewDictionary=true;" class="btn btn-block">Show Archived<i class="m-icon-swapdown"></i></button>-->
+            </table>
+            <!--
+            <button style="margin-bottom: 5px;" data-ng-hide="viewModel.showAddNewDictionary" data-ng-animate="{show: 'fadeIn', hide: 'fadeOut'}" data-ng-click="viewModel.showAddNewDictionary=true;" class="btn btn-block">Show Archived<i class="m-icon-swapdown"></i></button>
+            -->
           </div>
         </div>
       </div>

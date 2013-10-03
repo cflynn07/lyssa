@@ -13,7 +13,7 @@ employee  = ORM.model 'employee'
 client    = ORM.model 'client'
 
 module.exports = () ->
-  app = GLOBAL.app 
+  app = GLOBAL.app
 
   status = (req) ->
     if !_.isUndefined(req.session.user)
@@ -40,7 +40,9 @@ module.exports = () ->
     async.waterfall [
       (callback) ->
 
-        client.find 
+        console.log 'clientIdentifier ' + clientIdentifier
+
+        client.find
           where:
             identifier: clientIdentifier
         .success (resultClient) ->
@@ -48,7 +50,7 @@ module.exports = () ->
           callback null, resultClient
 
       (resultClient, callback) ->
-        
+
         if !resultClient
           callback (new Error())
           return
@@ -67,7 +69,7 @@ module.exports = () ->
 
       if err || !resultUser
         req.io.respond success: false
-      else 
+      else
         bcrypt.compare req.data.password, resultUser.password, (err, res) ->
           if res
 
@@ -92,7 +94,7 @@ module.exports = () ->
          #   req.io.room('super_admins').broadcast 'user_authenticate', user
 
             req.session.save () ->
-              req.io.respond 
+              req.io.respond
                 success: true
                 user:    userValues
           else
