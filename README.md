@@ -4,6 +4,11 @@ COBAR SYSTEMS - THEMIS
 - Production Server:  http://lyssa.cobarsystems.com/
 - Development Server: http://lyssa.cobarsystems.com/
 
+Instructions
+------------
+- Clone this repository
+- Within the repo run: git submodule init && git submodule update
+
 Requirements
 ------------
 - Vagrant v1.3.1 (http://downloads.vagrantup.com/tags/v1.3.1)
