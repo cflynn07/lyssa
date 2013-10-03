@@ -7,7 +7,7 @@ COBAR SYSTEMS - THEMIS
 Instructions
 ------------
 - Clone this repository
-- Within the repo run: git submodule init && git submodule update
+- Within the repo run: <pre>git submodule init && git submodule update</pre>
 
 Requirements
 ------------
