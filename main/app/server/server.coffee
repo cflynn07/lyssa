@@ -57,7 +57,7 @@ app.configure () ->
   app.use express.session
     secret: 'c9d7732c0de118325e6de4582b37a4e9'
     store:  redisStore
-    cookie: 
+    cookie:
       maxAge: 31536000000 # 1 day
 
   ###

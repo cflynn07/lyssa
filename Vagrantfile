@@ -22,9 +22,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "ohai"
     chef.add_recipe "openssl"
     chef.add_recipe "mysql"
+    chef.add_recipe "database"
     chef.add_recipe "nginx"
     chef.add_recipe "redis"
     chef.add_recipe "nodejs"
+    chef.add_recipe "lyssa"
   end
 
   # Create a forwarded port mapping which allows access to a specific port
@@ -34,15 +36,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network :private_network, ip: "192.168.3.10"
-  config.vm.hostname = "lyssa.cobarsystems.test"
-  config.hostsupdater.aliases = ["foo.cobarsystems.test", "bar.cobarsystems.test"]
+  config.vm.network :private_network, ip: "10.0.0.100"
 
+  config.vm.provision :hostmanager
+  config.vm.hostname = "cobarsystems.dev"
+  config.hostsupdater.aliases = ["lyssa.cobarsystems.dev", "company.cobarsystems.dev"]
+
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  config.vm.network :public_network
+  # config.vm.network :public_network
 
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
