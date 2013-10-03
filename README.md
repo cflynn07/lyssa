@@ -6,9 +6,12 @@ COBAR SYSTEMS - THEMIS
 
 Requirements
 ------------
-- Redis
-- MySQL
-- Node.js v0.8.18
+- Vagrant v1.3.1 (http://downloads.vagrantup.com/tags/v1.3.1)
+- Virtual Box (https://www.virtualbox.org/wiki/Downloads)
+- Within the VM (auto-configured & set up by vagrant)
+  - Redis
+  - MySQL
+  - Node.js v0.8.18
 
 Development Environment Setup
 -----------------------------
