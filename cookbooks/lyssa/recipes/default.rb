@@ -26,6 +26,14 @@ bash "install_global_npm_modules" do
   EOH
 end
 
+bash "compile_coffeescript" do
+  user "root"
+  cwd "/vagrant/main/app"
+  code <<-EOH
+  coffee -c .
+  EOH
+end
+
 bash "start_app" do
   user "root"
   cwd "/vagrant/main/app/server"
