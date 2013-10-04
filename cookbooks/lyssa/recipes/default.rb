@@ -40,6 +40,6 @@ bash "start_app" do
   code <<-EOH
   npm uninstall bcrypt
   npm install bcrypt
-  nodefront start server.js
+  forever start server.js
   EOH
 end
