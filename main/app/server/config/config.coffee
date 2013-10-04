@@ -158,11 +158,14 @@ else if GLOBAL.env and GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN
 else
   #local development
   config.mysql =
-    host: 'localhost'
+    host: '127.0.0.1'
     user: 'root'
     pass: 'password'
     port: 3306
     db:   'development'
+
+console.log 'config.mysql'
+console.log config.mysql
 
 
 module.exports = config
