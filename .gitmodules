@@ -1,3 +1,0 @@
-[submodule "cookbooks/database"]
-	path = cookbooks/database
-	url = https://github.com/opscode-cookbooks/database.git
