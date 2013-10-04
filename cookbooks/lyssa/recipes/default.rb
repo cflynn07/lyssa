@@ -22,7 +22,7 @@ bash "install_global_npm_modules" do
   npm install -g nodefront
   npm install -g nodemon
   npm install -g grunt
-  npm install -g supervisor
+  npm install -g forever
   EOH
 end
 
@@ -40,6 +40,6 @@ bash "start_app" do
   code <<-EOH
   npm uninstall bcrypt
   npm install bcrypt
-  nohup supervisor -w "./" server.js &
+  nodefront start server.js
   EOH
 end
