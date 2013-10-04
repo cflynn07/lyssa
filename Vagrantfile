@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "mysql"
     #chef.add_recipe "database"
 
-    chef.add_recipe "nginx_custom"
+    chef.add_recipe "nginx"
     chef.add_recipe "redis"
     chef.add_recipe "nodejs"
     chef.add_recipe "lyssa"
