@@ -1,25 +1,11 @@
-
-# externalize conection info in a ruby hash
-#mysql_connection_info = {
-#  :host => "localhost",
-#  :username => 'root',
-#  :password => node['mysql']['server_root_password']
-#}
-
-# drop if exists, then create a mysql database named DB_NAME
-#mysql_database 'development' do
-#  connection mysql_connection_info
-#  action [:drop, :create]
-#end
-
-#or import from a dump file
-#mysql_database "development" do
-#  connection mysql_connection_info
-#  sql "source /vagrant/main/app/tests/apiTests/lyssa.sql;"
-#end
-###
-
-
+bash "import_database" do
+  user "root"
+  cwd "/tmp"
+  code <<-EOH
+  mysql -uroot -ppassword -e "create database if not exists development"
+  mysql development -uroot -ppassword -e "source /vagrant/main/app/tests/apiTests/lyssa.sql"
+  EOH
+end
 
 bash "install_global_npm_modules" do
   user "root"
@@ -36,6 +22,7 @@ bash "install_global_npm_modules" do
   npm install -g nodefront
   npm install -g nodemon
   npm install -g grunt
+  npm install -g supervisor
   EOH
 end
 
@@ -43,6 +30,8 @@ bash "start_app" do
   user "root"
   cwd "/vagrant/main/app/server"
   code <<-EOH
-  nodemon server.js
+  npm uninstall bcrypt
+  npm install bcrypt
+  nohup supervisor -w "./" server.js &
   EOH
 end
