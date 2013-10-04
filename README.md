@@ -4,11 +4,20 @@ COBAR SYSTEMS - THEMIS
 - Production Server:  http://lyssa.cobarsystems.com/
 - Development Server: http://lyssa.cobarsystems.com/
 
+Instructions
+------------
+- Clone this repository
+- Within the repo run: <pre>git submodule init && git submodule update</pre>
+
 Requirements
 ------------
-- Redis
-- MySQL
-- Node.js v0.8.18
+- Vagrant v1.3.1 (http://downloads.vagrantup.com/tags/v1.3.1)
+- Virtual Box (https://www.virtualbox.org/wiki/Downloads)
+- Vagrant Host Manager <pre>vagrant plugin install vagrant-hostmanager</pre>
+- Within the VM (auto-configured & set up by vagrant)
+  - Redis
+  - MySQL
+  - Node.js v0.8.18
 
 Development Environment Setup
 -----------------------------
