@@ -21,8 +21,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "build-essential"
     chef.add_recipe "ohai"
     chef.add_recipe "openssl"
+
+    chef.add_recipe "aws"
+    chef.add_recipe "xfs"
     chef.add_recipe "mysql"
-    chef.add_recipe "database"
+    #chef.add_recipe "database"
+
     chef.add_recipe "nginx"
     chef.add_recipe "redis"
     chef.add_recipe "nodejs"

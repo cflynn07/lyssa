@@ -1,22 +1,23 @@
+
 # externalize conection info in a ruby hash
-mysql_connection_info = {
-  :host => "localhost",
-  :username => 'root',
-  :password => node['mysql']['server_root_password']
-}
+#mysql_connection_info = {
+#  :host => "localhost",
+#  :username => 'root',
+#  :password => node['mysql']['server_root_password']
+#}
 
 # drop if exists, then create a mysql database named DB_NAME
-mysql_database 'development' do
-  connection mysql_connection_info
-  action [:drop, :create]
-end
+#mysql_database 'development' do
+#  connection mysql_connection_info
+#  action [:drop, :create]
+#end
 
 #or import from a dump file
-mysql_database "development" do
-  connection mysql_connection_info
-  sql "source /vagrant/main/app/tests/apiTests/lyssa.sql;"
-end
-
+#mysql_database "development" do
+#  connection mysql_connection_info
+#  sql "source /vagrant/main/app/tests/apiTests/lyssa.sql;"
+#end
+###
 
 
 

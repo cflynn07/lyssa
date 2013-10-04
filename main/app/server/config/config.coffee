@@ -141,7 +141,7 @@ else
 #MySQL parameters
 if process.env.CIRCLECI
   #CircleCI CI
-  config.mysql = 
+  config.mysql =
     host: 'localhost'
     user: ''
     pass: ''
@@ -149,21 +149,21 @@ if process.env.CIRCLECI
     db:   'circle_test'
 else if GLOBAL.env and GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN
   #dotCloud
-  config.mysql = 
+  config.mysql =
     host: GLOBAL.env.DOTCLOUD_DB_MYSQL_HOST
     user: GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN
     pass: GLOBAL.env.DOTCLOUD_DB_MYSQL_PASSWORD
     port: GLOBAL.env.DOTCLOUD_DB_MYSQL_PORT
     db:   'production'
-else 
+else
   #local development
-  config.mysql = 
+  config.mysql =
     host: 'localhost'
     user: 'root'
-    pass: ''
+    pass: 'password'
     port: 3306
-    db:   'lyssa'
+    db:   'development'
 
 
-module.exports = config 
+module.exports = config
 
