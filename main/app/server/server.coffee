@@ -1,6 +1,8 @@
 #For including modules with absolute file paths
 GLOBAL.appRoot = __dirname + '/'
 
+# change
+
 fs      = require 'fs'
 express = require 'express.io'
 path    = require 'path'

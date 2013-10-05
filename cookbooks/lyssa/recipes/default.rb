@@ -11,7 +11,7 @@ bash "install_global_npm_modules" do
   user "root"
   cwd "/tmp"
   code <<-EOH
-  npm install -g ejs
+  npm insvtall -g ejs
   npm install -g jade
   npm install -g less
   npm install -g coffee-script
@@ -19,8 +19,6 @@ bash "install_global_npm_modules" do
   npm install -g hbs
   npm install -g marked
   npm install -g sass
-  npm install -g nodefront
-  npm install -g nodemon
   npm install -g grunt
   npm install -g forever
   EOH
@@ -34,12 +32,29 @@ bash "compile_coffeescript" do
   EOH
 end
 
+bash "reinstall_bcrypt" do
+  user "root"
+  cwd "/vagrant/main/app/server"
+  code <<-EOH
+  npm uninstall bcrypt
+  npm install bcrypt
+  EOH
+end
+
+bash "start_nodecompile" do
+  user "root"
+  cwd "/vagrant/main/app"
+  code <<-EOH
+  nodefront compile -r -w ./
+  EOH
+end
+
 bash "start_app" do
   user "root"
   cwd "/vagrant/main/app/server"
   code <<-EOH
   npm uninstall bcrypt
   npm install bcrypt
-  forever start server.js
+  sudo forever start --watch -l forever.log -o /var/log/lyssa-output.log -e /var/log/lyssa-error.log server.js
   EOH
 end

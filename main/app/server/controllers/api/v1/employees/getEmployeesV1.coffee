@@ -46,8 +46,6 @@ module.exports = (app) ->
 
     ]
 
-
-
   app.get config.apiSubDir + '/v1/employees/:id', (req, res) ->
     async.series [
       (callback) ->
@@ -80,13 +78,3 @@ module.exports = (app) ->
 
             apiExpand(req, res, employee, params)
     ]
-
-
-
-
-
-
-
-
-
-

@@ -164,9 +164,5 @@ else
     port: 3306
     db:   'development'
 
-console.log 'config.mysql'
-console.log config.mysql
-
-
 module.exports = config
 
