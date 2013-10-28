@@ -1,14 +1,15 @@
 define [
+  'app'
   'jquery'
   'jquery-ui'
 ], (
+  app
   $
   jqueryUi
 ) ->
 
-  (Module) ->
-
-    Module.directive 'datepicker', () ->
+  app.directive 'datepicker', [
+    () ->
       directive =
         restrict:   'A'
         #transclude: false
@@ -32,3 +33,4 @@ define [
                 return
           )
               #$parse()
+  ]

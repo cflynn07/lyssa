@@ -1,19 +1,26 @@
 define [
+  'app'
   'angular'
   'text!views/viewWidgetCoreFooter.html'
 ], (
+  app
   angular
   viewWidgetCoreFooter
 ) ->
-  (Module) ->
 
-    Module.run ['$templateCache',
+  app.run [
+    '$templateCache'
     ($templateCache) ->
       $templateCache.put 'viewWidgetCoreFooter', viewWidgetCoreFooter
-    ]
+  ]
 
-    Module.controller 'ControllerWidgetCoreFooter', ['$scope', 'authenticate',
-    ($scope, authenticate) ->
+  app.controller 'ControllerWidgetCoreFooter', [
+    '$scope'
+    'authenticate'
+    ($scope
+      authenticate) ->
+
       $scope.logout = () ->
         authenticate.unauthenticate()
-    ]
+
+  ]

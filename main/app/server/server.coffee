@@ -1,8 +1,6 @@
 #For including modules with absolute file paths
 GLOBAL.appRoot = __dirname + '/'
 
-# change
-
 fs      = require 'fs'
 express = require 'express.io'
 path    = require 'path'
@@ -43,7 +41,6 @@ app.io.set 'transports', [
   'xhr-polling'
   'jsonp-polling'
 ]
-
 
 app.configure () ->
 
@@ -92,12 +89,8 @@ app.io.route 'apiRequest', (req) ->
       app.router req, res, () ->
         req.io.respond config.errorResponse(404)
 
-
 #Mount all controllers (API & Regular)
 require(GLOBAL.appRoot + 'components/controllers')(app)
-
-
-
 
 ###
 test = require('./config/redis').createClient()
@@ -105,8 +98,6 @@ setInterval () ->
   test.publish 'eventsUpdated', 'test message'
 , 1000
 ###
-
-
 
 app.listen app.get 'port'
 console.log 'server listening on port: ' + app.get 'port'

@@ -1,26 +1,24 @@
 define [
+  'app'
   'jquery'
-  'angular'
   'underscore'
   'underscore_string'
   'spacetree'
 ], (
+  app
   $
-  angular
   _
   underscore_string
   $jit
 ) ->
 
-  (Module) ->
-
-    Module.directive "spaceTree", ($compile) ->
+  app.directive "spaceTree", [
+    '$compile'
+    ($compile) ->
       directive =
         restrict: 'A'
         scope: 'isolate'
         link: (scope, element, attrs) ->
-
-
 
           json =
             id: 'node02'
@@ -52,8 +50,6 @@ define [
               data: {}
               children: []
             }]
-
-
 
 
           id = 'food' #'spacetree_' + Math.random(1000)
@@ -104,5 +100,4 @@ define [
           st.loadJSON json
           st.compute()
           st.onClick st.root
-
-
+  ]

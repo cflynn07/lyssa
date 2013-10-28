@@ -9,12 +9,16 @@ define [
   (Module) ->
 
 
-    Module.run ['$templateCache', ($templateCache) ->
-      $templateCache.put 'viewWidget4oh4', viewWidget4oh4
+    Module.run [
+      '$templateCache'
+      ($templateCache) ->
+        $templateCache.put 'viewWidget4oh4', viewWidget4oh4
     ]
 
-    Module.controller 'ControllerWidget4oh4', ['$scope', '$route', ($scope, $route) ->
-
-
+    Module.controller 'ControllerWidget4oh4', [
+      '$scope'
+      '$route'
+      ($scope
+        $route) ->
 
     ]

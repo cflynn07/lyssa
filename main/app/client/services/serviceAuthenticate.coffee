@@ -1,10 +1,16 @@
 define [
+  'app'
 ], (
+  app
 ) ->
 
-  (Module) ->
-    Module.factory 'authenticate', ['$rootScope', 'socket', 'apiRequest'
-    ($rootScope, socket, apiRequest) ->
+  app.factory 'authenticate', [
+    '$rootScope'
+    'socket'
+    'apiRequest'
+    ($rootScope
+      socket
+      apiRequest) ->
 
       factory =
         authenticate: (user) ->
@@ -27,4 +33,4 @@ define [
             #$rootScope.resourcePool           = {}
             #$rootScope.resourceCollectionPool = {}
 
-    ]
+  ]

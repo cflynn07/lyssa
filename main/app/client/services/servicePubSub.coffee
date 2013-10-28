@@ -1,9 +1,10 @@
 define [
+  'app'
   'pubsub'
 ], (
+  app
   PubSub
 ) ->
 
-  (Module) ->
-    Module.factory 'pubsub', () ->
-      PubSub
+  app.factory 'pubsub', () ->
+    PubSub

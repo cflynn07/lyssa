@@ -1,16 +1,17 @@
 define [
+  'app'
   'jquery'
   'jquery-ui'
   'underscore'
 ], (
+  app
   $
   jqueryUi
   _
 ) ->
 
-  (Module) ->
-
-    Module.directive 'calendar', () ->
+  app.directive 'calendar', [
+    () ->
       directive =
         restrict: 'A'
         template: '<div class="calendar"></div>'
@@ -31,8 +32,6 @@ define [
             activated = true
             calendarElem.fullCalendar $scope.options
 
-
-
           #Listen for events to refetch events
           $scope.$on 'resourcePost', (e, data) ->
             if data['resourceName'] == $scope.refetchOnPost
@@ -52,3 +51,4 @@ define [
             if $scope.activateWatch is true
               activate()
           , true
+  ]

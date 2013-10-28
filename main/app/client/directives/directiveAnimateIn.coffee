@@ -1,17 +1,17 @@
 define [
+  'app'
   'jquery'
 ], (
+  app
   $
 ) ->
 
-  (Module) ->
-
-    Module.directive 'animateIn', () ->
+  app.directive 'animateIn', [
+    () ->
       (scope, element, attrs) ->
 
         element.addClass 'animated fadeIn'
         #return
-
 
         #console.log 'p1'
         loadingHTML = "<div class=\"loading-indicator\">
@@ -58,4 +58,4 @@ define [
           #  opacity: init_opacity + ((1.0 - init_opacity) * (num / max))
 
         , 50)
-
+  ]

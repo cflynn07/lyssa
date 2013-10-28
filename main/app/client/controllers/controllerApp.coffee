@@ -1,15 +1,15 @@
 define [
+  'app'
   'jquery'
   'underscore'
-  'angular'
   'config/clientConfig'
   'config/clientConfigHelperMethods'
   'text!views/viewCore.html'
   'text!config/clientOrmShare.json'
 ], (
+  app
   $
   _
-  angular
   clientConfig
   clientConfigHelperMethods
   viewCore
@@ -19,15 +19,23 @@ define [
   #Server dumps out JSON of ORM objects in a text file. Parse it to get object literal.
   clientOrmShare = JSON.parse clientOrmShare
 
-  (Module) ->
-
-    Module.run ['$templateCache',
+  app.run [
+    '$templateCache',
     ($templateCache) ->
       $templateCache.put 'viewCore', viewCore
-    ]
+  ]
 
-    Module.controller 'ControllerApp' , ['$rootScope', '$route', '$routeParams', 'socket', 'authenticate',
-    ($rootScope, $route, $routeParams, socket, authenticate) ->
+  app.controller 'ControllerApp' , [
+    '$rootScope'
+    '$route'
+    '$routeParams'
+    'socket'
+    'authenticate'
+    ($rootScope,
+      $route,
+      $routeParams,
+      socket,
+      authenticate) ->
 
 
       #Attach some helper methods to the rootScope to be used in views throughout
@@ -41,8 +49,6 @@ define [
       $rootScope.clientOrmShare = clientOrmShare
 
       $rootScope.rootStatus = 'food';
-
-
 
 
       #quick hack
@@ -59,8 +65,6 @@ define [
         $rootScope.routeParams = $routeParams
 
 
-
-
       #Get status, determine if user is authenticated or not.
       #unauthenticated shows login prompt, authenticated shows application
       socket.emit 'authenticate:status', {}, (response) ->
@@ -68,5 +72,4 @@ define [
           authenticate.authenticate response.user
         else
           authenticate.unauthenticate()
-
-    ]
+  ]

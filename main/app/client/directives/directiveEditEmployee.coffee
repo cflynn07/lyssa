@@ -1,18 +1,20 @@
 define [
+  'app'
   'jquery'
   'jquery-ui'
   'underscore'
   'text!views/widgetEmployeeManager/viewPartialEmployeeManagerEditEmployeeEJS.html'
 ], (
+  app
   $
   jqueryUi
   _
   viewPartialEmployeeManagerEditEmployeeEJS
 ) ->
 
-  (Module) ->
-
-    Module.directive 'editEmployee', (apiRequest) ->
+  app.directive 'editEmployee', [
+    'apiRequest'
+    (apiRequest) ->
       directive =
         restrict: 'A'
         template: viewPartialEmployeeManagerEditEmployeeEJS
@@ -33,7 +35,7 @@ define [
             #Runs once at initialization, set to true for first run
             if _.isUndefined $scope.dataIsSynced
               $scope.dataIsSynced = true
-            else 
+            else
               $scope.dataIsSynced = false
 
             console.log '$scope.dataIsSynced'
@@ -54,4 +56,4 @@ define [
               $scope.dataIsSynced         = true
               $scope.updateInProgress     = false
               $scope.updateActionComplete = true
-
+  ]

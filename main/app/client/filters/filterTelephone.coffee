@@ -1,13 +1,14 @@
 define [
+  'app'
   'underscore'
 ], (
+  app
   _
 ) ->
 
   #https://github.com/angular/angular.js/issues/1286
-  (Module) ->
-
-    Module.filter 'tel', () ->
+  app.filter 'tel', [
+    () ->
       (tel) ->
 
         value = tel.toString().trim().replace /^\+/, ''
@@ -35,3 +36,4 @@ define [
 
         number = number.slice(0, 3) + '-' + number.slice(3)
         return (country + ' (' + city + ') ' +number).trim()
+  ]

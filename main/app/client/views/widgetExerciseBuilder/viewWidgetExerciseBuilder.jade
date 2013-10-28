@@ -5,7 +5,7 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
 
 
     .row-fluid
-      .span3(style = "padding-bottom:10px;")      
+      .span3(style = "padding-bottom:10px;")
         .span6
           button.btn.green.btn-block(data-ng-hide    = "viewModel.showAddNewTemplate"
                                      data-ng-animate = "{show: 'fadeIn', hide: 'fadeOut'}"
@@ -27,7 +27,7 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
 
 
 
-    .row-fluid 
+    .row-fluid
        div(data-ng-include = "'viewPartialExerciseBuilderNewTemplateForm'")
 
 
@@ -53,7 +53,7 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
                   th.sorting_disabled Owner
                   th.sorting_disabled Date
                   th.sorting_disabled Finalized
-                  th.sorting_disabled     
+                  th.sorting_disabled
 
 
 
@@ -78,14 +78,14 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
                   th.sorting_disabled Owner
                   th.sorting_disabled Date
                   th.sorting_disabled Finalized
-                  th.sorting_disabled        
+                  th.sorting_disabled
 
   div(data-ng-show  = "viewModel.routeParams.revisionUid"
       data-ng-class = "{true:'span12 no-second-box-margin', false:'span7'}[(viewModel.templatesListCollapsed && viewModel.routeParams.revisionUid)]")
-    
+
 
     .row-fluid()
-      .span3(style = "padding-bottom:10px;")      
+      .span3(style = "padding-bottom:10px;")
         .span6
           a.btn.blue(href = "{{ '#' + viewRoot }}")
             i.icon-arrow-left.m-icon-white
@@ -140,7 +140,7 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
                                                        data-ng-click = "viewModel.showEditTemplateName = false; formEditTemplateName.$setPristine(); viewModel.formEditTemplateName.name=viewModel.currentTemplate.name;")
                           i.icon-remove.m-icon-white
                           | Cancel
-            
+
             .row-fluid
               .span6
                 button.btn.blue.btn-block(style           = "margin-bottom: 5px;"
@@ -174,7 +174,7 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
           .box.template-info-box.fade.in(data-ng-init = "editRevisionChangeSummary = false")
             h4(style = "font-weight:600; margin-top:0;")
               span Revision Change Summary
-           
+
             div(data-ng-show = "resourcePool[viewModel.routeParams.revisionUid].finalized")
               p(style        = "font-size:14px;"
                 data-ng-hide = "editRevisionChangeSummary")
@@ -196,8 +196,8 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
               .span12(data-ng-show = "editRevisionChangeSummary"
                       style        = "margin-left:0;")
                 button.btn.green.btn-block.span6(data-ng-show     = "editRevisionChangeSummary"
-                                                 style            = "margin-bottom: 5px;", 
-                                                 data-ng-disabled = "resourcePool[viewModel.routeParams.revisionUid].changeSummary == viewModel.revisionChangeSummary", 
+                                                 style            = "margin-bottom: 5px;",
+                                                 data-ng-disabled = "resourcePool[viewModel.routeParams.revisionUid].changeSummary == viewModel.revisionChangeSummary",
                                                  data-ng-click    = "viewModel.putRevisionChangeSummary(); editRevisionChangeSummary = false;")
                   i.icon-save.m-icon-white
                   | Save
@@ -330,4 +330,4 @@ div(data-ng-controller = "ControllerWidgetExerciseBuilder")
                             div(data-ng-switch-when="yesNo")
                             // yesNo
                             div(data-ng-include="'viewPartialExerciseBuilderFieldSlider'", data-ng-switch-when="slider")
-                 
+

@@ -1,8 +1,14 @@
 define [
+  'app'
 ], (
+  app
 ) ->
-  (Module) ->
 
-    Module.controller 'ControllerWidgetExerciseBuilderFieldManageOpenResponse', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
-    ]
+  app.controller 'ControllerWidgetExerciseBuilderFieldManageOpenResponse', [
+    '$scope'
+    'apiRequest'
+    '$dialog',
+    ($scope
+      apiRequest
+      $dialog) ->
+  ]

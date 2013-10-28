@@ -1,15 +1,17 @@
 define [
+  'app'
   'underscore'
   'io'
 ], (
+  app
   _
   io
 ) ->
 
   apiVersion = 'v1'
 
-  (Module) ->
-    Module.factory 'socket', ['$rootScope',
+  app.factory 'socket', [
+    '$rootScope',
     ($rootScope) ->
       socket = io.connect()
 
@@ -38,4 +40,4 @@ define [
               args = arguments
               $rootScope.$apply () ->
                 callback.apply socket, args
-    ]
+  ]

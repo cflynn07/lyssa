@@ -1,16 +1,18 @@
 define [
+  'app'
   'jquery'
   'jquery-ui'
   'jqueryFileUpload'
 ], (
+  app
   $
   jqueryUi
   jqueryFileUpload
 ) ->
 
-  (Module) ->
-
-    Module.directive 'fileUpload', ($parse) ->
+  app.directive 'fileUpload', [
+    '$parse'
+    ($parse) ->
       directive =
         restrict:   'A'
         scope:
@@ -50,3 +52,4 @@ define [
 
             done: (e, data) ->
               console.log 'done'
+  ]

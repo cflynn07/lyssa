@@ -1,22 +1,22 @@
 define [
+  'app'
   'jquery'
-  'angular'
   'datatables'
   'datatables_bootstrap'
   'underscore'
   'underscore_string'
 ], (
+  app
   $
-  angular
   dataTables
   dataTables_bootstrap
   _
   underscore_string
 ) ->
 
-  (Module) ->
-
-    Module.directive "dataTable", ($compile) ->
+  app.directive "dataTable", [
+    '$compile'
+    ($compile) ->
       directive =
         restrict: 'A'
         scope: 'isolate'
@@ -156,4 +156,4 @@ define [
               dataTable.fnClearTable()
               dataTable.fnAddData convertedVal
           , true
-
+  ]

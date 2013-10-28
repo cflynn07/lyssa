@@ -1,11 +1,17 @@
 define [
+  'app'
 ], (
+  app
 ) ->
-  
-  (Module) ->
 
-    Module.controller 'ControllerWidgetExerciseBuilderGroupFieldPercentageSlider', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
+  app.controller 'ControllerWidgetExerciseBuilderGroupFieldPercentageSlider', [
+    '$scope'
+    'apiRequest'
+    '$dialog'
+    ($scope
+      apiRequest
+      $dialog) ->
+
         $scope.form = {}
 
         $scope.cancelAddNewField = () ->
@@ -31,4 +37,4 @@ define [
             return
           return $scope.formPercentageSliderAdd.$invalid
 
-    ]
+  ]

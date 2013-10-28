@@ -1,10 +1,12 @@
-define [], () ->
+define [
+  'app'
+], (
+  app
+) ->
 
-  (Module) ->
-
-    #data-unique-field = "{resource: 'dictionary', property: 'name'}"
-
-    Module.directive 'uniqueField', (apiRequest) ->
+  app.directive 'uniqueField', [
+    'apiRequest'
+    (apiRequest) ->
 
       directive =
         restrict: 'A'
@@ -35,8 +37,6 @@ define [], () ->
                 else
                   uids = attrData.uids
 
-
-
               apiRequest.get attrData.resource, uids, {}, (response) ->
                 isValid = true
                 if response.code == 200
@@ -58,13 +58,9 @@ define [], () ->
                       #  isValid = true
                       #    break
 
-
-
                   ctrl.$setValidity 'uniqueField', isValid
                 else
                   ctrl.$setValidity 'uniqueField', true
-
-
 
             else
               ctrl.$setValidity 'uniqueField', true
@@ -75,3 +71,4 @@ define [], () ->
 
           ctrl.$parsers.unshift (viewValue) ->
             return checkDuplicates viewValue
+  ]

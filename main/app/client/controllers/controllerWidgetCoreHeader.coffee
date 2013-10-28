@@ -1,27 +1,34 @@
 define [
-  'angular'
+  'app'
   'underscore'
   'jquery'
   'utils/utilSoundManager'
   'text!views/viewWidgetCoreHeader.html'
 ], (
-  angular
+  app
   _
   $
   utilSoundManager
   viewWidgetCoreHeader
 ) ->
-  (Module) ->
 
-    Module.run ['$templateCache',
+  Module.run [
+    '$templateCache'
     ($templateCache) ->
       $templateCache.put 'viewWidgetCoreHeader', viewWidgetCoreHeader
-    ]
+  ]
 
-    Module.controller 'ControllerWidgetCoreHeader', ['$scope', '$rootScope', 'authenticate', 'apiRequest'
-    ($scope, $rootScope, authenticate, apiRequest) ->
+  Module.controller 'ControllerWidgetCoreHeader', [
+    '$scope'
+    '$rootScope'
+    'authenticate'
+    'apiRequest'
+    ($scope
+      $rootScope
+      authenticate
+      apiRequest) ->
 
-      $rootScope.rootActivityFeed   = false
+      $rootScope.rootActivityFeed = false
       fetchActivity = (uid = null, completedCallback = null) ->
         #return
         apiRequest.get 'activity', [uid], {
@@ -99,4 +106,4 @@ define [
 
       $scope.logout = () ->
         authenticate.unauthenticate()
-    ]
+  ]

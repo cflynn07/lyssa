@@ -1,13 +1,19 @@
 define [
+  'app'
   'utils/utilBuildDTQuery'
 ], (
+  app
   utilBuildDTQuery
 ) ->
 
-  (Module) ->
+  app.controller 'ControllerWidgetExerciseBuilderGroupFieldSelectIndividual', [
+    '$scope'
+    'apiRequest'
+    '$dialog'
+    ($scope
+      apiRequest
+      $dialog) ->
 
-    Module.controller 'ControllerWidgetExerciseBuilderGroupFieldSelectIndividual', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
         $scope.form = {}
 
         $scope.cancelAddNewField = () ->
@@ -167,5 +173,4 @@ define [
                     iTotalDisplayRecords: response.response.length
                     aaData:               dataArr
 
-
-    ]
+  ]

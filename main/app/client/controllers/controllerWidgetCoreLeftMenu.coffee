@@ -1,39 +1,43 @@
 define [
+  'app'
   'jquery'
   'underscore'
-  'angular'
   'text!views/widgetLeftMenu/viewWidgetCoreLeftMenu.html'
   'text!views/widgetLeftMenu/viewWidgetCoreLeftMenuOptionsAdmin.html'
   'text!views/widgetLeftMenu/viewWidgetCoreLeftMenuOptionsDelegate.html'
   'config/clientConfig'
 ], (
+  app
   $
   _
-  angular
   viewWidgetCoreLeftMenu
   viewWidgetCoreLeftMenuOptionsAdmin
   viewWidgetCoreLeftMenuOptionsDelegate
   clientConfig
 ) ->
 
-  (Module) ->
-
-    Module.run ['$templateCache',
+  app.run [
+    '$templateCache'
     ($templateCache) ->
-      $templateCache.put 'viewWidgetCoreLeftMenu',
-        viewWidgetCoreLeftMenu
-      $templateCache.put 'viewWidgetCoreLeftMenuOptionsAdmin',
-        viewWidgetCoreLeftMenuOptionsAdmin
-      $templateCache.put 'viewWidgetCoreLeftMenuOptionsDelegate',
-        viewWidgetCoreLeftMenuOptionsDelegate
-    ]
+      $templateCache.put 'viewWidgetCoreLeftMenu',                viewWidgetCoreLeftMenu
+      $templateCache.put 'viewWidgetCoreLeftMenuOptionsAdmin',    viewWidgetCoreLeftMenuOptionsAdmin
+      $templateCache.put 'viewWidgetCoreLeftMenuOptionsDelegate', viewWidgetCoreLeftMenuOptionsDelegate
+  ]
 
-
-    Module.controller 'ControllerWidgetCoreLeftMenu', ['$scope', '$rootScope', '$route', '$templateCache', '$location',
-    ($scope, $rootScope, $route, $templateCache, $location) ->
+  app.controller 'ControllerWidgetCoreLeftMenu', [
+    '$scope'
+    '$rootScope'
+    '$route'
+    '$templateCache'
+    '$location'
+    ($scope
+      $rootScope
+      $route
+      $templateCache
+      $location) ->
 
       if $scope.quizMode
-        return
+        return false
 
       $rootScope.sidebarClosedToggle = () ->
         $rootScope.sidebarClosed = !$rootScope.sidebarClosed
@@ -48,43 +52,12 @@ define [
           $scope.currentActiveMenuItem = item
 
 
-      ###
-      for key, value of clientConfig.routes
-        if clientConfig.routeMatchClientType(key, $scope.rootUser.type)
-          menuObj       = {}
-          menuObj.hash  = key
-          menuObj.title = value.title
-
-          $scope.menuChoices.push menuObj
-
-      [{
-        hash: 'menu1a'
-        title: 'Menu Option 1'
-        sub: [{
-          hash: 'menu1a'
-          title: 'Menu Option 1'
-        },{
-          hash: 'menu1a/sub1'
-          title: 'Menu Option 1sub'
-        }]
-      },{
-        hash: 'menu2'
-        title: 'Menu Option 2'
-      },{
-        hash: 'menu3'
-        title: 'Menu Option 3'
-      }]
-      ###
-
-      $scope.getClass    = (menuTitle, isTop) ->
+      $scope.getClass = (menuTitle, isTop) ->
         className = ''
         if isTop
           if $scope.activeMenuItem.indexOf(menuTitle) == 0
             className = 'active'
-        #else
-        #  if $scope.activeMenuItem == menuTitle
-        #    className = 'active'
-        return className
+        #className
 
       $scope.updateActiveMenuItem = () ->
         $scope.locationHash = $location.$$path
@@ -101,4 +74,4 @@ define [
       $scope.$on '$routeChangeSuccess', (scope, current, previous) ->
         $scope.updateActiveMenuItem()
       $scope.updateActiveMenuItem()
-    ]
+  ]

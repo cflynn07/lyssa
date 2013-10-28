@@ -25,14 +25,12 @@ requirejs.config
     'bootstrap':                'vendor/bootstrap'
     'gritter':                  'vendor/jquery.gritter'
 
-
     'bootstrapFileUpload':      'vendor/bootstrap-fileupload'
     'jqueryFileUpload':         'vendor/file-upload/jquery.fileupload'
     'jqueryFileUploadFp':       'vendor/file-upload/jquery.fileupload-fp'
     'jqueryFileUploadUi':       'vendor/file-upload/jquery.fileupload-ui'
     'jqueryIframeTransport':    'vendor/file-upload/jquery.iframe-transport'
     'jquery.ui.widget':         'vendor/file-upload/jquery.ui.widget'
-
 
     'jqueryUniform':            'vendor/jquery.uniform'
     'jqueryBrowser':            'vendor/jquery.browser'
@@ -60,7 +58,7 @@ requirejs.config
     templateExtension: 'html'
   shim:
     angular:
-      deps: ['jquery-ui', 'jqueryUniform', 'bootstrap-toggle-buttons']
+      deps:    ['jquery-ui', 'jqueryUniform', 'bootstrap-toggle-buttons']
       exports: 'angular'
     'angular-ui':
       deps:    ['angular', 'jquery', 'jquery-ui', 'jqueryMaskedInput']
@@ -93,7 +91,7 @@ requirejs.config
     pubsub:
       exports: 'pubsub'
     'bootstrap-toggle-buttons':
-      deps:     ['jquery', 'bootstrap']
+      deps:    ['jquery', 'bootstrap']
     ejs:
       exports: 'EJS'
     uuid:
@@ -133,25 +131,24 @@ requirejs.config
     spacetree:
       exports: '$jit'
 
-
-
 require [
-  'jquery'
-  'jquery-ui'
-  'gritter'
-  'jqueryTouchPunch'
-  'bootstrap-toggle-buttons'
-  'fullCalendar'
-  'bootstrap'
+
+  #Main AngularJS Module
+  'app'
   'angular'
+
+  'jqueryTouchPunch'
+
   'config/clientConfig'
-  'angular-ui'
-  'angular-bootstrap'
-  'boostrapDateTimePicker'
-  'vendor/fastclick'
   'config/clientRoutes'
+
+  'vendor/fastclick'
+
+  #Animations
   'animations/animationSlideUpDown'
   'animations/animationFadeInOut'
+
+  #Directives
   'directives/directiveAnimateIn'
   'directives/directiveCollapseWidget'
   'directives/directiveAnimateRouteChange'
@@ -167,14 +164,20 @@ require [
   'directives/directiveDateTimePicker'
   'directives/directiveSpaceTree'
   'directives/directiveJqueryAutoComplete'
+
+  #Services
   'services/serviceSocket'
   'services/servicePubSub'
   'services/serviceAuthenticate'
   'services/serviceAPIRequest'
+
+  #Filters
   'filters/filterToArray'
   'filters/filterDeleted'
   'filters/filterTelephone'
   'filters/filterFromNow'
+
+  #Controllers
   'controllers/controllerApp'
   'controllers/controllerCoreWidgets'
   'controllers/controllerWidgetCoreLeftMenu'
@@ -195,122 +198,26 @@ require [
   'controllers/widgets/widgetTimeline/controllerWidgetTimeline'
   'controllers/widgets/widgetTabs/controllerWidgetTabs'
   'controllers/widgets/widgetExerciseScheduleCalendar/controllerWidgetExerciseScheduleCalendar'
+
 ], (
-  $
-  jqueryUi
-  gritter
-  jqueryTouchPunch
-  bootstrapToggleButtons
-  jqueryFullCalendar
-  bootstrap
+  app
   angular
-  clientConfig
-  angularUi
-  angularBootstrap
-  boostrapDateTimePicker
-  FastClick
-  ClientRoutes
-  AnimationSlideUpDown
-  AnimationFadeInOut
-  DirectiveAnimateIn
-  DirectiveCollapseWidget
-  DirectiveAnimateRouteChange
-  DirectiveDatePicker
-  DirectiveToggleButton
-  DirectiveInlineEdit
-  DirectiveUniqueField
-  DirectiveDataTable
-  DirectiveFileUpload
-  DirectiveSlider
-  DirectiveCalendar
-  DirectiveEditEmployee
-  DirectiveDateTimePicker
-  DirectiveSpaceTree
-  DirectiveJqueryAutoComplete
-  ServiceSocket
-  ServicePubSub
-  ServiceAuthenticate
-  ServiceAPIRequest
-  FilterToArray
-  FilterDeleted
-  FilterTelephone
-  FilterFromNow
-  ControllerApp
-  ControllerCoreWidgets
-  ControllerWidgetCoreLeftMenu
-  ControllerWidgetCoreLogin
-  ControllerWidgetCoreHeader
-  ControllerWidgetCoreFooter
-  ControllerWidgetBreadCrumbs
-  ControllerWidgetExerciseBuilder
-  ControllerWidgetDictionaryManager
-  ControllerWidgetScheduler
-  #ControllerWidgetFullExerciseSubmitter
-  ControllerWidget4oh4
-  ControllerWidgetEmployeeManager
-  ControllerWidgetQuizExerciseSubmitter
-  ControllerWidgetActivityFeed
-  ControllerWidgetActivityExercisesQuizes
-  ControllerWidgetQuarterlyTestingReport
-  ControllerWidgetTimeline
-  ControllerWidgetTabs
-  ControllerWidgetExerciseScheduleCalendar
 ) ->
 
-  #Modules
-  CS = angular.module 'CS', ['ui', 'ui.bootstrap']
-
-  #Animations
-  AnimationSlideUpDown CS
-  AnimationFadeInOut   CS
-
-  #Directives
-  DirectiveCollapseWidget       CS
-  DirectiveAnimateIn            CS
-  DirectiveAnimateRouteChange   CS
-  DirectiveDatePicker           CS
-  DirectiveToggleButton         CS
-  DirectiveInlineEdit           CS
-  DirectiveUniqueField          CS
-  DirectiveDataTable            CS
-  DirectiveFileUpload           CS
-  DirectiveSlider               CS
-  DirectiveCalendar             CS
-  DirectiveEditEmployee         CS
-  DirectiveDateTimePicker       CS
-  DirectiveSpaceTree            CS
-  DirectiveJqueryAutoComplete   CS
-
-  #Services
-  ServiceSocket       CS
-  ServicePubSub       CS
-  ServiceAuthenticate CS
-  ServiceAPIRequest   CS
-
-  #Filters
-  FilterToArray   CS
-  FilterDeleted   CS
-  FilterTelephone CS
-  FilterFromNow   CS
-
-  CS.config ['$routeProvider', ($routeProvider) ->
+  app.config ['$routeProvider', ($routeProvider) ->
     ClientRoutes $routeProvider
   ]
 
-  ControllerApp                            CS
-  ControllerCoreWidgets                    CS
-  ControllerWidgetCoreLeftMenu             CS
-  ControllerWidgetCoreHeader               CS
-  ControllerWidgetBreadCrumbs              CS
-  ControllerWidgetExerciseBuilder          CS
-  ControllerWidgetCoreLogin                CS
-  ControllerWidgetDictionaryManager        CS
-  ControllerWidgetScheduler                CS
- #ControllerWidgetFullExerciseSubmitter    CS
-  ControllerWidget4oh4                     CS
-  ControllerWidgetCoreFooter               CS
-  ControllerWidgetEmployeeManager          CS
- #ControllerWidgetQuiz                     CS
+
+
+#  ControllerWidgetCoreLogin                CS
+#  ControllerWidgetDictionaryManager        CS
+#  ControllerWidgetScheduler                CS
+#  ControllerWidgetFullExerciseSubmitter    CS
+#  ControllerWidget4oh4                     CS
+#  ControllerWidgetCoreFooter               CS
+#  ControllerWidgetEmployeeManager          CS
+#  ControllerWidgetQuiz                     CS
   ControllerWidgetActivityFeed             CS
   ControllerWidgetActivityExercisesQuizes  CS
   ControllerWidgetQuarterlyTestingReport   CS
@@ -319,8 +226,9 @@ require [
   ControllerWidgetTabs                     CS
   ControllerWidgetExerciseScheduleCalendar CS
 
+
   #Start the party!
-  angular.bootstrap document, ['CS']
+  angular.bootstrap document, ['app']
 
   #Helper to remove 300ms delay from touch events on iOS devices
   window.addEventListener 'load', () ->

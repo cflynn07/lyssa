@@ -1,9 +1,11 @@
 define [
+  'app'
   'underscore'
   'uuid'
   'utils/utilSortHash'
   'text!config/clientOrmShare.json'
 ], (
+  app
   _
   uuid
   utilSortHash
@@ -12,9 +14,11 @@ define [
 
   clientOrmShare = JSON.parse clientOrmShare
 
-  (Module) ->
-    Module.factory 'apiRequest', ['socket', '$rootScope',
-    (socket, $rootScope) ->
+  app.factory 'apiRequest', [
+    'socket'
+    '$rootScope'
+    (socket
+      $rootScope) ->
 
       resourcePool = {}
       $rootScope.resourcePool = resourcePool
@@ -68,17 +72,17 @@ define [
 
         order = []
         order = _.sortBy defaultOptions.order, (arr) ->
-          return arr[0] + arr[1]        
+          return arr[0] + arr[1]
 
         uids = []
         uids = _.sortBy defaultOptions.uids, (uid) ->
           return uid
 
-        hashString = resourceName + 
+        hashString = resourceName +
           defaultOptions.offset   +
           defaultOptions.limit    +
           JSON.stringify(filter)  +
-          JSON.stringify(order)   + 
+          JSON.stringify(order)   +
           uids.join(',')
 
         return hashString
@@ -131,7 +135,7 @@ define [
             order:  if query.order  then query.order  else []
             uids:   uids
 
-          if !_.isUndefined(resourcePoolResultCache[hashString])            
+          if !_.isUndefined(resourcePoolResultCache[hashString])
             callback resourcePoolResultCache[hashString].response, resourcePoolResultCache[hashString].responseRaw, true
 
           socket.apiRequest 'GET',
@@ -203,4 +207,4 @@ define [
             uid,  #data
             (response) ->
               callback response
-    ]
+  ]

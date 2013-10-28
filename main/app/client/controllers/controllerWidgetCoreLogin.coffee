@@ -1,19 +1,26 @@
 define [
-  'angular'
+  'app'
   'text!views/viewWidgetCoreLogin.html'
 ], (
-  angular
+  app
   viewWidgetCoreLogin
 ) ->
-  (Module) ->
 
-    Module.run ['$templateCache',
+  app.run [
+    '$templateCache',
     ($templateCache) ->
       $templateCache.put 'viewWidgetCoreLogin', viewWidgetCoreLogin
-    ]
+  ]
 
-    Module.controller 'ControllerWidgetCoreLogin', ['$scope', '$templateCache', 'socket', 'authenticate',
-    ($scope, $templateCache, socket, authenticate) ->
+  app.controller 'ControllerWidgetCoreLogin', [
+    '$scope'
+    '$templateCache'
+    'socket'
+    'authenticate'
+    ($scope
+      $templateCache
+      socket
+      authenticate) ->
 
       $scope.errorMessage = ''
       $scope.submitting   = false
@@ -34,4 +41,4 @@ define [
               authenticate.authenticate response.user
             else
               $scope.errorMessage = 'Incorrect username or password'
-    ]
+  ]

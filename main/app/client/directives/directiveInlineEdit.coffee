@@ -1,14 +1,15 @@
 define [
+  'app'
   'jquery'
   'text!views/viewsDirectives/viewDirectiveInlineEdit.html'
 ], (
+  app
   $
   viewDirectiveInlineEdit
 ) ->
 
-  (Module) ->
-
-    Module.directive 'inlineEdit', () ->
+  app.directive 'inlineEdit', [
+    () ->
       directive =
         restrict: 'A'
         template: viewDirectiveInlineEdit
@@ -20,3 +21,4 @@ define [
             if e.charCode is 13
               scope.$apply () ->
                 scope.editMode = false
+  ]

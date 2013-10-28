@@ -1,30 +1,33 @@
 define [
-  'angular'
+  'app'
   'jquery'
   'underscore'
   'text!views/viewCoreWidgets.html'
   'config/clientConfig'
 ], (
-  angular
+  app
   $
   _
   viewCoreWidgets
   clientConfig
 ) ->
 
-  (Module) ->
-
-    Module.run ['$templateCache', 'apiRequest', '$routeParams', '$route',
-    ($templateCache, apiRequest, $routeParams, $route) ->
+  app.run [
+    '$templateCache'
+    ($templateCache) ->
       $templateCache.put 'viewCoreWidgets', viewCoreWidgets
-    ]
+  ]
 
-    ###
-      Manages the dynamic insertion of widgets to the main content area of the application
-    ###
-    Module.controller 'ControllerCoreWidgets', ['$scope', '$route', '$rootScope',
-    ($scope, $route, $rootScope) ->
-
+  ###
+  # Manages the dynamic insertion of widgets to the main content area of the application
+  ###
+  app.controller 'ControllerCoreWidgets', [
+    '$scope'
+    '$route'
+    '$rootScope'
+    ($scope
+      $route
+      $rootScope) ->
 
       #primaryWidgetRow      = [{widget: 'viewWidgetBreadCrumbs', spanLength:'span12'}]
       primaryWidgetRow       = []
@@ -91,12 +94,12 @@ define [
 
               widgetObjects = []
               for widget in rowWidgets
-              
+
                 spanLength = 'span12'
                 if rowWidgets.length == 2
                   spanLength = 'span6'
 
-                #Mesh that data in there                
+                #Mesh that data in there
                 widgetObjects.push {
                   spanLength: spanLength
                   widget:     widget.name
@@ -105,8 +108,8 @@ define [
 
 
               $scope.widgetRows.push widgetObjects
-              #if $route.current.$$route.widgetData 
-              #  $scope.widgetData = $route.current.$$route.widgetData 
+              #if $route.current.$$route.widgetData
+              #  $scope.widgetData = $route.current.$$route.widgetData
 
 
             #Used by widgets for forming links
@@ -120,18 +123,10 @@ define [
             loadNewRouteChangeCallback()
             $scope.$apply()
           , 200
-        else 
+        else
         ###
 
         loadNewRouteChangeCallback()
-
-        
-
-
-
-
-
-
 
 
       $scope.$on '$routeChangeSuccess', (event, current, previous) ->
@@ -139,5 +134,4 @@ define [
 
       loadNewRoute()
 
-
-    ]
+  ]

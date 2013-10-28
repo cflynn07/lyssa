@@ -3,7 +3,7 @@ bash "import_database" do
   cwd "/tmp"
   code <<-EOH
   mysql -uroot -ppassword -e "create database if not exists development"
-  mysql development -uroot -ppassword -e "source /vagrant/main/app/tests/apiTests/lyssa.sql"
+  mysql development -uroot -ppassword -e "source /root/lyssa/main/app/tests/apiTests/lyssa.sql"
   EOH
 end
 
@@ -26,7 +26,7 @@ end
 
 bash "compile_coffeescript" do
   user "root"
-  cwd "/vagrant/main/app"
+  cwd "/root/lyssa/main/app"
   code <<-EOH
   coffee -c .
   EOH
@@ -34,24 +34,16 @@ end
 
 bash "reinstall_bcrypt" do
   user "root"
-  cwd "/vagrant/main/app/server"
+  cwd "/root/lyssa/main/app/server"
   code <<-EOH
   npm uninstall bcrypt
   npm install bcrypt
   EOH
 end
 
-bash "start_nodecompile" do
-  user "root"
-  cwd "/vagrant/main/app"
-  code <<-EOH
-  nodefront compile -r -w ./
-  EOH
-end
-
 bash "start_app" do
   user "root"
-  cwd "/vagrant/main/app/server"
+  cwd "/root/lyssa/main/app/server"
   code <<-EOH
   npm uninstall bcrypt
   npm install bcrypt

@@ -1,11 +1,13 @@
 define [
+  'app'
   'jquery'
 ], (
+  app
   $
 ) ->
-  (Module) ->
 
-    Module.directive 'animateRouteChange', () ->
+  app.directive 'animateRouteChange', [
+    () ->
       (scope, element, attrs) ->
 
         scope.$on '$routeChangeSuccess', (event, current, previous) ->
@@ -17,3 +19,4 @@ define [
           else
             if element.find('.sub > li').length > 0
               element.find('.sub').slideUp 'fast'
+  ]

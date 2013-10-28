@@ -1,14 +1,16 @@
 define [
+  'app'
   'jquery'
   'jquery-ui'
 ], (
+  app
   $
   $ui
 ) ->
 
-  (Module) ->
-
-    Module.directive "jqueryAutoComplete", ($compile) ->
+  app.directive "jqueryAutoComplete", [
+    '$compile'
+    ($compile) ->
       directive =
         restrict: 'A'
         scope: 'isolate'
@@ -27,3 +29,4 @@ define [
             console.log ul
             console.log item
             return $('<li>').html('<a>food</a>').appendTo ul
+  ]

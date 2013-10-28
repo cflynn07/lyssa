@@ -1,14 +1,15 @@
 define [
+  'app'
   'jquery'
   'text!views/viewsDirectives/viewCollapseWidget.html'
 ], (
+  app
   $
   viewCollapseWidget
 ) ->
 
-  (Module) ->
-
-    Module.directive 'collapseWidget', () ->
+  app.directive 'collapseWidget', [
+    () ->
       directive =
         restrict:   'A'
         transclude: true
@@ -34,3 +35,4 @@ define [
             content    = origElem.text()
             scope.orig = content
             scope.obj  = content
+  ]

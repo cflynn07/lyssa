@@ -1,7 +1,8 @@
 define [
+  'app'
   'jquery'
-  'angular'
-  'angular-ui'
+  'ejs'
+  'async'
   'underscore'
   'underscore_string'
   'utils/utilBuildDTQuery'
@@ -12,12 +13,14 @@ define [
   'controllers/widgets/widgetExerciseBuilder/groupFieldAddFormControllers/controllerWidgetExerciseBuilderGroupFieldYesNo'
   'controllers/widgets/widgetExerciseBuilder/groupFieldAddFormControllers/controllerWidgetExerciseBuilderGroupFieldPercentageSlider'
 
+  #
   'controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageOpenResponse'
   'controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageSelectIndividual'
   'controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageSelectMultiple'
   'controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageYesNo'
   'controllers/widgets/widgetExerciseBuilder/groupFieldManageControllers/controllerWidgetExerciseBuilderFieldManageSlider'
 
+  #Edit controllers
   'controllers/widgets/widgetExerciseBuilder/controllerWidgetExerciseBuilderGroupEdit'
 
 
@@ -37,12 +40,11 @@ define [
   'text!views/widgetExerciseBuilder/formPartials/viewPartialExerciseBuilderGroupFieldOpenResponse.html'
   'text!views/widgetExerciseBuilder/formPartials/viewPartialExerciseBuilderGroupFieldSelectIndividual.html'
   'text!views/widgetExerciseBuilder/formPartials/viewPartialExerciseBuilderGroupFieldPercentageSlider.html'
-  'ejs'
-  'async'
 ], (
+  app
   $
-  angular
-  angularUi
+  EJS
+  async
   _
   _string
   utilBuildDTQuery
@@ -82,98 +84,102 @@ define [
   viewPartialExerciseBuilderGroupFieldSelectIndividual
   viewPartialExerciseBuilderGroupFieldPercentageSlider
 
-  EJS
-  async
 ) ->
-  (Module) ->
 
-    Module.run ['$templateCache',
-      ($templateCache) ->
-        #main Template
-        $templateCache.put 'viewWidgetExerciseBuilder', viewWidgetExerciseBuilder
+  helperReorderGroupOrdinals = ($scope, apiRequest, groupsHash, insertOrdinalNum, insertUid = false, topCallback) ->
+    groupsArray = $scope.getArrayFromHash groupsHash
 
-        #Field Templates
-        $templateCache.put 'viewPartialExerciseBuilderFieldOpenResponse',     viewPartialExerciseBuilderFieldOpenResponse
-        $templateCache.put 'viewPartialExerciseBuilderFieldSelectIndividual', viewPartialExerciseBuilderFieldSelectIndividual
-        $templateCache.put 'viewPartialExerciseBuilderFieldSlider',           viewPartialExerciseBuilderFieldSlider
-        $templateCache.put 'viewWidgetExerciseBuilderFieldButtons',           viewWidgetExerciseBuilderFieldButtons
+    groupsArray = _.sortBy groupsArray, (item) ->
+      return item.ordinal
 
-        #Partials
-        $templateCache.put 'viewPartialExerciseBuilderNewTemplateForm', viewPartialExerciseBuilderNewTemplateForm
-        $templateCache.put 'viewPartialExerciseBuilderNewGroupForm',    viewPartialExerciseBuilderNewGroupForm
-        $templateCache.put 'viewPartialExerciseBuilderGroupMenu',       viewPartialExerciseBuilderGroupMenu
+    groupsArray = _.filter groupsArray, (item) ->
+      !item.deletedAt
 
-        #Partials -- field adds
-        $templateCache.put 'viewPartialExerciseBuilderGroupFieldOpenResponse',     viewPartialExerciseBuilderGroupFieldOpenResponse
-        $templateCache.put 'viewPartialExerciseBuilderGroupFieldSelectIndividual', viewPartialExerciseBuilderGroupFieldSelectIndividual
-        $templateCache.put 'viewPartialExerciseBuilderGroupFieldPercentageSlider', viewPartialExerciseBuilderGroupFieldPercentageSlider
-    ]
+    #Now sorted by ordinal
+    i = 0
+    groupsArray = _.map groupsArray, (item) ->
 
+      if insertUid
+        if item.uid == insertUid
+          return item #This one is about to be tweaked
 
-    helperReorderGroupOrdinals = ($scope, apiRequest, groupsHash, insertOrdinalNum, insertUid = false, topCallback) ->
-      groupsArray = $scope.getArrayFromHash groupsHash
+      if i >= insertOrdinalNum
+        item.ordinal = i + 1
+      else
+        item.ordinal = i
+      i++
+      return item
 
-      groupsArray = _.sortBy groupsArray, (item) ->
-        return item.ordinal
+    async.map groupsArray, (item, callback) ->
 
-      groupsArray = _.filter groupsArray, (item) ->
-        !item.deletedAt
+      apiRequest.put 'group', item.uid, {
+        ordinal: item.ordinal
+      }, {}, (result) ->
+        callback()
 
-      #Now sorted by ordinal
-      i = 0
-      groupsArray = _.map groupsArray, (item) ->
+    , (err, results) ->
 
-        if insertUid
-          if item.uid == insertUid
-            return item #This one is about to be tweaked
-
-        if i >= insertOrdinalNum
-          item.ordinal = i + 1
-        else
-          item.ordinal = i
-        i++
-        return item
-
-      async.map groupsArray, (item, callback) ->
-
-        apiRequest.put 'group', item.uid, {
-          ordinal: item.ordinal
-        }, {}, (result) ->
-          callback()
-
-      , (err, results) ->
-
-        topCallback()
+      topCallback()
 
 
+  app.run [
+    '$templateCache'
+    ($templateCache) ->
+      #main Template
+      $templateCache.put 'viewWidgetExerciseBuilder', viewWidgetExerciseBuilder
+
+      #Field Templates
+      $templateCache.put 'viewPartialExerciseBuilderFieldOpenResponse',     viewPartialExerciseBuilderFieldOpenResponse
+      $templateCache.put 'viewPartialExerciseBuilderFieldSelectIndividual', viewPartialExerciseBuilderFieldSelectIndividual
+      $templateCache.put 'viewPartialExerciseBuilderFieldSlider',           viewPartialExerciseBuilderFieldSlider
+      $templateCache.put 'viewWidgetExerciseBuilderFieldButtons',           viewWidgetExerciseBuilderFieldButtons
+
+      #Partials
+      $templateCache.put 'viewPartialExerciseBuilderNewTemplateForm', viewPartialExerciseBuilderNewTemplateForm
+      $templateCache.put 'viewPartialExerciseBuilderNewGroupForm',    viewPartialExerciseBuilderNewGroupForm
+      $templateCache.put 'viewPartialExerciseBuilderGroupMenu',       viewPartialExerciseBuilderGroupMenu
+
+      #Partials -- field adds
+      $templateCache.put 'viewPartialExerciseBuilderGroupFieldOpenResponse',     viewPartialExerciseBuilderGroupFieldOpenResponse
+      $templateCache.put 'viewPartialExerciseBuilderGroupFieldSelectIndividual', viewPartialExerciseBuilderGroupFieldSelectIndividual
+      $templateCache.put 'viewPartialExerciseBuilderGroupFieldPercentageSlider', viewPartialExerciseBuilderGroupFieldPercentageSlider
+  ]
 
 
-    #Add Field Form Controllers
-    ControllerWidgetExerciseBuilderGroupFieldOpenResponse     Module
-    ControllerWidgetExerciseBuilderGroupFieldSelectIndividual Module
-    ControllerWidgetExerciseBuilderGroupFieldSelectMultiple   Module
-    ControllerWidgetExerciseBuilderGroupFieldYesNo            Module
-    ControllerWidgetExerciseBuilderGroupFieldPercentageSlider Module
 
+  #Add Field Form Controllers
+#  ControllerWidgetExerciseBuilderGroupFieldOpenResponse     app
+#  ControllerWidgetExerciseBuilderGroupFieldSelectIndividual app
+#  ControllerWidgetExerciseBuilderGroupFieldSelectMultiple   app
+#  ControllerWidgetExerciseBuilderGroupFieldYesNo            app
+#  ControllerWidgetExerciseBuilderGroupFieldPercentageSlider app
 
-    ControllerWidgetExerciseBuilderFieldManageOpenResponse     Module
-    ControllerWidgetExerciseBuilderFieldManageSelectIndividual Module
-    ControllerWidgetExerciseBuilderFieldManageSelectMultiple   Module 
-    ControllerWidgetExerciseBuilderFieldManageYesNo            Module
-    ControllerWidgetExerciseBuilderFieldManageSlider           Module
+#  ControllerWidgetExerciseBuilderFieldManageOpenResponse     app
+#  ControllerWidgetExerciseBuilderFieldManageSelectIndividual app
+#  ControllerWidgetExerciseBuilderFieldManageSelectMultiple   app
+#  ControllerWidgetExerciseBuilderFieldManageYesNo            app
+#  ControllerWidgetExerciseBuilderFieldManageSlider           app
 
+#  ControllerWidgetExerciseBuilderGroupEdit                   app
 
-    ControllerWidgetExerciseBuilderGroupEdit                   Module
-
-
-    ###
-    #
-    #  PRIMARY CONTROLLER
-    #
-    ###
-    Module.controller 'ControllerWidgetExerciseBuilder', ['$scope', '$route', '$routeParams', '$templateCache', 'socket', 'apiRequest', '$dialog',
-      ($scope, $route, $routeParams, $templateCache, socket, apiRequest, $dialog) ->
-
+  ###
+  # PRIMARY CONTROLLER
+  ###
+  app.controller 'ControllerWidgetExerciseBuilder', [
+    '$scope'
+    '$route'
+    '$routeParams'
+    '$templateCache'
+    'socket'
+    'apiRequest'
+    '$dialog'
+    ($scope
+      $route
+      $routeParams
+      $templateCache
+      socket
+      apiRequest
+      $dialog) ->
 
         $scope.viewModel =
 
@@ -234,7 +240,7 @@ define [
                 if full.name
                   resHtml += '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + $scope.escapeHtml(full.name) + '</span>'
                 resHtml += '</a>'
-                return resHtml        
+                return resHtml
             ,
               mData:     null
               aTargets:  [1]
@@ -246,7 +252,7 @@ define [
               aTargets:  [2]
               bSortable: true
               sWidth:    '125px'
-              mRender: (data, type, full) ->              
+              mRender: (data, type, full) ->
                 '{{ resourcePool[\'' + full.uid + '\'].createdAt | date:\'short\' }}'
             ,
               mData:     null
@@ -263,11 +269,11 @@ define [
               sWidth:    '100px'
               mRender: (data, type, full) ->
                 uid  = $scope.escapeHtml full.uid
-#                {{ resourcePool['<%= templateUid %>'].revisions[0].uid }}
+  #                {{ resourcePool['<%= templateUid %>'].revisions[0].uid }}
 
                 if !_.isUndefined(resourcePool[uid].revisions[0])
                   revisionUid = resourcePool[uid].revisions[0].uid
-                else 
+                else
                   revisionUid = ''
 
                 html = new EJS({text: viewWidgetExerciseBuilderArchivedTemplateListButtonsEJS}).render({
@@ -351,7 +357,7 @@ define [
                 if full.name
                   resHtml += '<span data-ng-bind="resourcePool[\'' + full.uid + '\'].name">' + $scope.escapeHtml(full.name) + '</span>'
                 resHtml += '</a>'
-                return resHtml        
+                return resHtml
             ,
               mData:     null
               aTargets:  [1]
@@ -363,7 +369,7 @@ define [
               aTargets:  [2]
               bSortable: true
               sWidth:    '125px'
-              mRender: (data, type, full) ->              
+              mRender: (data, type, full) ->
                 '{{ resourcePool[\'' + full.uid + '\'].createdAt | date:\'short\' }}'
             ,
               mData:     null
@@ -380,11 +386,11 @@ define [
               sWidth:    '100px'
               mRender: (data, type, full) ->
                 uid  = $scope.escapeHtml full.uid
-#                {{ resourcePool['<%= templateUid %>'].revisions[0].uid }}
+  #                {{ resourcePool['<%= templateUid %>'].revisions[0].uid }}
 
                 if !_.isUndefined(resourcePool[uid].revisions[0])
                   revisionUid = resourcePool[uid].revisions[0].uid
-                else 
+                else
                   revisionUid = ''
 
                 html = new EJS({text: viewWidgetExerciseBuilderTemplateListButtonsEJS}).render({templateUid: uid, revisionUid: revisionUid})
@@ -537,7 +543,7 @@ define [
               name:         $scope.viewModel.newTemplateForm.name
               type:         $scope.viewModel.newTemplateForm.type
             }, {}, (response) ->
-              
+
               if response.code != 201
                 return
 
@@ -548,11 +554,11 @@ define [
                 expand: [{
                   resource: 'revisions'
                 }]
-              }, (templateResponse) ->              
+              }, (templateResponse) ->
 
                 if templateResponse.code != 200
                   return
-                
+
                 $scope.viewModel.clearNewTemplateForm()
 
                 window.location.hash = hash + '/' + templateResponse.response.data.revisions[0].uid
@@ -607,7 +613,7 @@ define [
               return
             apiRequest.get 'revision', [$scope.viewModel.routeParams.revisionUid], {
               expand: [{
-                resource: 'template',                
+                resource: 'template',
               },{
                 resource: 'groups',
                 expand:   [{
@@ -619,8 +625,8 @@ define [
               if response.code != 200
                 return
 
-              $scope.viewModel.currentTemplate = response.response.template 
-              $scope.viewModel.currentRevision = response.response             
+              $scope.viewModel.currentTemplate = response.response.template
+              $scope.viewModel.currentRevision = response.response
 
 
         $scope.fieldsSortableOptions =
@@ -698,7 +704,4 @@ define [
         hashChangeUpdate()
         $scope.viewModel.fetchCurrentTemplate()
 
-    ]
-
-
-
+  ]

@@ -155,7 +155,14 @@ else if GLOBAL.env and GLOBAL.env.DOTCLOUD_DB_MYSQL_LOGIN
     pass: GLOBAL.env.DOTCLOUD_DB_MYSQL_PASSWORD
     port: GLOBAL.env.DOTCLOUD_DB_MYSQL_PORT
     db:   'production'
-else
+else if process.env.NODE_ENV is 'production'
+  config.mysql =
+    host: 'localhost'
+    user: 'root'
+    pass: '831e74a2068330b1fddd2e6715929bad'
+    port: 3306
+    db:   'production'
+else if !process.env.NODE_ENV || process.env.NODE_ENV is 'development'
   #local development
   config.mysql =
     host: '127.0.0.1'

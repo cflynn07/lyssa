@@ -1,13 +1,14 @@
 define [
+  'app'
   'underscore'
 ], (
+  app
   _
 ) ->
 
   #https://github.com/angular/angular.js/issues/1286
-  (Module) ->
-
-    Module.filter 'toArray', () ->
+  app.filter 'toArray', [
+    () ->
       (obj) ->
         if !(obj instanceof Object)
           return obj
@@ -16,3 +17,4 @@ define [
           return Object.defineProperty val, '$key', {__proto__: null, value: key}
 
         return result
+  ]

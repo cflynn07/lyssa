@@ -1,16 +1,15 @@
 define [
+  'app'
   'jquery'
   'jquery-ui'
 ], (
+  app
   $
   jqueryUi
 ) ->
 
-  (Module) ->
-
-    #http://www.malot.fr/bootstrap-datetimepicker
-
-    Module.directive 'dateTimePicker', () ->
+  app.directive 'dateTimePicker', [
+    () ->
       directive =
         restrict:   'A'
         scope:
@@ -38,3 +37,4 @@ define [
               $scope.form.$pristine = false
 
             #console.log arguments
+  ]

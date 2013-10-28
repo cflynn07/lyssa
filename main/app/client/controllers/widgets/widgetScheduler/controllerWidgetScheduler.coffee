@@ -1,45 +1,48 @@
 define [
+  'app'
   'jquery'
-  'angular'
   'ejs'
+  'underscore'
   'utils/utilBuildDTQuery'
   'utils/utilParseClientTimeZone'
   'utils/utilSafeStringify'
-  'underscore'
-  'controllers/widgets/widgetScheduler/controllerWidgetSchedulerAddExerciseForm'
 
   'text!views/widgetScheduler/viewWidgetScheduler.html'
   'text!views/widgetScheduler/viewWidgetSchedulerListButtonsEJS.html'
   'text!views/widgetScheduler/viewPartialSchedulerAddExerciseForm.html'
+
+  'controllers/widgets/widgetScheduler/controllerWidgetSchedulerAddExerciseForm'
 ], (
+  app
   $
-  angular
   EJS
+  _
   utilBuildDTQuery
   utilParseClientTimeZone
   utilSafeStringify
-  _
-  ControllerWidgetSchedulerAddExerciseForm
 
   viewWidgetScheduler
   viewWidgetSchedulerListButtonsEJS
   viewPartialSchedulerAddExerciseForm
+
 ) ->
 
-  (Module) ->
+  app.run [
+    '$templateCache'
+    ($templateCache) ->
+      $templateCache.put 'viewWidgetScheduler',                 viewWidgetScheduler
+      $templateCache.put 'viewPartialSchedulerAddExerciseForm', viewPartialSchedulerAddExerciseForm
+  ]
 
-    Module.run ['$templateCache',
-      ($templateCache) ->
-        $templateCache.put 'viewWidgetScheduler',                 viewWidgetScheduler
-        $templateCache.put 'viewPartialSchedulerAddExerciseForm', viewPartialSchedulerAddExerciseForm
-    ]
-
-
-    ControllerWidgetSchedulerAddExerciseForm Module 
-
-
-    Module.controller 'ControllerWidgetScheduler', ['$scope', '$route', '$routeParams', 'apiRequest'
-    ($scope, $route, $routeParams, apiRequest) ->
+  app.controller 'ControllerWidgetScheduler', [
+    '$scope'
+    '$route'
+    '$routeParams'
+    'apiRequest'
+    ($scope
+      $route
+      $routeParams
+      apiRequest) ->
 
       viewModel =
 
@@ -209,4 +212,4 @@ define [
         hashChangeUpdate()
       $scope.viewModel = viewModel
 
-    ]
+  ]

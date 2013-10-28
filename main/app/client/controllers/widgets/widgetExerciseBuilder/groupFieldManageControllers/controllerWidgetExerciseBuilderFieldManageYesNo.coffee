@@ -1,9 +1,14 @@
 define [
+  'app'
 ], (
+  app
 ) ->
-  
-  (Module) ->
 
-    Module.controller 'ControllerWidgetExerciseBuilderFieldManageYesNo', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
-    ]
+  app.controller 'ControllerWidgetExerciseBuilderFieldManageYesNo', [
+    '$scope'
+    'apiRequest'
+    '$dialog'
+    ($scope
+      apiRequest
+      $dialog) ->
+  ]

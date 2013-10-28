@@ -1,16 +1,17 @@
 define [
+  'app'
   'jquery'
   'jquery-ui'
   'underscore'
 ], (
+  app
   $
   jqueryUi
   _
 ) ->
 
-  (Module) ->
-
-    Module.directive 'slider', () ->
+  app.directive 'slider', [
+    () ->
       directive =
         restrict: 'A'
         template: '<div class="slider"></div>'
@@ -29,3 +30,4 @@ define [
             $scope.$apply () ->
               if !_.isUndefined $scope.options.value
                 $scope.options.value = ui.value
+  ]

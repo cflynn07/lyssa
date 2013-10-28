@@ -1,9 +1,14 @@
 define [
+  'app'
 ], (
+  app
 ) ->
-  
-  (Module) ->
 
-    Module.controller 'ControllerWidgetExerciseBuilderFieldManageSelectMultiple', ['$scope', 'apiRequest', '$dialog',
-      ($scope, apiRequest, $dialog) ->
-    ]
+  app.controller 'ControllerWidgetExerciseBuilderFieldManageSelectMultiple', [
+    '$scope'
+    'apiRequest'
+    '$dialog'
+    ($scope
+      apiRequest
+      $dialog) ->
+  ]
